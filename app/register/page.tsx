@@ -5,7 +5,7 @@ interface Props {
 }
 
 const Register: React.FC<Props> = () => {
-  return <div>{/* Your component JSX goes here */}</div>;
+  return <div>Register</div>;
 };
 
 export default Register;
