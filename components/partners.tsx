@@ -85,9 +85,9 @@ const ReviewCard = ({
       className={cn(
         "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
         // light styles
-        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
+        "border-emerald-50 bg-emerald-100 hover:bg-emerald-200",
         // dark styles
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
+        "dark:border-emerald-500 dark:bg-emerald-900 dark:hover:bg-emerald-800"
       )}
     >
       <Link href={link} className="flex flex-row items-center gap-2">
@@ -113,7 +113,7 @@ const ReviewCard = ({
 
 export const Partners = () => {
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border bg-background py-20 md:shadow-xl">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-emerald-700 bg-emerald-950 py-20 md:shadow-xl">
       <Marquee pauseOnHover className="[--duration:40s]">
         {firstRow.map((partners) => (
           <ReviewCard key={partners.partnership} {...partners} />
@@ -124,8 +124,8 @@ export const Partners = () => {
           <ReviewCard key={partners.partnership} {...partners} />
         ))}
       </Marquee>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-background"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-emerald-950"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-emerald-950"></div>
     </div>
   );
 };

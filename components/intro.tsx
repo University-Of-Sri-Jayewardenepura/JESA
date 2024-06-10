@@ -2,7 +2,7 @@ import TextReveal from "@/components/animated/text-reveal";
 
 export async function Intro() {
   return (
-    <div className="z-10 flex min-h-[16rem] items-center justify-center bg-white dark:bg-black text-left flex-col">
+    <div className="z-10 flex min-h-[12rem] items-center justify-center text-left flex-col pt-[5rem]">
       <h1 className="text-3xl md:text-4xl lg:text-5xl text-primary text-center font-semibold">
         What is JESA?
       </h1>
