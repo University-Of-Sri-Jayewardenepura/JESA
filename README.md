@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <a href="https://nextjs.org">
+    <picture>
+      <source media="(prefers-color-scheme: dark)">
+      <img src="./public/jesa.png" height="128">
+    </picture>
+    <h1 align="center">Jesa</h1>
+    <p align="center">✨ Leave a Star On The Repository ✨</p>
+  </a>
+</p>
 
-## Getting Started
+JESA (J'pura Employability Skills Awards), the ultimate platform for honoring the accomplishments of young talents. With 13 prestigious awards exclusively dedicated to undergraduates of the University of Sri Jayewardenepura, and a new special award open to students from other universities, JESA sets a remarkable standard for recognition.
 
-First, run the development server:
+Organized by the Career Skills Development Society of the University, this highly regarded award ceremony, initiated in 2015, continues to captivate audiences. Join us this year to witness the expansion of the JESA legacy, as talented undergraduates from diverse institutions compete for the coveted Best Innovator Award.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Contributing
+
+Prerequisites :
+
+- Install [Git](https://www.git-scm.com/downloads).
+- Install [Nodejs](https://nodejs.org/en) or [Bun](https://bun.sh/).
+
+Install Bun:
+
+_Linux & macOS_
+
+`$ curl -fsSL https://bun.sh/install | bash`
+
+_Windows_
+
+`> powershell -c "irm bun.sh/install.ps1 | iex"`
+
+We recomment using Bun for faster development and runtime
+
+- `git clone https://github.com/University-Of-Sri-Jayewardenepura/jesa`
+- `cd jesa`
+- `bun install` or `npm install`
+- `bun run dev` or `npm run dev`
+
+App Structure
+
+```
+├── app
+│   ├── layout.tsx
+│   └── page.tsx
+├── components
+│   ├── ui
+│   │   ├── alert-dialog.tsx
+│   │   ├── button.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   └── ...
+│   ├── main-nav.tsx
+│   └── ...
+├── lib
+│   └── utils.ts
+├── bun.lockb
+├── components.json
+├── LICENSE.md
+├── next.config.js
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+└── tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Authors
