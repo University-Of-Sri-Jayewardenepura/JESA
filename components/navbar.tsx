@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { ModeToggle } from "./mode-toggle";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function Navbar({ className }: { className?: string }) {
   return (
@@ -22,24 +24,20 @@ export function Navbar({ className }: { className?: string }) {
           <h1 className="text-lg font-semibold hidden md:block">JESA 2024</h1>
         </a>
         <div className="flex items-center space-x-4">
-          <a
-            href="/awards"
-            className="text-black dark:text-white hidden md:block"
-          >
+          <Link href="/awards" className=" hidden md:block">
             Awards
-          </a>
-          <a
-            href="/hall-of-fame"
-            className="text-black dark:text-white hidden md:block"
-          >
+          </Link>
+          <Link href="/hall-of-fame" className="hidden md:block">
             Hall of Fame
-          </a>
-          <a href="/register" className="text-black dark:text-white">
-            Register
-          </a>
+          </Link>
+          <Button asChild className="rounded-full">
+            <Link href="/register">Register</Link>
+          </Button>
           <ModeToggle />
         </div>
       </div>
     </div>
   );
 }
+
+function MobileNav() {}

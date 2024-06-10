@@ -66,6 +66,7 @@
 ::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary));
   border-radius: 5px;
+  height: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -2,7 +2,6 @@
 
 import Particles from "@/components/animated/particles";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export const Hero = () => {
@@ -16,12 +15,6 @@ export const Hero = () => {
   return (
     <div className="relative flex h-[400px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4">
       <span className="pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-b from-amber-300 to-amber-200/80 bg-clip-text text-center text-7xl font-semibold leading-none text-transparent md:text-9xl select-none flex">
-        <Image
-          src="/images/jesa-icon.ico"
-          width={100}
-          height={50}
-          alt="Jesa logo"
-        />
         JESA
       </span>
       <Particles
