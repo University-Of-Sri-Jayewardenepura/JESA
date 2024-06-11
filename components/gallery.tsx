@@ -22,6 +22,13 @@ export function Gallery() {
     "/images/carousel/image3.jpg",
     "/images/carousel/image4.jpg",
     "/images/carousel/image5.jpg",
+    "/images/carousel/image6.jpg",
+    "/images/carousel/image7.jpg",
+    "/images/carousel/image8.jpg",
+    "/images/carousel/image9.jpg",
+    "/images/carousel/image10.jpg",
+    "/images/carousel/image11.jpg",
+    "/images/carousel/image12.jpg",
   ];
 
   return (
@@ -46,8 +53,8 @@ export function Gallery() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="hidden md:flex" />
-      <CarouselNext className="hidden md:flex" />
+      <CarouselPrevious className="hidden lg:flex" />
+      <CarouselNext className="hidden lg:flex" />
     </Carousel>
   );
 }
