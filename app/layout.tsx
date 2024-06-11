@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 
 const plusjakarta = localFont({
@@ -54,14 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={plusjakarta.className}>
         <Navbar />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}{" "}
-        </ThemeProvider>
+        {children}{" "}
       </body>
     </html>
   );

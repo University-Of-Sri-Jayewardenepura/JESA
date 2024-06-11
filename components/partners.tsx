@@ -83,11 +83,7 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-        // light styles
-        "border-emerald-50 bg-emerald-100 hover:bg-emerald-200",
-        // dark styles
-        "dark:border-emerald-500 dark:bg-emerald-900 dark:hover:bg-emerald-800"
+        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-emerald-500 bg-emerald-900 hover:bg-emerald-800"
       )}
     >
       <Link href={link} className="flex flex-row items-center gap-2">
@@ -124,8 +120,8 @@ export const Partners = () => {
           <ReviewCard key={partners.partnership} {...partners} />
         ))}
       </Marquee>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-emerald-950"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-emerald-950"></div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-emerald-950"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-emerald-950"></div>
     </div>
   );
 };

@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ModeToggle } from "./mode-toggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -14,7 +13,7 @@ export function Navbar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex justify-between items-center px-4 py-3 bg-white dark:bg-black border border-black/[0.1] dark:border-white/[0.1] rounded-full shadow-lg">
+      <div className="flex justify-between items-center px-4 py-3 bg-black borderborder-white/[0.1] rounded-full shadow-lg">
         <a className="flex items-center space-x-4" href="/">
           <Image
             src="/images/jesa-icon.ico"
@@ -35,7 +34,6 @@ export function Navbar({ className }: { className?: string }) {
           <Button asChild className="rounded-full">
             <Link href="/register">Register</Link>
           </Button>
-          <ModeToggle />
         </div>
       </div>
     </div>
