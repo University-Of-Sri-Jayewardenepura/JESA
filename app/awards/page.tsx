@@ -38,7 +38,7 @@ const images = [
 
 export const Awards: React.FC = () => {
   return (
-    <section className="flex flex-col items-center min-h-screen bg-background">
+    <section className="flex flex-col items-center min-h-screen bg-gradient-to-b from-background to-background-gradient">
       <div className="w-full">
         <LampContainer>
           <motion.h1

@@ -40,14 +40,14 @@ export function Gallery() {
                 alt="Gallery Image"
                 width={1080}
                 height={350}
-                className="rounded-lg border"
+                className="rounded-lg border border-primary/50"
               />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="hidden md:flex" />
+      <CarouselNext className="hidden md:flex" />
     </Carousel>
   );
 }

@@ -9,11 +9,11 @@ export function Navbar({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "fixed top-10 inset-x-0 max-w-2xl mx-auto z-50 border rounded-full",
+        "fixed top-10 inset-x-0 max-w-2xl mx-auto z-50 border border-primary/50 rounded-full",
         className
       )}
     >
-      <div className="flex justify-between items-center px-4 py-3 bg-black borderborder-white/[0.1] rounded-full shadow-lg">
+      <div className="flex justify-between items-center px-4 py-3 bg-background rounded-full shadow-lg">
         <a className="flex items-center space-x-4" href="/">
           <Image
             src="/images/jesa-icon.ico"

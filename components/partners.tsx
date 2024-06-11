@@ -83,7 +83,7 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-emerald-500 bg-emerald-900 hover:bg-emerald-800"
+        "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-primary bg-emerald-950 hover:bg-emerald-900"
       )}
     >
       <Link href={link} className="flex flex-row items-center gap-2">
@@ -109,7 +109,7 @@ const ReviewCard = ({
 
 export const Partners = () => {
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg border border-emerald-700 bg-emerald-950 py-20 md:shadow-xl">
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background py-20 md:shadow-xl max-w-7xl">
       <Marquee pauseOnHover className="[--duration:40s]">
         {firstRow.map((partners) => (
           <ReviewCard key={partners.partnership} {...partners} />
