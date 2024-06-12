@@ -2,7 +2,7 @@
   <a href="https://nextjs.org">
     <picture>
       <source media="(prefers-color-scheme: dark)">
-      <img src="./public/jesa.png" height="128">
+      <img src="./public/images/jesa-logo.png" height="128">
     </picture>
     <h1 align="center">Jesa</h1>
     <p align="center">✨ Leave a Star On The Repository ✨</p>

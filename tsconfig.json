@@ -17,6 +17,7 @@
         "name": "next"
       }
     ],
+    // for absolute path
     "paths": {
       "@/*": ["./*"]
     }
