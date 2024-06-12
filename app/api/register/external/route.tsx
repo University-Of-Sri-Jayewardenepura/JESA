@@ -11,17 +11,16 @@ const enumValues = <T extends Record<string, string>>(enumObject: T): [string, .
 };
 
 const schema = z.object({
-    ApplicantId: z.string().optional(), // Assuming ApplicantId can be optional
     Name: z.string().min(1),
     NIC: z.string().min(9),
-    Gender: z.enum(enumValues(GENDER)), // Use your GENDER enum directly
+    Gender: z.enum(enumValues(GENDER)),
     Email: z.string().email(),
     Whatsapp: z.string().min(9),
-    University: z.enum(enumValues(UNIVERSITY)), // Use your UNIVERSITY enum directly
+    University: z.enum(enumValues(UNIVERSITY)),
     Faculty: z.string().min(1),
     UniversityRegisterId: z.string(),
-    AcademicYear: z.enum(enumValues(ACADEMICYEAR)), // Use your ACADEMICYEAR enum directly
-    Award: z.enum(enumValues(AWARDS)), //  your AWARDS enum directly
+    AcademicYear: z.enum(enumValues(ACADEMICYEAR)),
+    Award: z.enum(enumValues(AWARDS)).default(AWARDS.BEST_INNOVATOR),
     WhichIndustry: z.string().min(1)
 });
 
@@ -46,6 +45,12 @@ export async function POST(request: Request) {
         }
 
         await connectMongoDB();
+
+         const duplicateCheck = await ExternalApplicant.find({NIC:body.NIC})
+
+         if (duplicateCheck.length > 0) {
+            return new NextResponse(JSON.stringify({ message: "Duplicate Error" }), { status: 409 });
+        }
 
         // Create BaseApplicant
         const baseApplicant = new BaseApplicant({ University: body.University });
