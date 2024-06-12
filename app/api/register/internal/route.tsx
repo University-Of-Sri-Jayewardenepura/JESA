@@ -44,6 +44,18 @@ export async function POST(request: Request) {
             return new NextResponse(JSON.stringify({ message: "Only Past Year participants can apply for 3 Awards" }), { status: 401 });
         }
 
+        if (body.Award1==body.Award2) {
+            return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
+        }
+
+        if (body.Award1==body.Award3) {
+            return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
+        }
+
+        if (body.Award3==body.Award2) {
+            return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
+        }
+
         await connectMongoDB();
 
         const duplicateCheck = await InternalApplicant.find({ UniversityRegisterId: body.UniversityRegisterId });
