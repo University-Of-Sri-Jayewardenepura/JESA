@@ -1,6 +1,7 @@
 import mongoose,{Schema} from "mongoose";
 import {GENDER,UNIVERSITY,ACADEMICYEAR,FACULTY,DEGREE,AWARDS} from '../app/constants/index';
 import { getEnumValues } from '../app/utils/utils';
+import exp from "constants";
 
 const internalApplicantSchema = new Schema(
     {
@@ -30,7 +31,7 @@ const internalApplicantSchema = new Schema(
             enum: getEnumValues(UNIVERSITY),
             required: true,
         },
-        UniversityID: {
+        UniversityRegisterId: {
             type: String,
             required: true,
         },
@@ -69,4 +70,5 @@ const internalApplicantSchema = new Schema(
     }
 )
 
-const JapuraApplicant = mongoose.models.InternalApplicant || mongoose.model("InternalApplicant",internalApplicantSchema)
+const InternalApplicant = mongoose.models.InternalApplicant || mongoose.model("InternalApplicant",internalApplicantSchema);
+export default InternalApplicant;
