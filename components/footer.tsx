@@ -38,7 +38,7 @@ export function Footer() {
   return (
     <footer className="pt-[300px] flex justify-center items-center w-full h-20 bg-background text-white">
       <div className="pb-8 space-y-6">
-        {" "}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent mb-16" />{" "}
         <div className="space-y-6">
           {" "}
           <h2 className="sr-only">Institutions</h2>

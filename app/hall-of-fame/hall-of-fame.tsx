@@ -4,39 +4,9 @@ import { LampContainer } from "@/components/animated/lamp";
 import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
+import { images } from "@/public/data/hall-of-fame";
 import { zodiak } from "../fonts";
 import BlurIn from "@/components/animated/blur-in";
-
-const images = [
-  {
-    year: "JESA'22",
-    image: "/images/hall-of-fame/2022.png",
-  },
-  {
-    year: "JESA'21",
-    image: "/images/hall-of-fame/2021.jpg",
-  },
-  {
-    year: "JESA'19",
-    image: "/images/hall-of-fame/2020.jpg",
-  },
-  // {
-  //   year: "JESA'18",
-  //   image: "",
-  // },
-  // {
-  //   year: "JESA'17",
-  //   image: "",
-  // },
-  // {
-  //   year: "JESA'16",
-  //   image: "",
-  // },
-  // {
-  //   year: "JESA'15",
-  //   image: "",
-  // },
-];
 
 const HallOfFamePage: React.FC = () => {
   return (
@@ -51,7 +21,7 @@ const HallOfFamePage: React.FC = () => {
               duration: 0.8,
               ease: "easeInOut",
             }}
-            className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-5xl md:text-7xl lg:text-9xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
+            className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-6xl md:text-8xl lg:text-9xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
           >
             Hall of Fame
           </motion.h1>
@@ -71,18 +41,18 @@ const HallOfFamePage: React.FC = () => {
       <div className="py-16 md:py-28 lg:py-32">
         <div className="flex flex-col items-center gap-6 px-4">
           {images.map((image, index) => (
-            <div key={index} className="pb-32">
-              <h1 className="text-3xl text-amber-500 font-bold text-center pb-8">
+            <div key={index} className="pb-8 md:pb-16 lg:pb-32">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl text-amber-500 font-bold text-center pb-8">
                 {image.year}
               </h1>
               <Image
                 key={image.year}
                 src={image.image}
-                width={1080}
-                height={350}
+                width={1200}
+                height={627}
                 alt={image.year}
                 quality={100}
-                className="w-[500px] md:w-[720px] lg:w-[1280px] rounded-xl border border-primary/50"
+                className="w-[500px] sm:w-[720px] md:w-[960px] lg:w-[1280px] rounded-xl border border-primary/70 shadow-xl"
               />
             </div>
           ))}

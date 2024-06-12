@@ -6,26 +6,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { zodiak } from "../fonts";
 import BlurIn from "@/components/animated/blur-in";
-
-const awards = [
-  {
-    id: "0",
-    uri: "best-leader",
-    name: "Best Leader",
-    image: "/images/awards/best-leader.png",
-    description:
-      "Special award is designed to encourage undergraduates to take on responsible leadership challenges involved in extracurricular activities and in academic-related activities. This award is given to one of the outstanding undergraduates - student leaders of the university",
-    plat2019: "/images/companies/fonterra.png",
-    plat2021: "/images/companies/brandix.png",
-    plat2022: "/images/companies/brandix.png",
-    plat2023: "/images/companies/alpha-apparels.png",
-    gold2023: "/images/companies/csds.png",
-    silv2023: "/images/companies/csds.png",
-    plat2023link: "https://www.alpha.lk/",
-    gold2023link: "http://careerskills.sjp.ac.lk/",
-    silv2023link: "http://careerskills.sjp.ac.lk/",
-  },
-];
+import { awards } from "@/public/data/awards";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
 
 export const AwardsPage: React.FC = () => {
   return (
@@ -40,7 +30,7 @@ export const AwardsPage: React.FC = () => {
               duration: 0.8,
               ease: "easeInOut",
             }}
-            className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-5xl md:text-7xl lg:text-9xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
+            className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-6xl md:text-8xl lg:text-9xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
           >
             Awards
           </motion.h1>
@@ -53,75 +43,71 @@ export const AwardsPage: React.FC = () => {
           duration={2}
         />
       </div>
+      {/* Award Cards */}
       <div className="py-16 md:py-28 lg:py-32">
-        <div className="flex flex-col items-center gap-6 px-4">
-          {awards.map((award) => (
-            <div key={award.id} className="pb-32">
-              <h1 className="text-3xl text-amber-500 font-bold text-center pb-8">
-                {award.name}
-              </h1>
-              <Image
-                key={award.id}
-                src={award.image}
-                width={100}
-                height={75}
-                alt={award.name}
-                quality={100}
-                className="rounded-xl border border-primary/50"
-              />
-              <p>{award.description}</p>
-              <div>
-                <h2>Platinum Sponsors:</h2>
-                <Image
-                  src={award.plat2019}
-                  width={100}
-                  height={100}
-                  alt="Platinum Sponsor 2019"
-                />
-                <Image
-                  src={award.plat2021}
-                  width={100}
-                  height={100}
-                  alt="Platinum Sponsor 2021"
-                />
-                <Image
-                  src={award.plat2022}
-                  width={100}
-                  height={100}
-                  alt="Platinum Sponsor 2022"
-                />
-                <Image
-                  src={award.plat2023}
-                  width={100}
-                  height={100}
-                  alt="Platinum Sponsor 2023"
-                />
+        <div className="flex flex-col items-center gap-6 px-4 space-y-[6rem]">
+          {awards.map((award, index) => (
+            <Card className="bg-background max-w-7xl" key={index}>
+              <div className="flex justify-center">
+                <div className="w-1/2 flex justify-center items-center">
+                  <Image
+                    src={award.image}
+                    alt={award.name}
+                    width={130}
+                    height={130}
+                    className="h-fit"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <CardHeader>
+                    <CardTitle>{award.name}</CardTitle>
+                    <CardDescription>{award.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <CardTitle>Platinum Sponsors</CardTitle>
+                    <div className="flex justify-between">
+                      {award.sponsors
+                        .filter((sponsor) => sponsor.type === "Platinum")
+                        .map((sponsor) => (
+                          <Link href={sponsor.link} key={sponsor.year}>
+                            <span className="flex justify-center mb-[-5px] z-50 bg-gradient-to-t from-zinc-500 to-zinc-300 bg-clip-text text-transparent font-bold">
+                              {sponsor.year}
+                            </span>
+                            <Image
+                              src={sponsor.imgSrc}
+                              alt={`Platinum Sponsor ${sponsor.year}`}
+                              className="rounded-md shadow-lg"
+                              width={75}
+                              height={75}
+                              quality={100}
+                            />
+                          </Link>
+                        ))}
+                    </div>
+                    <CardTitle>Who will be the partners of 2024</CardTitle>
+                    <div className="flex justify-between">
+                      {award.sponsors
+                        .filter((sponsor) => sponsor.year === 2023)
+                        .map((sponsor) => (
+                          <Link href={sponsor.link} key={sponsor.year}>
+                            <span className="flex justify-center mb-[-5px] z-50 bg-gradient-to-t from-zinc-500 to-zinc-300 bg-clip-text text-transparent font-bold">
+                              {sponsor.year}
+                            </span>
+                            <Image
+                              src={sponsor.imgSrc}
+                              alt={`Platinum Sponsor ${sponsor.year}`}
+                              className="rounded-md shadow-lg"
+                              width={75}
+                              height={75}
+                              quality={100}
+                            />
+                          </Link>
+                        ))}
+                    </div>
+                  </CardContent>
+                </div>
               </div>
-              <div>
-                <h2>Gold Sponsor 2023:</h2>
-                <Image
-                  src={award.gold2023}
-                  width={100}
-                  height={100}
-                  alt="Gold Sponsor 2023"
-                />
-              </div>
-              <div>
-                <h2>Silver Sponsor 2023:</h2>
-                <Image
-                  src={award.silv2023}
-                  width={100}
-                  height={100}
-                  alt="Silver Sponsor 2023"
-                />
-              </div>
-              <div>
-                <h2>Links:</h2>
-                <a href={award.plat2023link}>Platinum Sponsor 2023</a>
-                <a href={award.gold2023link}>Gold Sponsor 2023</a>
-                <a href={award.silv2023link}>Silver Sponsor 2023</a>
-              </div>
-            </div>
+            </Card>
           ))}
         </div>
       </div>

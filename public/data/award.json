@@ -117,12 +117,12 @@
     "name": "BESA",
     "image": "/images/awards/besa.png",
     "description": "Dedicated to the most optimistic and brilliant all-rounded undergraduate from each faculty. (except for the faculty of graduate studies) The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in each faculty will be awarded as the BESA Silver Medalists accordingly. BESA Awards will be granted under the following faculties;",
-    "plat2019": "",
-    "plat2021": "",
-    "plat2022": "",
-    "plat2023": "",
-    "gold2023": "",
-    "silv2023": ""
+    "plat2019": "undefined",
+    "plat2021": "undefined",
+    "plat2022": "undefined",
+    "plat2023": "undefined",
+    "gold2023": "undefined",
+    "silv2023": "undefined"
   },
   {
     "id": "8",
