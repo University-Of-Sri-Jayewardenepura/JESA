@@ -1,5 +1,6 @@
 import mongoose,{Schema} from "mongoose";
-import {ACADEMICYEAR} from '../app/constants/index';
+import {ACADEMICYEAR,FACULTY,DEGREE,AWARDS} from '../app/constants/index';
+import { getEnumValues } from '../app/utils/utils';
 
 const japuraApplicantSchema = new Schema(
     {
@@ -7,13 +8,23 @@ const japuraApplicantSchema = new Schema(
             type:'ObjectID',
             required: true,
         },
-        UniversityID:{
-            type:String,
+        UniversityID: {
+            type: String,
             required: true,
         },
-        AcademicYear:{
-            type:String,
-            enum:[ACADEMICYEAR.Year1,ACADEMICYEAR.Year2,ACADEMICYEAR.Year3,ACADEMICYEAR.Year4],
+        AcademicYear: {
+            type: String,
+            enum: getEnumValues(ACADEMICYEAR),
+            required: true,
+        },
+        Faculty: {
+            type: String,
+            enum: getEnumValues(FACULTY),
+            required: true,
+        },
+        Degree: {
+            type: String,
+            enum: getEnumValues(DEGREE),
             required: true,
         },
         isPastParticipant:{
@@ -23,13 +34,16 @@ const japuraApplicantSchema = new Schema(
         award1:{
             type:String,
             required: true,
+            enum: getEnumValues(AWARDS),
         },
         award2:{
-            type:String
+            type:String,
+            enum: getEnumValues(AWARDS),
         },
         award3:{
-            type:String
-        },
+            type:String,
+            enum: getEnumValues(AWARDS),
+        }
     }
 )
 
