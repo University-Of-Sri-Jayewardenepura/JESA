@@ -5,7 +5,7 @@ import { ACADEMICYEAR,AWARDS,GENDER, UNIVERSITY } from '../app/constants/index';
 import { getEnumValues } from '../app/utils/utils';
 
 
-const intreApplicantSchema = new Schema(
+const externalApplicantSchema = new Schema(
     {
         ApplicantId:{
             type:'ObjectID',
@@ -59,4 +59,4 @@ const intreApplicantSchema = new Schema(
     }
 )
 
-const IntreApplicant = mongoose.models.IntreApplicant || mongoose.model("IntreApplicant",intreApplicantSchema)
+const IntreApplicant = mongoose.models.ExternalApplicant || mongoose.model("ExternalApplicant",externalApplicantSchema)

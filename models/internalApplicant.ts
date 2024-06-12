@@ -2,7 +2,7 @@ import mongoose,{Schema} from "mongoose";
 import {GENDER,UNIVERSITY,ACADEMICYEAR,FACULTY,DEGREE,AWARDS} from '../app/constants/index';
 import { getEnumValues } from '../app/utils/utils';
 
-const japuraApplicantSchema = new Schema(
+const internalApplicantSchema = new Schema(
     {
         ApplicantId:{
             type:'ObjectID',
@@ -69,4 +69,4 @@ const japuraApplicantSchema = new Schema(
     }
 )
 
-const JapuraApplicant = mongoose.models.JapuraApplicant || mongoose.model("JapuraApplicant",japuraApplicantSchema)
+const JapuraApplicant = mongoose.models.InternalApplicant || mongoose.model("InternalApplicant",internalApplicantSchema)
