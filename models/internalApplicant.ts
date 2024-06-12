@@ -5,10 +5,6 @@ import exp from "constants";
 
 const internalApplicantSchema = new Schema(
     {
-        ApplicantId:{
-            type:'ObjectID',
-            required: true,
-        },
         Name: {
             type: String,
             required: true,
@@ -50,20 +46,20 @@ const internalApplicantSchema = new Schema(
             enum: getEnumValues(DEGREE),
             required: true,
         },
-        isPastParticipant:{
+        IsPastParticipant:{
             type:Boolean,
             required: true,
         },
-        award1:{
+        Award1:{
             type:String,
             required: true,
             enum: getEnumValues(AWARDS),
         },
-        award2:{
+        Award2:{
             type:String,
             enum: getEnumValues(AWARDS),
         },
-        award3:{
+        Award3:{
             type:String,
             enum: getEnumValues(AWARDS),
         }
@@ -72,3 +68,21 @@ const internalApplicantSchema = new Schema(
 
 const InternalApplicant = mongoose.models.InternalApplicant || mongoose.model("InternalApplicant",internalApplicantSchema);
 export default InternalApplicant;
+
+/*
+{
+"Name": "Sonal Jayasinghe",
+"Gender": "M",
+ "Email": "sonaldanindulk@gmail.com",
+ "Whatsapp": "0705589209",
+ "University": "colombo",
+ "UniversityRegisterId": "AS2021939",
+ "AcademicYear": "1",
+ "Faculty": "Applied Sciences",
+ "Degree" : "B.A. Sinhala (Special) Degree",
+ "IsPastParticipant": true,
+ "Award1": "Best Innovator",
+ "Award2": "Best Innovator",
+ "Award3": "Best Innovator"
+}
+*/

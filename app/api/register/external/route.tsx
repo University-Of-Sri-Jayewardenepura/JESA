@@ -18,3 +18,19 @@ export async function POST(request:Request) {
         return new NextResponse(JSON.stringify({ message: "Error saving applicant"}), { status: 500 });
     }
 }
+
+
+/* 
+{
+"Name": "Sonal Jayasinghe",
+"Gender": "M",
+ "Email": "sonaldanindulk@gmail.com",
+ "Whatsapp": "0705589209",
+ "University": "sri_jayewardenepura",
+ "UniversityRegisterId": "AS2021939",
+ "AcademicYear": "1",
+ "NIC": "200105600352",
+ "Award": "Best Innovator",
+ "WhichIndustry": "Paka Banwa"
+}
+*/
