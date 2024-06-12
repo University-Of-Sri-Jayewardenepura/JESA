@@ -37,11 +37,11 @@ export async function POST(request: Request) {
         }
 
         if(body.University==UNIVERSITY.SRI_JAYEWARDENEPURA){
-            return new NextResponse(JSON.stringify({ message: "You are not Extenal Sudent"}), { status: 401 });            
+            return new NextResponse(JSON.stringify({ message: "Hmm... Are you from University of Sri Jayewardenepura"}), { status: 401 });            
         }
 
         if(!(body.Award==AWARDS.BEST_INNOVATOR)){
-            return new NextResponse(JSON.stringify({ message: "You Extenal Sudent only can appliy to the Best Innovator Award"}), { status: 401 });            
+            return new NextResponse(JSON.stringify({ message: "Sorry! You are only eligible for Best Innovator."}), { status: 401 });            
         }
 
         await connectMongoDB();
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
          const duplicateCheck = await ExternalApplicant.find({NIC:body.NIC})
 
          if (duplicateCheck.length > 0) {
-            return new NextResponse(JSON.stringify({ message: "Duplicate Error" }), { status: 409 });
+            return new NextResponse(JSON.stringify({ message: "Hmm... Please Check NIC Number" }), { status: 409 });
         }
 
         // Create BaseApplicant
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
         return new NextResponse(JSON.stringify({ message: "Applicant saved successfully" }), { status: 201 });
     } catch (error) {
         console.error(error);
-        return new NextResponse(JSON.stringify({ message: "Error saving applicant"}), { status: 500 });
+        return new NextResponse(JSON.stringify({ message: "Sorry! We are unabled to save your form."}), { status: 500 });
     }
 }
 
