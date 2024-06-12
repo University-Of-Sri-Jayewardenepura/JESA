@@ -58,10 +58,9 @@ const externalApplicantSchema = new Schema(
         WhichIndustry: {
             type: String,
             required: true,
-        },
-     
-        
-    }
+        },   
+    },
+    { timestamps: true }
 )
 
 const ExternalApplicant = mongoose.models.ExternalApplicant || mongoose.model("ExternalApplicant",externalApplicantSchema);

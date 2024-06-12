@@ -67,7 +67,8 @@ const internalApplicantSchema = new Schema(
             type:String,
             enum: getEnumValues(AWARDS),
         }
-    }
+    },
+    { timestamps: true }
 )
 
 const InternalApplicant = mongoose.models.InternalApplicant || mongoose.model("InternalApplicant",internalApplicantSchema);
