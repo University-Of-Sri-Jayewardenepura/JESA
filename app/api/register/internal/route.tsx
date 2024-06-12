@@ -52,7 +52,7 @@ export async function POST(request: Request) {
             return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
         }
 
-        if (body.Award3==body.Award2) {
+        if (body.Award3==body.Award2 && body.Award2 != null ) {
             return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
         }
 
