@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 import {
   AWARDS,
   ACADEMICYEAR,
@@ -65,6 +68,8 @@ const formSchema = z.object({
 });
 
 function InternalRegisterForm() {
+  const router = useRouter();
+
   type DegreeOptions =
     | MGT_DEGREE[]
     | APPL_DEGREE[]
@@ -74,6 +79,7 @@ function InternalRegisterForm() {
     | ENG_DEGREE[]
     | MED_DEGREE[];
   const [degreeOptions, setDegreeOptions] = useState<DegreeOptions>([]);
+
 
   const academicYear = Object.values(ACADEMICYEAR);
 
@@ -125,18 +131,21 @@ function InternalRegisterForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(cleanedValues),
+        body: JSON.stringify(values),
       }
     );
 
     if (!response.ok) {
-      console.error("API request failed", await response.text());
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText);
+      const errorMessage = errorData.message;
+      toast.error(errorMessage);
     } else {
       const data = await response.json();
       console.log("API response", data);
+      router.push("/register/success");
     }
   }
-
 
   return (
     <Form {...form}>
@@ -518,6 +527,7 @@ function InternalRegisterForm() {
 
         <Button type="submit">Submit</Button>
       </form>
+      <Toaster />
     </Form>
   );
 }

@@ -5,6 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { UNIVERSITY, ACADEMICYEAR } from "@/app/constants";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from 'next/navigation'
+
 
 import {
   Form,
@@ -52,6 +55,7 @@ const formSchema = z.object({
 });
 
 function ExternalRegisterForm() {
+  const router = useRouter()
   const [degreeOptions, setDegreeOptions] = useState([]);
   const universityNames = Object.values(UNIVERSITY).filter(
     (universityName) => universityName !== "University of Sri Jayewardenepura"
@@ -78,10 +82,14 @@ function ExternalRegisterForm() {
     );
 
     if (!response.ok) {
-      console.error("API request failed", await response.text());
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText);
+      const errorMessage = errorData.message;
+      toast.error(errorMessage);
     } else {
       const data = await response.json();
       console.log("API response", data);
+      router.push('/register/success');
     }
   }
 
@@ -300,6 +308,7 @@ function ExternalRegisterForm() {
 
         <Button type="submit">Submit</Button>
       </form>
+      <Toaster />
     </Form>
   );
 }
