@@ -10,28 +10,15 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 // Define Applicant Schema
 const applicantSchema = new Schema(
     {
-        Name: {
-            type: String,
-            required: true,
-        },
-        Gender: {
-            type: String,
-            enum: getEnumValues(GENDER),
-            required: true,
-        },
-        Email: {
-            type: String,
-            required: true,
-        },
-        Whatsapp: {
-            type: Number,
-            required: true,
-        },
         University: {
             type: String,
             enum: getEnumValues(UNIVERSITY),
             required: true,
         },
+        DetilID: {
+            type: 'ObjectID',
+        },
+        
     }
 );
 
