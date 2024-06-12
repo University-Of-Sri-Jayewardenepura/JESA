@@ -39,19 +39,7 @@ const formSchema = z.object({
   awards: z.string().optional(),
 });
 
-const facultiesDegrees = {
-  "Faculty of Management Studies & Commerce": [
-    "B.Sc. Accounting (Special) Degree",
-    "B.Sc. Finance (Special) Degree",
-    // Add other degrees for this faculty
-  ],
-  "Faculty of Applied Sciences": [
-    "B.Sc. (General) Degree (3 years)",
-    "B.Sc. (Special) Degree (4 years)",
-    // Add other degrees for this faculty
-  ],
-  // Add other faculties and their degrees here
-};
+
 
 function RegisterForm() {
   const [degreeOptions, setDegreeOptions] = useState([]);
@@ -61,17 +49,9 @@ function RegisterForm() {
     mode: "onChange",
   });
 
-  useEffect(() => {
-    if (form.getValues("faculty")) {
-      const facultyDegrees = facultiesDegrees[form.getValues("faculty")] || [];
-      setDegreeOptions(facultyDegrees);
-    }
-  }, [form.getValues("faculty")]);
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  function onSubmit(){
+    console.log("Submitted");
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
