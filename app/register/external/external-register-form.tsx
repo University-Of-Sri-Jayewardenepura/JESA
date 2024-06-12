@@ -64,8 +64,25 @@ function ExternalRegisterForm() {
     mode: "onChange",
   });
 
-  function onSubmit(values: any) {
+  async function onSubmit(values: any) {
     console.log(values);
+    const response = await fetch(
+      "http://localhost:3000/api/register/external",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    if (!response.ok) {
+      console.error("API request failed", await response.text());
+    } else {
+      const data = await response.json();
+      console.log("API response", data);
+    }
   }
 
   return (

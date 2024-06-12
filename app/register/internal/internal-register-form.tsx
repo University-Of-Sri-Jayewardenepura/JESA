@@ -113,11 +113,28 @@ function InternalRegisterForm() {
     mode: "onChange",
   });
 
-  function onSubmit(values: any) {
+  async function onSubmit(values: any) {
     const cleanedValues = Object.fromEntries(
       Object.entries(values).filter(([_, v]) => v !== undefined)
     );
     console.log(cleanedValues);
+    const response = await fetch(
+      "http://localhost:3000/api/register/internal",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cleanedValues),
+      }
+    );
+
+    if (!response.ok) {
+      console.error("API request failed", await response.text());
+    } else {
+      const data = await response.json();
+      console.log("API response", data);
+    }
   }
 
 
