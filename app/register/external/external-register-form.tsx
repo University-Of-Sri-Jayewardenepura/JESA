@@ -6,8 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { UNIVERSITY, ACADEMICYEAR } from "@/app/constants";
 import toast, { Toaster } from "react-hot-toast";
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -55,8 +54,10 @@ const formSchema = z.object({
 });
 
 function ExternalRegisterForm() {
-  const router = useRouter()
+  const router = useRouter();
   const [degreeOptions, setDegreeOptions] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const universityNames = Object.values(UNIVERSITY).filter(
     (universityName) => universityName !== "University of Sri Jayewardenepura"
   );
@@ -69,6 +70,7 @@ function ExternalRegisterForm() {
   });
 
   async function onSubmit(values: any) {
+    setIsSubmitting(true);
     console.log(values);
     const response = await fetch(
       "http://localhost:3000/api/register/external",
@@ -86,10 +88,11 @@ function ExternalRegisterForm() {
       const errorData = JSON.parse(errorText);
       const errorMessage = errorData.message;
       toast.error(errorMessage);
+      setIsSubmitting(false);
     } else {
       const data = await response.json();
       console.log("API response", data);
-      router.push('/register/success');
+      router.push("/register/success");
     }
   }
 
@@ -306,7 +309,9 @@ function ExternalRegisterForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
       </form>
       <Toaster />
     </Form>

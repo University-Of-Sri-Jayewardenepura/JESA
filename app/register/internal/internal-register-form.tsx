@@ -79,7 +79,7 @@ function InternalRegisterForm() {
     | ENG_DEGREE[]
     | MED_DEGREE[];
   const [degreeOptions, setDegreeOptions] = useState<DegreeOptions>([]);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const academicYear = Object.values(ACADEMICYEAR);
 
@@ -120,6 +120,8 @@ function InternalRegisterForm() {
   });
 
   async function onSubmit(values: any) {
+    setIsSubmitting(true);
+
     const cleanedValues = Object.fromEntries(
       Object.entries(values).filter(([_, v]) => v !== undefined)
     );
@@ -140,6 +142,7 @@ function InternalRegisterForm() {
       const errorData = JSON.parse(errorText);
       const errorMessage = errorData.message;
       toast.error(errorMessage);
+      setIsSubmitting(false);
     } else {
       const data = await response.json();
       console.log("API response", data);
@@ -525,7 +528,9 @@ function InternalRegisterForm() {
           </>
         )}
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
       </form>
       <Toaster />
     </Form>
