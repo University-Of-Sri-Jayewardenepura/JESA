@@ -37,23 +37,23 @@ export async function POST(request: Request) {
         }
 
         if(!(body.University==UNIVERSITY.SRI_JAYEWARDENEPURA)){
-            return new NextResponse(JSON.stringify({ message: "You are Extenal Sudent"}), { status: 401 });            
+            return new NextResponse(JSON.stringify({ message: "You are not belongs to this form!"}), { status: 401 });            
         }
 
         if (!body.IsPastParticipant && body.Award3) {
-            return new NextResponse(JSON.stringify({ message: "Only Past Year participants can apply for 3 Awards" }), { status: 401 });
+            return new NextResponse(JSON.stringify({ message: "Only past year participants can apply for 3 awards" }), { status: 401 });
         }
 
         if (body.Award1==body.Award2) {
-            return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
+            return new NextResponse(JSON.stringify({ message: "Oops! You cannot select same award again!" }), { status: 401 });
         }
 
         if (body.Award1==body.Award3) {
-            return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
+            return new NextResponse(JSON.stringify({ message: "Oops! You cannot select same award again!" }), { status: 401 });
         }
 
         if (body.Award3==body.Award2 && body.Award2 != null ) {
-            return new NextResponse(JSON.stringify({ message: "can not select same Award twice" }), { status: 401 });
+            return new NextResponse(JSON.stringify({ message: "Oops! You cannot select same award again!" }), { status: 401 });
         }
 
         await connectMongoDB();
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
         const duplicateCheck = await InternalApplicant.find({ UniversityRegisterId: body.UniversityRegisterId });
 
         if (duplicateCheck.length > 0) {
-            return new NextResponse(JSON.stringify({ message: "Duplicate Error" }), { status: 409 });
+            return new NextResponse(JSON.stringify({ message: "Hmm... Please Check Registration Number" }), { status: 409 });
         }
 
         // Create BaseApplicant
