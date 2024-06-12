@@ -7,7 +7,15 @@ import { getEnumValues } from '../app/utils/utils';
 
 const externalApplicantSchema = new Schema(
     {
+        ApplicantId:{
+            type:'ObjectId',
+            required: true,
+        },
         Name: {
+            type: String,
+            required: true,
+        },
+        NIC: {
             type: String,
             required: true,
         },
@@ -29,6 +37,10 @@ const externalApplicantSchema = new Schema(
             enum: getEnumValues(UNIVERSITY),
             required: true,
         },
+        Faculty: {
+            type: String,
+            required: true,
+        },
         UniversityRegisterId: {
             type: String,
             required: true,
@@ -36,10 +48,6 @@ const externalApplicantSchema = new Schema(
         AcademicYear: {
             type: String,
             enum: getEnumValues(ACADEMICYEAR),
-            required: true,
-        },
-        NIC: {
-            type: String,
             required: true,
         },
         Award:{

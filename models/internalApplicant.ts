@@ -5,6 +5,10 @@ import exp from "constants";
 
 const internalApplicantSchema = new Schema(
     {
+        ApplicantId:{
+            type:'ObjectId',
+            required: true,
+        },
         Name: {
             type: String,
             required: true,
