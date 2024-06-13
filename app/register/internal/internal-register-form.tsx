@@ -39,6 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { University } from "lucide-react";
 
 const formSchema = z.object({
   Name: z
@@ -54,7 +55,10 @@ const formSchema = z.object({
     .string()
     .min(10, { message: "Mobile number should be 10 characters." })
     .nonempty("WhatsApp number is required."),
-  University: z.string().nonempty("University is required."),
+  University: z
+    .string()
+    .nonempty("University is required.")
+    .default("University of Sri Jayewardenepura"),
   UniversityRegisterId: z
     .string()
     .nonempty("University Registration Number is required."),
@@ -230,7 +234,11 @@ function InternalRegisterForm() {
             <FormItem>
               <FormLabel>University</FormLabel>
               <FormControl>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  value="University of Sri Jayewardenepura" // Set the default value
+                  disabled={true} // Disable the Select component
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select University" />
                   </SelectTrigger>
