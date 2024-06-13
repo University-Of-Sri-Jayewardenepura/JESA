@@ -106,6 +106,8 @@ export enum DEGREE {
     
     MBBS = 'MBBS',
     HUMAN_BIOLOGY = 'B.Sc. in Human Biology',
+
+    Other = 'Other'
 }
 
 export enum AWARDS {
@@ -146,7 +148,8 @@ export enum APPL_DEGREE {
     SPECIAL_4YEARS = 'B.Sc. (Special) Degree (4 years)',
     HONOURS_APPLIED_SCIENCES_4YEARS = 'B.Sc. Honours Degree in Applied Sciences (4 years)',
     FOOD_SCIENCE_TECHNOLOGY_SPECIAL = 'B.Sc. Food Science and Technology (Special) Degree',
-    SPORT_SCIENCE_MANAGEMENT_SPECIAL = 'B.Sc. Sport Science and Management (Special) Degree'
+    SPORT_SCIENCE_MANAGEMENT_SPECIAL = 'B.Sc. Sport Science and Management (Special) Degree',
+    OTHER = 'Other'
 }
 
 export enum HUM_DEGREE {

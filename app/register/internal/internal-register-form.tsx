@@ -39,7 +39,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { University } from "lucide-react";
 
 const formSchema = z.object({
   Name: z
@@ -65,6 +64,7 @@ const formSchema = z.object({
   AcademicYear: z.string().nonempty("Academic Year is required."),
   Faculty: z.string().nonempty("Faculty is required."),
   Degree: z.string().nonempty("Degree is required."),
+  CustomDegree: z.string().optional(),
   IsPastParticipant: z.boolean().default(false),
   Award1: z.string().nonempty("Award is required."),
   Award2: z.string().optional(),
@@ -88,6 +88,16 @@ function InternalRegisterForm() {
   const academicYear = Object.values(ACADEMICYEAR);
 
   const faculties = Object.values(FACULTY);
+
+  const [selectedDegree, setSelectedDegree] = useState('');
+  const [isOtherSelected, setIsOtherSelected] = useState(false);
+
+  const handleDegreeChange = (value: any) => {
+    setSelectedDegree(value);
+    setIsOtherSelected(value === 'Other');
+    form.setValue('Degree', value); 
+  };
+
 
   function handleFacultyChange(selectedFaculty: string) {
     // Logic to set degree options based on selected faculty
@@ -334,34 +344,55 @@ function InternalRegisterForm() {
         />
 
         {degreeOptions.length > 0 && (
-          <FormField
-            control={form.control}
-            name="Degree"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Degree</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Degree" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Select Degree</SelectLabel>
-                        {degreeOptions.map((degree, index) => (
-                          <SelectItem key={index} value={degree}>
-                            {degree}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+        <FormField
+          control={form.control}
+          name="Degree"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Degree</FormLabel>
+              <FormControl>
+                <Select onValueChange={handleDegreeChange} value={selectedDegree}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Degree" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Select Degree</SelectLabel>
+                      {degreeOptions.map((degree, index) => (
+                        <SelectItem key={index} value={degree}>
+                          {degree}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
+
+      {isOtherSelected && (
+        <FormField
+          control={form.control}
+          name="CustomDegree"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Enter Degree</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter your degree"
+                  value={field.value}
+                  onChange={field.onChange}
+                  required = {isOtherSelected}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
 
         <FormField
           control={form.control}
