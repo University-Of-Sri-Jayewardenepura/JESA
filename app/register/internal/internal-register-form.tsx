@@ -236,8 +236,8 @@ function InternalRegisterForm() {
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  value="University of Sri Jayewardenepura" // Set the default value
-                  disabled={true} // Disable the Select component
+                  value="University of Sri Jayewardenepura"
+                  disabled={true} 
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select University" />

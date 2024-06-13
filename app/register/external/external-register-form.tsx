@@ -49,7 +49,7 @@ const formSchema = z.object({
     .string()
     .nonempty("University Registration Number is required."),
   AcademicYear: z.string().nonempty("Academic Year is required."),
-  Award: z.string().nonempty("Award is required."),
+  Award: z.string().nonempty("Award is required.").default("Best Innovator"),
   WhichIndustry: z.string().nonempty("Industry information is required."),
 });
 
@@ -274,14 +274,20 @@ function ExternalRegisterForm() {
             <FormItem>
               <FormLabel>Select Your Award</FormLabel>
               <FormControl>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  value="Best Innovator"
+                  disabled={true}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select Your Award" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Select Award</SelectLabel>
-                      <SelectItem value="Best Innovator">
+                      <SelectItem
+                        value="Best Innovator"
+                      >
                         Best Innovator
                       </SelectItem>
                     </SelectGroup>
