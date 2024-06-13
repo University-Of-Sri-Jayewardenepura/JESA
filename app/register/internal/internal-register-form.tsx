@@ -225,6 +225,7 @@ const relevantAwards = getRelevantAwards(form.watch("Faculty"));
                       <SelectLabel>Gender</SelectLabel>
                       <SelectItem value="Male">Male</SelectItem>
                       <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
