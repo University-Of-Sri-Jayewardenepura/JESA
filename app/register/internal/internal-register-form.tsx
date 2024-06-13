@@ -164,6 +164,33 @@ function InternalRegisterForm() {
     }
   }
 
+
+  function getRelevantAwards(faculty: string): string[] {
+    const facultyToBesaAwardsMap: { [key: string]: string[] } = {
+        "Faculty of Management Studies & Commerce": [AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE],
+        "Faculty of Applied Sciences": [AWARDS.BESA_APPLIED_SCIENCES],
+        "Faculty of Humanities and Social Sciences": [AWARDS.BESA_HUMANITIES_AND_SOCIAL_SCIENCES],
+        "Faculty of Allied Health Sciences": [AWARDS.BESA_ALLIED_HEALTH_SCIENCES],
+        "Faculty of Technology": [AWARDS.BESA_TECHNOLOGY],
+        "Faculty of Engineering": [AWARDS.BESA_ENGINEERING],
+        "Faculty of Medical Sciences": [AWARDS.BESA_MEDICAL_SCIENCES],
+    };
+
+    // Default awards excluding specific BESA awards
+    const defaultAwards = Object.values(AWARDS).filter(award => 
+        !award.startsWith("BESA")
+    );
+
+    // If the faculty has specific BESA awards, add them to the list
+    const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
+
+    return [...defaultAwards, ...facultySpecificAwards];
+}
+
+const relevantAwards = getRelevantAwards(form.watch("Faculty"));
+
+
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-96">
@@ -440,7 +467,7 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          {Object.values(AWARDS).map((award, index) => (
+                          {relevantAwards.map((award, index) => (
                             <SelectItem key={index} value={award}>
                               {award}
                             </SelectItem>
@@ -467,7 +494,7 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          {Object.values(AWARDS).map((award, index) => (
+                          {relevantAwards.map((award, index) => (
                             <SelectItem key={index} value={award}>
                               {award}
                             </SelectItem>
@@ -494,7 +521,7 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          {Object.values(AWARDS).map((award, index) => (
+                          {relevantAwards.map((award, index) => (
                             <SelectItem key={index} value={award}>
                               {award}
                             </SelectItem>
@@ -524,7 +551,7 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          {Object.values(AWARDS).map((award, index) => (
+                          {relevantAwards.map((award, index) => (
                             <SelectItem key={index} value={award}>
                               {award}
                             </SelectItem>
@@ -551,7 +578,7 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          {Object.values(AWARDS).map((award, index) => (
+                          {relevantAwards.map((award, index) => (
                             <SelectItem key={index} value={award}>
                               {award}
                             </SelectItem>
