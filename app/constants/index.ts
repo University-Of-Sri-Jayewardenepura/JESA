@@ -1,6 +1,7 @@
 export enum GENDER {
     MALE = 'Male',
     FEMALE = 'Female',
+    Other = 'Other' 
 }
 
 export enum UNIVERSITY {

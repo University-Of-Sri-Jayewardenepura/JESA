@@ -50,6 +50,9 @@ const internalApplicantSchema = new Schema(
             enum: getEnumValues(DEGREE),
             required: true,
         },
+        OtherDegree:{
+            type: String
+        },
         IsPastParticipant:{
             type:Boolean,
             required: true,

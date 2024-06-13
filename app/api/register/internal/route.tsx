@@ -21,6 +21,7 @@ const internalApplicantSchema = z.object({
     AcademicYear: z.enum(enumValues(ACADEMICYEAR)),
     Faculty: z.enum(enumValues(FACULTY)),
     Degree: z.enum(enumValues(DEGREE)),
+    OtherDegree:z.string().optional(),
     IsPastParticipant: z.boolean(),
     Award1: z.enum(enumValues(AWARDS)),
     Award2: z.enum(enumValues(AWARDS)).optional(),
