@@ -1,5 +1,5 @@
 import { Metadata } from "next/types";
-import AwardsPage from "./awards";
+import AwardsPage from "./awards-card";
 
 export const metadata: Metadata = {
   title: "JESA 2024 | Awards",

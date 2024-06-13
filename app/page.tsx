@@ -1,3 +1,4 @@
+import { Awards } from "@/components/awards";
 import { Gallery } from "@/components/gallery";
 import { Hero } from "@/components/hero";
 import { Intro } from "@/components/intro";
@@ -9,6 +10,7 @@ export default function Home() {
       <Hero />
       <Gallery />
       <Intro />
+      <Awards />
       <Partners />
     </main>
   );

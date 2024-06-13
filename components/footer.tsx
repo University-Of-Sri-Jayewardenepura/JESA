@@ -10,6 +10,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { zodiak } from "@/app/fonts";
+import { contactNames } from "@/public/data/contacts";
 
 export function Footer() {
   const socialIcons = [
@@ -19,19 +20,6 @@ export function Footer() {
     {
       link: "https://www.linkedin.com/showcase/j-pura-employability-skills-awards/",
       icon: Linkedin,
-    },
-  ];
-
-  const contactNames = [
-    {
-      name: "Naveen Hewage",
-      phone: "+94711766662",
-      linkedin: "https://www.linkedin.com/in/naveen-hewage/",
-    },
-    {
-      name: "Induwara Gamage",
-      phone: "+94718938256",
-      linkedin: "https://www.linkedin.com/in/induwara-gamage/",
     },
   ];
 
@@ -60,12 +48,24 @@ export function Footer() {
           </div>
           <p className="text-sm text-muted-foreground text-center px-2">
             <span className={`${zodiak.className} font-bold`}>
-              Career Skills Development Society
+              <Link
+                href="http://careerskills.sjp.ac.lk/"
+                target="_blank"
+                className="hover:underline"
+              >
+                Career Skills Development Society
+              </Link>
             </span>{" "}
             &#x2022; 2024 <br />
             in collaboration with Career Guidance Unit of{" "}
             <span className={`${zodiak.className} font-bold`}>
-              University of Sri Jayewardenepura
+              <Link
+                href="http://www.sjp.ac.lk/"
+                target="_blank"
+                className="hover:underline"
+              >
+                University of Sri Jayewardenepura
+              </Link>
             </span>
           </p>
         </div>

@@ -48,8 +48,8 @@ export const AwardsPage: React.FC = () => {
         <div className="flex flex-col items-center gap-6 px-4 space-y-[6rem]">
           {awards.map((award, index) => (
             <Card className="bg-background max-w-7xl" key={index}>
-              <div className="flex justify-center">
-                <div className="w-1/2 flex justify-center items-center">
+              <div className="flex justify-center flex-col md:flex-row">
+                <div className="w-full md:w-1/2 flex justify-center items-center">
                   <Image
                     src={award.image}
                     alt={award.name}
@@ -58,9 +58,11 @@ export const AwardsPage: React.FC = () => {
                     className="h-fit"
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="w-full md:w-1/2">
                   <CardHeader>
-                    <CardTitle>{award.name}</CardTitle>
+                    <CardTitle className="pb-4 bg-gradient-to-br from-amber-400 to-amber-500 bg-clip-text text-transparent">
+                      {award.name}
+                    </CardTitle>
                     <CardDescription>{award.description}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">

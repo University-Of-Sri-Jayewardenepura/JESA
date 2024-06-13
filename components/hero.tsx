@@ -16,9 +16,9 @@ export const Hero = () => {
   }, [theme]);
 
   return (
-    <div className="relative flex flex-col h-[600px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4 pt-[6rem]">
+    <div className="relative flex flex-col h-[600px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4 pt-[6rem] space-y-6">
       <h1
-        className={`pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-7xl  leading-none text-transparent md:text-9xl select-none flex font-black ${zodiak.className}`}
+        className={`pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-7xl  leading-none text-transparent md:text-9xl flex font-black ${zodiak.className}`}
       >
         JESA
       </h1>
@@ -30,13 +30,14 @@ export const Hero = () => {
         <br />
         <span className="text-white">This is your moment to make history.</span>
       </p>
-      <Button
-        asChild
-        className="font-bold text-lg text-background shadow-inner shadow-amber-400 rounded-full mt-8"
-        size={"lg"}
-      >
-        <Link href="/register">Register</Link>
-      </Button>
+      <Link href="/register" target="_self">
+        <Button
+          className="font-bold text-lg text-background shadow-inner shadow-amber-400 rounded-full mt-8"
+          size={"lg"}
+        >
+          Register
+        </Button>
+      </Link>
       <Particles
         className="absolute inset-0"
         quantity={100}
