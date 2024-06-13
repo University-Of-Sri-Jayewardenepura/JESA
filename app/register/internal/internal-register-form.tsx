@@ -173,15 +173,13 @@ function InternalRegisterForm() {
         "Faculty of Allied Health Sciences": [AWARDS.BESA_ALLIED_HEALTH_SCIENCES],
         "Faculty of Technology": [AWARDS.BESA_TECHNOLOGY],
         "Faculty of Engineering": [AWARDS.BESA_ENGINEERING],
-        "Faculty of Medical Sciences": [AWARDS.BESA_MEDICAL_SCIENCES],
+        "Faculty of Medical Science": [AWARDS.BESA_MEDICAL_SCIENCES],
     };
 
-    // Default awards excluding specific BESA awards
     const defaultAwards = Object.values(AWARDS).filter(award => 
         !award.startsWith("BESA")
     );
 
-    // If the faculty has specific BESA awards, add them to the list
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
     return [...defaultAwards, ...facultySpecificAwards];
