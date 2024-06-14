@@ -3,8 +3,8 @@
 import Particles from "@/components/animated/particles";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { zodiak } from "@/app/fonts";
-import { Button } from "./ui/button";
+import Image from "next/image";
+import ShinyButton from "./animated/shiny-button";
 import Link from "next/link";
 
 export const Hero = () => {
@@ -17,11 +17,14 @@ export const Hero = () => {
 
   return (
     <div className="relative flex flex-col h-[600px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4 pt-[6rem] space-y-6">
-      <h1
-        className={`pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-7xl  leading-none text-transparent md:text-9xl flex font-black ${zodiak.className}`}
-      >
-        JESA
-      </h1>
+      <div className="flex flex-col items-center">
+        <Image alt="JESA" width={400} height={200} src="/images/jesa-min.png" />
+        <h3
+          className={`pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-neutral-100 to-neutral-200 bg-clip-text text-center text-3xl  leading-none text-transparent md:text-5xl flex font-black mt-[-4rem] pb-2`}
+        >
+          J&apos;pura Employability Skills Awards
+        </h3>
+      </div>
       <p className={`text-white/70 text-center max-w-2xl`}>
         Your achievements deserve a grand celebration. Bask in the spotlight of
         recognition at the most prestigious and elegant award gala ever
@@ -30,14 +33,6 @@ export const Hero = () => {
         <br />
         <span className="text-white">This is your moment to make history.</span>
       </p>
-      <Link href="/register" target="_self">
-        <Button
-          className="font-bold text-lg text-background shadow-inner shadow-amber-400 rounded-full mt-8"
-          size={"lg"}
-        >
-          Register
-        </Button>
-      </Link>
       <Particles
         className="absolute inset-0"
         quantity={100}
@@ -45,6 +40,9 @@ export const Hero = () => {
         color={color}
         refresh
       />
+      <Link href="/register" className="hover:scale-110">
+        <ShinyButton text="Register" />
+      </Link>
     </div>
   );
 };

@@ -29,7 +29,7 @@ export function Navbar({ className }: { className?: string }) {
             alt="JESA 2024"
             className="h-8 w-8"
           />
-          <h1 className="text-lg font-semibold hidden md:block bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent">
+          <h1 className="text-lg font-semibold  bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent">
             JESA 2024
           </h1>
         </a>

@@ -44,7 +44,7 @@ export function Awards() {
                 alt={award.name}
                 className="h-fit z-10 w-[100px] sm:w-[150px] md:w-[175px] lg:w-[200px]"
               />
-              <h1 className="text-3xl md:text-5xl lg:text-6xl mt-[-1.5rem] md:mt-[-2.5rem] pb-6 bg-gradient-to-t from-amber-300 to-amber-500 bg-clip-text text-transparent font-bold">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl mt-[-1.5rem] md:mt-[-2.5rem] pb-6 bg-gradient-to-t from-amber-300 to-amber-500 bg-clip-text text-transparent font-bold text-center">
                 {award.name}
               </h1>
             </div>

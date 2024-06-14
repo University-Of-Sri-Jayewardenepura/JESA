@@ -56,7 +56,7 @@ export function Footer() {
                 Career Skills Development Society
               </Link>
             </span>{" "}
-            &#x2022; 2024 <br />
+            &#x2022; 2024/2025 <br />
             in collaboration with Career Guidance Unit of{" "}
             <span className={`${zodiak.className} font-bold`}>
               <Link
