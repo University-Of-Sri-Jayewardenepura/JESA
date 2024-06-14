@@ -44,7 +44,7 @@ export const AwardsPage: React.FC = () => {
         />
       </div>
       {/* Award Cards */}
-      <div className="py-16 md:py-28 lg:py-32">
+      <div className="py-16 md:py-28 lg:py-32 pt-[6rem]">
         <div className="flex flex-col items-center gap-6 px-4 space-y-[6rem]">
           {awards.map((award, index) => (
             <Card

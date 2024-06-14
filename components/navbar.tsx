@@ -20,7 +20,7 @@ export function Navbar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex justify-between items-center px-4 py-3 bg-background/60 backdrop-blur-xl rounded-full shadow-lg">
+      <div className="flex justify-between items-center px-4 py-3 bg-background/75 backdrop-blur-lg rounded-full shadow-lg">
         <a className="flex items-center space-x-4" href="/">
           <Image
             src="/images/jesa-icon.ico"

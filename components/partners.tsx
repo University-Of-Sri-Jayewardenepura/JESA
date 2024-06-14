@@ -48,7 +48,7 @@ const ReviewCard = ({
 export const Partners = () => {
   return (
     <section className="flex flex-col max-w-7xl w-full">
-      <h1 className="mb-[-.60rem] md:mb-[.80rem] lg:mb-[-1.5rem] bg-gradient-to-br from-amber-300 to-amber-950 bg-clip-text text-center text-6xl md:text-8xl lg:text-9xl font-bold uppercase tracking-tight text-transparent">
+      <h1 className="mb-[-.60rem] md:mb-[.80rem] lg:mb-[-1.5rem] bg-gradient-to-br from-amber-300 to-amber-950 bg-clip-text text-center text-5xl md:text-7xl lg:text-9xl font-bold uppercase tracking-tight text-transparent">
         Sponsors
       </h1>
       <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background py-20 border border-primary/70 md:shadow-xl mb-[6rem]">
