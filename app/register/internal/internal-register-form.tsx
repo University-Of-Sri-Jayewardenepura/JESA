@@ -154,7 +154,7 @@ function InternalRegisterForm() {
     const cleanedValues = Object.fromEntries(
       Object.entries(values).filter(([_, v]) => v !== undefined)
     );
-    console.log(cleanedValues);
+    //console.log(cleanedValues);
     const response = await fetch("/api/register/internal", {
       method: "POST",
       headers: {
@@ -171,7 +171,7 @@ function InternalRegisterForm() {
       setIsSubmitting(false);
     } else {
       const data = await response.json();
-      console.log("API response", data);
+      //console.log("API response", data);
       router.push("/register/success");
     }
   }

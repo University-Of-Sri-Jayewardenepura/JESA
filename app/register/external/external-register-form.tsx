@@ -71,7 +71,7 @@ function ExternalRegisterForm() {
 
   async function onSubmit(values: any) {
     setIsSubmitting(true);
-    console.log(values);
+    //console.log(values);
     const response = await fetch("/api/register/external", {
       method: "POST",
       headers: {
@@ -88,7 +88,7 @@ function ExternalRegisterForm() {
       setIsSubmitting(false);
     } else {
       const data = await response.json();
-      console.log("API response", data);
+      //console.log("API response", data);
       router.push("/register/success");
     }
   }
