@@ -41,6 +41,9 @@ App Structure
 
 ```
 ├── app
+│   ├── api
+│   │   ├── register
+│   │   |   ├── ...
 │   ├── awards
 │   │   ├── page.tsx
 │   │   └── awards-card.tsx
@@ -49,7 +52,7 @@ App Structure
 │   │   └── hall-of-fame.tsx
 │   ├── register
 │   │   ├── page.tsx
-│   │   └── register-form.tsx
+│   │   ├── ...
 │   ├── terms
 │   │   ├── page.tsx
 │   ├── layout.tsx
@@ -69,6 +72,8 @@ App Structure
 │   └── ├── ...
 │   ├── navbar.tsx
 │   └── ...
+├── constants
+├── models
 ├── lib
 │   └── utils.ts
 ├── bun.lockb
@@ -87,3 +92,4 @@ App Structure
 - [Sonal Jayasinghe](https://github.com/SonalJayasinghe)
 - [Pruthivi Thejan](https://links.pruthivithejan.me)
 - [Yasitha Renuk](https://github.com/YasithaRenuk)
+- [Kasun Rathnayaka](https://github.com/kasun-m-rathnayaka)

@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { zodiak } from "@/app/fonts";
-import { contactNames } from "@/public/data/contacts";
+import { contactNames } from "@/constants/contacts";
 
 export function Footer() {
   const socialIcons = [

@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { awards } from "@/public/data/awards";
+import { awards } from "@/constants/awards";
 import Image from "next/image";
 import { zodiak } from "@/app/fonts";
 

@@ -6,7 +6,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { zodiak } from "../fonts";
 import BlurIn from "@/components/animated/blur-in";
-import { awards } from "@/public/data/awards";
+import { awards } from "@/constants/awards";
 import {
   Card,
   CardContent,

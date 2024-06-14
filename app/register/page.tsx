@@ -1,6 +1,7 @@
 import { Metadata } from "next/types";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { zodiak } from "../fonts";
 
 export const metadata: Metadata = {
   title: "JESA 2024 | Register",
@@ -11,11 +12,14 @@ export const metadata: Metadata = {
 export default function Register() {
   return (
     <div className="flex flex-col items-center min-h-screen pt-32 w-full space-y-3">
-      <h1 className=" sm:text-5xl text-4xl text-center pl-3 pr-3">JESA 2024 REGISTRATION</h1>
-      <h2 className="text-slate-400 text-center pl-3 pr-3">
+      <h1
+        className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
+      >
+        JESA 2024 REGISTRATION
+      </h1>
+      <h2 className="text-white/75 text-center pl-3 pr-3">
         Please select the category to proceed with the form
       </h2>
-    
       <div className="flex flex-row justify-center items-center h-20 flex-wrap">
         <Link rel="preload" href="/register/internal">
           <Button className="m-4 px-6 py-2 shadow-md flex-1 h-24 w-64">

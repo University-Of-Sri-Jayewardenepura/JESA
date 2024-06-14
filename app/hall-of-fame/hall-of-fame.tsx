@@ -4,7 +4,7 @@ import { LampContainer } from "@/components/animated/lamp";
 import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
-import { images } from "@/public/data/hall-of-fame";
+import { images } from "@/constants/hall-of-fame";
 import { zodiak } from "../fonts";
 import BlurIn from "@/components/animated/blur-in";
 

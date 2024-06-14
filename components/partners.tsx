@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import Marquee from "@/components/animated/marquee";
 import Image from "next/image";
 import Link from "next/link";
-import { partners } from "@/public/data/sponsors";
+import { partners } from "@/constants/sponsors";
 
 const firstRow = partners.slice(0, partners.length / 2);
 const secondRow = partners.slice(partners.length / 2);

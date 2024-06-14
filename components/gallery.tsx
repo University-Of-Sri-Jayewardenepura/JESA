@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { imageSrcs } from "@/public/data/gallery";
+import { imageSrcs } from "@/constants/gallery";
 
 export function Gallery() {
   const plugin = React.useRef(
