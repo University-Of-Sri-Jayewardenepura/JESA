@@ -3,6 +3,7 @@ import "./globals.css";
 import { plusjakarta } from "./fonts";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "JESA 2024 | J'pura Employability Skills Awards",
@@ -19,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${plusjakarta.className}`}>
         <Navbar />
-        {children} <Footer />
+        {children}
+        <Footer />
+        <GoogleAnalytics gaId="G-KKJFV40G9S" />
       </body>
     </html>
   );

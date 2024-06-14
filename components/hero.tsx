@@ -3,9 +3,10 @@
 import Particles from "@/components/animated/particles";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { zodiak } from "@/app/fonts";
-import { Button } from "./ui/button";
+import Image from "next/image";
+import ShinyButton from "./animated/shiny-button";
 import Link from "next/link";
+import BlurIn from "./animated/blur-in";
 
 export const Hero = () => {
   const { theme } = useTheme();
@@ -16,27 +17,29 @@ export const Hero = () => {
   }, [theme]);
 
   return (
-    <div className="relative flex flex-col h-[600px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4 pt-[6rem]">
-      <h1
-        className={`pointer-events-none z-10 whitespace-pre-wrap bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-7xl  leading-none text-transparent md:text-9xl select-none flex font-black ${zodiak.className}`}
-      >
-        JESA
-      </h1>
-      <p className={`text-white/70 text-center max-w-2xl`}>
-        Your achievements deserve a grand celebration. Bask in the spotlight of
+    <div className="relative flex flex-col h-[600px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4 pt-[6rem] space-y-6">
+      <div className="flex flex-col items-center">
+        <Image alt="JESA" width={400} height={200} src="/images/jesa-min.png" />
+        <BlurIn
+          className={`pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-neutral-100 to-neutral-200 bg-clip-text text-center text-3xl  leading-none text-transparent md:text-5xl flex font-black mt-[-4rem] pb-2`}
+          word="J'pura Employability Skills Awards"
+          duration={1.5}
+        />
+      </div>
+      <BlurIn
+        className={`text-white/70 text-center max-w-2xl`}
+        word="Your achievements deserve a grand celebration. Bask in the spotlight of
         recognition at the most prestigious and elegant award gala ever
-        organized.
-        <br />
-        <br />
-        <span className="text-white">This is your moment to make history.</span>
-      </p>
-      <Button
-        asChild
-        className="font-bold text-lg text-background shadow-inner shadow-amber-400 rounded-full mt-8"
-        size={"lg"}
-      >
-        <Link href="/register">Register</Link>
-      </Button>
+        organized."
+        duration={2}
+      />
+      <br />
+      <br />
+      <BlurIn
+        className="text-white"
+        word="This is your moment to make history."
+        duration={3.5}
+      />
       <Particles
         className="absolute inset-0"
         quantity={100}
@@ -44,6 +47,9 @@ export const Hero = () => {
         color={color}
         refresh
       />
+      <Link href="/register" className="hover:scale-110 ">
+        <ShinyButton text="Register" />
+      </Link>
     </div>
   );
 };
