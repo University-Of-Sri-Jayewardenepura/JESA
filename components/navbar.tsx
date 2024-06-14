@@ -20,7 +20,7 @@ export function Navbar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex justify-between items-center px-4 py-3 bg-background/60 backdrop-blur-xl rounded-full shadow-lg">
+      <div className="flex justify-between items-center px-4 py-3 bg-background/75 backdrop-blur-lg rounded-full shadow-lg">
         <a className="flex items-center space-x-4" href="/">
           <Image
             src="/images/jesa-icon.ico"
@@ -29,7 +29,7 @@ export function Navbar({ className }: { className?: string }) {
             alt="JESA 2024"
             className="h-8 w-8"
           />
-          <h1 className="text-lg font-semibold hidden md:block bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent">
+          <h1 className="text-lg font-semibold  bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent">
             JESA 2024
           </h1>
         </a>

@@ -12,13 +12,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://jesa.lk/register",
       lastModified: new Date(),
       changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: "https://jesa.lk/hall-of-fame",
+      lastModified: new Date(),
+      changeFrequency: "yearly",
       priority: 0.8,
     },
     {
-      url: "https://acme.com/blog",
+      url: "https://jesa.lk/awards",
       lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.5,
+      changeFrequency: "yearly",
+      priority: 0.8,
     },
   ];
 }

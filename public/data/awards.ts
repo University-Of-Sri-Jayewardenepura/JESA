@@ -324,7 +324,7 @@ export const awards = [
   {
     id: "7",
     uri: "besa",
-    name: "BESA",
+    name: "BEST - EMPLOYABILITY SKILLS ACHIEVER",
     image: "/images/awards/besa.png",
     description:
       "Dedicated to the most optimistic and brilliant all-rounded undergraduate from each faculty. (except for the faculty of graduate studies) The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in each faculty will be awarded as the BESA Silver Medalists accordingly. BESA Awards will be granted under the following faculties;",
@@ -352,8 +352,8 @@ export const awards = [
   {
     id: "8",
     uri: "undefined",
-    name: "BESA",
-    image: "/some-image.png",
+    name: "BESA - FHSS",
+    image: "/images/awards/besa.png",
     description: "Faculty of Humanities and Social Sciences",
     sponsors: [
       {
@@ -397,8 +397,8 @@ export const awards = [
   {
     id: "9",
     uri: "undefined",
-    name: "BESA",
-    image: "/some-image.png",
+    name: "BESA - FAS",
+    image: "/images/awards/besa.png",
     description: "Faculty of Applied Sciences",
     sponsors: [
       {
@@ -442,8 +442,8 @@ export const awards = [
   {
     id: "10",
     uri: "undefined",
-    name: "BESA",
-    image: "/some-image.png",
+    name: "BESA - FMSC",
+    image: "/images/awards/besa.png",
     description: "Faculty of Management Studies and Commerce",
     sponsors: [
       {
@@ -487,8 +487,8 @@ export const awards = [
   {
     id: "11",
     uri: "",
-    name: "BESA",
-    image: "/some-image.png",
+    name: "BESA - FMS",
+    image: "/images/awards/besa.png",
     description: "Faculty of Medical Sciences",
     sponsors: [
       {
@@ -532,8 +532,53 @@ export const awards = [
   {
     id: "12",
     uri: "",
-    name: "BESA",
-    image: "/some-image.png",
+    name: "BESA - FOT",
+    image: "/images/awards/besa.png",
+    description: "Faculty of Technology",
+    sponsors: [
+      {
+        year: 2019,
+        type: "Platinum",
+        imgSrc: "/images/companies/cbl.png",
+        link: "https://www.creativesoftware.com/",
+      },
+      {
+        year: 2021,
+        type: "Platinum",
+        imgSrc: "/images/companies/sunquick.png",
+        link: "https://www.creativesoftware.com/",
+      },
+      {
+        year: 2022,
+        type: "Platinum",
+        imgSrc: "/images/companies/creative-software.png",
+        link: "https://www.creativesoftware.com/",
+      },
+      {
+        year: 2023,
+        type: "Platinum",
+        imgSrc: "/images/companies/creative-software.png",
+        link: "https://www.creativesoftware.com/",
+      },
+      {
+        year: 2023,
+        type: "Gold",
+        imgSrc: "/images/companies/acentura.png",
+        link: "https://www.acentura.com/",
+      },
+      {
+        year: 2023,
+        type: "Silver",
+        imgSrc: "/images/companies/csds.png",
+        link: "http://careerskills.sjp.ac.lk/",
+      },
+    ],
+  },
+  {
+    id: "13",
+    uri: "",
+    name: "BESA - FOE",
+    image: "/images/awards/besa.png",
     description: "Faculty of Technology",
     sponsors: [
       {

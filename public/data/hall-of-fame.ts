@@ -1,30 +1,18 @@
 export const images = [
+  // {
+  //   year: "JESA 2023",
+  //   image: "/images/hall-of-fame/2023.png",
+  // },
   {
-    year: "JESA'22",
+    year: "JESA 2022",
     image: "/images/hall-of-fame/2022.png",
   },
   {
-    year: "JESA'21",
+    year: "JESA 2021",
     image: "/images/hall-of-fame/2021.jpg",
   },
   {
-    year: "JESA'19",
+    year: "JESA 2019",
     image: "/images/hall-of-fame/2020.jpg",
   },
-  // {
-  //   year: "JESA'18",
-  //   image: "",
-  // },
-  // {
-  //   year: "JESA'17",
-  //   image: "",
-  // },
-  // {
-  //   year: "JESA'16",
-  //   image: "",
-  // },
-  // {
-  //   year: "JESA'15",
-  //   image: "",
-  // },
 ];

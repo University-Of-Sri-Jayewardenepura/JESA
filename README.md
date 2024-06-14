@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://nextjs.org">
+  <a href="http://careerskills.sjp.ac.lk/">
     <picture>
       <source media="(prefers-color-scheme: dark)">
       <img src="./public/images/jesa-logo.png" height="128">
@@ -41,15 +41,33 @@ App Structure
 
 ```
 ├── app
+│   ├── awards
+│   │   ├── page.tsx
+│   │   └── awards-card.tsx
+│   ├── hall-of-fame
+│   │   ├── page.tsx
+│   │   └── hall-of-fame.tsx
+│   ├── register
+│   │   ├── page.tsx
+│   │   └── register-form.tsx
+│   ├── terms
+│   │   ├── page.tsx
 │   ├── layout.tsx
+│   ├── global-error.tsx
 │   └── page.tsx
+│   └── error.tsx
+│   └── sitemap.ts
+│   └── fonts.ts
 ├── components
 │   ├── ui
 │   │   ├── alert-dialog.tsx
 │   │   ├── button.tsx
 │   │   ├── dropdown-menu.tsx
 │   │   └── ...
-│   ├── main-nav.tsx
+│   ├── animated
+│   │   ├── blur-in.tsx
+│   └── ├── ...
+│   ├── navbar.tsx
 │   └── ...
 ├── lib
 │   └── utils.ts
@@ -65,3 +83,7 @@ App Structure
 ```
 
 ## Authors
+
+- [Sonal Jayasinghe](https://github.com/SonalJayasinghe)
+- [Pruthivi Thejan](https://links.pruthivithejan.me)
+- [Yasitha Renuk](https://github.com/YasithaRenuk)
