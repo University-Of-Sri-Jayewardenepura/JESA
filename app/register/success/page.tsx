@@ -6,7 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const SuccessPage = () => {
   useEffect(() => {
-    toast.success("Your registration form was received. Thank you!");
+    toast.success("Registration Successful!");
   }, []);
 
   return (
