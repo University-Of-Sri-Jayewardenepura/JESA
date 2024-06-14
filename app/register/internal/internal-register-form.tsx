@@ -89,15 +89,14 @@ function InternalRegisterForm() {
 
   const faculties = Object.values(FACULTY);
 
-  const [selectedDegree, setSelectedDegree] = useState('');
+  const [selectedDegree, setSelectedDegree] = useState("");
   const [isOtherSelected, setIsOtherSelected] = useState(false);
 
   const handleDegreeChange = (value: any) => {
     setSelectedDegree(value);
-    setIsOtherSelected(value === 'Other');
-    form.setValue('Degree', value); 
+    setIsOtherSelected(value === "Other");
+    form.setValue("Degree", value);
   };
-
 
   function handleFacultyChange(selectedFaculty: string) {
     // Logic to set degree options based on selected faculty
@@ -164,34 +163,38 @@ function InternalRegisterForm() {
     }
   }
 
-
   function getRelevantAwards(faculty: string): string[] {
     const facultyToBesaAwardsMap: { [key: string]: string[] } = {
-        "Faculty of Management Studies & Commerce": [AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE],
-        "Faculty of Applied Sciences": [AWARDS.BESA_APPLIED_SCIENCES],
-        "Faculty of Humanities and Social Sciences": [AWARDS.BESA_HUMANITIES_AND_SOCIAL_SCIENCES],
-        "Faculty of Allied Health Sciences": [AWARDS.BESA_ALLIED_HEALTH_SCIENCES],
-        "Faculty of Technology": [AWARDS.BESA_TECHNOLOGY],
-        "Faculty of Engineering": [AWARDS.BESA_ENGINEERING],
-        "Faculty of Medical Science": [AWARDS.BESA_MEDICAL_SCIENCES],
+      "Faculty of Management Studies & Commerce": [
+        AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE,
+      ],
+      "Faculty of Applied Sciences": [AWARDS.BESA_APPLIED_SCIENCES],
+      "Faculty of Humanities and Social Sciences": [
+        AWARDS.BESA_HUMANITIES_AND_SOCIAL_SCIENCES,
+      ],
+      "Faculty of Allied Health Sciences": [AWARDS.BESA_ALLIED_HEALTH_SCIENCES],
+      "Faculty of Technology": [AWARDS.BESA_TECHNOLOGY],
+      "Faculty of Engineering": [AWARDS.BESA_ENGINEERING],
+      "Faculty of Medical Science": [AWARDS.BESA_MEDICAL_SCIENCES],
     };
 
-    const defaultAwards = Object.values(AWARDS).filter(award => 
-        !award.startsWith("BESA")
+    const defaultAwards = Object.values(AWARDS).filter(
+      (award) => !award.startsWith("BESA")
     );
 
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
     return [...defaultAwards, ...facultySpecificAwards];
-}
+  }
 
-const relevantAwards = getRelevantAwards(form.watch("Faculty"));
-
-
+  const relevantAwards = getRelevantAwards(form.watch("Faculty"));
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-96">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 md:w-96 sm:w-80 w-80"
+      >
         <FormField
           control={form.control}
           name="Name"
@@ -273,7 +276,7 @@ const relevantAwards = getRelevantAwards(form.watch("Faculty"));
                 <Select
                   onValueChange={field.onChange}
                   value="University of Sri Jayewardenepura"
-                  disabled={true} 
+                  disabled={true}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select University" />
@@ -370,55 +373,58 @@ const relevantAwards = getRelevantAwards(form.watch("Faculty"));
         />
 
         {degreeOptions.length > 0 && (
-        <FormField
-          control={form.control}
-          name="Degree"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Degree</FormLabel>
-              <FormControl>
-                <Select onValueChange={handleDegreeChange} value={selectedDegree}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Degree" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Select Degree</SelectLabel>
-                      {degreeOptions.map((degree, index) => (
-                        <SelectItem key={index} value={degree}>
-                          {degree}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
+          <FormField
+            control={form.control}
+            name="Degree"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Degree</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={handleDegreeChange}
+                    value={selectedDegree}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Degree" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select Degree</SelectLabel>
+                        {degreeOptions.map((degree, index) => (
+                          <SelectItem key={index} value={degree}>
+                            {degree}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
-      {isOtherSelected && (
-        <FormField
-          control={form.control}
-          name="CustomDegree"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Enter Degree</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter your degree"
-                  value={field.value}
-                  onChange={field.onChange}
-                  required = {isOtherSelected}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
+        {isOtherSelected && (
+          <FormField
+            control={form.control}
+            name="CustomDegree"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Enter Degree</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter your degree"
+                    value={field.value}
+                    onChange={field.onChange}
+                    required={isOtherSelected}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <FormField
           control={form.control}
@@ -593,9 +599,11 @@ const relevantAwards = getRelevantAwards(form.watch("Faculty"));
           </>
         )}
 
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
+        <div className=" flex justify-end"> 
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </Button>
+        </div>
       </form>
       <Toaster />
     </Form>
