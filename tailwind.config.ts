@@ -59,6 +59,16 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        spotlight: {
+          "0%": {
+            opacity: '0',
+            transform: "translate(-72%, -62%) scale(0.5)",
+          },
+          "100%": {
+            opacity:'1',
+            transform: "translate(-50%,-40%) scale(1)",
+          },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
