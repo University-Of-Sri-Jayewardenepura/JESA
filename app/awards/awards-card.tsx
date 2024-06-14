@@ -44,7 +44,7 @@ export const AwardsPage: React.FC = () => {
         />
       </div>
       {/* Award Cards */}
-      <div className="py-16 md:py-28 lg:py-32 pt-[6rem]">
+      <div className="py-16 md:py-28 lg:py-32 pt-[6rem] ">
         <div className="flex flex-col items-center gap-6 px-4 space-y-[6rem]">
           {awards.map((award, index) => (
             <Card
@@ -92,19 +92,55 @@ export const AwardsPage: React.FC = () => {
                     <CardTitle>
                       Who Will be the Partners of JESA 2024?
                     </CardTitle>
-
-                    <div className="flex flex-col items-center">
-                      <span className="mb-[-5px] bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-bold">
-                        2024
-                      </span>
-                      <Image
-                        src="/images/companies/silver-un.png"
-                        alt={`Platinum Sponsor 2024? `}
-                        className="rounded-md shadow-lg"
-                        width={75}
-                        height={75}
-                        quality={100}
-                      />
+                    <div className="flex justify-between">
+                      <div className="flex flex-col items-center">
+                        <span className="mb-[-5px] bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-bold">
+                          2024
+                        </span>
+                        <Image
+                          src="/images/companies/silver-un.png"
+                          alt={`Platinum Sponsor 2024? `}
+                          className="rounded-md shadow-lg z-10"
+                          width={75}
+                          height={75}
+                          quality={100}
+                        />
+                        <span className="mt-[-8px] bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-bold">
+                          Gold
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="mb-[-5px] bg-gradient-to-t from-zinc-500 to-zinc-300 bg-clip-text text-transparent font-bold">
+                          2024
+                        </span>
+                        <Image
+                          src="/images/companies/silver-un.png"
+                          alt={`Platinum Sponsor 2024? `}
+                          className="rounded-md shadow-lg z-10"
+                          width={75}
+                          height={75}
+                          quality={100}
+                        />
+                        <span className="mt-[-8px] bg-gradient-to-t from-zinc-500 to-zinc-300 bg-clip-text text-transparent font-bold">
+                          Platinum
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="mb-[-5px] bg-gradient-to-t from-zinc-300 to-zinc-100 bg-clip-text text-transparent font-bold">
+                          2024
+                        </span>
+                        <Image
+                          src="/images/companies/silver-un.png"
+                          alt={`Platinum Sponsor 2024? `}
+                          className="rounded-md shadow-lg z-10"
+                          width={75}
+                          height={75}
+                          quality={100}
+                        />
+                        <span className="mt-[-8px] bg-gradient-to-t from-zinc-300 to-zinc-100 bg-clip-text text-transparent font-bold">
+                          Silver
+                        </span>
+                      </div>
                     </div>
                     {/* {award.sponsors
                         .filter((sponsor) => sponsor.year === 2023)
