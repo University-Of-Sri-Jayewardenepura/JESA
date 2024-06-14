@@ -72,16 +72,13 @@ function ExternalRegisterForm() {
   async function onSubmit(values: any) {
     setIsSubmitting(true);
     console.log(values);
-    const response = await fetch(
-      "/api/register/external",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      }
-    );
+    const response = await fetch("/api/register/external", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -307,15 +304,37 @@ function ExternalRegisterForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                To which industry is your innovation related?
+                To Which Industry is Your Innovation Related?
               </FormLabel>
               <FormControl>
                 <Input placeholder="Your Answer" {...field} />
               </FormControl>
+              <FormDescription>
+                If there are multiple products relating to multiple industries,
+                please mention all the industries.{" "}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="TermsAndConditions"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <input type="checkbox" {...field} required />
+              </FormControl>
+              <FormLabel>
+                &nbsp; I confirm that the information above is accurate to the best of
+                my knowledge and in accordance with the terms and conditions.
+              </FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className=" flex justify-end">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Submit"}

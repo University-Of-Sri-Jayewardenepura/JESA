@@ -20,7 +20,7 @@ export enum UNIVERSITY {
     WAYAMBA = 'Wayamba University of Sri Lanka',
     UVA_WELLASSA = 'Uva Wellassa University',
     VISUAL_PERFORMING_ARTS = 'University of the Visual & Performing Arts',
-    GAMPANA_WICKRAMARACHCHI = 'University of the Sri Lanka (Gampaha Wickramarachchi Ayurveda Institute)',
+    GAMPANA_WICKRAMARACHCHI = 'Gampaha Wickramarachchi University of Indigenous Medicine',
     MORATUWA_TECHNOLOGY = 'Institute of Technology University of Moratuwa',
     VAUNIYA = 'University of Vavuniya',
 }
@@ -40,7 +40,10 @@ export enum FACULTY {
     ALLIED_HEALTH_SCIENCES = 'Faculty of Allied Health Sciences',
     TECHNOLOGY = 'Faculty of Technology',
     ENGINEERING = 'Faculty of Engineering',
-    MEDICAL_SCIENCE = 'Faculty of Medical Science'
+    MEDICAL_SCIENCE = 'Faculty of Medical Science',
+    DENTAL_SCIENCES ='Faculty of Dental Sciences',
+    URBAN_AQUATIC = 'Faculty of Urban & Aquatic Bioresources',
+    COMPUTING ='Faculty of Computing'
 }
 
 export enum DEGREE {
@@ -118,6 +121,7 @@ export enum AWARDS {
     BEST_COMMUNICATOR = 'Best Communicator',
     BEST_INNOVATOR = 'Best Innovator',
     BEST_YOUNG_ENTREPRENEUR = 'Best Young Entrepreneur',
+    CSR_AWARD = 'Best CSR Award',
     BESA_MANAGEMENT_STUDIES_AND_COMMERCE = 'BESA (Faculty of Management Studies and Commerce)',
     BESA_APPLIED_SCIENCES = 'BESA (Faculty of Applied Sciences)',
     BESA_HUMANITIES_AND_SOCIAL_SCIENCES = 'BESA (Faculty of Humanities and Social Sciences)',
@@ -125,7 +129,6 @@ export enum AWARDS {
     BESA_TECHNOLOGY = 'BESA (Faculty of Technology)',
     BESA_ENGINEERING = 'BESA (Faculty of Engineering)',
     BESA_ALLIED_HEALTH_SCIENCES = 'BESA (Faculty of Allied Health Sciences)',
-    CSR_AWARD = 'CSR Award',
 }
 
 
@@ -206,4 +209,16 @@ export enum ENG_DEGREE {
 export enum MED_DEGREE {
     MBBS = 'MBBS',
     HUMAN_BIOLOGY = 'B.Sc. in Human Biology',
+}
+
+export enum COMPUTING_DEGREE{
+    OTHER = 'Other'
+}
+
+export enum URBAN_AQUATIC_DEGREE{
+    OTHER = 'Other'
+}
+
+export enum DENTAL_SCIENCES_DEGREE{
+    OTHER = 'Other'
 }

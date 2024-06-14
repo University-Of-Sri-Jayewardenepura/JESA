@@ -18,6 +18,9 @@ import {
   HUM_DEGREE,
   MED_DEGREE,
   ENG_DEGREE,
+  COMPUTING_DEGREE,
+  DENTAL_SCIENCES_DEGREE,
+  URBAN_AQUATIC_DEGREE,
 } from "@/app/constants";
 
 import {
@@ -81,7 +84,11 @@ function InternalRegisterForm() {
     | ALMED_DEGREE[]
     | TECH_DEGREE[]
     | ENG_DEGREE[]
-    | MED_DEGREE[];
+    | MED_DEGREE[]
+    | COMPUTING_DEGREE[]
+    | DENTAL_SCIENCES_DEGREE[]
+    | URBAN_AQUATIC_DEGREE[];
+
   const [degreeOptions, setDegreeOptions] = useState<DegreeOptions>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -122,6 +129,15 @@ function InternalRegisterForm() {
       case FACULTY.MEDICAL_SCIENCE:
         setDegreeOptions(Object.values(MED_DEGREE));
         break;
+      case FACULTY.COMPUTING:
+        setDegreeOptions(Object.values(COMPUTING_DEGREE));
+        break;
+      case FACULTY.DENTAL_SCIENCES:
+        setDegreeOptions(Object.values(DENTAL_SCIENCES_DEGREE));
+        break;
+      case FACULTY.URBAN_AQUATIC:
+        setDegreeOptions(Object.values(URBAN_AQUATIC_DEGREE));
+        break;
       default:
         setDegreeOptions([]);
     }
@@ -139,16 +155,13 @@ function InternalRegisterForm() {
       Object.entries(values).filter(([_, v]) => v !== undefined)
     );
     console.log(cleanedValues);
-    const response = await fetch(
-      "/api/register/internal",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      }
-    );
+    const response = await fetch("/api/register/internal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -599,7 +612,25 @@ function InternalRegisterForm() {
           </>
         )}
 
-        <div className=" flex justify-end"> 
+        <FormField
+          control={form.control}
+          name="TermsAndConditions"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <input type="checkbox" {...field} required />
+              </FormControl>
+              <FormLabel>
+                &nbsp; I confirm that the information above is accurate to the
+                best of my knowledge and in accordance with the terms and
+                conditions.
+              </FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className=" flex justify-end">
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
