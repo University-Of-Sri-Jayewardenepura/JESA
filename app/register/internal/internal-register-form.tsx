@@ -67,7 +67,7 @@ const formSchema = z.object({
   AcademicYear: z.string().nonempty("Academic Year is required."),
   Faculty: z.string().nonempty("Faculty is required."),
   Degree: z.string().nonempty("Degree is required."),
-  CustomDegree: z.string().optional(),
+  OtherDegree: z.string().optional(),
   IsPastParticipant: z.boolean().default(false),
   Award1: z.string().nonempty("Award is required."),
   Award2: z.string().optional(),
@@ -421,7 +421,7 @@ function InternalRegisterForm() {
         {isOtherSelected && (
           <FormField
             control={form.control}
-            name="CustomDegree"
+            name="OtherDegree"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Enter Degree</FormLabel>
