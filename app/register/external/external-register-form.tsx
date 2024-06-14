@@ -98,7 +98,10 @@ function ExternalRegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-96">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 md:w-96 sm:w-80 w-80"
+      >
         <FormField
           control={form.control}
           name="Name"
@@ -286,9 +289,7 @@ function ExternalRegisterForm() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Select Award</SelectLabel>
-                      <SelectItem
-                        value="Best Innovator"
-                      >
+                      <SelectItem value="Best Innovator">
                         Best Innovator
                       </SelectItem>
                     </SelectGroup>
@@ -315,10 +316,11 @@ function ExternalRegisterForm() {
             </FormItem>
           )}
         />
-
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
+        <div className=" flex justify-end">
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </Button>
+        </div>
       </form>
       <Toaster />
     </Form>
