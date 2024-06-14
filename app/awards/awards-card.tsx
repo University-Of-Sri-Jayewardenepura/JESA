@@ -78,7 +78,7 @@ export const AwardsPage: React.FC = () => {
                             <Image
                               src={sponsor.imgSrc}
                               alt={`Platinum Sponsor ${sponsor.year}`}
-                              className="rounded-md shadow-lg"
+                              className="rounded-md shadow-lg mt-2"
                               width={75}
                               height={75}
                               quality={100}
@@ -98,7 +98,7 @@ export const AwardsPage: React.FC = () => {
                             <Image
                               src={sponsor.imgSrc}
                               alt={`Platinum Sponsor ${sponsor.year}`}
-                              className="rounded-md shadow-lg"
+                              className="rounded-md shadow-lg mt-2"
                               width={75}
                               height={75}
                               quality={100}
