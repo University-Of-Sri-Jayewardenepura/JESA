@@ -73,7 +73,7 @@ function ExternalRegisterForm() {
     setIsSubmitting(true);
     console.log(values);
     const response = await fetch(
-      "http://localhost:3000/api/register/external",
+      "/api/register/external",
       {
         method: "POST",
         headers: {

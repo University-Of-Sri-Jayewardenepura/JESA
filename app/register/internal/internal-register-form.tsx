@@ -140,7 +140,7 @@ function InternalRegisterForm() {
     );
     console.log(cleanedValues);
     const response = await fetch(
-      "http://localhost:3000/api/register/internal",
+      "/api/register/internal",
       {
         method: "POST",
         headers: {
