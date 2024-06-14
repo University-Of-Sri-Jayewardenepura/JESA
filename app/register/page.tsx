@@ -4,7 +4,7 @@ import RegisterForm from "./register-form";
 export const metadata: Metadata = {
   title: "JESA 2024 | Register",
   description:
-    "Official 2024 JESA aka J'pura Employability Skills Awards, the ultimate platform for honoring the accomplishments of young talents.",
+    "Register Now! This is your moment to make history. Your achievements deserve a grand celebration. Bask in the spotlight of recognition at the most prestigious and elegant award gala ever organized.",
 };
 
 export default function Register() {
