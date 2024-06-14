@@ -432,7 +432,7 @@ function InternalRegisterForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Are you a member of the JESA-2024 Organizing Committee ?
+                Are You a Member of JESA 2024/2023 Organizing Committee ?
               </FormLabel>
               <FormControl>
                 <Select
