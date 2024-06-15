@@ -323,38 +323,11 @@ export const awards = [
   },
   {
     id: "7",
-    uri: "besa",
-    name: "BEST EMPLOYABILITY SKILLS ACHIEVER (BESA)",
-    image: "/images/awards/besa.png",
-    description:
-      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from each faculty. (except for the faculty of graduate studies) The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in each faculty will be awarded as the BESA Silver Medalists accordingly. BESA Awards will be granted under the following faculties;",
-    sponsors: [
-      {
-        year: "undefined",
-        type: "Platinum",
-        imgSrc: "/undefined",
-        link: "undefined",
-      },
-      {
-        year: "undefined",
-        type: "Gold",
-        imgSrc: "/undefined",
-        link: "undefined",
-      },
-      {
-        year: "undefined",
-        type: "Silver",
-        imgSrc: "/undefined",
-        link: "undefined",
-      },
-    ],
-  },
-  {
-    id: "8",
     uri: "undefined",
     name: "BESA - FHSS",
     image: "/images/awards/besa.png",
-    description: "Faculty of Humanities and Social Sciences",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Humanities and Social Sciences. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Humanities and Social Sciences will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
@@ -395,11 +368,12 @@ export const awards = [
     ],
   },
   {
-    id: "9",
+    id: "8",
     uri: "undefined",
     name: "BESA - FAS",
     image: "/images/awards/besa.png",
-    description: "Faculty of Applied Sciences",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Applied Sciences. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Applied Sciences will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
@@ -440,11 +414,12 @@ export const awards = [
     ],
   },
   {
-    id: "10",
+    id: "9",
     uri: "undefined",
     name: "BESA - FMSC",
     image: "/images/awards/besa.png",
-    description: "Faculty of Management Studies and Commerce",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Management Studies and Commerce. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Management Studies and Commerce will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
@@ -485,11 +460,12 @@ export const awards = [
     ],
   },
   {
-    id: "11",
+    id: "10",
     uri: "",
     name: "BESA - FMS",
     image: "/images/awards/besa.png",
-    description: "Faculty of Medical Sciences",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Medical Sciences. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Medical Sciences will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
@@ -530,11 +506,12 @@ export const awards = [
     ],
   },
   {
-    id: "12",
+    id: "11",
     uri: "",
     name: "BESA - FOT",
     image: "/images/awards/besa.png",
-    description: "Faculty of Technology",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Technology. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Technology will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
@@ -575,11 +552,12 @@ export const awards = [
     ],
   },
   {
-    id: "13",
+    id: "12",
     uri: "",
     name: "BESA - FOE",
     image: "/images/awards/besa.png",
-    description: "Faculty of Technology",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Engineering. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Technology will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
