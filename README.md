@@ -114,9 +114,10 @@ App Structure
 
 - <a href="https://zod.dev/">Zod</a>
 
-### Database
+### Database & Object Modeling
 
 - <a href="https://www.mongodb.com/">MongoDB</a>
+- <a href="https://mongoosejs.com/">mongoose</a>
 
 ### Deployment
 
