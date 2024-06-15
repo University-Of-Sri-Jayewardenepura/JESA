@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { UNIVERSITY, ACADEMICYEAR } from "@/app/constants";
+import { UNIVERSITY, ACADEMICYEAR } from "@/constants/form";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import {
   Form,
@@ -327,8 +328,11 @@ function ExternalRegisterForm() {
                 <input type="checkbox" {...field} required />
               </FormControl>
               <FormLabel>
-                &nbsp; I confirm that the information above is accurate to the best of
-                my knowledge and in accordance with the terms and conditions.
+                &nbsp; I confirm that the information above is accurate to the
+                best of my knowledge and in accordance with the{" "}
+                <Link href="/terms" className="underline">
+                  terms and conditions.
+                </Link>
               </FormLabel>
               <FormMessage />
             </FormItem>

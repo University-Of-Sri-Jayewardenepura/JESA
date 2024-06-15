@@ -2,7 +2,7 @@ import connectMongoDB from "@/lib/mongodb";
 import InternalApplicant from "@/models/internalApplicant";
 import BaseApplicant from "@/models/BaseApplicant";
 import { NextRequest, NextResponse } from "next/server";
-import z, { object } from "zod";
+import z from "zod";
 import {
   GENDER,
   UNIVERSITY,
@@ -10,7 +10,7 @@ import {
   FACULTY,
   DEGREE,
   AWARDS,
-} from "@/constants/index";
+} from "@/constants/form";
 
 const enumValues = <T extends Record<string, string>>(
   enumObject: T
@@ -90,13 +90,11 @@ export async function POST(request: Request) {
 
     await connectMongoDB();
 
-    const duplicateCheck = await InternalApplicant.find({
-      UniversityRegisterId: body.UniversityRegisterId,
-    });
+    const duplicateCheck = await InternalApplicant.find({ Email: body.Email });
 
     if (duplicateCheck.length > 0) {
       return new NextResponse(
-        JSON.stringify({ message: "Hmm... Please Check Registration Number" }),
+        JSON.stringify({ message: "Hmm... Please Check Email Address" }),
         { status: 409 }
       );
     }

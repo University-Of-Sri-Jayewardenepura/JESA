@@ -17,20 +17,24 @@ export default function Register() {
       >
         JESA 2024 REGISTRATION
       </h1>
-      <h2 className="text-white/75 text-center pl-3 pr-3">
+      <h2 className="text-sm md:text-lg text-white/75 text-center px-3">
         Please select the category to proceed with the form
       </h2>
-      <div className="flex flex-row justify-center items-center h-20 flex-wrap">
+      <div className="flex flex-row justify-center items-center flex-wrap pt-[2rem]">
         <Link rel="preload" href="/register/internal">
-          <Button className="m-4 px-6 py-2 shadow-md flex-1 h-24 w-64">
-            Students of <br />
-            University of Sri Jayewardenepura
+          <Button className="m-4 px-6 py-2 font-bold shadow-md flex-1 h-16 w-64">
+            <span className="bg-gradient-to-b from-background to-emerald-950 bg-clip-text text-transparent">
+              Students of <br />
+              University of Sri Jayewardenepura
+            </span>
           </Button>
         </Link>
         <Link rel="preload" href="/register/external">
-          <Button className="m-4 px-6 py-2 shadow-md flex-1 h-24 w-64">
-            Students of <br />
-            Other State Universities
+          <Button className="m-4 px-6 py-2 font-bold shadow-md flex-1 h-16 w-64">
+            <span className="bg-gradient-to-b from-background to-emerald-950 bg-clip-text text-transparent">
+              Students of <br />
+              Other State Universities
+            </span>
           </Button>
         </Link>
       </div>

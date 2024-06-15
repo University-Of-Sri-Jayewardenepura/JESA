@@ -7,6 +7,7 @@ import Image from "next/image";
 import ShinyButton from "./animated/shiny-button";
 import Link from "next/link";
 import BlurIn from "./animated/blur-in";
+import { Spotlight } from "./ui/Spotlight";
 
 export const Hero = () => {
   const { theme } = useTheme();
@@ -17,7 +18,7 @@ export const Hero = () => {
   }, [theme]);
 
   return (
-    <div className="relative flex flex-col h-[600px] w-full items-center justify-center overflow-hidden rounded-lg bg-background p-4 pt-[6rem] space-y-6">
+    <div className="relative flex flex-col h-[650px] w-full items-center justify-center overflow-hidden bg-background p-4 pt-[6rem] space-y-6">
       <div className="flex flex-col items-center">
         <Image alt="JESA" width={400} height={200} src="/images/jesa-min.png" />
         <BlurIn
@@ -47,7 +48,11 @@ export const Hero = () => {
         color={color}
         refresh
       />
-      <Link href="/register" className="hover:scale-110 ">
+      <Spotlight
+        className="-top-40 left-0 md:left-80 md:-top-20 ml-[5rem] sm:ml-[10rem]"
+        fill="white"
+      />
+      <Link href="/register" className="hover:scale-110 mb-10">
         <ShinyButton text="Register" />
       </Link>
     </div>

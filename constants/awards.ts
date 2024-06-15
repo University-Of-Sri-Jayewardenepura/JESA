@@ -324,7 +324,7 @@ export const awards = [
   {
     id: "7",
     uri: "besa",
-    name: "BEST - EMPLOYABILITY SKILLS ACHIEVER",
+    name: "BEST EMPLOYABILITY SKILLS ACHIEVER (BESA)",
     image: "/images/awards/besa.png",
     description:
       "Dedicated to the most optimistic and brilliant all-rounded undergraduate from each faculty. (except for the faculty of graduate studies) The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in each faculty will be awarded as the BESA Silver Medalists accordingly. BESA Awards will be granted under the following faculties;",

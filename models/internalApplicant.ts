@@ -6,7 +6,7 @@ import {
   FACULTY,
   DEGREE,
   AWARDS,
-} from "../constants/index";
+} from "../constants/form";
 import { getEnumValues } from "@/lib/utils";
 import exp from "constants";
 

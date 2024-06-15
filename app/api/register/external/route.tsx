@@ -2,7 +2,7 @@ import connectMongoDB from "@/lib/mongodb";
 import ExternalApplicant from "@/models/externalApplicant";
 import BaseApplicant from "@/models/BaseApplicant";
 import { NextRequest, NextResponse } from "next/server";
-import { UNIVERSITY, AWARDS, GENDER, ACADEMICYEAR } from "@/constants/index";
+import { UNIVERSITY, AWARDS, GENDER, ACADEMICYEAR } from "@/constants/form";
 import z, { object } from "zod";
 
 const enumValues = <T extends Record<string, string>>(
@@ -55,11 +55,11 @@ export async function POST(request: Request) {
 
     await connectMongoDB();
 
-    const duplicateCheck = await ExternalApplicant.find({ NIC: body.NIC });
+    const duplicateCheck = await ExternalApplicant.find({ Email: body.Email });
 
     if (duplicateCheck.length > 0) {
       return new NextResponse(
-        JSON.stringify({ message: "Hmm... Please Check NIC Number" }),
+        JSON.stringify({ message: "Hmm... Please Check Email Address" }),
         { status: 409 }
       );
     }

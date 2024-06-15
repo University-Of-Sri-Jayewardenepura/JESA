@@ -77,10 +77,10 @@ export function Footer() {
             <p className="text-sm text-muted-foreground text-center">
               For more details, please reach out to us at:
             </p>
-            <div className="flex flex-col justify-center items-center space-x-2">
+            <div className="flex flex-col justify-center items-center">
               {contactNames.map((contact, index) => (
                 <div
-                  className="flex flex-col gap-2 place-items-center"
+                  className="flex flex-col gap-2 items-center py-1"
                   key={index}
                 >
                   <span className="text-sm text-muted-foreground">
