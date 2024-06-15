@@ -7,7 +7,7 @@ import Image from "next/image";
 import ShinyButton from "./animated/shiny-button";
 import Link from "next/link";
 import BlurIn from "./animated/blur-in";
-import { Spotlight } from "./ui/Spotlight";
+import { Spotlight } from "@/components/animated/spotlight";
 
 export const Hero = () => {
   const { theme } = useTheme();
@@ -20,7 +20,13 @@ export const Hero = () => {
   return (
     <div className="relative flex flex-col h-[650px] w-full items-center justify-center overflow-hidden bg-background p-4 pt-[6rem] space-y-6">
       <div className="flex flex-col items-center">
-        <Image alt="JESA" width={400} height={200} src="/images/jesa-min.png" />
+        <Image
+          alt="JESA"
+          width={400}
+          height={200}
+          src="/images/jesa-min.png"
+          priority
+        />
         <BlurIn
           className={`pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-neutral-100 to-neutral-200 bg-clip-text text-center text-3xl  leading-none text-transparent md:text-5xl flex font-black mt-[-4rem] pb-2`}
           word="J'pura Employability Skills Awards"

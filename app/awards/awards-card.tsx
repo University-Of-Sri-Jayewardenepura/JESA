@@ -76,6 +76,7 @@ export const AwardsPage: React.FC = () => {
                       width={130}
                       height={130}
                       className="h-fit"
+                      priority
                     />
                   </div>
                   <div className="w-full md:w-1/2">

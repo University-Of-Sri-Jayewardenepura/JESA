@@ -52,6 +52,7 @@ const HallOfFamePage: React.FC = () => {
                 height={627}
                 alt={image.year}
                 quality={100}
+                priority
                 className="w-[500px] sm:w-[720px] md:w-[960px] lg:w-[1280px] rounded-xl border border-primary/70 shadow-xl"
               />
             </div>

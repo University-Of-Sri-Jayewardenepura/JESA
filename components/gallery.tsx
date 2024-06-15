@@ -37,6 +37,7 @@ export function Gallery() {
                 width={1080}
                 height={350}
                 className="rounded-lg border border-primary/70"
+                priority
               />
             </div>
           </CarouselItem>

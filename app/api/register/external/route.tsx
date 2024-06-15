@@ -3,7 +3,7 @@ import ExternalApplicant from "@/models/externalApplicant";
 import BaseApplicant from "@/models/BaseApplicant";
 import { NextRequest, NextResponse } from "next/server";
 import { UNIVERSITY, AWARDS, GENDER, ACADEMICYEAR } from "@/constants/form";
-import z, { object } from "zod";
+import z from "zod";
 
 const enumValues = <T extends Record<string, string>>(
   enumObject: T

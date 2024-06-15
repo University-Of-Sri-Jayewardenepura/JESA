@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import {
   AWARDS,
@@ -33,7 +35,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -149,7 +151,7 @@ function InternalRegisterForm() {
     mode: "onChange",
   });
 
-  async function onSubmit(values: any) {
+  async function OnSubmit(values: any) {
     setIsSubmitting(true);
 
     const cleanedValues = Object.fromEntries(
@@ -206,7 +208,7 @@ function InternalRegisterForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(OnSubmit)}
         className="space-y-8 md:w-96 sm:w-80 w-80"
       >
         <FormField
@@ -618,8 +620,8 @@ function InternalRegisterForm() {
           name="TermsAndConditions"
           render={({ field }) => (
             <FormItem>
-              <FormControl>
-                <input type="checkbox" {...field} required />
+              <FormControl className="inline-flex">
+                <Checkbox {...field} required />
               </FormControl>
               <FormLabel>
                 &nbsp; I confirm that the information above is accurate to the
@@ -633,8 +635,8 @@ function InternalRegisterForm() {
           )}
         />
 
-        <div className=" flex justify-end">
-          <Button type="submit" disabled={isSubmitting}>
+        <div className="flex justify-center">
+          <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </div>
