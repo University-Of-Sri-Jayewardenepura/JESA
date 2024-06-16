@@ -14,4 +14,5 @@ export const imageSrcs = [
   "/images/carousel/Image13.jpg",
   "/images/carousel/Image14.jpg",
   "/images/carousel/Image15.jpg",
+  "/images/carousel/Image16.jpg",
 ];
