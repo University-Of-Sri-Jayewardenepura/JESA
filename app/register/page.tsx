@@ -20,17 +20,25 @@ export default function Register() {
       <h2 className="text-sm md:text-lg text-white/75 text-center px-3">
         Please select the category to proceed with the form
       </h2>
-      <div className="flex flex-row justify-center items-center flex-wrap pt-[2rem]">
-        <Link rel="preload" href="/register/internal">
-          <Button className="m-4 px-6 py-2 font-bold shadow-md flex-1 h-16 w-64">
+      <div className="flex flex-col justify-center items-center pt-[2rem] space-y-8">
+        <Link
+          rel="preload"
+          href="/register/internal"
+          className="w-full md:w-[350px]"
+        >
+          <Button className="font-bold shadow-md w-full py-6">
             <span className="bg-gradient-to-b from-background to-emerald-950 bg-clip-text text-transparent">
               Students of <br />
               University of Sri Jayewardenepura
             </span>
           </Button>
         </Link>
-        <Link rel="preload" href="/register/external">
-          <Button className="m-4 px-6 py-2 font-bold shadow-md flex-1 h-16 w-64">
+        <Link
+          rel="preload"
+          href="/register/external"
+          className="w-full md:w-[350px]"
+        >
+          <Button className="font-bold shadow-md w-full py-6">
             <span className="bg-gradient-to-b from-background to-emerald-950 bg-clip-text text-transparent">
               Students of <br />
               Other State Universities

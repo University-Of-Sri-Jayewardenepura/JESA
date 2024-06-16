@@ -21,7 +21,7 @@ export function Awards() {
   return (
     <Carousel
       plugins={[plugin.current]}
-      className="w-full max-w-6xl flex flex-col mx-auto relative gap-2 pt-[2rem] pb-[8rem] space-y-20"
+      className="w-full max-w-6xl flex flex-col mx-auto relative gap-2 pt-[2rem] pb-[8rem] space-y-20 px-8"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
