@@ -58,10 +58,9 @@ export const Hero = () => {
         className="-top-40 left-0 md:left-80 md:-top-20 ml-[5rem] sm:ml-[10rem]"
         fill="white"
       />
-      {/* <Link href="/register" className="hover:scale-110 mb-10">
+      <Link href="/register" className="hover:scale-110 mb-10">
         <ShinyButton text="Register" />
-      </Link> */}
-      <ShinyButton text="Registration Coming Soon" />
+      </Link>
     </div>
   );
 };

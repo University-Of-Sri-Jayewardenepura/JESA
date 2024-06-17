@@ -40,9 +40,9 @@ export function Navbar({ className }: { className?: string }) {
           <Link href="/hall-of-fame" className="hidden md:block">
             Hall of Fame
           </Link>
-          {/* <Button asChild className="rounded-full">
+          <Button asChild className="rounded-full">
             <Link href="/register">Register</Link>
-          </Button> */}
+          </Button>
           <MobileNav className="md:hidden" />
         </div>
       </div>
