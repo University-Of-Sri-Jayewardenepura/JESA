@@ -30,7 +30,7 @@ const ReviewCard = ({
           width="64"
           height="64"
           alt={partnership}
-          src={image}
+          src="/images/companies/question.png"
         />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
