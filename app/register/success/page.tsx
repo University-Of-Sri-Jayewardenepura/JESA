@@ -35,9 +35,7 @@ const SuccessPage = () => {
         className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
       >
         JESA 2024 REGISTRATION <br />
-        <span className="bg-gradient-to-br from-amber-300 to-white bg-clip-text text-transparent">
-          Succesful
-        </span>
+        Successful
       </h1>
       <h2 className="text-sm md:text-lg text-center px-3 text-emerald-400">
         Your registration form was received. <br />
