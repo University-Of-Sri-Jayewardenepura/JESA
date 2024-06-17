@@ -38,10 +38,11 @@ export default function Register() {
           href="/register/external"
           className="w-full md:w-[350px]"
         >
-          <Button className="font-bold shadow-md w-full py-6">
+          <Button className="font-bold shadow-md w-full py-6 h-[65px]">
             <span className="bg-gradient-to-b from-background to-emerald-950 bg-clip-text text-transparent">
               Students of <br />
-              Other State Universities
+              Other State Universities<br/>
+              (For Best Innovator Award Only)
             </span>
           </Button>
         </Link>
