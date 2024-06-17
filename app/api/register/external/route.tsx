@@ -13,55 +13,50 @@ const enumValues = <T extends Record<string, string>>(
 };
 
 const schema = z.object({
-  Name: z.string().min(1),
-  NIC: z.string().min(9),
+  Name: z.string().min(1, "Name is required"),
+  NIC: z.string(),
   Gender: z.enum(enumValues(GENDER)),
-  Email: z.string().email(),
-  Whatsapp: z.string().min(9),
+  Email: z.string().email("Invalid email address"),
+  Whatsapp: z.string(),
   University: z.enum(enumValues(UNIVERSITY)),
-  Faculty: z.string().min(1),
+  Faculty: z.string().min(1, "Faculty is required"),
   UniversityRegisterId: z.string(),
   AcademicYear: z.enum(enumValues(ACADEMICYEAR)),
   Award: z.enum(enumValues(AWARDS)).default(AWARDS.BEST_INNOVATOR),
-  WhichIndustry: z.string().min(1),
+  WhichIndustry: z.string().min(1, "Industry is required"),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validitity = schema.safeParse(body);
+    const validation = schema.safeParse(body);
 
-    if (!validitity.success) {
-      return NextResponse.json({ error: validitity.error }, { status: 400 });
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error.errors }, { status: 400 });
     }
 
-    if (body.University == UNIVERSITY.SRI_JAYEWARDENEPURA) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Hmm... Are you from University of Sri Jayewardenepura",
-        }),
-        { status: 401 }
-      );
+    if (body.NIC.length < 8) {
+      return NextResponse.json({ message: "Please check NIC number" }, { status: 401 });
     }
 
-    if (!(body.Award == AWARDS.BEST_INNOVATOR)) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Sorry! You are only eligible for Best Innovator.",
-        }),
-        { status: 401 }
-      );
+    if (body.University === UNIVERSITY.SRI_JAYEWARDENEPURA) {
+      return NextResponse.json({
+        message: "Hmm... Are you from the University of Sri Jayewardenepura?"
+      }, { status: 401 });
+    }
+
+    if (body.Award !== AWARDS.BEST_INNOVATOR) {
+      return NextResponse.json({
+        message: "Sorry! You are only eligible for Best Innovator."
+      }, { status: 401 });
     }
 
     await connectMongoDB();
 
-    const duplicateCheck = await ExternalApplicant.find({ Email: body.Email });
+    const duplicateCheck = await ExternalApplicant.findOne({ Email: body.Email });
 
-    if (duplicateCheck.length > 0) {
-      return new NextResponse(
-        JSON.stringify({ message: "Hmm... Please Check Email Address" }),
-        { status: 409 }
-      );
+    if (duplicateCheck) {
+      return NextResponse.json({ message: "Hmm... Email already exists" }, { status: 409 });
     }
 
     // Create BaseApplicant
@@ -80,35 +75,30 @@ export async function POST(request: Request) {
     // Save the ExternalApplicant
     const savedApplicant = await newApplicant.save();
 
-    // Update the DetilID of the BaseApplicant with the _id of the saved ExternalApplicant
+    // Update the DetailID of the BaseApplicant with the _id of the saved ExternalApplicant
     await BaseApplicant.findByIdAndUpdate(baseApplicantId, {
-      DetilID: savedApplicant._id,
+      DetailID: savedApplicant._id,
     });
 
-    return new NextResponse(
-      JSON.stringify({ message: "Applicant saved successfully" }),
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "Applicant saved successfully" }, { status: 201 });
   } catch (error) {
     console.error(error);
-    return new NextResponse(
-      JSON.stringify({ message: "Sorry! We are unabled to save your form." }),
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Sorry! We are unable to save your form." }, { status: 500 });
   }
 }
 
 /* 
 {
-"Name": "Sonal Jayasinghe",
-"Gender": "M",
- "Email": "sonaldanindulk@gmail.com",
- "Whatsapp": "0705589209",
- "University": "peradeniya",
- "UniversityRegisterId": "AS2021939",
- "AcademicYear": "1",
- "NIC": "200105600352",
- "Award": "Best Innovator",
- "WhichIndustry": "Paka Banwa"
+  "Name": "Sonal Jayasinghe",
+  "NIC": "200105600352",
+  "Gender": "M",
+  "Email": "sonaldanindulk@gmail.com",
+  "Whatsapp": "0705589209",
+  "University": "peradeniya",
+  "Faculty": "Engineering",
+  "UniversityRegisterId": "AS2021939",
+  "AcademicYear": "1",
+  "Award": "Best Innovator",
+  "WhichIndustry": "Paka Banwa"
 }
 */

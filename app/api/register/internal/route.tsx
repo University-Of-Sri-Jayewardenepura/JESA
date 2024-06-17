@@ -23,7 +23,7 @@ const internalApplicantSchema = z.object({
   Name: z.string().min(1),
   Gender: z.enum(enumValues(GENDER)),
   Email: z.string().email(),
-  Whatsapp: z.string().min(9),
+  Whatsapp: z.string(),
   University: z.enum(enumValues(UNIVERSITY)),
   UniversityRegisterId: z.string().min(1),
   AcademicYear: z.enum(enumValues(ACADEMICYEAR)),
@@ -36,67 +36,42 @@ const internalApplicantSchema = z.object({
   Award3: z.enum(enumValues(AWARDS)).optional(),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validity = internalApplicantSchema.safeParse(body);
 
     if (!validity.success) {
-      return NextResponse.json({ error: validity.error }, { status: 400 });
+      return NextResponse.json({ error: validity.error.errors }, { status: 400 });
     }
 
-    if (!(body.University == UNIVERSITY.SRI_JAYEWARDENEPURA)) {
-      return new NextResponse(
-        JSON.stringify({ message: "You are not belongs to this form!" }),
+    if (body.University !== UNIVERSITY.SRI_JAYEWARDENEPURA) {
+      return NextResponse.json(
+        { message: "You do not belong to this university form!" },
         { status: 401 }
       );
     }
 
     if (!body.IsPastParticipant && body.Award3) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Only past year participants can apply for 3 awards",
-        }),
+      return NextResponse.json(
+        { message: "Only past participants can apply for 3 awards" },
         { status: 401 }
       );
     }
 
-    if (body.Award1 == body.Award2) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Oops! You cannot select same award again!",
-        }),
-        { status: 401 }
-      );
-    }
-
-    if (body.Award1 == body.Award3) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Oops! You cannot select same award again!",
-        }),
-        { status: 401 }
-      );
-    }
-
-    if (body.Award3 == body.Award2 && body.Award2 != null) {
-      return new NextResponse(
-        JSON.stringify({
-          message: "Oops! You cannot select same award again!",
-        }),
+    if (body.Award1 === body.Award2 || body.Award1 === body.Award3 || (body.Award2 && body.Award2 === body.Award3)) {
+      return NextResponse.json(
+        { message: "You cannot select the same award more than once!" },
         { status: 401 }
       );
     }
 
     await connectMongoDB();
 
-    const duplicateCheck = await InternalApplicant.find({ Email: body.Email });
+    const duplicateCheck = await InternalApplicant.findOne({ Email: body.Email });
 
-    if (duplicateCheck.length > 0) {
-      return new NextResponse(
-        JSON.stringify({ message: "Hmm... Please Check Email Address" }),
-        { status: 409 }
-      );
+    if (duplicateCheck) {
+      return NextResponse.json({ message: "Hmm... Email already exists" }, { status: 409 });
     }
 
     // Create BaseApplicant
@@ -115,20 +90,37 @@ export async function POST(request: Request) {
     // Save the InternalApplicant
     const savedApplicant = await newApplicant.save();
 
-    // Update the DetilID of the BaseApplicant with the _id of the saved InternalApplicant
+    // Update the DetailID of the BaseApplicant with the _id of the saved InternalApplicant
     await BaseApplicant.findByIdAndUpdate(baseApplicantId, {
-      DetilID: savedApplicant._id,
+      DetailID: savedApplicant._id,
     });
 
-    return new NextResponse(
-      JSON.stringify({ message: "Applicant saved successfully" }),
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "Applicant saved successfully" }, { status: 201 });
   } catch (error) {
     console.error(error);
-    return new NextResponse(
-      JSON.stringify({ message: "Error saving applicant" }),
+    return NextResponse.json(
+      { message: "Error saving applicant" },
       { status: 500 }
     );
   }
 }
+
+/* 
+Example request body:
+{
+  "Name": "Sonal Jayasinghe",
+  "Gender": "M",
+  "Email": "sonaldanindulk@gmail.com",
+  "Whatsapp": "0705589209",
+  "University": "SRI_JAYEWARDENEPURA",
+  "UniversityRegisterId": "AS2021939",
+  "AcademicYear": "1",
+  "Faculty": "Engineering",
+  "Degree": "BSc",
+  "OtherDegree": "MSc",
+  "IsPastParticipant": true,
+  "Award1": "Best Innovator",
+  "Award2": "Best Researcher",
+  "Award3": "Best Presenter"
+}
+*/
