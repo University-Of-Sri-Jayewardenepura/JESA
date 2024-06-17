@@ -1,7 +1,7 @@
 export enum GENDER {
     MALE = 'Male',
     FEMALE = 'Female',
-    Other = 'Other' 
+    Other = 'Other'
 }
 
 export enum UNIVERSITY {
@@ -41,9 +41,9 @@ export enum FACULTY {
     TECHNOLOGY = 'Faculty of Technology',
     ENGINEERING = 'Faculty of Engineering',
     MEDICAL_SCIENCE = 'Faculty of Medical Science',
-    DENTAL_SCIENCES ='Faculty of Dental Sciences',
+    DENTAL_SCIENCES = 'Faculty of Dental Sciences',
     URBAN_AQUATIC = 'Faculty of Urban & Aquatic Bioresources',
-    COMPUTING ='Faculty of Computing'
+    COMPUTING = 'Faculty of Computing'
 }
 
 export enum DEGREE {
@@ -93,6 +93,8 @@ export enum DEGREE {
     BA_PHILOSOPHY_PSYCHOLOGY_SPECIAL = 'B.A. Philosophy and Psychology (Special) Degree',
     BA_BUDDHIST_HERITAGE_TOURISM_SPECIAL = 'B.A. Buddhist Heritage & Tourism (Special) Degree',
     BSC_HONOURS_GEO_SPATIAL_TECHNOLOGY = 'B.Sc. Honours in Geo-Spatial Technology',
+    BA_BUSINESS_STATISTICS_HONS = 'B.A. (Hons.) in Business Statistics',
+    BA_INFORMATION_TECHNOLOGY_HONS = 'B.A. (Hons.) in Information Technology',
 
     MEDICAL_LAB_SCIENCES = 'B.Sc. in Medical Laboratory Sciences',
     NURSING = 'B.Sc. in Nursing',
@@ -107,7 +109,7 @@ export enum DEGREE {
     CIVIL_ENGINEERING_SPECIAL = 'B.Sc.Civil Engineering (Special) Degree',
     ELECTRICAL_ELECTRONIC_ENGINEERING_SPECIAL = 'B.Sc.Electrical and Electronic Engineering (Special) Degree',
     MECHANICAL_ENGINEERING_SPECIAL = 'B.Sc.Mechanical Engineering (Special) Degree',
-    
+
     MBBS = 'MBBS',
     HUMAN_BIOLOGY = 'B.Sc. in Human Biology',
 
@@ -184,6 +186,8 @@ export enum HUM_DEGREE {
     BA_PHILOSOPHY_PSYCHOLOGY_SPECIAL = 'B.A. Philosophy and Psychology (Special) Degree',
     BA_BUDDHIST_HERITAGE_TOURISM_SPECIAL = 'B.A. Buddhist Heritage & Tourism (Special) Degree',
     BSC_HONOURS_GEO_SPATIAL_TECHNOLOGY = 'B.Sc. Honours in Geo-Spatial Technology',
+    BA_BUSINESS_STATISTICS_HONS = 'B.A. (Hons.) in Business Statistics',
+    BA_INFORMATION_TECHNOLOGY_HONS = 'B.A. (Hons.) in Information Technology',
 }
 
 export enum ALMED_DEGREE {
@@ -211,14 +215,14 @@ export enum MED_DEGREE {
     HUMAN_BIOLOGY = 'B.Sc. in Human Biology',
 }
 
-export enum COMPUTING_DEGREE{
+export enum COMPUTING_DEGREE {
     OTHER = 'Other'
 }
 
-export enum URBAN_AQUATIC_DEGREE{
+export enum URBAN_AQUATIC_DEGREE {
     OTHER = 'Other'
 }
 
-export enum DENTAL_SCIENCES_DEGREE{
+export enum DENTAL_SCIENCES_DEGREE {
     OTHER = 'Other'
 }
