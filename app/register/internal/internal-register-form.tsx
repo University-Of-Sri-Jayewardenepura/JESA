@@ -6,6 +6,9 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import {
   AWARDS,
@@ -21,7 +24,7 @@ import {
   COMPUTING_DEGREE,
   DENTAL_SCIENCES_DEGREE,
   URBAN_AQUATIC_DEGREE,
-} from "@/app/constants";
+} from "@/constants/form";
 
 import {
   Form,
@@ -32,7 +35,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -148,7 +151,7 @@ function InternalRegisterForm() {
     mode: "onChange",
   });
 
-  async function onSubmit(values: any) {
+  async function OnSubmit(values: any) {
     setIsSubmitting(true);
 
     const cleanedValues = Object.fromEntries(
@@ -205,7 +208,7 @@ function InternalRegisterForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(OnSubmit)}
         className="space-y-8 md:w-96 sm:w-80 w-80"
       >
         <FormField
@@ -445,7 +448,7 @@ function InternalRegisterForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Are You a Member of JESA 2024/2023 Organizing Committee ?
+                Are You a Member of JESA 2023 or 2024 Organizing Committee ?
               </FormLabel>
               <FormControl>
                 <Select
@@ -617,21 +620,23 @@ function InternalRegisterForm() {
           name="TermsAndConditions"
           render={({ field }) => (
             <FormItem>
-              <FormControl>
-                <input type="checkbox" {...field} required />
+              <FormControl className="inline-flex">
+                <Checkbox {...field} required />
               </FormControl>
               <FormLabel>
                 &nbsp; I confirm that the information above is accurate to the
-                best of my knowledge and in accordance with the terms and
-                conditions.
+                best of my knowledge and in accordance with the{" "}
+                <Link href="/terms" className="underline">
+                  terms and conditions.
+                </Link>
               </FormLabel>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className=" flex justify-end">
-          <Button type="submit" disabled={isSubmitting}>
+        <div className="flex justify-center">
+          <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </div>

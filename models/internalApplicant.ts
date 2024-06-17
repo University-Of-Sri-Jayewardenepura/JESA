@@ -1,80 +1,89 @@
-import mongoose,{Schema} from "mongoose";
-import {GENDER,UNIVERSITY,ACADEMICYEAR,FACULTY,DEGREE,AWARDS} from '../app/constants/index';
-import { getEnumValues } from '../app/utils/utils';
+import mongoose, { Schema } from "mongoose";
+import {
+  GENDER,
+  UNIVERSITY,
+  ACADEMICYEAR,
+  FACULTY,
+  DEGREE,
+  AWARDS,
+} from "../constants/form";
+import { getEnumValues } from "@/lib/utils";
 import exp from "constants";
 
 const internalApplicantSchema = new Schema(
-    {
-        ApplicantId:{
-            type:'ObjectId',
-            required: true,
-        },
-        Name: {
-            type: String,
-            required: true,
-        },
-        Gender: {
-            type: String,
-            enum: getEnumValues(GENDER),
-            required: true,
-        },
-        Email: {
-            type: String,
-            required: true,
-        },
-        Whatsapp: {
-            type: Number,
-            required: true,
-        },
-        University: {
-            type: String,
-            enum: getEnumValues(UNIVERSITY),
-            required: true,
-        },
-        UniversityRegisterId: {
-            type: String,
-            required: true,
-        },
-        AcademicYear: {
-            type: String,
-            enum: getEnumValues(ACADEMICYEAR),
-            required: true,
-        },
-        Faculty: {
-            type: String,
-            enum: getEnumValues(FACULTY),
-            required: true,
-        },
-        Degree: {
-            type: String,
-            enum: getEnumValues(DEGREE),
-            required: true,
-        },
-        OtherDegree:{
-            type: String
-        },
-        IsPastParticipant:{
-            type:Boolean,
-            required: true,
-        },
-        Award1:{
-            type:String,
-            required: true,
-            enum: getEnumValues(AWARDS),
-        },
-        Award2:{
-            type:String,
-            enum: getEnumValues(AWARDS),
-        },
-        Award3:{
-            type:String,
-            enum: getEnumValues(AWARDS),
-        }
+  {
+    ApplicantId: {
+      type: "ObjectId",
+      required: true,
     },
-    { timestamps: true }
-)
+    Name: {
+      type: String,
+      required: true,
+    },
+    Gender: {
+      type: String,
+      enum: getEnumValues(GENDER),
+      required: true,
+    },
+    Email: {
+      type: String,
+      required: true,
+    },
+    Whatsapp: {
+      type: Number,
+      required: true,
+    },
+    University: {
+      type: String,
+      enum: getEnumValues(UNIVERSITY),
+      required: true,
+    },
+    UniversityRegisterId: {
+      type: String,
+      required: true,
+    },
+    AcademicYear: {
+      type: String,
+      enum: getEnumValues(ACADEMICYEAR),
+      required: true,
+    },
+    Faculty: {
+      type: String,
+      enum: getEnumValues(FACULTY),
+      required: true,
+    },
+    Degree: {
+      type: String,
+      enum: getEnumValues(DEGREE),
+      required: true,
+    },
+    OtherDegree: {
+      type: String,
+    },
+    IsPastParticipant: {
+      type: Boolean,
+      required: true,
+    },
+    Award1: {
+      type: String,
+      required: true,
+      enum: getEnumValues(AWARDS),
+    },
+    Award2: {
+      type: String,
+      enum: getEnumValues(AWARDS),
+    },
+    Award3: {
+      type: String,
+      enum: getEnumValues(AWARDS),
+    },
+  },
+  { timestamps: true }
+);
 
-const InternalApplicant = mongoose.models.InternalApplicant || mongoose.model("InternalApplicant",internalApplicantSchema);
+const InternalApplicant =
+  mongoose.models.InternalApplicant ||
+  mongoose.model("InternalApplicant", internalApplicantSchema);
 export default InternalApplicant;
 
 /*

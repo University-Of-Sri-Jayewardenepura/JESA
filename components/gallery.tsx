@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import { imageSrcs } from "@/public/data/gallery";
+import { imageSrcs } from "@/constants/gallery";
 
 export function Gallery() {
   const plugin = React.useRef(
@@ -37,6 +37,7 @@ export function Gallery() {
                 width={1080}
                 height={350}
                 className="rounded-lg border border-primary/70"
+                priority
               />
             </div>
           </CarouselItem>

@@ -1,0 +1,18 @@
+export const imageSrcs = [
+  "/images/carousel/Image1.jpg",
+  "/images/carousel/Image2.jpg",
+  "/images/carousel/Image3.jpg",
+  "/images/carousel/Image4.jpg",
+  "/images/carousel/Image5.jpg",
+  "/images/carousel/Image6.jpg",
+  "/images/carousel/Image7.jpg",
+  "/images/carousel/Image8.jpg",
+  "/images/carousel/Image9.jpg",
+  "/images/carousel/Image10.jpg",
+  "/images/carousel/Image11.jpg",
+  "/images/carousel/Image12.jpg",
+  "/images/carousel/Image13.jpg",
+  "/images/carousel/Image14.jpg",
+  "/images/carousel/Image15.jpg",
+  "/images/carousel/Image16.jpg",
+];

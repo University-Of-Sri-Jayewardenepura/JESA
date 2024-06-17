@@ -1,5 +1,5 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -40,9 +40,9 @@ export function Navbar({ className }: { className?: string }) {
           <Link href="/hall-of-fame" className="hidden md:block">
             Hall of Fame
           </Link>
-          <Button asChild className="rounded-full">
+          {/* <Button asChild className="rounded-full">
             <Link href="/register">Register</Link>
-          </Button>
+          </Button> */}
           <MobileNav className="md:hidden" />
         </div>
       </div>
@@ -53,7 +53,7 @@ export function Navbar({ className }: { className?: string }) {
 function MobileNav({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
@@ -64,7 +64,7 @@ function MobileNav({ className }: { className?: string }) {
             <span className="sr-only">Mobile Navigation Menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" sideOffset={5}>
           <DropdownMenuItem>
             <Link href="/awards">Awards</Link>
           </DropdownMenuItem>

@@ -41,6 +41,9 @@ App Structure
 
 ```
 ├── app
+│   ├── api
+│   │   ├── register
+│   │   |   ├── ...
 │   ├── awards
 │   │   ├── page.tsx
 │   │   └── awards-card.tsx
@@ -49,7 +52,7 @@ App Structure
 │   │   └── hall-of-fame.tsx
 │   ├── register
 │   │   ├── page.tsx
-│   │   └── register-form.tsx
+│   │   ├── ...
 │   ├── terms
 │   │   ├── page.tsx
 │   ├── layout.tsx
@@ -69,6 +72,8 @@ App Structure
 │   └── ├── ...
 │   ├── navbar.tsx
 │   └── ...
+├── constants
+├── models
 ├── lib
 │   └── utils.ts
 ├── bun.lockb
@@ -82,8 +87,45 @@ App Structure
 └── tsconfig.json
 ```
 
+## Built with:
+
+### JavaScript frameworks:
+
+- <a href="https://react.dev/">React</a>
+- <a href="https://nextjs.org/">Next.js 14</a>
+
+### UI frameworks :
+
+- <a href="https://www.radix-ui.com/">Radix UI</a>
+- <a href="https://ui.shadcn.com/">shadcn UI</a>
+- <a href="https://tailwindcss.com/">Tailwind CSS</a>
+- <a href="https://ui.aceternity.com/">Aceternity UI</a>
+- <a href="https://magicui.design/">Magic UI</a>
+
+### Icons
+
+- <a href="https://lucide.dev/icons/">Lucide</a>
+
+### Analytics
+
+- <a href="https://analytics.google.com/">Google Analytics GA4</a>
+
+### Data Validation
+
+- <a href="https://zod.dev/">Zod</a>
+
+### Database & Object Modeling
+
+- <a href="https://www.mongodb.com/">MongoDB</a>
+- <a href="https://mongoosejs.com/">mongoose</a>
+
+### Deployment
+
+- <a href="https://vercel.com">Vercel</a>
+
 ## Authors
 
 - [Sonal Jayasinghe](https://github.com/SonalJayasinghe)
 - [Pruthivi Thejan](https://links.pruthivithejan.me)
 - [Yasitha Renuk](https://github.com/YasithaRenuk)
+- [Kasun Rathnayaka](https://github.com/kasun-m-rathnayaka)

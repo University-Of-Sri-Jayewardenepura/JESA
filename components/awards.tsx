@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { awards } from "@/public/data/awards";
+import { awards } from "@/constants/awards";
 import Image from "next/image";
 import { zodiak } from "@/app/fonts";
 
@@ -21,12 +21,12 @@ export function Awards() {
   return (
     <Carousel
       plugins={[plugin.current]}
-      className="w-full max-w-6xl flex flex-col mx-auto relative gap-2 pt-[2rem] pb-[8rem] space-y-24"
+      className="w-full max-w-6xl flex flex-col mx-auto relative gap-2 pt-[2rem] pb-[8rem] space-y-20 px-8"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
       <h1
-        className={`text-3xl md:text-5xl lg:text-6xl text-primary text-center font-bold ${zodiak.className}`}
+        className={`text-3xl md:text-5xl lg:text-6xl text-primary mb-[-1.5rem] text-center font-bold ${zodiak.className}`}
       >
         Awards
       </h1>
