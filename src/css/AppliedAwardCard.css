@@ -1,0 +1,73 @@
+/* AppliedAwardCard component */
+
+.applied-cards {
+  margin: 5vh auto;
+}
+.applied-cards h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin: 7vh auto 4vh;
+}
+.applied-card-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+.applied-card {
+  padding: 7px 20px 35px;
+  background-color: #1e1e1e;
+  border: 3px solid #cbaa55c1;
+  border-radius: 15px;
+  box-shadow: 0 0 2.5rem #000000e7;
+}
+.applied-card h3 {
+  font-size: 1.65rem;
+}
+.applied-card p {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+.applied-card-reg-no {
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: #cbaa55c1;
+  border-radius: 100px;
+  color: #000000;
+  padding: 3px 25px;
+  margin: auto;
+  width: fit-content;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .applied-cards {
+    margin: 5vh auto 0vh;
+  }
+  .applied-cards h2 {
+    font-size: 2rem;
+  }
+  .applied-card-container {
+    flex-direction: column;
+    width: 70vw;
+    margin: 0px auto;
+    gap: 1rem;
+  }
+  .applied-card {
+    padding: 7px 20px 25px;
+  }
+  .applied-card h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .applied-cards h2 {
+    font-size: 2rem;
+  }
+  .applied-card h3 {
+    font-size: 1.5rem;
+  }
+}

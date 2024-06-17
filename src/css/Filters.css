@@ -1,0 +1,96 @@
+/* Filters component */
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 15vw;
+}
+.filter-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+}
+.fil-clear {
+  font-size: 1.2rem;
+  padding: 7px 9px;
+  background-color: #2c2c2c;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.fil-clear:hover {
+  background-color: #3d3d3d;
+}
+.filters h3 {
+  font-size: 1.2rem;
+  margin: 0 0 5px;
+  padding: 0 0 0 15px;
+}
+
+.filter {
+  font-size: 1.15rem;
+  padding: 3px 12px 5px;
+  border-radius: 7px;
+  width: 100%;
+  cursor: pointer;
+  color: #cecece;
+  background-color: #252525;
+  transition: 0.2s;
+}
+.filter:hover {
+  background-color: #3d3d3d;
+  padding-left: 7px;
+}
+.filter-active {
+  color: #191919;
+  background-color: #cbaa55d3;
+}
+.filter-active:hover {
+  background-color: #cbaa55;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .filters {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100vw;
+    margin-bottom: 35px;
+  }
+  .filter-title {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+  }
+  .fil-clear {
+    margin-left: 30px;
+  }
+  .filter {
+    border-radius: 9px;
+    width: fit-content;
+  }
+  .filter:hover {
+    background-color: #3d3d3d;
+    padding: 3px 12px 5px;
+  }
+  .filter-active:hover {
+    background-color: #cbaa55;
+  }
+}
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .filters {
+    gap: 0.5rem;
+    width: 16.5vw;
+  }
+  .filter {
+    font-size: 1rem;
+  }
+}

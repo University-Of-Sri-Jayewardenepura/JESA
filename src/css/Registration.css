@@ -1,0 +1,99 @@
+/* Registration component */
+
+/* Default styling */
+.registration {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 85vw;
+  gap: 2vw;
+  flex-wrap: wrap;
+}
+.registration-text {
+  width: 40vw;
+  font-size: 1.4rem;
+  text-align: center;
+  padding: 1.5rem 4vw;
+  border-radius: 1.5rem;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 5rem #0000009e;
+}
+
+/* button section */
+.registration-links {
+  width: 30vw;
+  text-align: center;
+}
+.registration-btn {
+  font-weight: 700;
+  font-size: 1.6rem;
+  display: block;
+  width: fit-content;
+  margin: auto;
+  text-decoration: none;
+  border-radius: 500px;
+  padding: 10px 50px;
+  cursor: pointer;
+  background-color: #cbaa55;
+  border: none;
+  color: #000000;
+}
+.registration-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  background-color: #e2be61;
+}
+.reg-closed {
+  background-color: #cbaa5573;
+  cursor: default;
+  pointer-events: none;
+}
+.registration-links h4 {
+  font-weight: 400;
+  width: 70%;
+  color: #8b8b8b;
+  font-size: 1.3rem;
+  margin: 4vh auto 0;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .registration {
+    flex-direction: column;
+    width: 90vw;
+    gap: 7vw;
+  }
+  .registration-text {
+    width: 90vw;
+    font-size: 1.3rem;
+    padding: 1rem 5vw;
+  }
+  /* button section */
+  .registration-links {
+    width: 90vw;
+  }
+  .registration-btn {
+    font-size: 1.4rem;
+  }
+  .registration-links h4 {
+    width: 80%;
+    font-size: 1.25rem;
+    margin: 2vh auto 0;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* default styling */
+  .registration-text {
+    width: 43vw;
+    padding: 1.5rem 3vw;
+  }
+  /* button section */
+  .registration-links {
+    width: 32vw;
+  }
+  .registration-btn {
+    font-size: 1.4rem;
+  }
+}

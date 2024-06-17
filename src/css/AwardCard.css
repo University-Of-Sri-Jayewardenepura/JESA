@@ -1,0 +1,147 @@
+/* AwardCard Component */
+
+.awd-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 18px;
+  background-color: #1e1e1e;
+  width: 16vw;
+  height: 25vw;
+  border: 0px solid rgba(117, 117, 117, 0.397);
+  transition: 0.3s ease-out;
+}
+.awd-card-image {
+  position: absolute;
+  height: 22vw;
+  object-fit: cover;
+  filter: drop-shadow(0 0 0.75rem #000000ee);
+  transition: 0.4s;
+}
+.awd-card-title,
+.awd-besa {
+  position: absolute;
+  width: 14vw;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 5px 15px;
+  color: #000000;
+  background-color: #cbaa55;
+  border-radius: 10px;
+  transform: translateY(+13vw);
+  opacity: 0;
+  transition: 0.3s ease-out;
+}
+.awd-besa {
+  width: 13vw;
+  font-size: 1.75rem;
+  padding: 5px 15px;
+  color: #e1e1e1af;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 100px;
+  transform: translateY(+12vw);
+}
+
+/* animating the award card when hover over it*/
+.awd-card:hover {
+  transform: translateY(+1vw);
+  cursor: pointer;
+  z-index: 99;
+  border: 5px solid #cbaa55bd;
+  background-color: #4d4d4d15;
+  box-shadow: 0 2vh 2rem rgba(0, 0, 0, 0.614);
+}
+.awd-card:hover .awd-card-image {
+  transform: scale(1.1);
+  margin-bottom: 7vw;
+  filter: drop-shadow(0 0 1.5rem #000000cc);
+}
+.awd-card:hover .awd-card-title {
+  transform: translateY(+10.3vw);
+  opacity: 1;
+}
+.awd-card:hover .awd-besa {
+  transform: translateY(+13.5vw);
+  opacity: 1;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .awd-card {
+    width: 40vw;
+    height: 55vw;
+    margin: 1rem 0.3rem 8.5vh;
+    padding: 0rem;
+  }
+  .awd-card-image {
+    height: 53vw;
+    filter: drop-shadow(0 0 0.75rem #000000df);
+  }
+  .awd-card-title,
+  .awd-besa {
+    width: 40vw;
+    border-radius: 15px;
+    transform: translateY(+36vw);
+    opacity: 1;
+    font-size: 1.2rem;
+  }
+  .awd-besa {
+    transform: translateY(+43vw);
+  }
+  /* reducing animations */
+  .awd-card:hover {
+    transform: translateY(+1vh);
+    border: 3px solid #cbaa55bd;
+  }
+  .awd-card:hover .awd-card-image {
+    transform: scale(1.1);
+    margin-bottom: 5vh;
+  }
+  .awd-card:hover .awd-card-title {
+    transform: translateY(+36vw);
+  }
+  .awd-card:hover .awd-besa {
+    transform: translateY(+43vw);
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* default styling */
+  .awd-card {
+    width: 18vw;
+    height: 30vw;
+    margin: 1rem 0.5rem;
+    padding: 0rem;
+  }
+  .awd-card-image {
+    height: 26vw;
+  }
+  .awd-card-title,
+  .awd-besa {
+    width: 16vw;
+    transform: translateY(+15vw);
+    font-size: 1.2rem;
+  }
+  .awd-besa {
+    transform: translateY(+14vw);
+  }
+
+  /* animating the award card when hover over it*/
+  .awd-card:hover {
+    transform: translateY(+1.5vw);
+  }
+  .awd-card:hover .awd-card-image {
+    margin-bottom: 10vw;
+  }
+  .awd-card:hover .awd-card-title {
+    transform: translateY(+11.5vw);
+  }
+  .awd-card:hover .awd-besa {
+    transform: translateY(+16.5vw);
+  }
+}

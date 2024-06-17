@@ -1,0 +1,179 @@
+/* Hall of fame Component */
+
+/* default styling */
+.hof-container {
+  width: 85vw;
+  display: flex;
+  flex-direction: column;
+  margin: 8vh auto 20vh;
+  align-items: center;
+  justify-content: center;
+  scroll-margin-top: 16vh;
+  animation: hof-fade-in 0.5s;
+}
+.hof-container h1 {
+  position: relative;
+  margin: 4rem 0rem 2.5rem;
+  font-size: 5rem;
+  color: #ffffff;
+}
+.hof-description {
+  width: 60vw;
+  font-size: 1.5rem;
+  text-align: center;
+  text-wrap: balance;
+  margin-bottom: 1rem;
+  color: #c4c4c4;
+  padding: 3rem 4rem;
+  border-radius: 2rem;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 3rem #00000085;
+}
+
+/* styles for rending hall of fame for each year */
+.hof-section {
+  display: flex;
+  scroll-margin-top: 7rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+.hof-section h2 {
+  width: fit-content;
+  text-align: center;
+  font-size: 3rem;
+  padding: 3px 50px;
+  margin-bottom: 2rem;
+  z-index: 5;
+  color: #000000;
+  border-radius: 500px;
+  background-color: #cbaa55c6;
+}
+.hof-image {
+  width: 85vw;
+  border-radius: 2rem;
+  border: 5px solid #cbaa55c6;
+  transition: 0.3s ease-out;
+  box-shadow: 0 0 5rem #000000ac;
+  margin-bottom: 5vh;
+}
+
+/* displaying button links for each year */
+.hof-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 50vw;
+  margin-bottom: 10vh;
+}
+.hof-tag,
+.hof-tag-disable {
+  margin: 5px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 3px 25px;
+  border-radius: 50px;
+  text-decoration: none;
+  color: #000000;
+  background-color: #cbaa55c6;
+  border: 2px solid #00000000;
+  transition: 0.3s;
+  pointer-events: all;
+}
+.hof-tag-disable {
+  color: #cbaa5580;
+  cursor: default;
+  background-color: #1e1e1e;
+  border: 2px solid #cbaa5561;
+}
+.hof-tag:hover {
+  border: 2px solid #cbaa55;
+}
+
+/* animation used when loading the page */
+@keyframes hof-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(+5vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-0vh);
+  }
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .hof-container {
+    margin: 7vh auto 8vh;
+    scroll-margin-top: 14vh;
+    width: 90vw;
+  }
+  .hof-container h1 {
+    font-size: 3.2rem;
+  }
+  .hof-description {
+    width: 85vw;
+    font-size: 1.25rem;
+    padding: 2rem 1.5rem;
+    border-radius: 1.5rem;
+  }
+
+  /* displaying button links for each year */
+  .hof-row {
+    margin-top: 0.5rem;
+    width: 85vw;
+  }
+  .hof-tag,
+  .hof-tag-disable {
+    font-size: 1.3rem;
+  }
+
+  /* styles for rending hall of fame for each year */
+  .hof-section h2 {
+    width: 50%;
+    font-size: 2rem;
+    padding: 0px;
+    margin-bottom: 1.25rem;
+  }
+  .hof-image {
+    width: 90vw;
+    border-radius: 1rem;
+    border: 2px solid #cbaa55;
+    margin-bottom: 8vh;
+  }
+  .hof-image:hover {
+    transform: scale(2) translateX(+25%) translateY(+4vw);
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .hof-container {
+    margin: 7vh auto 15vh;
+    scroll-margin-top: 14vh;
+  }
+  .hof-container h1 {
+    font-size: 4rem;
+    margin: 4rem 0rem 2rem;
+  }
+  .hof-description {
+    width: 70vw;
+  }
+  .hof-row {
+    width: 60vw;
+  }
+
+  /* styles for rending hall of fame for each year */
+  .hof-section h2 {
+    font-size: 2.5rem;
+  }
+  .hof-image {
+    border-radius: 1.5rem;
+    margin-bottom: 8vh;
+  }
+}

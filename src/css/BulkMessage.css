@@ -1,0 +1,71 @@
+/* Bulk message componenet */
+
+.bm-card {
+  display: flex;
+  margin: 18vh 0vw 16vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.bm-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.bm-subtitle {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+.bm-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.bm-input a {
+  color: #525252;
+}
+.bm-input a:hover {
+  color: rgb(97, 97, 97);
+}
+.bm-input a:visited {
+  color: #525252;
+}
+.bm-textarea {
+  width: 50vw;
+  height: 30vh;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 1rem;
+
+  resize: none;
+}
+.bm-button {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  position: relative;
+  padding: 5px 40px 8px;
+  border-radius: 10px;
+  background-color: #cbaa55;
+  color: #191919;
+  transition: 0.2s;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+.bm-button:hover {
+  background-color: #f4d36e;
+  padding: 5px 45px 8px;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .bm-textarea {
+    width: 85vw;
+    font-size: 1.1rem;
+  }
+}

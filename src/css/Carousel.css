@@ -1,0 +1,138 @@
+/* Carousel Component */
+
+.carousel-image-holder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  scroll-margin-top: 5rem;
+}
+.carousel-image {
+  width: 85vw;
+  height: 80vh;
+  border-radius: 2vw;
+  object-fit: cover;
+  transition: fade-in 0.5s;
+  z-index: 0;
+  background-color: #000000;
+  background-image: url(../images/carousel/carousel-lazyload.jpeg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* transition classes for each buttons */
+.transitioning-right {
+  pointer-events: none;
+  animation: fade-in-right 0.7s;
+}
+.transitioning-left {
+  pointer-events: none;
+  animation: fade-in-left 0.7s;
+}
+.prev-btn {
+  transform: translateX(+40vw);
+}
+.next-btn {
+  transform: translateX(-40vw);
+}
+
+.prev-btn,
+.next-btn {
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  border-radius: 50px;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  background-color: #202020b0;
+  cursor: pointer;
+  z-index: 5;
+  pointer-events: all;
+}
+
+/* styles for scroll down button */
+.scroll-btn {
+  padding: 12px 25px;
+  background-color: #282828;
+  border-radius: 50px;
+  color: #f7f7f7;
+  position: absolute;
+  text-decoration: none;
+  transform: translateY(+40vh);
+  box-shadow: 0 0 5rem #000000fb;
+  transition: 0.3s ease-out;
+  z-index: 10;
+}
+.scroll-btn:hover {
+  padding: 12px 50px;
+  background-color: #454545;
+  font-weight: 600;
+  transform: translateY(+40vh) scale(1);
+}
+
+/* animation keyframes for each button action */
+@keyframes fade-in-right {
+  0% {
+    opacity: 80%;
+    transform: translateX(+2vw);
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+@keyframes fade-in-left {
+  0% {
+    opacity: 80%;
+    transform: translateX(-2vw);
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .carousel-image {
+    width: 90vw;
+    margin-top: 1vh;
+    border-radius: 1.5rem;
+    height: 72vh;
+  }
+  .prev-btn {
+    transform: translateX(+37vw);
+  }
+  .next-btn {
+    transform: translateX(-37vw);
+  }
+  .scroll-btn {
+    transform: translateY(+36vh);
+  }
+  .scroll-btn:hover {
+    transform: translateY(+37vh) scale(1.1);
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* default styling */
+  .carousel-image {
+    margin-top: 3vh;
+    border-radius: 1.5rem;
+    height: 80vh;
+  }
+  .prev-btn {
+    transform: translateX(+38vw);
+  }
+  .next-btn {
+    transform: translateX(-38vw);
+  }
+  .scroll-btn {
+    transform: translateY(+41vh);
+  }
+  .scroll-btn:hover {
+    transform: translateY(+39.5vh) scale(1.1);
+  }
+}

@@ -1,0 +1,200 @@
+/* Regstration Page component */
+
+/* default styling */
+.registration-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 15vh 0vh 25vh;
+  scroll-margin-top: 15vh;
+  width: 85vw;
+}
+.reg-page-description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #cecece;
+  justify-content: center;
+  gap: 2rem;
+}
+.reg-page-description img {
+  width: 30vw;
+  height: 50vh;
+  object-fit: scale-down;
+  margin: 2rem 0rem 2rem 2rem;
+  filter: drop-shadow(0 20px 2rem #000000ee);
+}
+.reg-page-description p {
+  width: 35vw;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 5vh 2.5rem;
+  margin: 1rem;
+  border-radius: 1.5rem;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 5rem #0000007a;
+}
+
+/* Closing section */
+.registration-page h3 {
+  margin: 15vh 0rem 5vh;
+  font-size: 1.5rem;
+  background-color: #272727;
+  padding: 7px 5vw;
+  border-radius: 50px;
+  text-align: center;
+  font-weight: 400;
+}
+.registration-page h3 span {
+  color: #cbaa55;
+  font-weight: 600;
+}
+
+/* Links for applications */
+.reg-page-form-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+.reg-link-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 22vw;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 2px solid #cbaa556b;
+  min-height: 40vh;
+  box-shadow: 0 25px 3rem #0000009f;
+}
+.reg-link-section h2 {
+  width: 100%;
+  padding: 10px 0px;
+  border-radius: 15px;
+  background-color: #0000007a;
+  margin: 0vh;
+}
+.reg-link-text,
+.extended-reg {
+  font-size: 1.25rem;
+  margin-top: 10px;
+  color: #8a8a8a;
+  margin-bottom: 5vh;
+}
+.extended-reg {
+  margin-top: 3vh;
+  font-size: 1.2rem;
+  color: #cbaa55b2;
+  margin-bottom: 0vh;
+}
+.jesa-reg-btn {
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 10px 35px;
+  cursor: pointer;
+  pointer-events: all;
+  background-color: #cbaa55;
+  border: none;
+  color: #000000;
+}
+.jesa-reg-btn:hover {
+  transform: translateY(+7px) scale(1.05);
+  background-color: #e2be61;
+  box-shadow: 0 25px 1.5rem #0000009f;
+}
+.disable-btn {
+  background-color: #cbaa5550;
+  cursor: default;
+}
+.disable-btn:hover {
+  transform: translateY(0px) scale(1);
+  background-color: #cbaa5550;
+  box-shadow: none;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .registration-page {
+    margin: 9vh auto 12vh;
+    scroll-margin-top: 9vh;
+    width: 90vw;
+  }
+  .registration-page h1 {
+    font-size: 3rem;
+    text-align: center;
+  }
+  .reg-page-description {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 0rem;
+  }
+  .reg-page-description img {
+    width: 85vw;
+    height: 30vh;
+    margin: 2rem auto 0rem;
+  }
+  .reg-page-description p {
+    width: 85vw;
+    font-size: 1.35rem;
+    padding: 3vh 5vw;
+    text-wrap: balance;
+    margin: 0.75rem auto;
+  }
+
+  /* Closing section */
+  .registration-page h3 {
+    margin: 12vh 0rem 5vh;
+    font-size: 1.35rem;
+    width: 85vw;
+    border-radius: 20px;
+  }
+
+  /* Links for applications */
+  .reg-page-form-links {
+    flex-direction: row;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .reg-link-section {
+    width: 85vw;
+    padding: 1.75rem;
+    border-radius: 1.25rem;
+    min-height: 10vh;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* default styling */
+  .registration-page {
+    margin: 12vh 0vh 20vh;
+  }
+  .reg-page-description img {
+    width: 33vw;
+    margin: 1rem 0rem 1rem 1rem;
+  }
+  .reg-page-description {
+    gap: 1.5rem;
+  }
+  .reg-page-description p {
+    width: 40vw;
+    padding: 5vh 2rem;
+  }
+
+  /* Links for applications */
+  .reg-page-form-links {
+    gap: 1.5rem;
+  }
+  .reg-link-section {
+    width: 32vw;
+    padding: 1.75rem;
+  }
+}

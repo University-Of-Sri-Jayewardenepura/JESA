@@ -1,0 +1,365 @@
+/* Besa Partners Component */
+
+/* default styles */
+.besa-partners {
+  width: 85vw;
+  padding: 1rem;
+  scroll-margin-top: 20vh;
+  margin: 5vh auto;
+  border-radius: 2rem;
+  box-shadow: 0 0 3rem #000000c3;
+  background-color: #1e1e1e;
+  border: 2px solid #2e2e2e;
+}
+.faculty-name {
+  width: max-content;
+  min-width: 45%;
+  max-width: 90vw;
+  text-align: left;
+  color: #fffafe;
+  margin: 0.5rem;
+  background-color: #3d3d3d;
+  padding: 7px 2.5rem;
+  border-radius: 15px;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.besa-partner-container {
+  width: 100%;
+  margin: 0vh auto 6vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* styles for previous besa partners */
+.prev-besa-partners {
+  width: 35vw;
+  margin: 0rem 1.5vw;
+  filter: drop-shadow(0 0px 2rem #000000d2);
+}
+.prev-besa-plat-partners {
+  width: 90%;
+  color: #cccccc;
+  margin: 1rem auto;
+  padding: 5px 20px;
+  border-radius: 15px;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.prev-besa-partners-list {
+  width: 100%;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.prev-besa-partner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0rem 0.75rem;
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 5px solid rgb(175, 175, 175);
+  overflow: hidden;
+}
+.prev-besa-partner img {
+  width: 8vw;
+  height: 8vw;
+  object-fit: cover;
+  transform: scale(1.2);
+  object-position: 0px -0.75rem;
+}
+.prev-besa-partner h3 {
+  position: absolute;
+  transform: translateY(+4vw);
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 5px 15px;
+  color: #000000;
+  background-color: rgb(175, 175, 175);
+  border-radius: 15px;
+  width: 6vw;
+}
+
+/* styles for current/new besa partners */
+.current-besa-partners {
+  width: 45vw;
+  margin: 0rem 1vw;
+}
+.current-besa-partners h1 {
+  width: 60%;
+  margin: 1rem auto;
+  padding: 5px 20px;
+  color: #ffffff;
+  background-color: #2c2c2c;
+  border-radius: 150px;
+  font-size: 2rem;
+  font-weight: 700;
+  transform: translateY(-2vh);
+}
+.besa-partner-subtitle {
+  padding: 2px 25px 10px;
+  width: 80%;
+  font-size: 1.6rem;
+  border-radius: 5rem;
+  margin: 0rem auto 0vh;
+  color: #bdbdbd;
+  transform: translateY(+5px);
+  font-weight: 600;
+}
+.current-besa-partners-list {
+  width: 100%;
+  transform: translateY(-0.5vh);
+  margin: 0rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.current-besa-partner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: -0.5rem;
+  transition: 0.3s ease-out;
+}
+.current-besa-partner img {
+  width: 12vw;
+  height: 12vw;
+  border-radius: 20px;
+  object-fit: scale-down;
+  transition: 0.3s ease-out;
+  background-color: #ffffff;
+}
+.current-besa-partner h3 {
+  position: absolute;
+  transform: translateY(+4.3vw);
+  border-radius: 10px;
+  font-size: 1.2rem;
+  color: #000000;
+  width: 9vw;
+  opacity: 0;
+  font-weight: 600;
+  margin: 0.5rem;
+  transition: 0.3s ease-out;
+}
+
+/* exclusive for platinum partners */
+.besa-platinum {
+  z-index: 20;
+  transform: scale(1.1);
+}
+.besa-platinum:hover {
+  transform: translateY(-0vh) scale(1.15);
+  filter: drop-shadow(0 3vh 2rem #000000ac);
+}
+.besa-platinum img {
+  border: 7px solid rgb(175, 175, 175);
+}
+.platinum-text {
+  background-color: rgb(175, 175, 175);
+}
+.besa-platinum:hover .platinum-text {
+  transform: translateY(+5.5vw);
+  opacity: 1;
+  box-shadow: 0vh 1vh 1.5rem #0000004d;
+}
+
+/* exclusive for gold partners */
+.besa-gold {
+  z-index: 10;
+}
+.besa-gold:hover {
+  transform: translateX(-3.5vh) scale(1.05);
+  filter: drop-shadow(3vh 3vh 2rem #000000ac);
+}
+.besa-gold img {
+  border: 7px solid #feb72afe;
+}
+.gold-text {
+  background-color: #feb72afe;
+}
+.besa-gold:hover .gold-text {
+  transform: translateY(+5.5vw);
+  opacity: 1;
+  box-shadow: 0vh 1vh 1.5rem #0000004d;
+}
+
+/* exclusive for silver partners */
+.besa-silver {
+  z-index: 5;
+}
+.besa-silver:hover {
+  transform: translateX(+3.5vh) scale(1.05);
+  filter: drop-shadow(-3vh 3vh 2rem #000000ac);
+}
+.besa-silver img {
+  border: 7px solid rgb(125, 125, 125);
+}
+.silver-text {
+  background-color: rgb(125, 125, 125);
+}
+.besa-silver:hover .silver-text {
+  transform: translateY(+5.5vw);
+  opacity: 1;
+  box-shadow: 0vh 1vh 1.5rem #0000004d;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .besa-partners {
+    width: 90vw;
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+    scroll-margin-top: 11.5vh;
+    margin-bottom: 8vh;
+    box-shadow: 0 0 3rem #000000c3;
+  }
+  .faculty-name {
+    font-size: 1.75rem;
+    width: 82.5vw;
+    padding: 7px 15px;
+  }
+  .besa-partner-container {
+    width: 100%;
+    margin: 0vh auto 1vh;
+    flex-wrap: wrap;
+  }
+
+  /* styles for previous besa partners */
+  .prev-besa-partners {
+    width: 90vw;
+    margin: 2vh 0vw 5vh;
+    filter: drop-shadow(0 0px 0.5rem #00000097);
+  }
+  .prev-besa-plat-partners {
+    width: 100%;
+    font-size: 1.25rem;
+  }
+  .prev-besa-partners-list {
+    width: 100%;
+  }
+  .prev-besa-partner {
+    margin: 0rem 0.5rem;
+    border-radius: 15px;
+  }
+  .prev-besa-partner img {
+    width: 22vw;
+    height: 22vw;
+    transform: scale(1.25);
+    object-position: 0px -0.5rem;
+  }
+  .prev-besa-partner h3 {
+    transform: translateY(+11vw);
+    width: 17vw;
+    border-radius: 150px;
+  }
+
+  /* styles for current/new besa partners */
+  .current-besa-partners {
+    width: 90vw;
+    margin: 0rem 1vw 3vh;
+  }
+  .current-besa-partners h1 {
+    width: 80%;
+    font-size: 1.85rem;
+  }
+  .besa-partner-subtitle {
+    padding: 2px 10px 10px;
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 1.3rem;
+    transform: translateY(+10px);
+  }
+  .current-besa-partner {
+    margin: -0.3rem;
+  }
+  .current-besa-partner img {
+    width: 30vw;
+    height: 30vw;
+  }
+  .current-besa-partner h3 {
+    transform: translateY(+10vw);
+    font-size: 1.05rem;
+    width: 23vw;
+    padding: 2px;
+    font-weight: 500;
+  }
+  /* Reducing the animations on mobile */
+  .besa-gold:hover {
+    transform: translateX(-1.5vh) scale(1.05);
+  }
+  .besa-silver:hover {
+    transform: translateX(+1.5vh) scale(1.05);
+  }
+  /* adjusting the animations */
+  .besa-platinum:hover .platinum-text {
+    transform: translateY(+13.5vw);
+  }
+  .besa-gold:hover .gold-text {
+    transform: translateY(+13.5vw);
+  }
+  .besa-silver:hover .silver-text {
+    transform: translateY(+13.5vw);
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .faculty-name {
+    font-size: 2rem;
+  }
+  .besa-partner-container {
+    margin: 0vh auto 4vh;
+  }
+
+  /* styles for previous besa partners */
+  .prev-besa-partners {
+    width: 40vw;
+    margin: 0rem 1vw;
+  }
+  .prev-besa-plat-partners {
+    width: 100%;
+    font-size: 1.35rem;
+  }
+  .prev-besa-partner {
+    margin: 0rem 0.5rem;
+    border-radius: 15px;
+  }
+  .prev-besa-partner img {
+    width: 8.5vw;
+    height: 8.5vw;
+  }
+  .prev-besa-partner h3 {
+    transform: translateY(+4.25vw);
+    padding: 4px 15px;
+    font-size: 1rem;
+    width: 6.8vw;
+  }
+
+  /* styles for current/new besa partners */
+  .current-besa-partners h1 {
+    width: 65%;
+    font-size: 1.85rem;
+  }
+  .besa-partner-subtitle {
+    padding: 2px 10px 10px;
+    width: 95%;
+    margin-top: 0.5rem;
+    font-size: 1.35rem;
+    transform: translateY(+7px);
+  }
+  .current-besa-partner h3 {
+    font-size: 1.05rem;
+    width: 9vw;
+  }
+}

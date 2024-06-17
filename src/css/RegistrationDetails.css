@@ -1,0 +1,125 @@
+/* RegistrationDetails Component */
+
+.reg-details {
+  margin: 3vh auto 5vh;
+  scroll-margin-top: 15vh;
+}
+
+.reg-details-container {
+  width: 50vw;
+  text-align: left;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  padding: 3vh 3.5vw 7vh;
+  border-radius: 1.5rem;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 5rem #000000e7;
+  border: 3px solid #cbaa5595;
+}
+.reg-details-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin: 2vh auto 5vh;
+  color: #cbaa55;
+}
+.reg-details-container h3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  margin: 7px 0px;
+}
+.reg-details-container h3 div {
+  font-weight: 200;
+  padding: 3px 25px;
+  transform: translateY(+2px);
+  color: #dadada;
+  margin-left: 10px;
+  width: 33vw;
+  background-color: #121212;
+  border-radius: 7px;
+}
+
+/* Tags area */
+.reg-details-row-tags {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  margin: 20px 0px 0px;
+}
+.candidate-tag,
+.oc-tag {
+  padding: 4px 15px;
+  border-radius: 50px;
+  font-weight: 500;
+  transform: translateY(+3px);
+}
+.candidate-tag {
+  margin-left: 15px;
+  background-color: #cfcfcfd3;
+  color: #000000;
+}
+.oc-tag {
+  margin-left: 5px;
+  background-color: #cbaa55d3;
+  color: #000000;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .reg-details {
+    margin: 5vh auto 5vh;
+  }
+  .reg-details-container {
+    width: 90vw;
+    margin: 0px;
+    padding: 3vh 5vw 5vh;
+    border-radius: 1.25rem;
+  }
+  .reg-details-container h1 {
+    font-size: 2rem;
+    margin: 1vh auto 4vh;
+    padding: 0px;
+  }
+  .reg-details-container h3 {
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    font-size: 1.4rem;
+    width: 80vw;
+    margin: 0px;
+  }
+  .reg-details-container h3 div {
+    transform: translateY(0px);
+    margin: 5px auto 10px;
+    font-size: 1.2rem;
+    width: 75vw;
+    padding: 7px 15px;
+  }
+
+  /* Tags area */
+  .reg-details-row-tags {
+    flex-direction: column;
+    margin: 20px 0px 0px;
+  }
+  .candidate-tag,
+  .oc-tag {
+    margin: 3px 0px;
+    margin-left: 0px;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .reg-details-container {
+    width: 65vw;
+  }
+  .reg-details-container h1 {
+    text-align: center;
+    font-size: 2rem;
+  }
+  .reg-details-container h3 div {
+    width: 43vw;
+  }
+}

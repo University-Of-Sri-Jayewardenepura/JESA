@@ -1,0 +1,142 @@
+/* Header and Navigation bar component */
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  margin-top: 1rem;
+}
+.nav-bar {
+  padding: 17px 6px;
+  border-radius: 5rem;
+  box-shadow: 0 10px 5rem rgba(0, 0, 0, 0.915);
+  background-color: #282828;
+}
+.nav-btn,
+.reg-nav-btn,
+.jesa23-nav-btn {
+  text-decoration: none;
+  color: #ffffff;
+  padding: 10px 25px;
+  min-width: 120px;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  margin: auto 2px;
+  font-size: 1.1rem;
+  pointer-events: all;
+  font-weight: 600;
+  transition: all 0.25s ease-out;
+}
+.nav-btn:hover {
+  background-color: #4e4e4e94;
+}
+/* Relevent to register for Jesa button */
+.nav-move {
+  width: calc(100vw - 225px);
+}
+.reg-nav-btn,
+.jesa23-nav-btn {
+  position: absolute;
+  color: #fdfdfd;
+  background-color: #282828;
+  padding-left: 120px;
+  border: 7.5px solid #282828;
+  transform: translateX(-50px);
+  z-index: -1;
+  opacity: 0;
+}
+.reg-nav-btn:hover,
+.jesa23-nav-btn:hover {
+  background-color: #cbaa55;
+  color: #000000;
+}
+.show-reg-btn,
+.show-jesa23-btn {
+  opacity: 1;
+  transform: translateX(+240px);
+}
+
+/* Relevent to JESA 23 button */
+.jesa23-nav-btn {
+  padding-left: 60px;
+  transform: translateX(0px);
+}
+.show-jesa23-btn {
+  transform: translateX(+300px);
+}
+.closed-nav-move {
+  width: calc(100vw - 267px);
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .nav-btn {
+    font-size: 1rem;
+  }
+  /* Relevent to register for Jesa button and Jesa 23 button*/
+  .nav-move,
+  .closed-nav-move {
+    width: 100vw;
+  }
+  .reg-nav-btn,
+  .jesa23-nav-btn {
+    padding: 10px 25px;
+    width: 360px;
+    display: none;
+    background-color: #cbaa55;
+    text-align: center;
+    color: #000000;
+    border: 6px solid #282828;
+    z-index: -10;
+  }
+  .show-reg-btn,
+  .show-jesa23-btn {
+    animation: come-in-out 15s ease-out infinite;
+    display: inline;
+  }
+}
+
+/* animation used for registration button */
+@keyframes come-in-out {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+    z-index: -10;
+  }
+  2% {
+    opacity: 1;
+    transform: translateY(0px);
+    z-index: 50;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0px);
+    z-index: 50;
+  }
+  32% {
+    opacity: 0;
+    transform: translateY(+5px);
+    z-index: -10;
+  }
+  100% {
+    opacity: 0;
+    z-index: -10;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* Relevent to register for Jesa button */
+  .nav-move {
+    width: calc(100vw - 210px);
+  }
+  /* relevent to JESA 23 button */
+  .closed-nav-move {
+    width: calc(100vw - 267px);
+  }
+}

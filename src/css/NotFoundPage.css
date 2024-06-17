@@ -1,0 +1,74 @@
+/* 404 Component */
+
+/* Default styling */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  margin-top: 5vh;
+}
+
+.not-found h1 {
+  font-size: 9rem;
+  font-weight: 900;
+  margin: -10px 0;
+}
+.not-found h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  padding: 10px 30px;
+  border-radius: 10px;
+  margin: 0 0 7vh 0;
+  color: #191919;
+  background-color: rgb(203, 170, 85);
+}
+.not-found p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0;
+  text-wrap: balance;
+  text-align: center;
+  width: 50vw;
+  color: rgba(211, 211, 211, 0.829);
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .not-found {
+    height: 70vh;
+    margin-top: 2vh;
+  }
+  .not-found h1 {
+    font-size: 6rem;
+    margin: -10px 0 0;
+  }
+  .not-found h2 {
+    font-size: 2rem;
+    padding: 10px 25px;
+    margin: 0 0 5vh 0;
+  }
+  .not-found p {
+    font-size: 1.4rem;
+    width: 85vw;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .not-found {
+    height: 80vh;
+    margin-top: 0vh;
+  }
+
+  .not-found h1 {
+    font-size: 8rem;
+  }
+  .not-found h2 {
+    font-size: 2.7rem;
+    border-radius: 12px;
+  }
+  .not-found p {
+    width: 80vw;
+  }
+}

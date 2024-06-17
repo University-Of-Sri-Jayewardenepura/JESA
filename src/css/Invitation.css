@@ -1,0 +1,368 @@
+/* AppliedAwardCard component */
+@import url("https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@500;600;700;800&display=swap");
+
+.inv-container {
+  width: 85vw;
+  display: flex;
+  flex-direction: column;
+  margin: 16vh auto 20vh;
+  align-items: center;
+  justify-content: center;
+  scroll-margin-top: 16vh;
+  animation: hof-fade-in 0.4s;
+  text-align: center;
+  font-size: 1.4em;
+}
+
+.inv-header {
+  width: fit-content;
+  margin: 2vh 0 8vh;
+}
+.inv-header h3 {
+  margin: 0 0 2vh;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+.inv-title {
+  margin: 0;
+  font-size: 4rem;
+}
+.inv-header h2 {
+  margin: 0 0 1vh;
+  font-weight: 700;
+  font-size: 1.7rem;
+  padding: 5px 15px 7px;
+  border-radius: 7px;
+  color: #191919;
+  background-color: #cbaa55;
+}
+.inv-header-para {
+  margin: 0;
+  color: #d8d8d8;
+}
+
+.inv-mid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 3vw;
+  margin-bottom: 15vh;
+}
+.inv-body {
+  width: 40vw;
+  margin: 0;
+  padding: 7vh 5vh 5vh;
+  border-radius: 1.5rem;
+}
+.inv-body span {
+  color: #cbaa55;
+  font-weight: 600;
+}
+.inv-body h3 {
+  margin: 5vh auto 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border-radius: 7px;
+  width: fit-content;
+  padding: 5px 15px;
+  /* border: 1px solid #cbaa55; */
+}
+
+.inv-countdown {
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 0 2rem #000000bb);
+}
+.inv-countdown h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0;
+}
+.inv-countdown-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+}
+.inv-countdown-bg {
+  padding: 0.75rem;
+  border-radius: 1px;
+}
+.inv-countdown-num {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-weight: 700;
+  font-family: "Chivo Mono", monospace;
+  color: #191919;
+  background-color: #cbaa55f3;
+  border-radius: 5px;
+  width: 6vw;
+  height: 5.5vw;
+}
+.inv-countdown-text {
+  margin-top: -5px;
+  color: #b8b8b8;
+  width: 6vw;
+  font-size: 1.2rem;
+}
+
+.inv-footer-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.inv-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 4vw;
+  margin-bottom: 5vh;
+}
+.inv-footer-para {
+  width: 35vw;
+  text-wrap: balance;
+  padding: 6vh 5vh;
+  border-radius: 1.5rem;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 5rem #0000007a;
+}
+.inv-footer-details {
+  width: 35vw;
+  margin: 7vh 0;
+  padding: 0rem 1rem 2rem;
+  border-radius: 1.25rem;
+  border: 2px solid #cbaa55;
+  background-color: #191919;
+}
+.inv-footer-details h2 {
+  margin: 0 auto;
+  width: fit-content;
+  padding: 0px 25px;
+  font-size: 1.8rem;
+  background-color: #191919;
+  transform: translateY(-1.25rem);
+  color: #cbaa55;
+}
+.inv-footer-details table {
+  margin: 5px auto;
+  width: fit-content;
+  font-weight: 400;
+  font-size: 1.3rem;
+  text-align: left;
+}
+.inv-footer-details td {
+  vertical-align: top;
+  padding: 5px;
+}
+.inv-footer-details span {
+  font-weight: 700;
+}
+.location-btn {
+  text-decoration: underline;
+  color: #cbaa55;
+}
+.location-btn:hover {
+  color: #ffda7d;
+}
+.map-btn {
+  background-color: #cbaa55;
+  width: fit-content;
+  border-radius: 7px;
+  margin: 10px 0 0;
+  padding: 3px 15px 5px;
+}
+.map-btn a {
+  text-decoration: none;
+  color: #191919;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.map-btn:hover {
+  background-color: #f8d06c;
+}
+
+.inv-footer-end {
+  width: 50vw;
+  margin: 3vh auto 3vh;
+}
+.inv-footer-closing {
+  font-weight: 600;
+}
+.inv-footer-closing span {
+  color: #cbaa55;
+  font-weight: 600;
+}
+
+/* animation used when loading the page */
+@keyframes hof-fade-in {
+  from {
+    transform: translateY(+5vh);
+  }
+  to {
+    transform: translateY(-0vh);
+  }
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .inv-container {
+    margin: 15vh auto 15vh;
+    font-size: 1.2em;
+    width: 90vw;
+  }
+  .inv-header {
+    width: 90vw;
+    margin: 2vh 0 4vh;
+  }
+  .inv-header h3 {
+    font-size: 1.4rem;
+    margin-bottom: 4vh;
+  }
+  .inv-title {
+    font-size: 3.5rem;
+  }
+  .inv-header h2 {
+    margin: 0 0 1.5vh;
+    font-size: 1.3rem;
+    border-radius: 6px;
+  }
+  .inv-header-para {
+    font-size: 1em;
+  }
+
+  .inv-mid {
+    flex-direction: column;
+    gap: 15vw;
+    margin-bottom: 5vh;
+  }
+  .inv-body {
+    width: 90vw;
+    padding: 7vh 2.5vw 2vh;
+  }
+  .inv-countdown {
+    width: 90vw;
+  }
+  .inv-countdown h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 5px;
+  }
+  .inv-countdown-row {
+    display: flex;
+    gap: 0.8rem;
+  }
+  .inv-countdown-num {
+    font-size: 3rem;
+    font-weight: 800;
+    border-radius: 6px;
+    width: 17vw;
+    height: 16vw;
+  }
+  .inv-countdown-text {
+    width: 17vw;
+    font-size: 1.1rem;
+  }
+
+  .inv-footer {
+    flex-direction: column;
+    gap: 0vw;
+    margin-bottom: 3vh;
+  }
+  .inv-footer-para {
+    width: 90vw;
+    padding: 3.5vh 2.5vh;
+
+    border-radius: 1.25rem;
+  }
+  .inv-footer-details {
+    width: 90vw;
+    margin: 7vh 0 3vh;
+    border-radius: 1.25rem;
+  }
+  .inv-footer-details h2 {
+    margin: 0 auto;
+    padding: 0px 25px;
+  }
+  .inv-footer-details table {
+    margin: 5px auto;
+    width: 70vw;
+    font-size: 1.25rem;
+  }
+  .inv-footer-end {
+    width: 90vw;
+    margin: 0vh auto 7vh;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .inv-container {
+    font-size: 1.35em;
+  }
+  .inv-title {
+    margin: 0;
+    font-size: 3.75rem;
+  }
+  .inv-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .inv-mid {
+    gap: 2vw;
+  }
+  .inv-body {
+    width: 45vw;
+    border-radius: 1.25rem;
+  }
+
+  .inv-countdown {
+    width: 40vw;
+  }
+  .inv-countdown h2 {
+    font-size: 1.5rem;
+  }
+  .inv-countdown-num {
+    font-size: 2.8rem;
+    border-radius: 7px;
+    width: 7.5vw;
+    height: 7vw;
+  }
+  .inv-countdown-text {
+    width: 7.5vw;
+    font-size: 1.1rem;
+  }
+
+  .inv-footer {
+    gap: 2.5vw;
+    margin-bottom: 5vh;
+  }
+  .inv-footer-para {
+    width: 40vw;
+    padding: 5vh 4vh;
+    border-radius: 1.25rem;
+  }
+  .inv-footer-details {
+    width: 40vw;
+    margin: 0vh;
+    padding: 0rem 1.5rem 2rem;
+    border-radius: 1.25rem;
+  }
+  .inv-footer-details h2 {
+    font-size: 1.7rem;
+  }
+
+  .inv-footer-end {
+    width: 75vw;
+  }
+}

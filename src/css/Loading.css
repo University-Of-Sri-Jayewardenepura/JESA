@@ -1,0 +1,20 @@
+/* Loading component */
+
+.loading {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #19191994;
+  z-index: 50000;
+  position: fixed;
+  background-image: url("/images/loading.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 200px;
+}
+
+.dummy-space {
+  height: 30vh;
+  position: relative;
+}

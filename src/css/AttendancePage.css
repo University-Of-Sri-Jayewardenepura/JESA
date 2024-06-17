@@ -1,0 +1,223 @@
+/* AttendancePage Component */
+
+.attendance-page {
+  margin: 15vh 0vh;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.ap-heading {
+  margin: 0 0 6vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw;
+}
+.ap-title {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.ap-heading h1 {
+  font-size: 3.5rem;
+  margin: 0;
+}
+.ap-heading h2 {
+  font-size: 1.5rem;
+  margin: 5px 0;
+  font-weight: 600;
+}
+.ap-heading span {
+  margin-right: 10px;
+  padding: 0px 15px 3px;
+  font-weight: 700;
+  border-radius: 7px;
+  color: #191919;
+  background-color: #cbaa55;
+}
+
+/* search section */
+.search-bar {
+  margin: 15px 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  transform: translateX(-20px) translateY(+10px);
+  z-index: 5000;
+}
+.search-bar i {
+  cursor: pointer;
+}
+.search-box {
+  font-size: 1.3rem;
+  position: relative;
+  padding: 10px 50px 10px 15px;
+  border-radius: 10px;
+  background-color: #353535;
+  border: none;
+  color: rgb(248, 248, 248);
+  width: 22vw;
+  transition: 0.3s;
+}
+.search-box:hover {
+  background-color: #2f2f2f;
+}
+.search-bar i {
+  position: absolute;
+  font-size: 1.3rem;
+  padding: 10px;
+  transform: translateX(-45px) translateY(+1px);
+}
+/* OC Menu style */
+.oc-menu-toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(+20px) translateY(+20px);
+  z-index: 5000;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 5px;
+  border: 1px solid #454545;
+  background-color: #191919;
+  border-radius: 10px;
+}
+.oc-menu-toggle h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 7px 7px;
+  border-radius: 5px;
+  margin: 0;
+}
+.toggle-holder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  background-color: #2f2f2f;
+  border-radius: 7px;
+}
+.oc-menu-off,
+.oc-menu-on {
+  padding: 7px 10px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #9e9e9e;
+}
+.oc-menu-on {
+  background-color: #cbaa55;
+  color: #191919;
+}
+.toggle-holder:hover {
+  background-color: #474747;
+}
+
+.ap-body {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 1.5vw;
+  width: 90vw;
+}
+/* Contaact me section */
+.ap-contactme {
+  font-size: 1rem;
+  color: #616161;
+  margin-top: 2vh;
+}
+/* download section */
+.ap-download-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(20px) translateY(75px);
+  z-index: 4000;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 15px 7px;
+  border: 1px solid #454545;
+  background-color: #191919;
+  color: #9e9e9e;
+  border-radius: 7px;
+}
+.ap-download-btn:hover {
+  background-color: #2f2f2f;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .attendance-page {
+    width: 100vw;
+  }
+  .ap-heading {
+    margin: 2vh 0 2vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 3vw;
+  }
+  .ap-heading h1 {
+    font-size: 3.2rem;
+  }
+  .ap-heading h2 {
+    font-size: 1.3rem;
+  }
+
+  /* search section */
+  .search-bar {
+    margin: 0;
+    display: none;
+    transform: translateX(-20vw) translateY(+8.5vh);
+  }
+  .search-box {
+    font-size: 1.15rem;
+    width: 80vw;
+  }
+  .search-bar i {
+    font-size: 1.15rem;
+  }
+  .oc-menu-toggle h2 {
+    display: none;
+  }
+  /* OC Menu style */
+  .oc-menu-toggle {
+    transform: translateX(+25vw) translateY(+8.5vh);
+  }
+
+  .ap-body {
+    gap: 1.5vw;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+  }
+  /* download section */
+  .ap-download-btn {
+    display: none;
+  }
+}
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .ap-body {
+    width: 95vw;
+    margin: 0 auto;
+  }
+  .search-box {
+    font-size: 1.1rem;
+  }
+  .search-bar i {
+    position: absolute;
+    font-size: 1.1rem;
+  }
+  .attendance-page {
+    margin: 17vh 0vh;
+  }
+}

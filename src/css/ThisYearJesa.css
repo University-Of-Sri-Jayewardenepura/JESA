@@ -1,0 +1,37 @@
+/* This Year Jesa component */
+
+/* default styling */
+.this-year-section {
+  border-radius: 2rem;
+  margin: 10vh 0vh;
+  width: 85vw;
+  padding: 6vh 0vw 7vh;
+  scroll-margin-top: 14vh;
+}
+.this-year-section h1 {
+  width: fit-content;
+  margin: 0rem auto 3vw;
+  border-radius: 150px;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .this-year-section {
+    border-radius: 1.5rem;
+    width: 90vw;
+    padding: 5vh 0vw 0vh;
+    scroll-margin-top: 10vh;
+  }
+  .this-year-section h1 {
+    margin: 0rem auto 10vw;
+    font-size: 2.7rem;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* default styling */
+  .this-year-section {
+    padding: 7vh 0vw 5vh;
+  }
+}

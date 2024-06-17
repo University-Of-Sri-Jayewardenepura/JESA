@@ -1,0 +1,260 @@
+/* Check in Componenet */
+
+.ap-check-in-section {
+  width: 75vw;
+}
+.ap-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.25rem;
+  padding: 3vh 2.5vw;
+  margin: 0vh auto 5vh;
+  width: fit-content;
+  background-color: #1e1e1e;
+  box-shadow: 0 0 50px 0 #0000001e;
+}
+
+.ap-inputs-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #bdbdbd;
+}
+.ap-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 17vw;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+}
+.ap-input-container input,
+.ap-input-container select {
+  font-size: 1.1rem;
+  padding: 7px 15px;
+  border-radius: 7px;
+  background-color: #191919;
+  border: 2px solid #8a8a8a4f;
+  color: rgb(199, 199, 199);
+  width: 16vw;
+  transition: 0.2s;
+}
+.ap-input-container input:hover {
+  background-color: #252525;
+}
+.ap-input-container input:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px #8a8a8abd;
+}
+.ap-button-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.ap-form-btn,
+.ap-clear-btn {
+  font-size: 1.2rem;
+  padding: 10px 25px;
+  border-radius: 7px;
+  width: fit-content;
+  cursor: pointer;
+  color: rgb(228, 228, 228);
+  border: none;
+  background-color: #333333;
+  margin: 15px 10px 0;
+  transition: 0.2s;
+}
+.ap-form-btn:hover {
+  background-color: #d8d8d834;
+}
+
+/* Attendees section */
+.ap-attendees-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.25rem;
+}
+.apc-no-data {
+  color: #bdbdbd;
+  font-size: 1.8rem;
+  margin: 5vh auto;
+  font-weight: 200;
+}
+
+/* handling output messages */
+.apc-message-failed,
+.apc-message-success,
+.apc-sms-failed,
+.apc-sms-success {
+  position: fixed;
+  top: 0;
+  right: 0;
+  font-size: 1.2rem;
+  transform: translateX(-20px) translateY(+90px);
+  padding: 7px 25px 10px;
+  border-radius: 7px;
+  background-color: #7b1a1a;
+  opacity: 0;
+}
+.apc-message-success,
+.apc-sms-success {
+  background-color: #198419;
+}
+.apc-sms-failed,
+.apc-sms-success {
+  transform: translateX(-20px) translateY(+140px);
+}
+.apc-msg-hide {
+  animation: hide-msg 7s ease-out;
+}
+.apc-sms-hide {
+  animation: hide-sms 7s ease-out;
+}
+
+/* animation used for registration button */
+@keyframes hide-msg {
+  0% {
+    opacity: 1;
+    transform: translateX(0px) translateY(+90px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+90px);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+90px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px) translateY(+90px);
+  }
+}
+@keyframes hide-sms {
+  0% {
+    opacity: 1;
+    transform: translateX(0px) translateY(+140px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+140px);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+140px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px) translateY(+140px);
+  }
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .ap-check-in-section {
+    width: 100vw;
+  }
+  .ap-form {
+    padding: 2vh 2vw;
+    width: 90vw;
+  }
+  .ap-inputs-area {
+    flex-direction: column;
+  }
+  .ap-input-container {
+    width: 85vw;
+    gap: 0.5rem;
+    margin-top: 7px;
+  }
+  .ap-input-container input,
+  .ap-input-container select {
+    width: 75vw;
+  }
+
+  /* Attendees section */
+  .ap-attendees-list {
+    gap: 1.25rem;
+    flex-direction: column;
+    align-items: center;
+  }
+  .apc-no-data {
+    margin: 7vh auto;
+  }
+
+  /* handling output messages */
+  .apc-message-failed,
+  .apc-message-success,
+  .apc-sms-failed,
+  .apc-sms-success {
+    font-size: 1.2rem;
+    transform: translateX(-20px) translateY(+150px);
+  }
+  .apc-sms-failed,
+  .apc-sms-success {
+    transform: translateX(-20px) translateY(+200px);
+  }
+  .apc-msg-hide {
+    animation: hide-msg-mobile 7s ease-out;
+  }
+  .apc-sms-hide {
+    animation: hide-sms-mobile 7s ease-out;
+  }
+}
+/* animation used for registration button */
+@keyframes hide-msg-mobile {
+  0% {
+    opacity: 1;
+    transform: translateX(0px) translateY(+150px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+150px);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+150px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px) translateY(+150px);
+  }
+}
+@keyframes hide-sms-mobile {
+  0% {
+    opacity: 1;
+    transform: translateX(0px) translateY(+200px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+200px);
+  }
+  90% {
+    opacity: 1;
+    transform: translateX(-20px) translateY(+200px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px) translateY(+200px);
+  }
+}
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .ap-input-container {
+    width: 18vw;
+    font-size: 1.1rem;
+  }
+  .ap-form-btn,
+  .ap-clear-btn {
+    font-size: 1.1rem;
+  }
+  .ap-check-in-section {
+    width: 80vw;
+  }
+}

@@ -1,0 +1,30 @@
+/* Main styling for the webpage */
+
+/* importing awesome font icon pack */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: #f5f5f5;
+  background-color: #202020;
+  font-synthesis: none;
+  color-scheme: dark;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  min-width: 320px;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: #191919;
+  transition: 0s;
+  /* background-image: radial-gradient(#cbaa5541 1.35px, #ffffff 1.35px);
+  background-size: 25px 25px; */
+}

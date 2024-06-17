@@ -1,0 +1,32 @@
+/* AwardPage Component */
+
+.award-page {
+  margin: 12vh 0vh 15vh;
+}
+.current-partners {
+  margin: 17vh 0vh;
+  text-align: center;
+}
+.partner-footer {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #fafafa;
+  margin-top: 10vh;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .award-page {
+    margin: 10vh 0vh 15vh;
+  }
+  .current-partners {
+    margin: 12vh 0vh 5vh;
+  }
+  .partner-footer {
+    width: 85vw;
+    font-size: 1.3rem;
+    margin: 10vh auto;
+    text-wrap: balance;
+  }
+}

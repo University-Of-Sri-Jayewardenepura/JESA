@@ -1,0 +1,320 @@
+/* AwardDetails Component */
+
+/* default award details component */
+.award-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 85vw;
+  margin: 0 auto;
+  z-index: 5;
+}
+.award-card-image {
+  height: 50vh;
+  object-fit: cover;
+  margin: 1rem 2.5rem 1rem 4rem;
+  filter: drop-shadow(0 0 1.5rem #000000e0);
+  transition: 0.4s;
+  cursor: pointer;
+}
+.award-card-image:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 50px 2.5rem #000000be);
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 55vw;
+}
+.award-details {
+  margin: 2vh 3vw;
+  padding: 1.75rem;
+  width: 45vw;
+  background-color: #242424;
+  border-radius: 2rem;
+}
+.award-card-title {
+  font-size: 2.2rem;
+  color: #ffffff;
+  padding: 5px 25px;
+  background-color: #3d3d3d;
+  border-radius: 15px;
+  width: fit-content;
+  margin: 0rem 0rem 2rem;
+}
+.award-card-description {
+  font-size: 1.3rem;
+  color: #d1d1d1;
+}
+
+/* award details component after redirecting to award page */
+.award-card-image-award-page {
+  height: 75vh;
+  object-fit: cover;
+  margin: 1rem 2.5rem 1rem 4rem;
+  filter: drop-shadow(0 50px 2.5rem #000000dd);
+  transition: 0.4s;
+}
+
+/* Exclusinve when displaying the best inventor award */
+.innovator-class {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+.award-tag,
+.become-partner,
+.faculty-tag {
+  font-size: 1.25rem;
+  font-weight: 400;
+  padding: 5px 15px;
+  text-decoration: none;
+  background-color: #1e1e1e;
+  border-radius: 50px;
+  width: fit-content;
+  pointer-events: all;
+  z-index: 2;
+}
+.award-tag {
+  padding: 5px 25px;
+  color: #e1e1e1;
+}
+.become-partner {
+  background-color: #cbaa55ce;
+  cursor: pointer;
+  color: #000000;
+  font-weight: 500;
+  transition: 0.3s ease-out;
+  opacity: 0;
+  margin-left: 1rem;
+  z-index: 1;
+  transform: translateX(-20px); /*-6vw*/
+}
+.become-partner:hover {
+  background-color: #cbaa55a1;
+}
+.award-card:hover .become-partner {
+  transform: translateX(0vw);
+  opacity: 1;
+}
+.innovator-msg {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #cbaa55;
+  text-align: left;
+  width: fit-content;
+  border-radius: 50px;
+  padding: 5px 10px;
+  transform: translateY(-0.5rem);
+  border: 1px solid #cbaa55;
+}
+
+/* Exclusive for the BESA awards */
+.faculty-names {
+  width: 42vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.faculty-tag {
+  margin: 2.5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: #cfcfcf;
+  border: 1px solid #474747df;
+  transition: 0.3s;
+}
+.faculty-tag:hover {
+  background-color: #323232df;
+}
+
+/* Used when in the Award Page */
+.prev-partners {
+  width: 45vw;
+  text-align: center;
+}
+.prev-partners h2 {
+  font-size: 1.7rem;
+  color: #ffffff;
+  margin: 1.5rem 0rem 1rem;
+}
+.prev-partner-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  filter: drop-shadow(0 0px 2rem #000000);
+}
+.prev-partner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0rem 1rem;
+  border-radius: 20px;
+  border: 5px solid rgb(175, 175, 175);
+  overflow: hidden;
+}
+.prev-partner img {
+  width: 10vw;
+  height: 10vw;
+  object-fit: cover;
+  transform: scale(1.2);
+  background-color: #ffffff;
+  object-position: 0px -0.75rem;
+}
+.prev-partner-year {
+  position: absolute;
+  transform: translateY(+5vw);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #000000;
+  padding: 5px 15px;
+  background-color: rgb(175, 175, 175);
+  border-radius: 15px;
+  width: 8vw;
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  /* default styling */
+  .award-card {
+    width: 90vw;
+    flex-wrap: wrap;
+  }
+  .award-card-image {
+    margin: 1rem 0.5rem;
+    height: 35vh;
+    object-fit: scale-down;
+    width: 90vw;
+    filter: drop-shadow(0 0 1.5rem #000000db);
+  }
+  .row {
+    width: 90vw;
+  }
+  .award-details {
+    margin: 2vh 0vw;
+    padding: 1.5rem;
+    width: 90vw;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .award-card-title {
+    width: 100%;
+    font-size: 2rem;
+  }
+  .award-card-description {
+    font-size: 1.25rem;
+    margin-bottom: 1vh;
+  }
+  /* exclusive for innovator class */
+  .innovator-class {
+    flex-wrap: wrap;
+  }
+  .award-tag,
+  .become-partner {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    width: 80%;
+    padding: 7px 15px;
+    text-align: center;
+  }
+  .become-partner {
+    opacity: 1;
+    background-color: #cbaa55c8;
+    margin-top: 7px;
+    margin-bottom: 0.5rem;
+    transform: translateX(0vw);
+  }
+  .innovator-msg {
+    font-size: 1.25rem;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+  }
+  /* styling when open in Award */
+  .award-card-image-award-page {
+    height: 50vh;
+    margin: 1rem auto;
+  }
+  .prev-partners {
+    width: 90vw;
+  }
+  .prev-partners h2 {
+    font-size: 1.5rem;
+  }
+  .prev-partner {
+    margin: 0rem 0.5rem;
+    border-radius: 15px;
+  }
+  .prev-partner img {
+    width: 22vw;
+    height: 22vw;
+    transform: scale(1.25);
+    object-position: 0px -0.5rem;
+  }
+  .prev-partner-year {
+    transform: translateY(+11vw);
+    padding: 5px 15px;
+    width: 17vw;
+    border-radius: 150px;
+  }
+  /* Exclusive for BESA award */
+  .faculty-names {
+    width: 80vw;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  /* default styling */
+  .award-details {
+    margin: 3.5vh 1vw;
+    width: 50vw;
+    text-wrap: balance;
+  }
+  .award-card-title {
+    font-size: 2.15rem;
+  }
+  .become-partner {
+    margin-left: 0.5rem;
+  }
+  .innovator-msg {
+    font-size: 1.2rem;
+  }
+
+  /* styling when open in Award */
+  .prev-partners h2 {
+    font-size: 1.6rem;
+  }
+  .prev-partner {
+    margin: 0rem 0.75rem;
+  }
+  .prev-partner img {
+    width: 11vw;
+    height: 11vw;
+  }
+  .prev-partner-year {
+    transform: translateY(+5.5vw);
+    padding: 4px 15px;
+  }
+
+  /* Exclusive for the BESA awards */
+  .faculty-names {
+    width: 45vw;
+    transform: translateY(-0.5rem);
+  }
+  .faculty-tag {
+    margin: 2.5px;
+    font-size: 1.2rem;
+    padding: 4px 15px;
+  }
+}

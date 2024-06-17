@@ -1,0 +1,203 @@
+/* AfterRegistration Component */
+
+/* Default styling */
+.ar-section {
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+  margin: 12vh auto 20vh;
+  align-items: center;
+  justify-items: center;
+}
+
+/* Heading section */
+.ar-headings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ar-headings h1 {
+  font-size: 4rem;
+  margin-bottom: 0vh;
+}
+.ar-description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #cecece;
+  justify-content: center;
+  gap: 2rem;
+}
+.ar-description img {
+  width: 30vw;
+  height: 50vh;
+  object-fit: scale-down;
+  margin: 2rem 0rem 2rem 2rem;
+  filter: drop-shadow(0 20px 2rem #000000ee);
+}
+.ar-subtext {
+  width: 40vw;
+  text-align: center;
+  font-size: 1.45rem;
+  padding: 5vh 2.5rem;
+  margin: 1rem;
+  text-wrap: balance;
+  border-radius: 1.5rem;
+  box-shadow: 0 0 5rem #0000007a;
+}
+.ar-check-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.ar-check-container input {
+  margin: 2vh 0.5vw 2vh 1vw;
+  font-size: 1.3rem;
+  width: 100%;
+  background-color: #333333;
+  color: white;
+  padding: 7px 25px;
+  border: 5px solid #333333;
+  border-radius: 50px;
+}
+.ar-check-btn {
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-decoration: none;
+  border-radius: 100px;
+  padding: 10px 30px;
+  cursor: pointer;
+  pointer-events: all;
+  background-color: #cbaa55;
+  border: none;
+  color: #000000;
+  margin: 2vh 1vw 2vh 0.5vw;
+  transition: 0.3s;
+}
+.ar-check-btn:hover {
+  background-color: #f4ce65;
+  color: #000000;
+  padding: 10px 40px;
+}
+.ar-footer-text {
+  font-size: 1.25rem;
+  color: #828282;
+  font-weight: 400;
+  margin: 2vh 0vw 2vh 0vw;
+}
+
+/* Error message section */
+.ar-error-message {
+  position: fixed;
+  bottom: 3%;
+  color: #ededed;
+  background-color: #832a23;
+  border: 2px solid #832a23;
+  border-radius: 10px;
+  padding: 15px 10%;
+  font-size: 1.5rem;
+  opacity: 0;
+}
+.ar-error-hide {
+  animation: error-hide 4s ease-out;
+}
+
+/* animation used for registration button */
+@keyframes error-hide {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(+10px);
+  }
+}
+
+/* Making Responsive */
+@media all and (max-width: 810px) {
+  .ar-section {
+    margin: 10vh auto 15vh;
+    width: 90vw;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  /* Heading section */
+  .ar-headings h1 {
+    font-size: 3rem;
+    display: none;
+  }
+  .ar-description {
+    flex-wrap: wrap;
+    gap: 0rem;
+  }
+  .ar-description img {
+    width: 80vw;
+    height: 32vh;
+    margin: 0rem;
+  }
+  .ar-subtext {
+    width: 90vw;
+    font-size: 1.2rem;
+    padding: 2vh 1rem 3vh;
+    margin: 0px;
+    border-radius: 1.25rem;
+  }
+  .ar-check-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .ar-check-container input {
+    margin: 1vh 0 1vh;
+  }
+  .ar-check-btn {
+    margin: 1vh 1vw 1vh 0.5vw;
+  }
+  .ar-footer-text {
+    font-size: 1.25rem;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* Error message section */
+  .ar-error-message {
+    width: 90%;
+    padding: 15px 30px;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+}
+
+@media all and (min-width: 811px) and (max-width: 1200px) {
+  .ar-description {
+    gap: 0rem;
+  }
+  .ar-description img {
+    width: 30vw;
+    height: 45vh;
+    margin: 2.5rem 0rem;
+  }
+  .ar-subtext {
+    font-size: 1.35rem;
+    width: 50vw;
+    padding: 3vh 2.5rem 5vh;
+  }
+
+  /* Error message section */
+  .ar-error-message {
+    padding: 15px 35px;
+    font-size: 1.35rem;
+    text-align: center;
+  }
+
+  .ar-footer-text {
+    margin: 0vh;
+  }
+}

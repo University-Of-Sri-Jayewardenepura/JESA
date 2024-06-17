@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "partnership": "Gift Partner",
+    "image": "/images/companies/nestle.png",
+    "link": "https://www.nestle.lk/"
+  },
+  {
+    "id": "2",
+    "partnership": "Broadcasting Partner",
+    "image": "/images/companies/japura-voice.png",
+    "link": "https://jpuravoice.lk/"
+  },
+  {
+    "id": "3",
+    "partnership": "Decoration Partner",
+    "image": "/images/companies/silver-un.png",
+    "_link": ""
+  },
+  {
+    "id": "4",
+    "partnership": "Printing Partner",
+    "image": "/images/companies/wristband.png",
+    "link": "https://wristbandlanka.lk/"
+  },
+  {
+    "id": "5",
+    "partnership": "Media Partner",
+    "image": "/images/companies/flames.png",
+    "link": "https://www.facebook.com/Jpuraflames"
+  },
+  {
+    "id": "6",
+    "partnership": "Photography Partner",
+    "image": "/images/companies/behance.png",
+    "link": "https://www.facebook.com/Behance.lk"
+  },
+  {
+    "id": "7",
+    "partnership": "Live Streaming Partner",
+    "image": "/images/companies/silver-un.png",
+    "_link": ""
+  },
+  {
+    "id": "8",
+    "partnership": "Clothing Partner",
+    "image": "/images/companies/rogo.png",
+    "link": "https://rogotshirts.business.site/?utm_source=gmb&utm_medium=referral"
+  },
+  {
+    "id": "9",
+    "partnership": "Beauty Care Partner",
+    "image": "/images/companies/saloon-looks.png",
+    "link": "https://www.salonlooks.lk/"
+  },
+  {
+    "id": "10",
+    "partnership": "Event T-Shirt Partner",
+    "image": "/images/companies/star.png",
+    "link": "https://www.star.lk/"
+  }
+]
