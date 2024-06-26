@@ -73,10 +73,18 @@ App Structure
 │   ├── navbar.tsx
 │   └── ...
 ├── constants
+│   └── awards.ts
+│   └── form.ts
+│   └── ...
 ├── models
+├── public
+│   └── fonts
+│   └── images
 ├── lib
 │   └── utils.ts
+│   └── mongodb.ts
 ├── bun.lockb
+├── .env.example
 ├── components.json
 ├── LICENSE.md
 ├── next.config.js
@@ -101,6 +109,10 @@ App Structure
 - <a href="https://tailwindcss.com/">Tailwind CSS</a>
 - <a href="https://ui.aceternity.com/">Aceternity UI</a>
 - <a href="https://magicui.design/">Magic UI</a>
+
+### Animations
+
+- <a href="https://lucide.dev/icons/">Framer Motion</a>
 
 ### Icons
 
