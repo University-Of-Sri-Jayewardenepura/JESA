@@ -56,7 +56,7 @@ App Structure
 │   ├── terms
 │   │   ├── page.tsx
 │   ├── layout.tsx
-│   ├── global-error.tsx
+│   ├── not-found.tsx
 │   └── page.tsx
 │   └── error.tsx
 │   └── sitemap.ts
@@ -112,7 +112,7 @@ App Structure
 
 ### Animations
 
-- <a href="https://lucide.dev/icons/">Framer Motion</a>
+- <a href="https://www.framer.com/motion/animation/">Framer Motion</a>
 
 ### Icons
 
