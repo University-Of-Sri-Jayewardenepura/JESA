@@ -18,7 +18,7 @@ export const Hero = () => {
   }, [theme]);
 
   return (
-    <div className="relative flex flex-col h-[650px] w-full items-center justify-center overflow-hidden bg-background p-4 pt-[6rem] space-y-6">
+    <div className="relative flex flex-col h-[650px] w-full items-center justify-center overflow-hidden bg-background pt-[6rem] space-y-6">
       <div className="flex flex-col items-center">
         <Image
           alt="JESA"
@@ -28,9 +28,9 @@ export const Hero = () => {
           priority
         />
         <BlurIn
-          className={`pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-neutral-100 to-neutral-200 bg-clip-text text-center text-3xl  leading-none text-transparent md:text-5xl flex font-black mt-[-4rem] pb-2`}
+          className={`mx-auto max-w-[22rem] md:max-w-[40rem]  text-3xl font-semibold leading-tight md:text-5xl md:leading-[1.08] space-y-2 text-center mt-[-2.5rem]`}
           word="J'pura Employability Skills Awards"
-          duration={1.5}
+          duration={1}
         />
       </div>
       <BlurIn
@@ -38,14 +38,13 @@ export const Hero = () => {
         word="Your achievements deserve a grand celebration. Bask in the spotlight of
         recognition at the most prestigious and elegant award gala ever
         organized."
-        duration={2}
+        duration={1.5}
+        
       />
-      <br />
-      <br />
       <BlurIn
-        className="text-white"
+        className="text-white/70"
         word="This is your moment to make history."
-        duration={3.5}
+        duration={2.5}
       />
       <Particles
         className="absolute inset-0"

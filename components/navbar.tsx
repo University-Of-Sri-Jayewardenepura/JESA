@@ -40,6 +40,9 @@ export function Navbar({ className }: { className?: string }) {
           <Link href="/hall-of-fame" className="hidden md:block">
             Hall of Fame
           </Link>
+          <Link href="/terms" className="hidden md:block">
+            Terms
+          </Link>
           <Button asChild className="rounded-full">
             <Link href="/register">Register</Link>
           </Button>
@@ -70,6 +73,9 @@ function MobileNav({ className }: { className?: string }) {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href="/hall-of-fame">Hall of Fame</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/terms">Terms</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
