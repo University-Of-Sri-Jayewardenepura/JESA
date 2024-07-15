@@ -166,7 +166,7 @@ export const awards = [
       {
         year: 2023,
         type: "Platinum",
-        imgSrc: "/images/companies/expert-education.png",
+        imgSrc: "/images/companies/csds.png",
         link: "https://experteducation.lk/index.html",
       },
       {
@@ -557,7 +557,7 @@ export const awards = [
     name: "BESA - FOE",
     image: "/images/awards/besa.png",
     description:
-      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Engineering. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Technology will be awarded as the BESA Silver Medalists accordingly.",
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Engineering. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Engineering will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [
       {
         year: 2019,
@@ -580,7 +580,7 @@ export const awards = [
       {
         year: 2023,
         type: "Platinum",
-        imgSrc: "/images/companies/creative-software.png",
+        imgSrc: "/images/companies/dimo.png",
         link: "https://www.creativesoftware.com/",
       },
       {

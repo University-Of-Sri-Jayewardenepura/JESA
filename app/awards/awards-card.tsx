@@ -44,7 +44,7 @@ export const AwardsPage: React.FC = () => {
         />
       </div>
       {/* Award Cards */}
-      <div className="py-16 md:py-28 lg:py-32 pt-[6rem] ">
+      <div className="py-16 md:py-28 lg:py-32 pt-[6rem]  ">
         <div className="flex flex-col items-center gap-6 px-4 space-y-[6rem]">
           {awards.map((award) => (
             <div key={award.id}>
@@ -67,7 +67,7 @@ export const AwardsPage: React.FC = () => {
                   </p>
                 </div>
               )}
-              <Card className="bg-background border-primary max-w-7xl">
+              <Card className=" bg-emerald-950/30 backdrop-blur-lg border-primary/50 max-w-7xl">
                 <div className="flex justify-center flex-col md:flex-row">
                   <div className="w-full md:w-1/2 flex justify-center items-center">
                     <Image
