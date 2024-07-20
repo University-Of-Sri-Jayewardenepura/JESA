@@ -12,12 +12,17 @@ export const metadata: Metadata = {
 export default function Register() {
   return (
     <div className="flex flex-col items-center min-h-screen pt-32 space-y-3">
-      <h1
+        <h1
         className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
       >
-        JESA 2024 REGISTRATION
+        Registration <br /> Closed
       </h1>
-      <h2 className="text-sm md:text-lg text-white/75 text-center px-3">
+      {/* <h1
+        className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
+      >
+        JESA 2024 Registration
+      </h1> */}
+      {/* <h2 className="text-sm md:text-lg text-white/75 text-center px-3">
         Please select the category to proceed with the form
       </h2>
       <div className="flex flex-col justify-center items-center pt-[2rem] space-y-8 w-[18rem] md:w-[28rem]">
@@ -39,7 +44,7 @@ export default function Register() {
             </span>
           </Button>
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -41,11 +41,11 @@ export const Hero = () => {
         duration={1.5}
         
       />
-      <BlurIn
+      {/* <BlurIn
         className="text-white/70"
         word="This is your moment to make history."
         duration={2.5}
-      />
+      /> */}
       <Particles
         className="absolute inset-0"
         quantity={100}
@@ -57,9 +57,10 @@ export const Hero = () => {
         className="-top-40 left-0 md:left-80 md:-top-20 ml-[5rem] sm:ml-[10rem]"
         fill="white"
       />
-      <Link href="/register" className="hover:scale-110 mb-10">
+      <ShinyButton text="Registration Closed" />
+      {/* <Link href="/register" className="hover:scale-110 mb-10">
         <ShinyButton text="Register" />
-      </Link>
+      </Link> */}
     </div>
   );
 };

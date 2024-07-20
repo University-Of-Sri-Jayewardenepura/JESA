@@ -20,7 +20,7 @@ export function Navbar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="flex justify-between items-center px-4 py-3 backdrop-blur-xl rounded-full shadow-lg">
+      <div className="flex justify-between items-center px-8 py-3 backdrop-blur-xl rounded-full shadow-lg">
         <a className="flex items-center space-x-4" href="/">
           <Image
             src="/images/jesa-icon.ico"
@@ -43,9 +43,9 @@ export function Navbar({ className }: { className?: string }) {
           <Link href="/terms" className="hidden md:block">
             Terms
           </Link>
-          <Button asChild className="rounded-full">
+          {/* <Button asChild className="rounded-full">
             <Link href="/register">Register</Link>
-          </Button>
+          </Button> */}
           <MobileNav className="md:hidden" />
         </div>
       </div>

@@ -208,7 +208,7 @@ function InternalRegisterForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(OnSubmit)}
+        // onSubmit={form.handleSubmit(OnSubmit)}
         className="space-y-8 md:w-96 sm:w-80 w-80"
       >
         <FormField
