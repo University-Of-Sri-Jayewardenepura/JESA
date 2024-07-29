@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     await connectMongoDB();
 
     // Find user with the given Whatsapp number
-    const user = await RegTable.findOne({ Whatsapp: body.Whatsapp });
+    const user = await RegTable.find({ Whatsapp: body.Whatsapp });
 
     // Return error response if no user is found
     if (!user) {
