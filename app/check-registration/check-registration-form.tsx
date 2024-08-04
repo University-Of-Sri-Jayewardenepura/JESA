@@ -100,7 +100,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
                     <div className="space-y-1">
                         <h3 className="text-lg font-semibold">Awards Applied For</h3>
                         <ul className="space-y-2">
-                        {responseData.user.map((item: User, index: number) => (
+                        {responseData.user.map((item: any, index: any) => (
                         <li className="flex items-center justify-between" key={index}>
                             <div>
                             {item.RegNo.startsWith('TP') && 'Best Team Player'}
@@ -110,13 +110,13 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
                             {item.RegNo.startsWith('YE') && 'Best Young Entrepreneur'}
                             {item.RegNo.startsWith('BI') && 'Best Innovator'}
                             {item.RegNo.startsWith('CSR') && 'Best CSR'}
-                            {item.RegNo.startsWith('FMSC') && 'BESA (FMSC)'}
-                            {item.RegNo.startsWith('FHSS') && 'BESA (FHSS)'}
-                            {item.RegNo.startsWith('FAS') && 'BESA (FAS)'}
-                            {item.RegNo.startsWith('FOT') && 'BESA (FOT)'}
-                            {item.RegNo.startsWith('FAHS') && 'BESA (FAHS)'}
-                            {item.RegNo.startsWith('FOE') && 'BESA (FOE)'}
-                            {item.RegNo.startsWith('FMS') && 'BESA (FMS)'}
+                            {item.RegNo.startsWith('FMSC') && 'BESA - FMSC'}
+                            {item.RegNo.startsWith('FHSS') && 'BESA - FHSS'}
+                            {item.RegNo.startsWith('FAS') && 'BESA - FAS'}
+                            {item.RegNo.startsWith('FOT') && 'BESA - FOT'}
+                            {item.RegNo.startsWith('FAHS') && 'BESA - FAHS'}
+                            {item.RegNo.startsWith('FOE') && 'BESA - FOE'}
+                            {item.RegNo.startsWith('FMS') && !item.RegNo.startsWith('FMSC') && 'BESA - FMS'}
                             {!item.RegNo.startsWith('TP') &&
                             !item.RegNo.startsWith('BL') &&
                             !item.RegNo.startsWith('BC') &&
@@ -133,7 +133,8 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
                             !item.RegNo.startsWith('FMS') && 'Unknown Award'}
                             </div>
                             <div className="text-sm text-muted-foreground">{item.RegNo}</div>
-                        </li>))}
+                        </li>
+                        ))}
                         </ul>
                     </div>
                     </div>
