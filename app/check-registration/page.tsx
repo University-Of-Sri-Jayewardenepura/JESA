@@ -12,7 +12,7 @@ export default function Register() {
   return (
     <div className="flex flex-col items-center min-h-screen pt-32 space-y-3">
         <h1
-        className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-center text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight text-transparent  ${zodiak.className}`}
+        className={`mt-8 bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent text-center text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight   ${zodiak.className}`}
       >
         Check <br /> Registration
       </h1>

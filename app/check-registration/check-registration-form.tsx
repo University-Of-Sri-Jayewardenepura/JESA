@@ -32,7 +32,6 @@ export default function CheckRegistrationForm() {
 });
 
 async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
     try {
         const response = await fetch('/api/getregno', {
             method: 'POST',
@@ -65,7 +64,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             render={({ field }) => (
                 <FormItem className="w-full">
                 <FormControl>
-                    <Input placeholder="shadcn" {...field}  />
+                    <Input placeholder="7XXXXXXXX" {...field} maxLength={9}  />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -77,14 +76,14 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <div className="container mx-auto px-4 md:px-6 py-12 md:py-16 lg:py-20">
                 <div className="mx-auto max-w-3xl space-y-6">
                 <div className="space-y-2 text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">John Doe</h2>
-                    <p className="text-muted-foreground">Registration Number: #12345</p>
+                    <h2 className="text-3xl font-bold bg-gradient-to-br from-amber-300 to-amber-500 bg-clip-text text-transparent sm:text-4xl">{responseData.user[0].Name}</h2>
+                    <p className="text-muted-foreground">WhatsApp Number: +94 {responseData.user[0].Whatsapp}</p>
                 </div>
                 <div className="rounded-lg bg-card p-6 text-card-foreground">
                     <div className="space-y-4">
                     <div className="space-y-1">
                         <h3 className="text-lg font-semibold">Registration Details</h3>
-                        <p className="text-sm text-muted-foreground">Registered on: June 15, 2023</p>
+                        <p className="text-sm text-muted-foreground">Email: {responseData.user[0].Email}</p>
                     </div>
                     <div className="space-y-1">
                         <h3 className="text-lg font-semibold">Awards Applied For</h3>
