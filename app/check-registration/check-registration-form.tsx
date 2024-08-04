@@ -21,8 +21,20 @@ const FormSchema = z.object({
     }),
 })
 
+
+interface User {
+    Name: string;
+    Whatsapp: string;
+    Email: string;
+    RegNo: string;
+}
+
+interface ResponseData {
+    user: User[];
+}
+
 export default function CheckRegistrationForm() {
-  const [responseData, setResponseData] = useState(null);
+  const [responseData, setResponseData] = useState<ResponseData | null>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -42,7 +54,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
         });
 
         if (response.ok) {
-            const result = await response.json();
+            const result: ResponseData = await response.json();
             setResponseData(result);
             
         } else {
@@ -88,7 +100,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
                     <div className="space-y-1">
                         <h3 className="text-lg font-semibold">Awards Applied For</h3>
                         <ul className="space-y-2">
-                        {responseData.user.map((item: any, index: any) => (
+                        {responseData.user.map((item: User, index: number) => (
                         <li className="flex items-center justify-between" key={index}>
                             <div>
                             {item.RegNo.startsWith('TP') && 'Best Team Player'}
