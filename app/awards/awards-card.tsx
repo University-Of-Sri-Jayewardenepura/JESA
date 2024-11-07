@@ -108,7 +108,7 @@ export const AwardsPage: React.FC = () => {
                           ))}
                       </div>
                       <CardTitle>
-                        Who Will be the Partners of JESA 2024?
+                        Sponsors of 2024
                       </CardTitle>
                       <div className="flex justify-between items-center">
                         <div className="flex flex-col items-center">
@@ -116,8 +116,8 @@ export const AwardsPage: React.FC = () => {
                             2024
                           </span>
                           <Image
-                            src="/images/companies/question.png"
-                            alt={`Platinum Sponsor 2024? `}
+                            src={award.sponsors[4].imgSrc}
+                            alt={award.sponsors[4].imgSrc}
                             className="rounded-md shadow-lg z-10"
                             width={75}
                             height={75}
@@ -132,8 +132,8 @@ export const AwardsPage: React.FC = () => {
                             2024
                           </span>
                           <Image
-                            src="/images/companies/question.png"
-                            alt={`Platinum Sponsor 2024? `}
+                            src={award.sponsors[5].imgSrc}
+                            alt={award.sponsors[5].imgSrc}
                             className="rounded-md shadow-lg z-10"
                             width={90}
                             height={90}
@@ -148,8 +148,8 @@ export const AwardsPage: React.FC = () => {
                             2024
                           </span>
                           <Image
-                            src="/images/companies/question.png"
-                            alt={`Platinum Sponsor 2024? `}
+                            src={award.sponsors[6].imgSrc}
+                            alt={award.sponsors[6].imgSrc}
                             className="rounded-md shadow-lg z-10"
                             width={75}
                             height={75}
