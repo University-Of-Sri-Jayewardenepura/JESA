@@ -33,7 +33,7 @@ const Magazine: React.FC = () => {
         />
       </div>
       <div className="w-full flex justify-center align-middle max-w-6x shadow-lg mt-8 pt-24 mb-[64em]">
-  <iframe style={{ position: "absolute", border: "none", width: "100%", height: "100%",   }} src="https://online.fliphtml5.com/nlkow/cdle/" seamless="seamless" scrolling="no" frameBorder="0" allowTransparency="true" allowFullScreen="true"></iframe>
+  <iframe style={{ position: "absolute", border: "none", width: "100%", height: "100%",   }} src="https://online.fliphtml5.com/nlkow/cdle/" scrolling="no" frameBorder="0" allowTransparency={true} allowFullScreen={true}></iframe>
 </div>
     </section>
   );
