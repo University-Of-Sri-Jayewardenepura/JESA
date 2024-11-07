@@ -33,12 +33,15 @@ export function Navbar({ className }: { className?: string }) {
             JESA 2024
           </h1>
         </a>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 text-amber-400">
           <Link href="/awards" className=" hidden md:block">
             Awards
           </Link>
           <Link href="/hall-of-fame" className="hidden md:block">
             Hall of Fame
+          </Link>
+          <Link href="/magazine" className="hidden md:block">
+            Magazine
           </Link>
           <Link href="/terms" className="hidden md:block">
             Terms
@@ -67,12 +70,15 @@ function MobileNav({ className }: { className?: string }) {
             <span className="sr-only">Mobile Navigation Menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" sideOffset={5}>
+        <DropdownMenuContent align="end" sideOffset={5} className="text-amber-400">
           <DropdownMenuItem>
             <Link href="/awards">Awards</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href="/hall-of-fame">Hall of Fame</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+          <Link href="/magazine"> Magazine </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href="/terms">Terms</Link>
