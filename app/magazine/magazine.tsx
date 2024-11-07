@@ -37,6 +37,7 @@ const Magazine: React.FC = () => {
           src="/JESA Magazine 2024.pdf#toolbar=0#view=fitH#zoom=100"
           className="w-full h-screen"
           title="JESA Magazine"
+          loading="lazy"
           style={{ height: "125vh", width: "95%" }}
         />
       </div>
