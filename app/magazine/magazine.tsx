@@ -32,15 +32,9 @@ const Magazine: React.FC = () => {
           duration={2}
         />
       </div>
-      <div className="w-full max-w-4xl flex justify-center align-middle max-w-6x shadow-lg mt-8 pt-24 mb-24">
-      <iframe
-          src="/JESA Magazine 2024.pdf#toolbar=0#view=fitH#zoom=100"
-          className="w-full h-screen"
-          title="JESA Magazine"
-          loading="lazy"
-          style={{ height: "125vh", width: "95%" }}
-        />
-      </div>
+      <div className="w-full flex justify-center align-middle max-w-6x shadow-lg mt-8 pt-24 mb-[64em]">
+  <iframe style={{ position: "absolute", border: "none", width: "100%", height: "100%",   }} src="https://online.fliphtml5.com/nlkow/cdle/" seamless="seamless" scrolling="no" frameBorder="0" allowTransparency="true" allowFullScreen="true"></iframe>
+</div>
     </section>
   );
 };
