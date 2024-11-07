@@ -137,7 +137,7 @@ App Structure
 
 ## Authors
 
-- [Sonal Jayasinghe](https://github.com/SonalJayasinghe)
 - [Pruthivi Thejan](https://links.pruthivithejan.me)
+- [Sonal Jayasinghe](https://github.com/SonalJayasinghe)
 - [Yasitha Renuk](https://github.com/YasithaRenuk)
 - [Kasun Rathnayaka](https://github.com/kasun-m-rathnayaka)

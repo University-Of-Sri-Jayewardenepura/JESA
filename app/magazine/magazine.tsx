@@ -34,7 +34,7 @@ const Magazine: React.FC = () => {
       </div>
       <div className="w-full max-w-4xl flex justify-center align-middle max-w-6x shadow-lg mt-8 pt-24 mb-24">
       <iframe
-          src="/magazine.pdf#toolbar=0#view=fitH#zoom=100"
+          src="/JESA Magazine 2024.pdf#toolbar=0#view=fitH#zoom=100"
           className="w-full h-screen"
           title="JESA Magazine"
           style={{ height: "125vh", width: "95%" }}
