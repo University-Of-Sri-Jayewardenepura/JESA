@@ -24,13 +24,13 @@ const ReviewCard = ({
         "relative w-64 cursor-pointer overflow-hidden rounded-xl border p-4 border-primary bg-background/80 hover:bg-emerald-950"
       )}
     >
-      <Link href={link} className="flex flex-row items-center gap-2">
+      <Link href={link} target="_blank" className="flex flex-row items-center gap-2">
         <Image
           className="rounded-md"
           width="64"
           height="64"
           alt={partnership}
-          src="/images/companies/question.png"
+          src={image}
         />
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">
