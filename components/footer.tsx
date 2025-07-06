@@ -1,5 +1,5 @@
 import React from "react";
-import { Facebook, Twitter, Github } from "lucide-react";
+import { Facebook, Twitter, Github, Linkedin, Instagram } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -16,11 +16,27 @@ const Footer: React.FC = () => {
                 width={72}
                 height={20}
                 alt="JESA 2024"
-                className="ml-[-1rem] w-auto h-auto"
+                className="ml-[-1.2rem] mt-[-1.6rem] w-auto h-auto"
               />
               <span className="sr-only">JESA</span>
             </Link>
-            <p className="max-w-xs text-sm text-slate-300">
+            <div className="flex justify-start items-center space-x-2">
+              <Image
+                alt="USJP Logo"
+                src="/images/usjp.jpg"
+                width={40}
+                height={40}
+                className="select-none pointer-events-none"
+              />
+              <Image
+                alt="CSDS Logo"
+                src="/images/csds.png"
+                width={40}
+                height={40}
+                className="select-none pointer-events-none"
+              />
+            </div>
+            <p className="max-w-xs text-sm text-slate-500">
               Career Skills Development Society • 2025/2026 <br />
               in collaboration with Career Guidance Unit of <br /> University of
               Sri Jayewardenepura Contacts
@@ -28,91 +44,96 @@ const Footer: React.FC = () => {
           </div>
           <div className="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-3">
             <div>
-              <h2 className="mb-6 text-sm tracking-tighter font-medium">
-                Community
-              </h2>
-              <ul className="gap-2 grid">
+              <h2 className="mb-6 tracking-tighter font-medium">Contacts</h2>
+              <ul className="gap-4 grid">
                 <li>
-                  <a
-                    className="cursor-pointer duration-200 font-[450] text-sm"
-                    href="/chat"
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-500"
+                    href="https://www.linkedin.com/in/mohamed-insaf-512620302/"
                   >
-                    Discord
-                  </a>
+                    Mohomed Insaf
+                  </Link>{" "}
+                  <br />
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-700"
+                    href="tel:+94 74 352 3151"
+                  >
+                    +94 74 352 3151
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="cursor-pointer duration-200 font-[450] text-sm"
-                    href="https://twitter.com/milliondotjs"
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-500"
+                    href="https://www.linkedin.com/in/pradeep-wedagedara/"
                   >
-                    Twitter
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="cursor-pointer duration-200 font-[450] text-sm"
-                    href="mailto:aiden@million.dev"
+                    Pradeep Wedagedara
+                  </Link>{" "}
+                  <br />
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-700"
+                    href="tel:+94 75 455 4776"
                   >
-                    Email
-                  </a>
+                    +94 75 455 4776
+                  </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-sm tracking-tighter font-medium">
-                Legal
-              </h2>
-              <ul className="gap-2 grid">
+              <h2 className="mb-6 tracking-tighter font-medium">Show</h2>
+              <ul className="gap-4 grid">
                 <li>
-                  <a
-                    className="cursor-pointer duration-200 font-[450] text-sm"
-                    href="/docs/terms"
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-500"
+                    href="awards"
                   >
-                    Terms of Service
-                  </a>
+                    Awards{" "}
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="cursor-pointer duration-200 font-[450] text-sm"
-                    href="/docs/privacy-policy"
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-500"
+                    href="/hall-of-fame"
                   >
-                    Privacy Policy
-                  </a>
+                    Hall of Fame{" "}
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="cursor-pointer duration-200 font-[450] text-sm"
-                    href="/docs/code-policy"
+                  <Link
+                    className="cursor-pointer duration-200 text-slate-500"
+                    href="/terms"
                   >
-                    Code Policy
-                  </a>
+                    Terms & Conditions{" "}
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-md py-4 px-8 gap-2">
-          <div className="flex space-x-5 sm:justify-center sm:mt-0">
-            <Link href="https://million.dev/chat">
-              <Facebook className="h-5 w-5 text-gray-500 hover:text-gray-700 transition-colors" />
-              <span className="sr-only">Discord</span>
-            </Link>
-            <Link href="https://twitter.com/milliondotjs">
-              <Twitter className="h-5 w-5 text-gray-500 hover:text-gray-700 transition-colors" />
-              <span className="sr-only">Twitter</span>
-            </Link>
-            <Link href="https://github.com/aidenybai/million">
-              <Github className="h-5 w-5 text-gray-500 hover:text-gray-700 transition-colors" />
-              <span className="sr-only">Github</span>
-            </Link>
-          </div>
-          <span className="text-sm sm:text-center">
+        <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between rounded-md py-4 px-8 gap-4">
+          <span className="text-sm text-slate-500 sm:text-center">
             Copyright © 2025{" "}
             <a className="cursor-pointer" href="/">
               CDSD
             </a>
             . All Rights Reserved.
           </span>
+          <div className="flex space-x-5 sm:justify-center sm:mt-0">
+            <Link href="https://facebook.com/jesa2022" target="_blank">
+              <Facebook className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <span className="sr-only">Facebook</span>
+            </Link>
+            <Link
+              href="https://www.linkedin.com/showcase/j-pura-employability-skills-awards/"
+              target="_blank"
+            >
+              <Linkedin className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <span className="sr-only">LinkedIn</span>
+            </Link>
+            <Link href="https://www.instagram.com/jesa_2023/" target="_blank">
+              <Instagram className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <span className="sr-only">Instagram</span>
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

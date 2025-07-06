@@ -26,7 +26,7 @@ const Nav: React.FC = () => {
             width={72}
             height={20}
             alt="JESA 2024"
-            className="w-auto h-auto"
+            className="ml-[-0.4rem] lg:ml-[-1.2rem] w-auto h-auto"
           />
           <span className="sr-only">JESA</span>
         </Link>
@@ -36,7 +36,7 @@ const Nav: React.FC = () => {
           <li>
             <Link
               href="/awards"
-              className="px-2.5 py-1.5  hover:text-slate-300 transition-colors"
+              className="px-2.5 py-1.5 text-sm   hover:text-slate-300 transition-colors"
             >
               Awards
             </Link>
@@ -44,7 +44,7 @@ const Nav: React.FC = () => {
           <li>
             <Link
               href="/hall-of-fame"
-              className="px-2.5 py-1.5  hover:text-slate-300 transition-colors"
+              className="px-2.5 py-1.5 text-sm   hover:text-slate-300 transition-colors"
             >
               Hall of Fame
             </Link>
@@ -55,18 +55,18 @@ const Nav: React.FC = () => {
         <div className="hidden lg:flex items-center gap-x-5">
           <Link
             href="/terms"
-            className="px-2.5 py-1.5  hover:text-slate-300 transition-colors"
+            className="px-2.5 py-1.5 text-sm   hover:text-slate-300 transition-colors"
           >
             Terms & Conditions
           </Link>
           <Button
             asChild
             variant="outline"
-            className="px-3.5 py-2 bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full"
+            className="bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full"
           >
             <Link
               href="/register"
-              className="px-2.5 py-1.5  hover:text-slate-300 transition-colors"
+              className="px-2.5 text-sm hover:text-slate-300 transition-colors"
             >
               Registration
             </Link>
