@@ -100,15 +100,13 @@ App Structure
 ### JavaScript frameworks:
 
 - <a href="https://react.dev/">React</a>
-- <a href="https://nextjs.org/">Next.js 14</a>
+- <a href="https://nextjs.org/">Next.js 15</a>
 
 ### UI frameworks :
 
 - <a href="https://www.radix-ui.com/">Radix UI</a>
 - <a href="https://ui.shadcn.com/">shadcn UI</a>
 - <a href="https://tailwindcss.com/">Tailwind CSS</a>
-- <a href="https://ui.aceternity.com/">Aceternity UI</a>
-- <a href="https://magicui.design/">Magic UI</a>
 
 ### Animations
 

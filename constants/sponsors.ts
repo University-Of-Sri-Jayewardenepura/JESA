@@ -1,0 +1,86 @@
+export const partners = [
+  {
+    partnership: "Gift Partner",
+    image: "/images/partners/alaris.png",
+    link: "http://alaris.lk/",
+    description: "Providing gifts for the event",
+  },
+  {
+    partnership: "Gift Partner",
+    image: "/images/partners/cbl.png",
+    link: "https://cbllk.com/",
+    description: "Providing gifts for the event",
+  },
+  {
+    partnership: "Gift Partner",
+    image: "/images/partners/facescrubs.png",
+    link: "https://facescrubs.lk/product-category/face/",
+    description: "Providing gifts for the event",
+  },
+  {
+    partnership: "Gift Partner",
+    image: "/images/partners/slaughter.png",
+    link: "",
+    description: "Providing gifts for the event",
+  },
+  {
+    partnership: "Photography Partner",
+    image: "/images/partners/envalon.png",
+    link: "https://www.facebook.com/envalonstudios/",
+    description: "Providing photography services",
+  },
+  {
+    partnership: "Photography Partner",
+    image: "/images/partners/craft.png",
+    link: "https://www.facebook.com/craftglobal/",
+    description: "Providing photography services",
+  },
+  {
+    partnership: "Photography Partner",
+    image: "/images/partners/freeze.png",
+    link: "",
+    description: "Providing photography services",
+  },
+  {
+    partnership: "Photography Partner",
+    image: "/images/partners/click.png",
+    link: "https://studioclick.lk/",
+    description: "Providing photography services",
+  },
+  {
+    partnership: "Event Partner",
+    image: "/images/partners/imagine-entertainment.png",
+    link: "https://imaginesl.com/",
+    description: "Handling event management",
+  },
+  {
+    partnership: "Printing Partner",
+    image: "/images/partners/wristband.png",
+    link: "https://wristbandlanka.lk/",
+    description: "Providing printing services",
+  },
+  {
+    partnership: "Printing Partner",
+    image: "/images/partners/flexport.png",
+    link: "https://flexport.lk/contact/",
+    description: "Providing printing services",
+  },
+  {
+    partnership: "Beautycare Partner",
+    image: "/images/partners/queens.png",
+    link: "https://www.instagram.com/salon.queens.beauticians/",
+    description: "Providing beauty care services",
+  },
+  {
+    partnership: "Entertainment Partner",
+    image: "/images/partners/flair.png",
+    link: "https://www.facebook.com/flairclub.usj/",
+    description: "Providing entertainment for the event",
+  },
+  {
+    partnership: "Official Printed Media Partner",
+    image: "/images/partners/ceylon-today.png",
+    link: "https://ceylontoday.lk/",
+    description: "Providing printed media coverage",
+  },
+];
