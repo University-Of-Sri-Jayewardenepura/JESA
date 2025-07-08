@@ -29,14 +29,14 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`}>
         <div>
           <main
-            className="flex min-h-screen min-w-[340px] flex-col font-sans text-slate-200 antialiased"
+            className="flex min-w-[340px] flex-col font-sans text-slate-200 antialiased"
             style={{ background: "var(--background-gradient)" }}
           >
             <header className="fixed left-0 right-0 z-50 bg-background px-safe pt-safe lg:h-16 top-9 flex justify-center px-5">
               <Announcement />
               <Nav />
             </header>
-            {children}
+            <div className="pt-24 lg:pt-32 min-h-screen">{children}</div>
           </main>
           <Footer />
         </div>

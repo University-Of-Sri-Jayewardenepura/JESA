@@ -29,7 +29,7 @@ export default function ImageWall() {
               x: [-firstRowWidth, 0],
             }}
             transition={{
-              duration: 20,
+              duration: 50,
               repeat: Infinity,
               ease: "linear",
               repeatType: "loop",
@@ -53,14 +53,14 @@ export default function ImageWall() {
         </div>
 
         {/* Second row - moving right */}
-        <div className="relative overflow-hidden ">
+        <div className="relative overflow-hidden">
           <motion.div
             className="flex gap-4"
             animate={{
               x: [0, -secondRowWidth],
             }}
             transition={{
-              duration: 20,
+              duration: 50,
               repeat: Infinity,
               ease: "linear",
               repeatType: "loop",
@@ -69,7 +69,7 @@ export default function ImageWall() {
             {[...secondRow, ...secondRow, ...secondRow].map((src, index) => (
               <div
                 key={`row2-${index}`}
-                className="flex-shrink-0 w-64 h-40 rounded-xl overflow-hidden"
+                className="flex-shrink-0 w-64 h-40 rounded-lg overflow-hidden"
               >
                 <Image
                   src={src}
@@ -93,7 +93,7 @@ export default function ImageWall() {
               x: [-allImagesWidth, 0],
             }}
             transition={{
-              duration: 30,
+              duration: 200,
               repeat: Infinity,
               ease: "linear",
               repeatType: "loop",
