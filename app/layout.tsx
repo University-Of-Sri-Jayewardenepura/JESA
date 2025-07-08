@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Announcement from "@/components/annoucement";
+import Footer from "@/components/footer";
+import Nav from "@/components/nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,10 +23,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} antialiased`}
-      >
-        {children}
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/wnv5dxv.css" />
+      </head>
+      <body className={`${inter.variable} antialiased`}>
+        <div>
+          <main
+            className="flex min-h-screen min-w-[340px] flex-col font-sans text-slate-200 antialiased"
+            style={{ background: "var(--background-gradient)" }}
+          >
+            <header className="fixed left-0 right-0 z-50 bg-background px-safe pt-safe lg:h-16 top-9 flex justify-center px-5">
+              <Announcement />
+              <Nav />
+            </header>
+            {children}
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

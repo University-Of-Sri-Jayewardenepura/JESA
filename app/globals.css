@@ -37,6 +37,7 @@
   --color-foreground: var(--foreground);
   --font-sans: Inter, sans-serif;
   --font-serif: "ivypresto-display", serif;
+  --font-title: "ivypresto-display", serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -73,7 +74,7 @@
 }
 
 :root {
-  --background: oklch(0.10 0.05 263);
+  --background: oklch(0.1 0.05 263);
   --background-gradient: linear-gradient(
     to right,
     oklch(0.05 0.05 263) 0%,
@@ -82,9 +83,9 @@
   );
   --gradient-annoucement: linear-gradient(
     to right,
-    oklch(0.10 0.05 263) 0%,
-    oklch(0.30 0.07 263) 30%,
-    oklch(0.10 0.05 263) 100%
+    oklch(0.1 0.05 263) 0%,
+    oklch(0.3 0.07 263) 30%,
+    oklch(0.1 0.05 263) 100%
   );
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -124,5 +125,12 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .cta-title {
+    @apply text-balance font-medium text-center leading-tight tracking-tight text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+    font-family: var(--font-title);
   }
 }

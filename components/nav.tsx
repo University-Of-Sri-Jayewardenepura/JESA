@@ -36,7 +36,7 @@ const Nav: React.FC = () => {
           <li>
             <Link
               href="/awards"
-              className="px-2.5 py-1.5 text-sm   hover:text-slate-300 transition-colors"
+              className="px-2.5 py-1.5 text-md  hover:text-slate-300 transition-colors"
             >
               Awards
             </Link>
@@ -44,7 +44,7 @@ const Nav: React.FC = () => {
           <li>
             <Link
               href="/hall-of-fame"
-              className="px-2.5 py-1.5 text-sm   hover:text-slate-300 transition-colors"
+              className="px-2.5 py-1.5 text-md  hover:text-slate-300 transition-colors"
             >
               Hall of Fame
             </Link>
@@ -55,18 +55,18 @@ const Nav: React.FC = () => {
         <div className="hidden lg:flex items-center gap-x-5">
           <Link
             href="/terms"
-            className="px-2.5 py-1.5 text-sm   hover:text-slate-300 transition-colors"
+            className="px-2.5 py-1.5 text-md   hover:text-slate-300 transition-colors"
           >
             Terms & Conditions
           </Link>
           <Button
             asChild
             variant="outline"
-            className="bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full"
+            className="bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full text-md h-8"
           >
             <Link
               href="/register"
-              className="px-2.5 text-sm hover:text-slate-300 transition-colors"
+              className="px-2  hover:text-slate-300 transition-colors"
             >
               Registration
             </Link>
