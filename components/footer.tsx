@@ -1,7 +1,8 @@
 import React from "react";
-import { Facebook, Twitter, Github, Linkedin, Instagram } from "lucide-react";
+import { Facebook, Linkedin, Instagram } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { contactNames } from "@/constants/contacts";
 
 const Footer: React.FC = () => {
   return (
@@ -46,36 +47,23 @@ const Footer: React.FC = () => {
             <div>
               <h2 className="mb-6 tracking-tighter font-medium">Contacts</h2>
               <ul className="gap-4 grid">
-                <li>
-                  <Link
-                    className="cursor-pointer duration-200 text-slate-500"
-                    href="https://www.linkedin.com/in/mohamed-insaf-512620302/"
-                  >
-                    Mohomed Insaf
-                  </Link>{" "}
-                  <br />
-                  <Link
-                    className="cursor-pointer duration-200 text-slate-700"
-                    href="tel:+94 74 352 3151"
-                  >
-                    +94 74 352 3151
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="cursor-pointer duration-200 text-slate-500"
-                    href="https://www.linkedin.com/in/pradeep-wedagedara/"
-                  >
-                    Pradeep Wedagedara
-                  </Link>{" "}
-                  <br />
-                  <Link
-                    className="cursor-pointer duration-200 text-slate-700"
-                    href="tel:+94 75 455 4776"
-                  >
-                    +94 75 455 4776
-                  </Link>
-                </li>
+                {contactNames.map((contact, index) => (
+                  <li key={index}>
+                    <Link
+                      className="cursor-pointer duration-200 text-slate-500"
+                      href={contact.linkedin}
+                    >
+                      {contact.name}
+                    </Link>{" "}
+                    <br />
+                    <Link
+                      className="cursor-pointer duration-200 text-slate-700"
+                      href={`tel:${contact.phone}`}
+                    >
+                      {contact.phone}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>

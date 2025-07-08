@@ -135,7 +135,7 @@
     font-family: var(--font-title);
   }
   .secondary-title {
-    @apply text-balance font-medium leading-tight tracking-tight text-2xl md:text-3xl lg:text-4xl xl:text-5xl;
+    @apply text-balance font-medium leading-tight tracking-tight text-3xl lg:text-4xl xl:text-5xl;
     font-family: var(--font-title);
   }
 }
