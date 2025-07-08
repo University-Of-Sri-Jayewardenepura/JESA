@@ -15,15 +15,9 @@ const CTA: React.FC = () => {
           excellence.
         </p>
         <div className="relative flex justify-center">
-          <div className="group relative rounded-full p-1 transition-colors mt-5 w-fit md:mt-6 lg:mt-8">
-            <CtaButton href="/regiter">Register Now</CtaButton>
-            <span className="absolute inset-0 z-[11] cursor-pointer rounded-[40px]" />
-            <span className="absolute -inset-px z-10 rounded-full" />
+          <div className="mt-5 w-fit md:mt-6 lg:mt-8">
+            <CtaButton href="/register">Register Now</CtaButton>
           </div>
-          <div
-            className="pointer-events-none absolute -bottom-1 left-1/2 -z-20 h-[66px] w-[187px] -translate-x-1/2 opacity-40 blur-3xl"
-            aria-hidden="true"
-          />
         </div>
       </div>
       <div

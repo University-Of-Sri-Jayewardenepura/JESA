@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
@@ -20,10 +22,10 @@ export function CtaButton({
     <div className="relative">
       <div className="group relative rounded-full p-1 transition-colors ">
         {/* Slate border - outside border around full button */}
-        <div className="absolute -inset-px rounded-full bg-gradient-to-b from-slate-700 to-slate-900"></div>
+        <div className="absolute -inset-px rounded-full bg-gradient-to-b from-slate-700 to-slate-900" />
 
         {/* Gold gradient background - between border and button */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-200/30 via-background to-amber-200/30"></div>
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-200/30 via-background to-amber-200/30" />
 
         {/* Regular button in the middle */}
         <Button
