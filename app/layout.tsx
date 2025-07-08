@@ -36,7 +36,7 @@ export default function RootLayout({
               <Announcement />
               <Nav />
             </header>
-            <div className="pt-24 lg:pt-32 min-h-screen">{children}</div>
+            <div className="min-h-screen">{children}</div>
           </main>
           <Footer />
         </div>

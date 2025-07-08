@@ -1,5 +1,9 @@
 export const images = [
   {
+    year: "JESA 2024",
+    image: "/images/hall-of-fame/2024.png",
+  },
+  {
     year: "JESA 2023",
     image: "/images/hall-of-fame/2023.jpg",
   },
