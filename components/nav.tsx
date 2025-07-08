@@ -34,31 +34,34 @@ const Nav: React.FC = () => {
         {/* Main Navigation - Desktop */}
         <ul className="hidden lg:flex items-center gap-x-2">
           <li>
-            <Link
-              href="/awards"
-              className="px-2.5 py-1.5 text-md  hover:text-slate-300 transition-colors"
+            <Button
+              asChild
+              variant="ghost"
+              className="px-2.5 py-1.5 text-md hover:text-slate-300 transition-colors"
             >
-              Awards
-            </Link>
+              <Link href="/awards">Awards</Link>
+            </Button>
           </li>
           <li>
-            <Link
-              href="/hall-of-fame"
-              className="px-2.5 py-1.5 text-md  hover:text-slate-300 transition-colors"
+            <Button
+              asChild
+              variant="ghost"
+              className="px-2.5 py-1.5 text-md hover:text-slate-300 transition-colors"
             >
-              Hall of Fame
-            </Link>
+              <Link href="/hall-of-fame">Hall of Fame</Link>
+            </Button>
           </li>
         </ul>
 
         {/* Right Side Actions - Desktop */}
         <div className="hidden lg:flex items-center gap-x-5">
-          <Link
-            href="/terms"
-            className="px-2.5 py-1.5 text-md   hover:text-slate-300 transition-colors"
+          <Button
+            asChild
+            variant="ghost"
+            className="px-2.5 py-1.5 text-md hover:text-slate-300 transition-colors"
           >
-            Terms & Conditions
-          </Link>
+            <Link href="/terms">Terms & Conditions</Link>
+          </Button>
           <Button
             asChild
             variant="outline"
@@ -92,7 +95,7 @@ const Nav: React.FC = () => {
                 <li className="border-b border-slate-900 group/navitem relative">
                   <Button
                     asChild
-                    variant="link"
+                    variant="ghost"
                     className="flex w-full items-center gap-x-1.5 rounded-full py-5 whitespace-pre text-lg leading-none text-slate-300 transition-colors duration-200 hover:text-slate-100 h-auto justify-start"
                     onClick={toggleMenu}
                   >
@@ -102,7 +105,7 @@ const Nav: React.FC = () => {
                 <li className="border-b border-slate-900 group/navitem relative">
                   <Button
                     asChild
-                    variant="link"
+                    variant="ghost"
                     className="flex w-full items-center gap-x-1.5 rounded-full py-5 whitespace-pre text-lg leading-none text-slate-300 transition-colors duration-200 hover:text-slate-100 h-auto justify-start"
                     onClick={toggleMenu}
                   >

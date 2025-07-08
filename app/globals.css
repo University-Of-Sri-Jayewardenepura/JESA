@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../lib/tailwind-utils.css";
 /* @import url("https://use.typekit.net/wnv5dxv.css"); */
 
 @font-face {
@@ -131,6 +132,10 @@
 @layer components {
   .cta-title {
     @apply text-balance font-medium text-center leading-tight tracking-tight text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+    font-family: var(--font-title);
+  }
+  .secondary-title {
+    @apply text-balance font-medium leading-tight tracking-tight text-2xl md:text-3xl lg:text-4xl xl:text-5xl;
     font-family: var(--font-title);
   }
 }

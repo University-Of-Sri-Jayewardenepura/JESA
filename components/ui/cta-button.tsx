@@ -26,7 +26,7 @@ export function CtaButton({
     <div className="relative w-full">
       <div className="group relative rounded-full p-1 transition-colors w-full">
         {/* Border around button */}
-        <div className="absolute -inset-px rounded-full bg-gradient-to-b from-slate-500 to-slate-900" />
+        <div className="absolute -inset-px rounded-full bg-gradient-to-b from-slate-00 to-slate-900" />
 
         {/* Gold gradient background - for both default and secondary variants */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-300/10 via-background to-slate-300/10" />
@@ -34,7 +34,7 @@ export function CtaButton({
         {/* Regular button in the middle */}
         <Button
           asChild={asChild || Boolean(href)}
-          variant={isDefault ? "default" : "link"}
+          variant={isDefault ? "default" : "ghost"}
           className={cn(
             "relative rounded-full z-10 w-full transition-all !font-semibold",
             isDefault ? "bg-white hover:bg-slate-100" : "",
