@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { awards } from "@/constants/awards";
-import "../lib/tailwind-utils.css";
 
 // Add isNew property to specific awards (you can modify this logic later)
 const awardCategories = awards.map((award, index) => ({
