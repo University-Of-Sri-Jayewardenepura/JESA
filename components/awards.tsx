@@ -10,43 +10,43 @@ const categories = [
     title: "Marketing Agencies",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fperformace-marketers.deff9d47.jpg&w=3840&q=100",
-    comingSoon: false,
+    isNew: false,
   },
   {
     title: "Wholesalers",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fwholesalers.ac9c6289.jpg&w=3840&q=100",
-    comingSoon: false,
+    isNew: false,
   },
   {
     title: "E-commerce",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fe-commerce.873fb521.jpg&w=3840&q=100",
-    comingSoon: false,
+    isNew: false,
   },
   {
     title: "Online Travel Agencies",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ftravel-agencies.4b4819f0.jpg&w=3840&q=100",
-    comingSoon: false,
+    isNew: false,
   },
   {
     title: "Affiliates",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Faffiliates.92e5bfd5.jpg&w=3840&q=100",
-    comingSoon: false,
+    isNew: false,
   },
   {
     title: "Home Services",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhome-services.9215f1a9.jpg&w=3840&q=100",
-    comingSoon: true,
+    isNew: false,
   },
   {
     title: "Web3",
     image:
       "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fweb3.77c90334.jpg&w=3840&q=100",
-    comingSoon: true,
+    isNew: true,
   },
 ];
 
@@ -75,7 +75,7 @@ export default function Awards() {
   };
 
   return (
-    <section className="mt-[355px] overflow-hidden pb-[76px] pt-[120px] px-safe md:mt-0 md:pb-0 md:pt-[146px] lg:pt-44 xl:pt-[117px]">
+    <section className="overflow-hidden pb-[76px] pt-[120px] px-safe md:pb-0 md:pt-[146px] lg:pt-44 xl:pt-[117px]">
       <div className="container mx-auto px-5 md:px-8">
         <h2 className="secondary-title">Award Categories</h2>
       </div>
@@ -111,19 +111,28 @@ export default function Awards() {
                       <div
                         className="pointer-events-none absolute inset-0"
                         style={{
-                          backgroundImage: "url('/images/noise-pixel.png')",
-                          backgroundRepeat: "repeat",
-                          opacity: 0.1,
+                          background:
+                            "linear-gradient(to right, rgb(148, 163, 184), rgb(251, 191, 36))",
+                          opacity: 0.6,
                           mixBlendMode: "overlay",
                         }}
                       ></div>
-                      <h3 className="absolute left-5 top-5 max-w-44 text-20 font-medium leading-tight -tracking-tightest lg:left-6 lg:top-6 lg:text-24">
+                      <div
+                        className="pointer-events-none absolute inset-0"
+                        style={{
+                          backgroundImage: "url('/images/noise-pixel.png')",
+                          backgroundRepeat: "repeat",
+                          opacity: 0.2,
+                          mixBlendMode: "overlay",
+                        }}
+                      ></div>
+                      <h3 className="absolute left-5 top-5 max-w-44 text-[20px] font-medium leading-tight tracking-tightest lg:left-6 lg:top-6 lg:text-[24px]">
                         {category.title}
                       </h3>
 
-                      {category.comingSoon && (
-                        <span className="absolute right-5 top-[23px] flex h-5 items-center justify-center rounded bg-white/[0.12] px-3 text-8 font-semibold uppercase leading-none tracking-tighter text-gray-90 backdrop-blur-[2px] lg:right-6 lg:top-[29px]">
-                          Coming soon
+                      {category.isNew && (
+                        <span className="absolute right-5 top-[23px] flex h-5 items-center justify-center rounded bg-emerald-400/[0.5] px-3 text-[8px] font-semibold uppercase leading-none tracking-tighter text-gray-90 backdrop-blur-[2px] lg:right-6 lg:top-[29px]">
+                          New
                         </span>
                       )}
 

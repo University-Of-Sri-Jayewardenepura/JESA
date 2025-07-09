@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Facebook, Linkedin, Instagram } from "lucide-react";
 import Link from "next/link";

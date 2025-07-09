@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { CtaButton } from "@/components/ui/cta-button";
 import Link from "next/link";
@@ -32,8 +34,8 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="w-5/7 sm:w-1/2">
-            <CtaButton href="/about" variant="secondary">
-              Learn More
+            <CtaButton href="/terms" variant="secondary">
+              Terms & Conditions{" "}
             </CtaButton>
           </div>
         </div>

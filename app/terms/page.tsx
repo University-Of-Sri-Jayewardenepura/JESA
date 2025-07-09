@@ -4,11 +4,11 @@ export default function Terms() {
       <h3 className="secondary-title">Terms & Conditions</h3>
       <div>
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
-          Common Eligibility Criteria for JESA 2024
+          Common Eligibility Criteria for JESA 2025
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl ">
+        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
           <li>
-            To be eligible to apply for the JESA 2024 Awards, you must be a
+            To be eligible to apply for the JESA 2025 Awards, you must be a
             currently enrolled undergraduate student at our university. Recent
             graduates are not eligible.
           </li>
@@ -22,8 +22,8 @@ export default function Terms() {
             selections.
           </li>
           <li>
-            If you were a member of the JESA Organizing Committee in 2023 or
-            2024, you are eligible to apply for up to three (3) award
+            If you were a member of the JESA Organizing Committee in 2024 or
+            2025, you are eligible to apply for up to three (3) award
             categories.
           </li>
           <li>
@@ -34,7 +34,7 @@ export default function Terms() {
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
           Eligibility Criteria for BESA Awards
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl ">
+        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md text-slate-400 max-w-2xl ">
           <li>
             Students can only apply for the BESA award of their respective
             faculty.
@@ -48,7 +48,7 @@ export default function Terms() {
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
           Eligibility Criteria for the Best Innovator Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl ">
+        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
           <li>
             Undergraduate students from any state university in Sri Lanka can
             apply for this.
@@ -64,7 +64,7 @@ export default function Terms() {
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
           Eligibility Criteria for the Best Creative Designer Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl ">
+        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
           <li>
             Undergraduate students from any faculty of University of Sri
             Jayewardenepura can apply for this.
@@ -78,7 +78,7 @@ export default function Terms() {
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
           Eligibility Criteria for the Best Communicator Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl ">
+        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
           <li>
             Undergraduate students from any faculty of University of Sri
             Jayewardenepura can apply for this.

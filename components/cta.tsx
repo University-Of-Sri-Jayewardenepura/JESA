@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import { CtaButton } from "@/components/ui/cta-button";
