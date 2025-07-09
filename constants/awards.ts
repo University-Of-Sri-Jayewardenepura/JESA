@@ -676,7 +676,7 @@ export const awards = [
     ],
   },
   {
-    id: "12",
+    id: "13",
     uri: "",
     name: "BESA - FAHS",
     image: "/images/awards/besa.png",
