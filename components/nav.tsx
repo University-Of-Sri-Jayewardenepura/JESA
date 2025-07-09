@@ -97,9 +97,10 @@ const Nav: React.FC = () => {
                     asChild
                     variant="ghost"
                     className="flex w-full items-center gap-x-1.5 rounded-full py-5 whitespace-pre text-lg leading-none text-slate-300 transition-colors duration-200 hover:text-slate-100 h-auto justify-start"
-                    onClick={toggleMenu}
                   >
-                    <Link href="/awards">Awards</Link>
+                    <Link href="/awards" onClick={toggleMenu}>
+                      Awards
+                    </Link>
                   </Button>
                 </li>
                 <li className="border-b border-slate-900 group/navitem relative">
@@ -107,9 +108,10 @@ const Nav: React.FC = () => {
                     asChild
                     variant="ghost"
                     className="flex w-full items-center gap-x-1.5 rounded-full py-5 whitespace-pre text-lg leading-none text-slate-300 transition-colors duration-200 hover:text-slate-100 h-auto justify-start"
-                    onClick={toggleMenu}
                   >
-                    <Link href="/hall-of-fame">Hall of Fame</Link>
+                    <Link href="/hall-of-fame" onClick={toggleMenu}>
+                      Hall of Fame
+                    </Link>
                   </Button>
                 </li>
               </ul>
@@ -120,13 +122,17 @@ const Nav: React.FC = () => {
                 variant="outline"
                 className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full transition-colors border  h-11 text-[15px] leading-none px-3.5 font-medium"
               >
-                <Link href="/terms">Terms & Conditions</Link>
+                <Link href="/terms" onClick={toggleMenu}>
+                  Terms & Conditions
+                </Link>
               </Button>
               <Button
                 asChild
                 className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full transition-colors h-11 text-[15px] leading-none px-3.5 font-medium"
               >
-                <Link href="/register">Registration</Link>
+                <Link href="/register" onClick={toggleMenu}>
+                  Registration
+                </Link>
               </Button>
             </div>
           </div>
