@@ -20,7 +20,7 @@ const WhatIsJesa: React.FC = () => {
     },
     {
       text: "With ",
-      highlights: ["sixteen prestigious titles"],
+      highlights: ["seventeen prestigious titles"],
       continuation: ", JESA stands as a tribute to ",
       highlights2: ["resilience, leadership, and unwavering dedication"],
       ending: ", celebrating those who pursue growth, purpose, and excellence.",
