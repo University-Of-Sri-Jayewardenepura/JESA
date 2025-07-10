@@ -64,7 +64,6 @@ App Structure
 │   ├── ui
 │   │   ├── alert-dialog.tsx
 │   │   ├── button.tsx
-│   │   ├── dropdown-menu.tsx
 │   │   └── ...
 │   ├── animated
 │   │   ├── blur-in.tsx
