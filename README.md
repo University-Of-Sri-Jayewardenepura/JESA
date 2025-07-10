@@ -4,7 +4,7 @@
       <source media="(prefers-color-scheme: dark)">
       <img src="./public/images/jesa-logo.png" height="128">
     </picture>
-    <h1 align="center">Jesa</h1>
+    <h1 align="center">JESA</h1>
     <p align="center">✨ Leave a Star On The Repository ✨</p>
   </a>
 </p>
