@@ -68,10 +68,10 @@ const Nav: React.FC = () => {
             className="bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full text-md h-8"
           >
             <Link
-              href="/register"
+              href="/"
               className="px-2  hover:text-slate-300 transition-colors"
             >
-              Registration
+              Registration Coming Soon
             </Link>
           </Button>
         </div>
@@ -130,8 +130,8 @@ const Nav: React.FC = () => {
                 asChild
                 className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full transition-colors h-11 text-[15px] leading-none px-3.5 font-medium"
               >
-                <Link href="/register" onClick={toggleMenu}>
-                  Registration
+                <Link href="/" onClick={toggleMenu}>
+                  Registration Coming Soon
                 </Link>
               </Button>
             </div>

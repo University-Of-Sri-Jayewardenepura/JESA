@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { awards } from "@/constants/awards";
 import Link from "next/link";
+import { TextAnimate } from "@/components/core/text-animate";
 
 export const AwardsPage: React.FC = () => {
   return (
@@ -15,12 +16,21 @@ export const AwardsPage: React.FC = () => {
           </span>
         </h1>
 
-        <p className="mt-5 max-w-[432px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
-          Discover sixteen prestigious awards celebrating excellence across
-          university life at JESA 2025. Each award recognizes outstanding
-          undergraduates for their dedication in leadership, innovation,
-          academics, and social responsibility.
-        </p>
+        <div className="mt-5 max-w-[432px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
+          <TextAnimate
+            animation="blurInUp"
+            by="character"
+            once
+            startOnView={false}
+            delay={0.3}
+            duration={0.5}
+          >
+            Discover sixteen prestigious awards celebrating excellence across
+            university life at JESA 2025. Each award recognizes outstanding
+            undergraduates for their dedication in leadership, innovation,
+            academics, and social responsibility.
+          </TextAnimate>
+        </div>
       </div>
 
       <div className="py-16 md:py-28 lg:py-32">

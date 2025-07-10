@@ -18,7 +18,7 @@ const CTA: React.FC = () => {
         </p>
         <div className="relative flex justify-center">
           <div className="mt-5 w-fit md:mt-6 lg:mt-8">
-            <CtaButton href="/register">Register Now</CtaButton>
+            <CtaButton href="/">Registration Coming Soon</CtaButton>
           </div>
         </div>
       </div>
