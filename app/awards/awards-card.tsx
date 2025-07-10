@@ -76,96 +76,97 @@ export const AwardsPage: React.FC = () => {
                     </div>
 
                     <div className="space-y-6">
-                      <div>
-                        <h4 className="text-lg font-semibold text-white mb-4">
-                          Platinum Sponsors
-                        </h4>
-                        <div className="flex flex-wrap gap-4 justify-start">
-                          {award.sponsors
-                            .filter((sponsor) => sponsor.type === "Platinum")
-                            .map((sponsor) => (
-                              <Link
-                                href={sponsor.link}
-                                key={sponsor.year}
-                                className="group"
-                              >
-                                <div className="flex flex-col items-center space-y-2">
-                                  <span className="text-xs bg-gradient-to-t from-slate-400 to-slate-200 bg-clip-text text-transparent font-semibold">
-                                    {sponsor.year}
-                                  </span>
-                                  <Image
-                                    src={sponsor.imgSrc}
-                                    alt={`Platinum Sponsor ${sponsor.year}`}
-                                    className="rounded-md shadow-lg w-[60px] md:w-[75px] transition-transform group-hover:scale-105"
-                                    width={75}
-                                    height={75}
-                                    quality={100}
-                                  />
-                                </div>
-                              </Link>
-                            ))}
+                      {award.sponsors &&
+                      award.sponsors.filter(
+                        (sponsor) => sponsor.type === "Platinum"
+                      ).length > 0 ? (
+                        <div>
+                          <h4 className="text-lg font-semibold text-white mb-4">
+                            Platinum Sponsors
+                          </h4>
+                          <div className="flex flex-wrap gap-4 justify-start">
+                            {award.sponsors
+                              .filter((sponsor) => sponsor.type === "Platinum")
+                              .map((sponsor) => (
+                                <Link
+                                  href={sponsor.link}
+                                  key={sponsor.year}
+                                  className="group"
+                                >
+                                  <div className="flex flex-col items-center space-y-2">
+                                    <span className="text-xs bg-gradient-to-t from-slate-400 to-slate-200 bg-clip-text text-transparent font-semibold">
+                                      {sponsor.year}
+                                    </span>
+                                    <Image
+                                      src={sponsor.imgSrc}
+                                      alt={`Platinum Sponsor ${sponsor.year}`}
+                                      className="rounded-[4px] shadow-lg w-[60px] md:w-[75px] transition-transform group-hover:scale-105"
+                                      width={75}
+                                      height={75}
+                                      quality={100}
+                                    />
+                                  </div>
+                                </Link>
+                              ))}
+                          </div>
                         </div>
-                      </div>
+                      ) : null}
 
                       <div>
                         <h4 className="text-lg font-semibold text-white mb-4">
-                          Sponsors of 2024
+                          Who will be the Sponsors of 2025?
                         </h4>
                         <div className="flex flex-wrap gap-6 justify-start">
-                          {award.sponsors.length > 4 && (
-                            <div className="flex flex-col items-center space-y-2">
-                              <span className="text-xs bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-semibold">
-                                2024
-                              </span>
-                              <Image
-                                src={award.sponsors[4].imgSrc}
-                                alt={award.sponsors[4].imgSrc}
-                                className="rounded-md shadow-lg"
-                                width={75}
-                                height={75}
-                                quality={100}
-                              />
-                              <span className="text-xs bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-semibold">
-                                Gold
-                              </span>
-                            </div>
-                          )}
-                          {award.sponsors.length > 5 && (
-                            <div className="flex flex-col items-center space-y-2">
-                              <span className="text-xs bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text text-transparent font-semibold">
-                                2024
-                              </span>
-                              <Image
-                                src={award.sponsors[5].imgSrc}
-                                alt={award.sponsors[5].imgSrc}
-                                className="rounded-md shadow-lg"
-                                width={90}
-                                height={90}
-                                quality={100}
-                              />
-                              <span className="text-xs bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text text-transparent font-semibold">
-                                Platinum
-                              </span>
-                            </div>
-                          )}
-                          {award.sponsors.length > 6 && (
-                            <div className="flex flex-col items-center space-y-2">
-                              <span className="text-xs bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text text-transparent font-semibold">
-                                2024
-                              </span>
-                              <Image
-                                src={award.sponsors[6].imgSrc}
-                                alt={award.sponsors[6].imgSrc}
-                                className="rounded-md shadow-lg"
-                                width={75}
-                                height={75}
-                                quality={100}
-                              />
-                              <span className="text-xs bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text text-transparent font-semibold">
-                                Silver
-                              </span>
-                            </div>
-                          )}
+                          <div className="flex flex-col items-center space-y-2">
+                            <span className="text-xs bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-semibold">
+                              2025
+                            </span>
+                            <Image
+                              src="/images/companies/question.png"
+                              alt="Gold Sponsor 2025"
+                              className="rounded-[4px] shadow-lg"
+                              width={75}
+                              height={75}
+                              quality={100}
+                            />
+                            <span className="text-xs bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-semibold">
+                              Gold
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col items-center space-y-2">
+                            <span className="text-xs bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text text-transparent font-semibold">
+                              2025
+                            </span>
+                            <Image
+                              src="/images/companies/question.png"
+                              alt="Platinum Sponsor 2025"
+                              className="rounded-[4px] shadow-lg"
+                              width={90}
+                              height={90}
+                              quality={100}
+                            />
+                            <span className="text-xs bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text text-transparent font-semibold">
+                              Platinum
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col items-center space-y-2">
+                            <span className="text-xs bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text text-transparent font-semibold">
+                              2025
+                            </span>
+                            <Image
+                              src="/images/companies/question.png"
+                              alt="Silver Sponsor 2025"
+                              className="rounded-[4px] shadow-lg"
+                              width={75}
+                              height={75}
+                              quality={100}
+                            />
+                            <span className="text-xs bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text text-transparent font-semibold">
+                              Silver
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>

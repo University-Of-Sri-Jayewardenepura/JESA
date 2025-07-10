@@ -10,7 +10,7 @@ const awardCategories = awards.map((award, index) => ({
   id: award.id,
   title: award.name,
   image: award.image,
-  isNew: index === 6 || index === 7, // Example: mark 7th and 8th awards as new
+  isNew: index === 7 || index === 15 || index === 16,
 }));
 
 export default function Awards() {
@@ -99,16 +99,6 @@ export default function Awards() {
                           priority={index < 2}
                         />
                       </div>
-
-                      <div
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                          background:
-                            "linear-gradient(to right, rgb(148, 163, 184), rgb(251, 191, 36))",
-                          opacity: 0.3,
-                          mixBlendMode: "overlay",
-                        }}
-                      ></div>
                       <div
                         className="pointer-events-none absolute inset-0"
                         style={{
@@ -116,6 +106,14 @@ export default function Awards() {
                           backgroundRepeat: "repeat",
                           opacity: 0.2,
                           mixBlendMode: "overlay",
+                        }}
+                      ></div>
+                      <div
+                        className="pointer-events-none absolute inset-0"
+                        style={{
+                          background: "var(--background-card)",
+                          mixBlendMode: "overlay",
+                          opacity: 0.6,
                         }}
                       ></div>
                       <h3 className="absolute left-5 top-5 max-w-44 text-[20px] font-medium leading-tight tracking-tightest lg:left-6 lg:top-6 lg:text-[24px]">
@@ -160,8 +158,6 @@ export default function Awards() {
             </button>
           </div>
         </div>
-
-        {/* Using external CSS for scrollbar hiding */}
       </div>
     </section>
   );

@@ -365,6 +365,15 @@ export const awards = [
   },
   {
     id: "7",
+    uri: "",
+    name: "BESA - Inter University Award",
+    image: "/images/awards/besa.png",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from universities other than USJ. The winner is excelled in academics, sports, and other extracurricular activities.",
+    sponsors: [],
+  },
+  {
+    id: "8",
     uri: "undefined",
     name: "BESA - FHSS",
     image: "/images/awards/besa.png",
@@ -416,7 +425,7 @@ export const awards = [
     ],
   },
   {
-    id: "8",
+    id: "9",
     uri: "undefined",
     name: "BESA - FAS",
     image: "/images/awards/besa.png",
@@ -468,7 +477,7 @@ export const awards = [
     ],
   },
   {
-    id: "9",
+    id: "10",
     uri: "undefined",
     name: "BESA - FMSC",
     image: "/images/awards/besa.png",
@@ -520,7 +529,7 @@ export const awards = [
     ],
   },
   {
-    id: "10",
+    id: "11",
     uri: "",
     name: "BESA - FMS",
     image: "/images/awards/besa.png",
@@ -572,7 +581,7 @@ export const awards = [
     ],
   },
   {
-    id: "11",
+    id: "12",
     uri: "",
     name: "BESA - FOT",
     image: "/images/awards/besa.png",
@@ -624,7 +633,7 @@ export const awards = [
     ],
   },
   {
-    id: "12",
+    id: "13",
     uri: "",
     name: "BESA - FOE",
     image: "/images/awards/besa.png",
@@ -676,7 +685,7 @@ export const awards = [
     ],
   },
   {
-    id: "13",
+    id: "14",
     uri: "",
     name: "BESA - FAHS",
     image: "/images/awards/besa.png",
@@ -726,5 +735,23 @@ export const awards = [
         link: "http://careerskills.sjp.ac.lk/",
       },
     ],
+  },
+  {
+    id: "15",
+    uri: "",
+    name: "BESA - FUAB",
+    image: "/images/awards/besa.png",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Urban and Aquatic  Bio resources Faculty . The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Urban and Aquatic Bio resources Faculty  will be awarded as the BESA Silver Medalists accordingly.",
+    sponsors: [],
+  },
+  {
+    id: "16",
+    uri: "",
+    name: "BESA - FDS",
+    image: "/images/awards/besa.png",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the New Dental Sciences Faculty. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the New Dental Sciences Faculty will be awarded as the BESA Silver Medalists accordingly.",
+    sponsors: [],
   },
 ];
