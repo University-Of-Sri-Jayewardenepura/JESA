@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { CtaButton } from "@/components/ui/cta-button";
 
 const Nav: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -117,23 +118,17 @@ const Nav: React.FC = () => {
               </ul>
             </nav>
             <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2 md:p-8">
-              <Button
+              <CtaButton
                 asChild
-                variant="outline"
-                className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full transition-colors border  h-11 text-[15px] leading-none px-3.5 font-medium"
+                variant="secondary"
+                className="w-full"
+                onClick={toggleMenu}
               >
-                <Link href="/terms" onClick={toggleMenu}>
-                  Terms & Conditions
-                </Link>
-              </Button>
-              <Button
-                asChild
-                className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full transition-colors h-11 text-[15px] leading-none px-3.5 font-medium"
-              >
-                <Link href="/" onClick={toggleMenu}>
-                  Registration Coming Soon
-                </Link>
-              </Button>
+                <Link href="/terms">Terms & Conditions</Link>
+              </CtaButton>
+              <CtaButton asChild className="w-full" onClick={toggleMenu}>
+                <Link href="/">Registration Coming Soon</Link>
+              </CtaButton>
             </div>
           </div>
         </div>

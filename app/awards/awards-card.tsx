@@ -15,8 +15,7 @@ export const AwardsPage: React.FC = () => {
             Awards
           </span>
         </h1>
-
-        <div className="mt-5 max-w-[432px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
+        <div className="mt-5 max-w-[340px]  text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
           <TextAnimate
             animation="blurInUp"
             by="character"
@@ -53,7 +52,10 @@ export const AwardsPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="border border-slate-800 shadow-2xl rounded-[10px] bg-slate-900/50 backdrop-blur-lg max-w-7xl">
+              <div
+                className="border border-slate-900 shadow-2xl rounded-[10px] backdrop-blur-lg max-w-7xl"
+                style={{ background: "var(--background-card)" }}
+              >
                 <div className="flex justify-center flex-col md:flex-row p-6 md:p-8">
                   <div className="w-full md:w-1/2 flex justify-center items-center mb-6 md:mb-0">
                     <Image
@@ -61,7 +63,7 @@ export const AwardsPage: React.FC = () => {
                       alt={award.name}
                       width={180}
                       height={180}
-                      className="h-fit"
+                      className="h-fit w-[100px] md:w-[180px]"
                       priority
                     />
                   </div>
@@ -116,7 +118,7 @@ export const AwardsPage: React.FC = () => {
                         <h4 className="text-lg font-semibold text-white mb-4">
                           Who will be the Sponsors of 2025?
                         </h4>
-                        <div className="flex flex-wrap gap-6 justify-start">
+                        <div className="flex flex-wrap gap-3 md:gap-6 justify-start">
                           <div className="flex flex-col items-center space-y-2">
                             <span className="text-xs bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text text-transparent font-semibold">
                               2025

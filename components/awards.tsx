@@ -84,18 +84,16 @@ export default function Awards() {
                     key={index}
                     className="relative h-[348px] w-[264px] lg:h-[400px] lg:w-80 flex-shrink-0"
                   >
-                    <div className="relative h-full w-full overflow-hidden rounded-[10px]">
-                      {/* Background gradient for awards */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
-
+                    <div className="relative h-full w-full overflow-hidden">
                       {/* Award image centered */}
-                      <div className="absolute inset-0 flex items-center justify-center p-8">
+                      <div className="absolute inset-0 flex items-center justify-center p-8 pt-[100px]">
                         <Image
                           src={category.image}
                           alt={category.title}
                           width={180}
                           height={180}
-                          className="w-32 h-32 lg:w-40 lg:h-40 object-contain"
+                          className="h-fit
+                          w-[90px] lg:w-[100px] object-contain"
                           priority={index < 2}
                         />
                       </div>
@@ -104,7 +102,7 @@ export default function Awards() {
                         style={{
                           backgroundImage: "url('/images/noise-pixel.png')",
                           backgroundRepeat: "repeat",
-                          opacity: 0.2,
+                          opacity: 0.1,
                           mixBlendMode: "overlay",
                         }}
                       ></div>
@@ -113,7 +111,7 @@ export default function Awards() {
                         style={{
                           background: "var(--background-card)",
                           mixBlendMode: "overlay",
-                          opacity: 0.6,
+                          opacity: 0.5,
                         }}
                       ></div>
                       <h3 className="absolute left-5 top-5 max-w-44 text-[20px] font-medium leading-tight tracking-tightest lg:left-6 lg:top-6 lg:text-[24px]">
@@ -127,7 +125,7 @@ export default function Awards() {
                       )}
 
                       <div
-                        className="pointer-events-none absolute inset-0 rounded-[10px] border border-white opacity-60 mix-blend-overlay"
+                        className="pointer-events-none absolute inset-0 rounded-[10px] border border-slate-700 opacity-60 mix-blend-overlay"
                         aria-hidden="true"
                       ></div>
                     </div>
@@ -141,7 +139,7 @@ export default function Awards() {
           <div className="relative pl-5 md:pl-8">
             <button
               onClick={handlePrev}
-              className="group absolute -bottom-[68px] right-[76px] flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-[88px] md:top-[-80px] lg:top-[-84px] z-20"
+              className="group absolute -bottom-[68px] right-[76px] flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-[85px] lg:top-[-490px] lg:right-[90px] z-20"
               aria-label="Previous slide"
             >
               <ArrowLeft size={20} />
@@ -150,7 +148,7 @@ export default function Awards() {
 
             <button
               onClick={handleNext}
-              className="group absolute -bottom-[68px] right-5 flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-8 md:top-[-80px] lg:top-[-84px] z-20"
+              className="group absolute -bottom-[68px] right-5 flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-8 lg:top-[-490px] lg:right-8 z-20"
               aria-label="Next slide"
             >
               <ArrowRight size={20} />

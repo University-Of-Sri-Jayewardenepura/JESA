@@ -15,7 +15,7 @@ const HallOfFamePage: React.FC = () => {
           </span>
         </h1>
 
-        <div className="mt-5 max-w-[432px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
+        <div className="mt-5 max-w-[340px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
           <TextAnimate
             animation="blurInUp"
             by="character"
@@ -36,7 +36,7 @@ const HallOfFamePage: React.FC = () => {
         <div className="flex flex-col items-center gap-6 md:gap-8 lg:gap-12 px-4 md:px-6">
           {images.map((image, index) => (
             <div key={index} className="pb-4 md:pb-12 lg:pb-24">
-              <h1 className="relative z-20 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 md:pb-6 lg:pb-8 text-center font-title text-[40px] leading-[1.125] tracking-tight text-transparent md:text-[56px] lg:text-[64px] xl:text-[72px]">
+              <h1 className="relative z-20 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 md:pb-6 lg:pb-8 text-center font-title text-[24px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[64px] xl:text-[72px]">
                 <span className="bg-[linear-gradient(180deg,rgba(251,191,36,1)_0%,rgba(251,191,36,0)_70%)] bg-clip-text text-white md:text-transparent">
                   {image.year}
                 </span>
