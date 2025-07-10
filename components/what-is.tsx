@@ -49,7 +49,7 @@ const WhatIsJesa: React.FC = () => {
           {content.map((paragraph, index) => (
             <p
               key={index}
-              className={`text-center text-[20px] font-medium leading-snug -tracking-tightest text-slate-400 md:text-[28px] lg:text-[32px] [&_span]:font-title [&_span]:italic [&_span]:tracking-tight [&_span]:text-white ${
+              className={`text-center text-[20px] font-medium leading-snug -tracking-tightest text-slate-400 md:text-[28px] lg:text-[32px] [&_span]:font-title [&_span]:text-white ${
                 index === 2 || index === 3 ? "hidden md:block" : ""
               }`}
             >

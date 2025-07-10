@@ -4,6 +4,7 @@ import "./globals.css";
 import Announcement from "@/components/annoucement";
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
+import MSClarity from "@/components/ms-clarity";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://use.typekit.net/wnv5dxv.css" />
       </head>
       <body className={`${inter.variable} antialiased`}>
+        <MSClarity />
         <div>
           <main
             className="flex min-w-[340px] flex-col font-sans text-slate-200 antialiased"

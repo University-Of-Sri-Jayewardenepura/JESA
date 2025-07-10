@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "../lib/tailwind-utils.css";
 
 @font-face {
   font-family: "ivypresto-display";
@@ -89,23 +88,23 @@
     oklch(0.3 0.07 263) 30%,
     oklch(0.1 0.05 263) 100%
   );
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --foreground: oklch(0.985 0.002 263);
+  --card: oklch(0.15 0.06 263);
+  --card-foreground: oklch(0.985 0.002 263);
+  --popover: oklch(0.15 0.06 263);
+  --popover-foreground: oklch(0.985 0.002 263);
+  --primary: oklch(0.922 0.002 263);
+  --primary-foreground: oklch(0.1 0.05 263);
+  --secondary: oklch(0.2 0.07 263);
+  --secondary-foreground: oklch(0.985 0.002 263);
+  --muted: oklch(0.2 0.07 263);
+  --muted-foreground: oklch(0.6 0.05 263);
+  --accent: oklch(0.2 0.07 263);
+  --accent-foreground: oklch(0.985 0.002 263);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: oklch(1 0.002 263 / 10%);
+  --input: oklch(1 0.002 263 / 15%);
+  --ring: oklch(0.4 0.06 263);
 }
 
 @layer base {

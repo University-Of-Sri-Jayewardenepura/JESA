@@ -3,17 +3,27 @@
 import Image from "next/image";
 import React from "react";
 import { images } from "@/constants/hall-of-fame";
+import { motion } from "motion/react";
 
 const HallOfFamePage: React.FC = () => {
   return (
     <section className="relative pt-[140px] px-safe pb-[120px] md:pt-[148px] md:pb-[136px] lg:pt-[180px] lg:pb-[160px] xl:pb-[162px]">
       <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl">
-        <h1 className="relative z-20 max-w-[340px] bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 text-center font-title text-[40px] leading-[1.125] tracking-tight text-transparent md:max-w-none md:text-[56px] lg:text-[64px] xl:text-[72px]">
+        <motion.h1
+          initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{
+            y: { duration: 0.3 },
+            opacity: { duration: 0.4 },
+            filter: { duration: 0.3 },
+          }}
+          className="relative z-20 max-w-[340px] bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 text-center font-title text-[40px] leading-[1.125] tracking-tight text-transparent md:max-w-none md:text-[56px] lg:text-[64px] xl:text-[72px]"
+        >
           Hall of{" "}
           <span className="bg-[linear-gradient(180deg,rgba(251,191,36,1)_0%,rgba(251,191,36,0)_70%)] bg-clip-text text-white md:text-transparent">
             Fame
           </span>
-        </h1>
+        </motion.h1>
 
         <p className="mt-5 max-w-[432px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
           The legacy of JESA is an enduring testament to the celebration of

@@ -2,14 +2,22 @@
 
 import React from "react";
 import { CtaButton } from "@/components/ui/cta-button";
-import Link from "next/link";
+import Image from "next/image";
 
 const Hero: React.FC = () => {
   return (
     <section className="hero relative px-safe pb-[120px] pt-[124px] md:pb-[136px] md:pt-[142px] lg:pb-[160px] lg:pt-[232px] xl:pb-[162px] xl:pt-[180px]">
       {/* Space for image above the title */}
-      <div className="absolute inset-x-0 top-0 h-[200px] md:h-[250px] lg:h-[300px] xl:h-[320px]">
-        {/* This is where your hero image would go */}
+      <div className="absolute inset-x-0 top-20 h-[200px] md:h-[250px] lg:h-[300px] xl:h-[320px]">
+        <div className="relative w-full h-full flex items-center justify-center">
+          <Image
+            alt="JESA"
+            width={400}
+            height={200}
+            src="/images/jesa-min.png"
+            priority
+          />
+        </div>
       </div>
 
       <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl">
