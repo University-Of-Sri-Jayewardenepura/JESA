@@ -76,6 +76,9 @@ const formSchema = z.object({
   Award1: z.string().nonempty("Award is required."),
   Award2: z.string().optional(),
   Award3: z.string().optional(),
+  TermsAndConditions: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
 });
 
 function InternalRegisterForm() {
@@ -635,23 +638,27 @@ function InternalRegisterForm() {
               />
             </>
           )}
-
           <FormField
             control={form.control}
             name="TermsAndConditions"
             render={({ field }) => (
-              <FormItem>
-                <FormControl className="inline-flex">
-                  <Checkbox {...field} required />
+              <FormItem className="flex flex-row items-start space-x-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
-                <FormLabel>
-                  &nbsp; I confirm that the information above is accurate to the
-                  best of my knowledge and in accordance with the{" "}
-                  <Link href="/terms" className="underline">
-                    terms and conditions.
-                  </Link>
-                </FormLabel>
-                <FormMessage />
+                <div className="space-y-1 leading-none">
+                  <FormLabel>
+                    I confirm that the information above is accurate to the best
+                    of my knowledge and in accordance with the{" "}
+                    <Link href="/terms" className="underline">
+                      terms and conditions.
+                    </Link>
+                  </FormLabel>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />

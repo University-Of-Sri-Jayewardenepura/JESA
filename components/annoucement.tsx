@@ -12,7 +12,7 @@ const Announcement: React.FC = () => {
     >
       <div className="flex items-center gap-x-3.5">
         <p className=" text-sm leading-snug tracking-tighter  space-x-2">
-          Announcing two new BESA awards &nbsp;
+          Announcing three new BESA awards &nbsp;
           <span className="opacity-30">|</span>
           &nbsp;
           <Link

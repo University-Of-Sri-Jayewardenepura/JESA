@@ -54,6 +54,9 @@ const formSchema = z.object({
   AcademicYear: z.string().nonempty("Academic Year is required."),
   Award: z.string().nonempty("Award is required.").default("Best Innovator"),
   WhichIndustry: z.string().nonempty("Industry information is required."),
+  TermsAndConditions: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
 });
 
 function ExternalRegisterForm() {
@@ -332,7 +335,12 @@ function ExternalRegisterForm() {
             render={({ field }) => (
               <FormItem>
                 <FormControl className="inline-flex">
-                  <Checkbox {...field} required />
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    name={field.name}
+                    ref={field.ref}
+                  />
                 </FormControl>
                 <FormLabel>
                   &nbsp; I confirm that the information above is accurate to the

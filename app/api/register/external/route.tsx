@@ -32,31 +32,48 @@ export async function POST(request: NextRequest) {
     const validation = schema.safeParse(body);
 
     if (!validation.success) {
-      return NextResponse.json({ error: validation.error.errors }, { status: 400 });
+      return NextResponse.json(
+        { error: validation.error.errors },
+        { status: 400 }
+      );
     }
 
     if (body.NIC.length < 8) {
-      return NextResponse.json({ message: "Please check NIC number" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Please check NIC number" },
+        { status: 401 }
+      );
     }
 
     if (body.University === UNIVERSITY.SRI_JAYEWARDENEPURA) {
-      return NextResponse.json({
-        message: "Hmm... Are you from the University of Sri Jayewardenepura?"
-      }, { status: 401 });
+      return NextResponse.json(
+        {
+          message: "Hmm... Are you from the University of Sri Jayewardenepura?",
+        },
+        { status: 401 }
+      );
     }
 
     if (body.Award !== AWARDS.BEST_INNOVATOR) {
-      return NextResponse.json({
-        message: "Sorry! You are only eligible for Best Innovator."
-      }, { status: 401 });
+      return NextResponse.json(
+        {
+          message: "Sorry! You are only eligible for Best Innovator.",
+        },
+        { status: 401 }
+      );
     }
 
     await connectMongoDB();
 
-    const duplicateCheck = await ExternalApplicant.findOne({ Email: body.Email });
+    const duplicateCheck = await ExternalApplicant.findOne({
+      Email: body.Email,
+    });
 
     if (duplicateCheck) {
-      return NextResponse.json({ message: "Hmm... Email already exists" }, { status: 409 });
+      return NextResponse.json(
+        { message: "Hmm... Email already exists" },
+        { status: 409 }
+      );
     }
 
     // Create BaseApplicant
@@ -80,10 +97,16 @@ export async function POST(request: NextRequest) {
       DetailID: savedApplicant._id,
     });
 
-    return NextResponse.json({ message: "Applicant saved successfully" }, { status: 201 });
+    return NextResponse.json(
+      { message: "Applicant saved successfully" },
+      { status: 201 }
+    );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: "Sorry! We are unable to save your form." }, { status: 500 });
+    return NextResponse.json(
+      { message: "Sorry! We are unable to save your form." },
+      { status: 500 }
+    );
   }
 }
 
