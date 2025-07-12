@@ -188,6 +188,9 @@ function InternalRegisterForm() {
     }
   }
 
+  // Watch the IsPastParticipant value for reactive updates
+  const isPastParticipant = form.watch("IsPastParticipant");
+
   function getRelevantAwards(faculty: string): string[] {
     const facultyToBesaAwardsMap: Record<string, string[]> = {
       "Faculty of Management Studies & Commerce": [
@@ -205,8 +208,10 @@ function InternalRegisterForm() {
       "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
     };
 
+    // General awards available to all internal students
     const defaultAwards = Object.values(AWARDS).filter(
-      (award) => !award.startsWith("BESA")
+      (award) =>
+        !award.startsWith("BESA") || award === AWARDS.BESA_INTER_UNIVERSITY // Include BESA Inter University for all
     );
 
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
@@ -218,7 +223,7 @@ function InternalRegisterForm() {
 
   return (
     <div className="w-full max-w-xl mx-auto px-4">
-      <h2 className="mb-8 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text text-center font-title text-[32px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[48px]">
+      <h2 className="pb-8 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text text-center font-title text-[32px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[48px]">
         Internal Registration
       </h2>
 
@@ -498,7 +503,7 @@ function InternalRegisterForm() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel> Select Answer</SelectLabel>
+                        <SelectLabel>Select Answer</SelectLabel>
                         <SelectItem value="true">Yes</SelectItem>
                         <SelectItem value="false">No</SelectItem>
                       </SelectGroup>
@@ -510,7 +515,7 @@ function InternalRegisterForm() {
             )}
           />
 
-          {/* Award selection fields */}
+          {/* Award 1 - Always required for everyone */}
           <FormField
             control={form.control}
             name="Award1"
@@ -542,103 +547,79 @@ function InternalRegisterForm() {
             )}
           />
 
-          {form.getValues("IsPastParticipant") === false && (
-            <FormField
-              control={form.control}
-              name="Award2"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Award 2</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value || ""}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Award" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Select Award</SelectLabel>
-                          {relevantAwards.map((award, index) => (
+          {/* Award 2 - Always shown for everyone */}
+          <FormField
+            control={form.control}
+            name="Award2"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Award 2</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Award" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select Award</SelectLabel>
+                        {relevantAwards.map((award, index) => (
+                          <SelectItem key={index} value={award}>
+                            {award}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Award 3 - Show for all, but different logic:
+              - For non-OC members: Third award as BESA Inter University specifically
+              - For OC members: Any third award from the list */}
+          <FormField
+            control={form.control}
+            name="Award3"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Award 3</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Award" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select Award</SelectLabel>
+                        {isPastParticipant ? (
+                          // OC members can select any award
+                          relevantAwards.map((award, index) => (
                             <SelectItem key={index} value={award}>
                               {award}
                             </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {form.getValues("IsPastParticipant") === true && (
-            <>
-              <FormField
-                control={form.control}
-                name="Award2"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Award 2</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value || ""}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select Award" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Select Award</SelectLabel>
-                            {relevantAwards.map((award, index) => (
-                              <SelectItem key={index} value={award}>
-                                {award}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="Award3"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Award 3</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value || ""}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select Award" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Select Award</SelectLabel>
-                            {relevantAwards.map((award, index) => (
-                              <SelectItem key={index} value={award}>
-                                {award}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
+                          ))
+                        ) : (
+                          // Non-OC members can only select BESA Inter University as 3rd award
+                          <SelectItem value={AWARDS.BESA_INTER_UNIVERSITY}>
+                            {AWARDS.BESA_INTER_UNIVERSITY}
+                          </SelectItem>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}

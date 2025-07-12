@@ -24,18 +24,18 @@ export default function Register() {
 
         <div className="mt-8 flex flex-col items-center justify-center gap-8 w-full max-w-md">
           <div className="w-full text-center">
-            <h2 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-2xl leading-[1.125] tracking-tight text-transparent mb-6">
+            <h2 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-2xl leading-[1.125] tracking-tight text-transparent pb-6">
               Students of University of Sri Jayewardenepura
             </h2>
             <CtaButton href="/register/internal">Register Now</CtaButton>
           </div>
 
           <div className="w-full text-center">
-            <h2 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-2xl leading-[1.125] tracking-tight text-transparent mb-6">
+            <h2 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-2xl leading-[1.125] tracking-tight text-transparent pb-6">
               Students of Other State Universities
             </h2>
             <CtaButton href="/register/external" variant="secondary">
-              Register for Best Innovator Award
+              Register for Best Innovator and BESA Awards
             </CtaButton>
           </div>
         </div>

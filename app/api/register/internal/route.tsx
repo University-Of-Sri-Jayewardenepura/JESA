@@ -43,7 +43,6 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    console.log("Request body parsed successfully");
     console.log("Received request body:", JSON.stringify(body, null, 2));
 
     const validity = internalApplicantSchema.safeParse(body);
@@ -62,9 +61,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("Validation passed");
-
-    // Use the validated and transformed data
     const validatedData = validity.data;
 
     // Check university
@@ -75,19 +71,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate award selections
+    // Updated award validation logic
+    // For non-OC members: Award3 can only be BESA Inter University if provided
     if (!validatedData.IsPastParticipant && validatedData.Award3) {
-      return NextResponse.json(
-        { message: "Only past participants can apply for 3 awards" },
-        { status: 401 }
-      );
+      if (validatedData.Award3 !== "BESA Inter University") {
+        return NextResponse.json(
+          {
+            message:
+              "Non-OC members can only select BESA Inter University as their third award",
+          },
+          { status: 401 }
+        );
+      }
     }
 
-    if (
-      validatedData.Award1 === validatedData.Award2 ||
-      validatedData.Award1 === validatedData.Award3 ||
-      (validatedData.Award2 && validatedData.Award2 === validatedData.Award3)
-    ) {
+    // Check for duplicate awards
+    const awards = [
+      validatedData.Award1,
+      validatedData.Award2,
+      validatedData.Award3,
+    ].filter(Boolean);
+    const uniqueAwards = new Set(awards);
+
+    if (awards.length !== uniqueAwards.size) {
       return NextResponse.json(
         { message: "You cannot select the same award more than once!" },
         { status: 401 }
@@ -138,13 +144,17 @@ export async function POST(request: NextRequest) {
       { message: "Registration successful!" },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Registration error:", error);
     return NextResponse.json(
       {
         message: "Error saving applicant",
         error:
-          process.env.NODE_ENV === "development" ? error.message : undefined,
+          process.env.NODE_ENV === "development"
+            ? error instanceof Error
+              ? error.message
+              : String(error)
+            : undefined,
       },
       { status: 500 }
     );
