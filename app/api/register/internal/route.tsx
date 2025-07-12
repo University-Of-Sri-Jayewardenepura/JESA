@@ -3,6 +3,7 @@ import InternalApplicant from "@/models/internalApplicant";
 import BaseApplicant from "@/models/BaseApplicant";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
+import { AWARDS } from "@/constants/form";
 
 // Add a simple GET method for testing
 export async function GET() {
@@ -23,12 +24,8 @@ const internalApplicantSchema = z.object({
     .string()
     .optional()
     .transform((val) => (val === "" ? undefined : val)),
-  IsPastParticipant: z.boolean(),
   Award1: z.string().min(1, "First award is required"),
-  Award2: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
+  Award2: z.string().min(1, "Second award is required"),
   Award3: z
     .string()
     .optional()
@@ -37,6 +34,36 @@ const internalApplicantSchema = z.object({
     message: "You must accept terms and conditions",
   }),
 });
+
+// Helper function to get valid awards for a faculty
+function getValidAwardsForFaculty(faculty: string): string[] {
+  const facultyToBesaAwardsMap: Record<string, string[]> = {
+    "Faculty of Management Studies & Commerce": [
+      AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE,
+    ],
+    "Faculty of Applied Sciences": [AWARDS.BESA_APPLIED_SCIENCES],
+    "Faculty of Humanities and Social Sciences": [
+      AWARDS.BESA_HUMANITIES_AND_SOCIAL_SCIENCES,
+    ],
+    "Faculty of Allied Health Sciences": [AWARDS.BESA_ALLIED_HEALTH_SCIENCES],
+    "Faculty of Technology": [AWARDS.BESA_TECHNOLOGY],
+    "Faculty of Engineering": [AWARDS.BESA_ENGINEERING],
+    "Faculty of Medical Science": [AWARDS.BESA_MEDICAL_SCIENCES],
+    "Faculty of Dental Sciences": [AWARDS.BESA_DENTAL_SCIENCES],
+    "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
+  };
+
+  // General awards available to all internal students (excluding ALL BESA awards)
+  const defaultAwards = Object.values(AWARDS).filter(
+    (award) => !award.startsWith("BESA")
+  );
+
+  // Get faculty-specific BESA awards (only for the selected faculty)
+  const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
+
+  // Combine general awards with faculty-specific BESA awards
+  return [...defaultAwards, ...facultySpecificAwards];
+}
 
 export async function POST(request: NextRequest) {
   console.log("POST request received at /api/register/internal");
@@ -71,33 +98,65 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Updated award validation logic
-    // For non-OC members: Award3 can only be BESA Inter University if provided
-    if (!validatedData.IsPastParticipant && validatedData.Award3) {
-      if (validatedData.Award3 !== "BESA Inter University") {
+    // Get valid awards for the selected faculty
+    const validAwards = getValidAwardsForFaculty(validatedData.Faculty);
+
+    // Validate Award1 and Award2 are valid for the faculty
+    if (!validAwards.includes(validatedData.Award1)) {
+      return NextResponse.json(
+        {
+          message: `Award 1 "${validatedData.Award1}" is not available for your faculty`,
+        },
+        { status: 401 }
+      );
+    }
+
+    if (!validAwards.includes(validatedData.Award2)) {
+      return NextResponse.json(
+        {
+          message: `Award 2 "${validatedData.Award2}" is not available for your faculty`,
+        },
+        { status: 401 }
+      );
+    }
+
+    // Validate Award3 if provided
+    if (
+      validatedData.Award3 &&
+      validatedData.Award3 !== "BESA - Inter University Award"
+    ) {
+      return NextResponse.json(
+        {
+          message: "Award 3 can only be BESA - Inter University Award",
+        },
+        { status: 401 }
+      );
+    }
+
+    // Check for duplicate awards between Award1 and Award2
+    if (validatedData.Award1 === validatedData.Award2) {
+      return NextResponse.json(
+        {
+          message: "You cannot select the same award for Award 1 and Award 2!",
+        },
+        { status: 401 }
+      );
+    }
+
+    // Check if Award1 or Award2 conflicts with Award3
+    if (validatedData.Award3) {
+      if (
+        validatedData.Award1 === validatedData.Award3 ||
+        validatedData.Award2 === validatedData.Award3
+      ) {
         return NextResponse.json(
           {
             message:
-              "Non-OC members can only select BESA Inter University as their third award",
+              "BESA - Inter University Award cannot be selected as Award 1 or Award 2!",
           },
           { status: 401 }
         );
       }
-    }
-
-    // Check for duplicate awards
-    const awards = [
-      validatedData.Award1,
-      validatedData.Award2,
-      validatedData.Award3,
-    ].filter(Boolean);
-    const uniqueAwards = new Set(awards);
-
-    if (awards.length !== uniqueAwards.size) {
-      return NextResponse.json(
-        { message: "You cannot select the same award more than once!" },
-        { status: 401 }
-      );
     }
 
     console.log("Connecting to MongoDB...");

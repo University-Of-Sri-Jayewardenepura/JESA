@@ -8,7 +8,6 @@ import {
   AWARDS,
 } from "../constants/form";
 import { getEnumValues } from "@/lib/utils";
-import exp from "constants";
 
 const internalApplicantSchema = new Schema(
   {
@@ -60,30 +59,34 @@ const internalApplicantSchema = new Schema(
     OtherDegree: {
       type: String,
     },
-    IsPastParticipant: {
-      type: Boolean,
-      required: true,
-    },
     Award1: {
       type: String,
       required: true,
-      enum: getEnumValues(AWARDS),
+      // Remove enum validation to allow for dynamic award values
     },
     Award2: {
       type: String,
-      enum: getEnumValues(AWARDS),
+      required: true,
+      // Remove enum validation to allow for dynamic award values
     },
     Award3: {
       type: String,
-      enum: getEnumValues(AWARDS),
+      // Remove enum validation to allow for dynamic award values
     },
   },
   { timestamps: true }
 );
 
-const InternalApplicant =
-  mongoose.models.InternalApplicant ||
-  mongoose.model("InternalApplicant", internalApplicantSchema);
+// Force delete the existing model to ensure schema updates
+if (mongoose.models.InternalApplicant) {
+  delete mongoose.models.InternalApplicant;
+}
+
+const InternalApplicant = mongoose.model(
+  "InternalApplicant",
+  internalApplicantSchema
+);
+
 export default InternalApplicant;
 
 /*

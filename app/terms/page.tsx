@@ -17,14 +17,9 @@ export default function Terms() {
             suspended or expelled from the university.
           </li>
           <li>
-            Candidates can apply for a maximum of two (2) award categories.
-            Please note that you cannot choose the same award for both
-            selections.
-          </li>
-          <li>
-            If you were a member of the JESA Organizing Committee in 2024 or
-            2025, you are eligible to apply for up to three (3) award
-            categories.
+            Candidates from the University of Sri Jayewardenepura can apply for
+            up to 2 awards, and also apply for the BESA – Inter University Award
+            separately. So, they can apply for 3 awards in total.
           </li>
           <li>
             Previous JESA award winners cannot apply for the same award

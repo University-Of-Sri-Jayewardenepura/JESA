@@ -47,6 +47,7 @@ export enum FACULTY {
 }
 
 export enum DEGREE {
+  // Management Studies & Commerce degrees
   ACCOUNTING_SPECIAL = "B.Sc. Accounting (Special) Degree",
   FINANCE_SPECIAL = "B.Sc. Finance (Special) Degree",
   BUSINESS_ADMINISTRATION_SPECIAL = "B.Sc. Business Administration (Special) Degree",
@@ -60,12 +61,14 @@ export enum DEGREE {
   ESTATE_MANAGEMENT_VALUATION_SPECIAL = "B.Sc. Estate Management and Valuation (Special) Degree",
   COM_SPECIAL = "B.Com (Special) Degree",
 
+  // Applied Sciences degrees
   GENERAL_3YEARS = "B.Sc. (General) Degree (3 years)",
   SPECIAL_4YEARS = "B.Sc. (Special) Degree (4 years)",
   HONOURS_APPLIED_SCIENCES_4YEARS = "B.Sc. Honours Degree in Applied Sciences (4 years)",
   FOOD_SCIENCE_TECHNOLOGY_SPECIAL = "B.Sc. Food Science and Technology (Special) Degree",
   SPORT_SCIENCE_MANAGEMENT_SPECIAL = "B.Sc. Sport Science and Management (Special) Degree",
 
+  // Humanities and Social Sciences degrees
   BA_GENERAL = "B.A. (General) Degree",
   BSC_INFORMATION_TECHNOLOGY_SPECIAL = "B.Sc. Information Technology (Special) Degree",
   BA_GEOGRAPHY_SPECIAL = "B.A. Geography (Special) Degree",
@@ -96,22 +99,42 @@ export enum DEGREE {
   BA_BUSINESS_STATISTICS_HONS = "B.A. (Hons.) in Business Statistics",
   BA_INFORMATION_TECHNOLOGY_HONS = "B.A. (Hons.) in Information Technology",
 
+  // Allied Health Sciences degrees
   MEDICAL_LAB_SCIENCES = "B.Sc. in Medical Laboratory Sciences",
   NURSING = "B.Sc. in Nursing",
   PHARM_HONS = "B.Pharm(Hons)",
   OPTOMETRY = "B.Sc in Optometry",
 
+  // Technology degrees
   BIOSYSTEMS_TECHNOLOGY_HONOURS = "Bachelor of Biosystems Technology (Honours) Degree",
   ENGINEERING_TECHNOLOGY_HONOURS = "Bachelor of Engineering Technology (Honours) Degree",
   INFORMATION_COMMUNICATION_TECHNOLOGY_HONOURS = "Bachelor of Information and Communication Technology (Honours) Degree",
 
+  // Engineering degrees
   COMPUTER_ENGINEERING_SPECIAL = "B.Sc.Computer Engineering (Special) Degree",
   CIVIL_ENGINEERING_SPECIAL = "B.Sc.Civil Engineering (Special) Degree",
   ELECTRICAL_ELECTRONIC_ENGINEERING_SPECIAL = "B.Sc.Electrical and Electronic Engineering (Special) Degree",
   MECHANICAL_ENGINEERING_SPECIAL = "B.Sc.Mechanical Engineering (Special) Degree",
 
+  // Medical Sciences degrees
   MBBS = "MBBS",
   HUMAN_BIOLOGY = "B.Sc. in Human Biology",
+
+  // Dental Sciences degrees
+  BASIC_SCIENCES = "Basic Sciences",
+  COMMUNITY_DENTAL_HEALTH = "Community Dental Health",
+  COMPREHENSIVE_GERIATRIC_DENTISTRY = "Comprehensive & Geriatric Dentistry",
+  ORAL_MEDICINE_PERIODONTOLOGY = "Oral Medicine & Periodontology",
+  ORAL_PATHOLOGY = "Oral Pathology",
+  ORAL_SURGERY = "Oral Surgery",
+  PARACLINICAL_SCIENCES = "Paraclinical Sciences",
+  PROSTHODONTICS = "Prosthodontics",
+  RESTORATIVE_DENTISTRY = "Restorative Dentistry",
+
+  // Urban & Aquatic Bioresources degrees
+  URBAN_BIORESOURCES = "Urban Bioresources",
+  AQUATIC_BIORESOURCES = "Aquatic Bioresources",
+  MULTIDISCIPLINARY_STUDIES = "Multidisciplinary Studies",
 
   Other = "Other",
 }
@@ -217,14 +240,25 @@ export enum MED_DEGREE {
   HUMAN_BIOLOGY = "B.Sc. in Human Biology",
 }
 
-export enum COMPUTING_DEGREE {
-  OTHER = "Other",
+export enum DENTAL_SCIENCES_DEGREE {
+  BASIC_SCIENCES = "Basic Sciences",
+  COMMUNITY_DENTAL_HEALTH = "Community Dental Health",
+  COMPREHENSIVE_GERIATRIC_DENTISTRY = "Comprehensive & Geriatric Dentistry",
+  ORAL_MEDICINE_PERIODONTOLOGY = "Oral Medicine & Periodontology",
+  ORAL_PATHOLOGY = "Oral Pathology",
+  ORAL_SURGERY = "Oral Surgery",
+  PARACLINICAL_SCIENCES = "Paraclinical Sciences",
+  PROSTHODONTICS = "Prosthodontics",
+  RESTORATIVE_DENTISTRY = "Restorative Dentistry",
 }
 
 export enum URBAN_AQUATIC_DEGREE {
+  URBAN_BIORESOURCES = "Urban Bioresources",
+  AQUATIC_BIORESOURCES = "Aquatic Bioresources",
+  MULTIDISCIPLINARY_STUDIES = "Multidisciplinary Studies",
   OTHER = "Other",
 }
 
-export enum DENTAL_SCIENCES_DEGREE {
+export enum COMPUTING_DEGREE {
   OTHER = "Other",
 }

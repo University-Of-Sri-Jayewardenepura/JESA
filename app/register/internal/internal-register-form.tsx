@@ -64,10 +64,9 @@ const formSchema = z.object({
   Faculty: z.string().min(1, "Faculty is required."),
   Degree: z.string().min(1, "Degree is required."),
   OtherDegree: z.string().optional(),
-  IsPastParticipant: z.boolean(),
   Award1: z.string().min(1, "Award is required."),
-  Award2: z.string().optional(),
-  Award3: z.string().optional(),
+  Award2: z.string().min(1, "Award is required."),
+  Award3: z.string().optional(), // BESA - Inter University Award (optional)
   TermsAndConditions: z.boolean().refine((val) => val === true, {
     message: "You must accept the terms and conditions",
   }),
@@ -102,10 +101,8 @@ function InternalRegisterForm() {
       Faculty: "",
       Degree: "",
       OtherDegree: "",
-      IsPastParticipant: false,
       Award1: "",
       Award2: "",
-      Award3: "",
       TermsAndConditions: false,
     },
   });
@@ -164,6 +161,15 @@ function InternalRegisterForm() {
     setIsSubmitting(true);
 
     try {
+      // Check for duplicate awards between Award1 and Award2
+      if (values.Award1 === values.Award2) {
+        toast.error(
+          "You cannot select the same award for Award 1 and Award 2!"
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
       const response = await fetch("/api/register/internal", {
         method: "POST",
         headers: {
@@ -188,9 +194,6 @@ function InternalRegisterForm() {
     }
   }
 
-  // Watch the IsPastParticipant value for reactive updates
-  const isPastParticipant = form.watch("IsPastParticipant");
-
   function getRelevantAwards(faculty: string): string[] {
     const facultyToBesaAwardsMap: Record<string, string[]> = {
       "Faculty of Management Studies & Commerce": [
@@ -208,14 +211,15 @@ function InternalRegisterForm() {
       "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
     };
 
-    // General awards available to all internal students
+    // General awards available to all internal students (excluding ALL BESA awards and BESA Inter University)
     const defaultAwards = Object.values(AWARDS).filter(
-      (award) =>
-        !award.startsWith("BESA") || award === AWARDS.BESA_INTER_UNIVERSITY // Include BESA Inter University for all
+      (award) => !award.startsWith("BESA")
     );
 
+    // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
+    // Combine general awards with faculty-specific BESA awards
     return [...defaultAwards, ...facultySpecificAwards];
   }
 
@@ -485,37 +489,7 @@ function InternalRegisterForm() {
             />
           )}
 
-          <FormField
-            control={form.control}
-            name="IsPastParticipant"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>
-                  Are You a Member of JESA 2024 or 2025 Organizing Committee ?
-                </FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={(value) => field.onChange(value === "true")}
-                    value={field.value ? "true" : "false"}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Answer" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Select Answer</SelectLabel>
-                        <SelectItem value="true">Yes</SelectItem>
-                        <SelectItem value="false">No</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Award 1 - Always required for everyone */}
+          {/* Award 1 - Required */}
           <FormField
             control={form.control}
             name="Award1"
@@ -534,7 +508,10 @@ function InternalRegisterForm() {
                       <SelectGroup>
                         <SelectLabel>Select Award</SelectLabel>
                         {relevantAwards.map((award, index) => (
-                          <SelectItem key={index} value={award}>
+                          <SelectItem
+                            key={`award1-${award}-${index}`}
+                            value={award}
+                          >
                             {award}
                           </SelectItem>
                         ))}
@@ -547,7 +524,7 @@ function InternalRegisterForm() {
             )}
           />
 
-          {/* Award 2 - Always shown for everyone */}
+          {/* Award 2 - Required */}
           <FormField
             control={form.control}
             name="Award2"
@@ -566,7 +543,10 @@ function InternalRegisterForm() {
                       <SelectGroup>
                         <SelectLabel>Select Award</SelectLabel>
                         {relevantAwards.map((award, index) => (
-                          <SelectItem key={index} value={award}>
+                          <SelectItem
+                            key={`award2-${award}-${index}`}
+                            value={award}
+                          >
                             {award}
                           </SelectItem>
                         ))}
@@ -579,44 +559,35 @@ function InternalRegisterForm() {
             )}
           />
 
-          {/* Award 3 - Show for all, but different logic:
-              - For non-OC members: Third award as BESA Inter University specifically
-              - For OC members: Any third award from the list */}
+          {/* Award 3 - Optional BESA Inter University Award */}
           <FormField
             control={form.control}
             name="Award3"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Award 3</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || ""}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Award" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Select Award</SelectLabel>
-                        {isPastParticipant ? (
-                          // OC members can select any award
-                          relevantAwards.map((award, index) => (
-                            <SelectItem key={index} value={award}>
-                              {award}
-                            </SelectItem>
-                          ))
-                        ) : (
-                          // Non-OC members can only select BESA Inter University as 3rd award
-                          <SelectItem value={AWARDS.BESA_INTER_UNIVERSITY}>
-                            {AWARDS.BESA_INTER_UNIVERSITY}
-                          </SelectItem>
-                        )}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
+                <div className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value === "BESA - Inter University Award"}
+                      onCheckedChange={(checked) => {
+                        field.onChange(
+                          checked ? "BESA - Inter University Award" : ""
+                        );
+                      }}
+                      className="mt-1"
+                    />
+                  </FormControl>
+                  <div className="flex-1">
+                    <FormLabel className="text-sm font-normal leading-relaxed">
+                      Also apply for BESA - Inter University Award (Optional)
+                    </FormLabel>
+                    <FormDescription className="text-xs text-slate-400">
+                      You can apply for this award in addition to your 2 main
+                      awards
+                    </FormDescription>
+                    <FormMessage />
+                  </div>
+                </div>
               </FormItem>
             )}
           />
