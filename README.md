@@ -62,7 +62,6 @@ App Structure
 │   └── fonts.ts
 ├── components
 │   ├── ui
-│   │   ├── alert-dialog.tsx
 │   │   ├── button.tsx
 │   │   └── ...
 │   ├── animated
