@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { CtaButton } from "@/components/ui/cta-button";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -48,32 +47,25 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  Name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters." })
-    .nonempty("Name is required."),
-  Gender: z.string().nonempty("Gender is required."),
+  Name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  Gender: z.string().min(1, "Gender is required."),
   Email: z
     .string()
     .email({ message: "Invalid email address." })
-    .nonempty("Email is required."),
+    .min(1, "Email is required."),
   Whatsapp: z
     .string()
-    .min(10, { message: "Mobile number should be 10 characters." })
-    .nonempty("WhatsApp number is required."),
-  University: z
-    .string()
-    .nonempty("University is required.")
-    .default("University of Sri Jayewardenepura"),
+    .min(10, { message: "Mobile number should be 10 characters." }),
+  University: z.string().min(1, "University is required."),
   UniversityRegisterId: z
     .string()
-    .nonempty("University Registration Number is required."),
-  AcademicYear: z.string().nonempty("Academic Year is required."),
-  Faculty: z.string().nonempty("Faculty is required."),
-  Degree: z.string().nonempty("Degree is required."),
+    .min(1, "University Registration Number is required."),
+  AcademicYear: z.string().min(1, "Academic Year is required."),
+  Faculty: z.string().min(1, "Faculty is required."),
+  Degree: z.string().min(1, "Degree is required."),
   OtherDegree: z.string().optional(),
-  IsPastParticipant: z.boolean().default(false),
-  Award1: z.string().nonempty("Award is required."),
+  IsPastParticipant: z.boolean(),
+  Award1: z.string().min(1, "Award is required."),
   Award2: z.string().optional(),
   Award3: z.string().optional(),
   TermsAndConditions: z.boolean().refine((val) => val === true, {
@@ -81,38 +73,56 @@ const formSchema = z.object({
   }),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 function InternalRegisterForm() {
   const router = useRouter();
 
-  type DegreeOptions =
-    | MGT_DEGREE[]
-    | APPL_DEGREE[]
-    | HUM_DEGREE[]
-    | ALMED_DEGREE[]
-    | TECH_DEGREE[]
-    | ENG_DEGREE[]
-    | MED_DEGREE[]
-    | COMPUTING_DEGREE[]
-    | DENTAL_SCIENCES_DEGREE[]
-    | URBAN_AQUATIC_DEGREE[];
+  // Fix: Properly type the degree options with a union type
+  type DegreeOption = string;
 
-  const [degreeOptions, setDegreeOptions] = useState<DegreeOptions>([]);
+  const [degreeOptions, setDegreeOptions] = useState<DegreeOption[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const academicYear = Object.values(ACADEMICYEAR);
-
-  const faculties = Object.values(FACULTY);
-
   const [selectedDegree, setSelectedDegree] = useState("");
   const [isOtherSelected, setIsOtherSelected] = useState(false);
 
-  const handleDegreeChange = (value: any) => {
+  const academicYear = Object.values(ACADEMICYEAR);
+  const faculties = Object.values(FACULTY);
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      Name: "",
+      Gender: "",
+      Email: "",
+      Whatsapp: "",
+      University: "University of Sri Jayewardenepura",
+      UniversityRegisterId: "",
+      AcademicYear: "",
+      Faculty: "",
+      Degree: "",
+      OtherDegree: "",
+      IsPastParticipant: false,
+      Award1: "",
+      Award2: "",
+      Award3: "",
+      TermsAndConditions: false,
+    },
+  });
+
+  // Fix: Properly type the degree change handler
+  const handleDegreeChange = (value: string) => {
     setSelectedDegree(value);
     setIsOtherSelected(value === "Other");
     form.setValue("Degree", value);
   };
 
   function handleFacultyChange(selectedFaculty: string) {
+    // Reset degree when faculty changes
+    setSelectedDegree("");
+    setIsOtherSelected(false);
+    form.setValue("Degree", "");
+
     // Logic to set degree options based on selected faculty
     switch (selectedFaculty) {
       case FACULTY.MANAGEMENT_STUDIES_AND_COMMERCE:
@@ -150,41 +160,36 @@ function InternalRegisterForm() {
     }
   }
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    mode: "onChange",
-  });
-
-  async function OnSubmit(values: any) {
+  async function OnSubmit(values: FormData) {
     setIsSubmitting(true);
 
-    const cleanedValues = Object.fromEntries(
-      Object.entries(values).filter(([_, v]) => v !== undefined)
-    );
-    //console.log(cleanedValues);
-    const response = await fetch("/api/register/internal", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
+    try {
+      const response = await fetch("/api/register/internal", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      const errorData = JSON.parse(errorText);
-      const errorMessage = errorData.message;
-      toast.error(errorMessage);
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = errorData.message || "Registration failed";
+        toast.error(errorMessage);
+      } else {
+        const data = await response.json();
+        toast.success("Registration successful!");
+        router.push("/register/success");
+      }
+    } catch (error) {
+      toast.error("Network error occurred");
+    } finally {
       setIsSubmitting(false);
-    } else {
-      const data = await response.json();
-      //console.log("API response", data);
-      router.push("/register/success");
     }
   }
 
   function getRelevantAwards(faculty: string): string[] {
-    const facultyToBesaAwardsMap: { [key: string]: string[] } = {
+    const facultyToBesaAwardsMap: Record<string, string[]> = {
       "Faculty of Management Studies & Commerce": [
         AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE,
       ],
@@ -196,6 +201,8 @@ function InternalRegisterForm() {
       "Faculty of Technology": [AWARDS.BESA_TECHNOLOGY],
       "Faculty of Engineering": [AWARDS.BESA_ENGINEERING],
       "Faculty of Medical Science": [AWARDS.BESA_MEDICAL_SCIENCES],
+      "Faculty of Dental Sciences": [AWARDS.BESA_DENTAL_SCIENCES],
+      "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
     };
 
     const defaultAwards = Object.values(AWARDS).filter(
@@ -210,24 +217,28 @@ function InternalRegisterForm() {
   const relevantAwards = getRelevantAwards(form.watch("Faculty"));
 
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className="w-full max-w-xl mx-auto px-4">
       <h2 className="mb-8 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text text-center font-title text-[32px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[48px]">
         Internal Registration
       </h2>
 
       <Form {...form}>
         <form
-          // onSubmit={form.handleSubmit(OnSubmit)}
-          className="space-y-6 p-8 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
+          onSubmit={form.handleSubmit(OnSubmit)}
+          className="space-y-6 p-10 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
         >
           <FormField
             control={form.control}
             name="Name"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Your Name" {...field} />
+                  <Input
+                    placeholder="Enter Your Name"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -241,11 +252,14 @@ function InternalRegisterForm() {
             control={form.control}
             name="Gender"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Gender</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Gender" />
                     </SelectTrigger>
                     <SelectContent>
@@ -267,10 +281,14 @@ function InternalRegisterForm() {
             control={form.control}
             name="Email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Your Email Here" {...field} />
+                  <Input
+                    placeholder="Enter Your Email Here"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -281,10 +299,14 @@ function InternalRegisterForm() {
             control={form.control}
             name="Whatsapp"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>WhatsApp Number</FormLabel>
                 <FormControl>
-                  <Input placeholder="07XXXXXXXX" {...field} />
+                  <Input
+                    placeholder="07XXXXXXXX"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -295,15 +317,15 @@ function InternalRegisterForm() {
             control={form.control}
             name="University"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>University</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    value="University of Sri Jayewardenepura"
+                    value={field.value || "University of Sri Jayewardenepura"}
                     disabled={true}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select University" />
                     </SelectTrigger>
                     <SelectContent>
@@ -325,10 +347,10 @@ function InternalRegisterForm() {
             control={form.control}
             name="UniversityRegisterId"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>University Registration Number</FormLabel>
                 <FormControl>
-                  <Input placeholder="TE110XXX" {...field} />
+                  <Input placeholder="TE110XXX" {...field} className="w-full" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -339,11 +361,14 @@ function InternalRegisterForm() {
             control={form.control}
             name="AcademicYear"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Select Academic Year</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Academic Year" />
                     </SelectTrigger>
                     <SelectContent>
@@ -367,7 +392,7 @@ function InternalRegisterForm() {
             control={form.control}
             name="Faculty"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Faculty</FormLabel>
                 <FormControl>
                   <Select
@@ -375,9 +400,9 @@ function InternalRegisterForm() {
                       field.onChange(value);
                       handleFacultyChange(value);
                     }}
-                    value={field.value}
+                    value={field.value || ""}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Faculty" />
                     </SelectTrigger>
                     <SelectContent>
@@ -402,14 +427,17 @@ function InternalRegisterForm() {
               control={form.control}
               name="Degree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Degree</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={handleDegreeChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        handleDegreeChange(value);
+                      }}
                       value={selectedDegree}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                         <SelectValue placeholder="Select Degree" />
                       </SelectTrigger>
                       <SelectContent>
@@ -435,14 +463,15 @@ function InternalRegisterForm() {
               control={form.control}
               name="OtherDegree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Enter Degree</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your degree"
-                      value={field.value}
-                      onChange={field.onChange}
+                      {...field}
+                      value={field.value || ""}
                       required={isOtherSelected}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormMessage />
@@ -455,16 +484,16 @@ function InternalRegisterForm() {
             control={form.control}
             name="IsPastParticipant"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>
-                  Are You a Member of JESA 2023 or 2024 Organizing Committee ?
+                  Are You a Member of JESA 2024 or 2025 Organizing Committee ?
                 </FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={(value) => field.onChange(value === "true")}
                     value={field.value ? "true" : "false"}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Answer" />
                     </SelectTrigger>
                     <SelectContent>
@@ -481,50 +510,85 @@ function InternalRegisterForm() {
             )}
           />
 
-          {form.getValues("IsPastParticipant") === true ? (
+          {/* Award selection fields */}
+          <FormField
+            control={form.control}
+            name="Award1"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Award 1</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Award" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select Award</SelectLabel>
+                        {relevantAwards.map((award, index) => (
+                          <SelectItem key={index} value={award}>
+                            {award}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {form.getValues("IsPastParticipant") === false && (
+            <FormField
+              control={form.control}
+              name="Award2"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Award 2</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Award" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Award</SelectLabel>
+                          {relevantAwards.map((award, index) => (
+                            <SelectItem key={index} value={award}>
+                              {award}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {form.getValues("IsPastParticipant") === true && (
             <>
-              <FormField
-                control={form.control}
-                name="Award1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Award 1</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Award" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Select Award</SelectLabel>
-                            {relevantAwards.map((award, index) => (
-                              <SelectItem key={index} value={award}>
-                                {award}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="Award2"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>Award 2</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={field.value || ""}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select Award" />
                         </SelectTrigger>
                         <SelectContent>
@@ -547,77 +611,14 @@ function InternalRegisterForm() {
                 control={form.control}
                 name="Award3"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>Award 3</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={field.value || ""}
                       >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Award" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Select Award</SelectLabel>
-                            {relevantAwards.map((award, index) => (
-                              <SelectItem key={index} value={award}>
-                                {award}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          ) : (
-            <>
-              <FormField
-                control={form.control}
-                name="Award1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Award 1</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Award" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Select Award</SelectLabel>
-                            {relevantAwards.map((award, index) => (
-                              <SelectItem key={index} value={award}>
-                                {award}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="Award2"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Award 2</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select Award" />
                         </SelectTrigger>
                         <SelectContent>
@@ -638,34 +639,47 @@ function InternalRegisterForm() {
               />
             </>
           )}
+
           <FormField
             control={form.control}
             name="TermsAndConditions"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-2 space-y-0">
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel>
-                    I confirm that the information above is accurate to the best
-                    of my knowledge and in accordance with the{" "}
-                    <Link href="/terms" className="underline">
-                      terms and conditions.
-                    </Link>
-                  </FormLabel>
-                  <FormMessage />
+              <FormItem className="w-full">
+                <div className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="mt-1"
+                    />
+                  </FormControl>
+                  <div className="flex-1">
+                    <FormLabel className="text-sm font-normal leading-relaxed">
+                      <span>
+                        I confirm that the information above is accurate to the
+                        best of my knowledge and in accordance with the&ensp;
+                        <Link
+                          href="/terms"
+                          className="underline text-blue-400 hover:text-blue-300"
+                        >
+                          terms and conditions.
+                        </Link>
+                      </span>
+                    </FormLabel>
+                    <FormMessage />
+                  </div>
                 </div>
               </FormItem>
             )}
           />
 
-          <div className="flex justify-center">
-            <Button type="submit" disabled={isSubmitting} className="w-full">
-              {isSubmitting ? "Submitting..." : "Submit"}
+          <div className="pt-4">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full rounded-[8px] py-3 text-base font-medium"
+            >
+              {isSubmitting ? "Submitting..." : "Submit Registration"}
             </Button>
           </div>
         </form>

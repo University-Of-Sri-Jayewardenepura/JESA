@@ -48,20 +48,31 @@ const externalApplicantSchema = new Schema(
       enum: getEnumValues(ACADEMICYEAR),
       required: true,
     },
-    Award: {
+    Award1: {
       type: String,
       enum: getEnumValues(AWARDS),
       required: true,
     },
+    Award2: {
+      type: String,
+      enum: getEnumValues(AWARDS),
+    },
     WhichIndustry: {
       type: String,
-      required: true,
+      // Remove required: true to make it optional
     },
   },
   { timestamps: true }
 );
 
-const ExternalApplicant =
-  mongoose.models.ExternalApplicant ||
-  mongoose.model("ExternalApplicant", externalApplicantSchema);
+// Force delete the existing model to ensure schema updates
+if (mongoose.models.ExternalApplicant) {
+  delete mongoose.models.ExternalApplicant;
+}
+
+const ExternalApplicant = mongoose.model(
+  "ExternalApplicant",
+  externalApplicantSchema
+);
+
 export default ExternalApplicant;

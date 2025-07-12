@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
                 src="/images/jesa-min.png"
                 width={72}
                 height={20}
-                alt="JESA 2024"
+                alt="JESA 2025"
                 className="ml-[-1.2rem] mt-[-1.6rem] w-auto h-auto"
               />
               <span className="sr-only">JESA</span>

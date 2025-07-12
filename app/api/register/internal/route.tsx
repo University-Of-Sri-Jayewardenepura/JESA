@@ -3,109 +3,155 @@ import InternalApplicant from "@/models/internalApplicant";
 import BaseApplicant from "@/models/BaseApplicant";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
-import {
-  GENDER,
-  UNIVERSITY,
-  ACADEMICYEAR,
-  FACULTY,
-  DEGREE,
-  AWARDS,
-} from "@/constants/form";
 
-const enumValues = <T extends Record<string, string>>(
-  enumObject: T
-): [string, ...string[]] => {
-  const values = Object.values(enumObject);
-  return [values[0], ...values.slice(1)];
-};
+// Add a simple GET method for testing
+export async function GET() {
+  return NextResponse.json({ message: "Internal registration API is working" });
+}
 
 const internalApplicantSchema = z.object({
-  Name: z.string().min(1),
-  Gender: z.enum(enumValues(GENDER)),
-  Email: z.string().email(),
-  Whatsapp: z.string(),
-  University: z.enum(enumValues(UNIVERSITY)),
-  UniversityRegisterId: z.string().min(1),
-  AcademicYear: z.enum(enumValues(ACADEMICYEAR)),
-  Faculty: z.enum(enumValues(FACULTY)),
-  Degree: z.enum(enumValues(DEGREE)),
-  OtherDegree: z.string().optional(),
+  Name: z.string().min(1, "Name is required"),
+  Gender: z.enum(["Male", "Female", "Other"]),
+  Email: z.string().email("Invalid email format"),
+  Whatsapp: z.string().min(10, "WhatsApp number must be at least 10 digits"),
+  University: z.string().min(1, "University is required"),
+  UniversityRegisterId: z.string().min(1, "Registration ID is required"),
+  AcademicYear: z.string().min(1, "Academic year is required"),
+  Faculty: z.string().min(1, "Faculty is required"),
+  Degree: z.string().min(1, "Degree is required"),
+  OtherDegree: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
   IsPastParticipant: z.boolean(),
-  Award1: z.enum(enumValues(AWARDS)),
-  Award2: z.enum(enumValues(AWARDS)).optional(),
-  Award3: z.enum(enumValues(AWARDS)).optional(),
+  Award1: z.string().min(1, "First award is required"),
+  Award2: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  Award3: z
+    .string()
+    .optional()
+    .transform((val) => (val === "" ? undefined : val)),
+  TermsAndConditions: z.boolean().refine((val) => val === true, {
+    message: "You must accept terms and conditions",
+  }),
 });
 
 export async function POST(request: NextRequest) {
+  console.log("POST request received at /api/register/internal");
+
   try {
     const body = await request.json();
+    console.log("Request body parsed successfully");
+    console.log("Received request body:", JSON.stringify(body, null, 2));
+
     const validity = internalApplicantSchema.safeParse(body);
 
     if (!validity.success) {
-      return NextResponse.json({ error: validity.error.errors }, { status: 400 });
+      console.log("Validation errors:", validity.error.errors);
+      return NextResponse.json(
+        {
+          message: "Validation failed",
+          errors: validity.error.errors.map((err) => ({
+            field: err.path.join("."),
+            message: err.message,
+          })),
+        },
+        { status: 400 }
+      );
     }
 
-    if (body.University !== UNIVERSITY.SRI_JAYEWARDENEPURA) {
+    console.log("Validation passed");
+
+    // Use the validated and transformed data
+    const validatedData = validity.data;
+
+    // Check university
+    if (validatedData.University !== "University of Sri Jayewardenepura") {
       return NextResponse.json(
         { message: "You do not belong to this university form!" },
         { status: 401 }
       );
     }
 
-    if (!body.IsPastParticipant && body.Award3) {
+    // Validate award selections
+    if (!validatedData.IsPastParticipant && validatedData.Award3) {
       return NextResponse.json(
         { message: "Only past participants can apply for 3 awards" },
         { status: 401 }
       );
     }
 
-    if (body.Award1 === body.Award2 || body.Award1 === body.Award3 || (body.Award2 && body.Award2 === body.Award3)) {
+    if (
+      validatedData.Award1 === validatedData.Award2 ||
+      validatedData.Award1 === validatedData.Award3 ||
+      (validatedData.Award2 && validatedData.Award2 === validatedData.Award3)
+    ) {
       return NextResponse.json(
         { message: "You cannot select the same award more than once!" },
         { status: 401 }
       );
     }
 
+    console.log("Connecting to MongoDB...");
     await connectMongoDB();
+    console.log("MongoDB connected successfully");
 
-    const duplicateCheck = await InternalApplicant.findOne({ Email: body.Email });
+    // Check for duplicate email
+    const duplicateCheck = await InternalApplicant.findOne({
+      Email: validatedData.Email,
+    });
 
     if (duplicateCheck) {
-      return NextResponse.json({ message: "Hmm... Email already exists" }, { status: 409 });
+      return NextResponse.json(
+        { message: "Hmm... Email already exists" },
+        { status: 409 }
+      );
     }
 
+    console.log("Creating BaseApplicant...");
     // Create BaseApplicant
-    const baseApplicant = new BaseApplicant({ University: body.University });
+    const baseApplicant = new BaseApplicant({
+      University: validatedData.University,
+    });
     await baseApplicant.save();
+    console.log("BaseApplicant created with ID:", baseApplicant._id);
 
-    // Retrieve the _id of the created BaseApplicant
-    const baseApplicantId = baseApplicant._id;
-
-    // Create InternalApplicant with BaseApplicantId
+    console.log("Creating InternalApplicant...");
+    // Create InternalApplicant using validated data
     const newApplicant = new InternalApplicant({
-      ...body,
-      ApplicantId: baseApplicantId, // Add BaseApplicantId to InternalApplicant
+      ...validatedData,
+      ApplicantId: baseApplicant._id,
     });
 
-    // Save the InternalApplicant
     const savedApplicant = await newApplicant.save();
+    console.log("InternalApplicant saved with ID:", savedApplicant._id);
 
-    // Update the DetailID of the BaseApplicant with the _id of the saved InternalApplicant
-    await BaseApplicant.findByIdAndUpdate(baseApplicantId, {
+    // Update BaseApplicant with DetailID
+    await BaseApplicant.findByIdAndUpdate(baseApplicant._id, {
       DetailID: savedApplicant._id,
     });
+    console.log("BaseApplicant updated with DetailID");
 
-    return NextResponse.json({ message: "Applicant saved successfully" }, { status: 201 });
-  } catch (error) {
-    console.error(error);
     return NextResponse.json(
-      { message: "Error saving applicant" },
+      { message: "Registration successful!" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Registration error:", error);
+    return NextResponse.json(
+      {
+        message: "Error saving applicant",
+        error:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
+      },
       { status: 500 }
     );
   }
 }
 
-/* 
+/*
 Example request body:
 {
   "Name": "Sonal Jayasinghe",

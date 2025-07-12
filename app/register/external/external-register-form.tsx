@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { UNIVERSITY, ACADEMICYEAR } from "@/constants/form";
+import { UNIVERSITY, ACADEMICYEAR, AWARDS } from "@/constants/form";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -32,28 +32,43 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  Name: z
+  Name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  NIC: z
     .string()
-    .min(2, { message: "Name must be at least 2 characters." })
-    .nonempty("Name is required."),
-  NIC: z.string().nonempty("NIC is required."),
-  Gender: z.string().nonempty("Gender is required."),
+    .min(1, "NIC is required.")
+    .refine(
+      (value) => {
+        // Check if it's a 12-digit number
+        const twelveDigitPattern = /^\d{12}$/;
+        // Check if it's a 9-digit number ending with 'V' or 'v'
+        const nineDigitWithVPattern = /^\d{9}[Vv]$/;
+
+        return (
+          twelveDigitPattern.test(value) || nineDigitWithVPattern.test(value)
+        );
+      },
+      {
+        message:
+          "NIC must be either a 12-digit number or a 9-digit number ending with 'V'",
+      }
+    ),
+  Gender: z.string().min(1, "Gender is required."),
   Email: z
     .string()
     .email({ message: "Invalid email address." })
-    .nonempty("Email is required."),
+    .min(1, "Email is required."),
   Whatsapp: z
     .string()
-    .min(10, { message: "Mobile number should be 10 characters." })
-    .nonempty("WhatsApp number is required."),
-  University: z.string().nonempty("University is required."),
-  Faculty: z.string().nonempty("Faculty is required."),
+    .min(10, { message: "Mobile number should be 10 characters." }),
+  University: z.string().min(1, "University is required."),
+  Faculty: z.string().min(1, "Faculty is required."),
   UniversityRegisterId: z
     .string()
-    .nonempty("University Registration Number is required."),
-  AcademicYear: z.string().nonempty("Academic Year is required."),
-  Award: z.string().nonempty("Award is required.").default("Best Innovator"),
-  WhichIndustry: z.string().nonempty("Industry information is required."),
+    .min(1, "University Registration Number is required."),
+  AcademicYear: z.string().min(1, "Academic Year is required."),
+  Award1: z.string().min(1, "Award is required."),
+  Award2: z.string().optional(),
+  WhichIndustry: z.string().optional(),
   TermsAndConditions: z.boolean().refine((val) => val === true, {
     message: "You must accept the terms and conditions",
   }),
@@ -75,9 +90,25 @@ function ExternalRegisterForm() {
     mode: "onChange",
   });
 
+  // Watch Award1 and Award2 values to determine if industry question should show
+  const award1 = form.watch("Award1");
+  const award2 = form.watch("Award2");
+
+  // Check if Best Innovator is selected in either award
+  const isBestInnovatorSelected =
+    award1 === AWARDS.BEST_INNOVATOR || award2 === AWARDS.BEST_INNOVATOR;
+
+  // Add available awards for external students
+  const availableAwards = [AWARDS.BEST_INNOVATOR, AWARDS.BESA_INTER_UNIVERSITY];
+
   async function OnSubmit(values: any) {
     setIsSubmitting(true);
-    //console.log(values);
+
+    // If Best Innovator is not selected, remove WhichIndustry from submission
+    if (!isBestInnovatorSelected) {
+      delete values.WhichIndustry;
+    }
+
     const response = await fetch("/api/register/external", {
       method: "POST",
       headers: {
@@ -94,30 +125,33 @@ function ExternalRegisterForm() {
       setIsSubmitting(false);
     } else {
       const data = await response.json();
-      //console.log("API response", data);
       router.push("/register/success");
     }
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto">
-      <h2 className="mb-8 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text text-center font-title text-[32px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[48px]">
+    <div className="w-full max-w-xl mx-auto px-4">
+      <h2 className="pb-8 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text text-center font-title text-[32px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[48px]">
         External Registration
       </h2>
 
       <Form {...form}>
         <form
-          // onSubmit={form.handleSubmit(OnSubmit)}
-          className="space-y-6 p-8 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
+          onSubmit={form.handleSubmit(OnSubmit)}
+          className="space-y-6 p-10 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
         >
           <FormField
             control={form.control}
             name="Name"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Your Name" {...field} />
+                  <Input
+                    placeholder="Enter Your Name"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormDescription>
                   This is your public display name.
@@ -131,10 +165,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="NIC"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>NIC</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Your NIC Number" {...field} />
+                  <Input
+                    placeholder="Enter Your NIC Number"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -145,11 +183,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="Gender"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Gender</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Gender" />
                     </SelectTrigger>
                     <SelectContent>
@@ -171,10 +212,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="Email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Your Email Here" {...field} />
+                  <Input
+                    placeholder="Enter Your Email Here"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -185,10 +230,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="Whatsapp"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>WhatsApp Number</FormLabel>
                 <FormControl>
-                  <Input placeholder="07XXXXXXXX" {...field} />
+                  <Input
+                    placeholder="07XXXXXXXX"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -199,11 +248,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="University"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>University</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                       <SelectValue placeholder="Select University" />
                     </SelectTrigger>
                     <SelectContent>
@@ -227,10 +279,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="Faculty"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Faculty</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter Your Faculty" {...field} />
+                  <Input
+                    placeholder="Enter Your Faculty"
+                    {...field}
+                    className="w-full"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -241,10 +297,10 @@ function ExternalRegisterForm() {
             control={form.control}
             name="UniversityRegisterId"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>University Registration Number</FormLabel>
                 <FormControl>
-                  <Input placeholder="TE110XXX" {...field} />
+                  <Input placeholder="TE110XXX" {...field} className="w-full" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -255,11 +311,14 @@ function ExternalRegisterForm() {
             control={form.control}
             name="AcademicYear"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Select Academic Year</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Academic Year" />
                     </SelectTrigger>
                     <SelectContent>
@@ -281,25 +340,26 @@ function ExternalRegisterForm() {
 
           <FormField
             control={form.control}
-            name="Award"
+            name="Award1"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select Your Award</FormLabel>
+              <FormItem className="w-full">
+                <FormLabel>Award 1 (Required)</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    value="Best Innovator"
-                    disabled={true}
+                    value={field.value || ""}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select Your Award" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Select Award</SelectLabel>
-                        <SelectItem value="Best Innovator">
-                          Best Innovator
-                        </SelectItem>
+                        {availableAwards.map((award, index) => (
+                          <SelectItem key={index} value={award}>
+                            {award}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -311,52 +371,102 @@ function ExternalRegisterForm() {
 
           <FormField
             control={form.control}
-            name="WhichIndustry"
+            name="Award2"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  To Which Industry is Your Innovation Related?
-                </FormLabel>
+              <FormItem className="w-full">
+                <FormLabel>Award 2 (Optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your Answer" {...field} />
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || ""}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Your Award" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Select Award</SelectLabel>
+                        {availableAwards.map((award, index) => (
+                          <SelectItem key={index} value={award}>
+                            {award}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <FormDescription>
-                  If there are multiple products relating to multiple
-                  industries, please mention all the industries.{" "}
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Only show industry question if Best Innovator is selected */}
+          {isBestInnovatorSelected && (
+            <FormField
+              control={form.control}
+              name="WhichIndustry"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>
+                    To Which Industry is Your Innovation Related?
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Your Answer"
+                      {...field}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    If there are multiple products relating to multiple
+                    industries, please mention all the industries.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}
             name="TermsAndConditions"
             render={({ field }) => (
-              <FormItem>
-                <FormControl className="inline-flex">
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    name={field.name}
-                    ref={field.ref}
-                  />
-                </FormControl>
-                <FormLabel>
-                  &nbsp; I confirm that the information above is accurate to the
-                  best of my knowledge and in accordance with the{" "}
-                  <Link href="/terms" className="underline">
-                    terms and conditions.
-                  </Link>
-                </FormLabel>
-                <FormMessage />
+              <FormItem className="w-full">
+                <div className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="mt-1"
+                    />
+                  </FormControl>
+                  <div className="flex-1">
+                    <FormLabel className="text-sm font-normal leading-relaxed">
+                      <span>
+                        I confirm that the information above is accurate to the
+                        best of my knowledge and in accordance with the&ensp;
+                        <Link
+                          href="/terms"
+                          className="underline text-blue-400 hover:text-blue-300"
+                        >
+                          terms and conditions.
+                        </Link>
+                      </span>
+                    </FormLabel>
+                    <FormMessage />
+                  </div>
+                </div>
               </FormItem>
             )}
           />
 
-          <div className="flex justify-center">
-            <Button type="submit" disabled={isSubmitting} className="w-full">
-              {isSubmitting ? "Submitting..." : "Submit"}
+          <div className="pt-4">
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full rounded-[8px] py-3 text-base font-medium"
+            >
+              {isSubmitting ? "Submitting..." : "Submit Registration"}
             </Button>
           </div>
         </form>

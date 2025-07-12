@@ -60,6 +60,12 @@ export default function Terms() {
             If your innovation is work-in-progress, at least 75% of it should be
             completed.
           </li>
+          <li>
+            ⁠Currently enrolled undergraduate students from any state university
+            in Sri Lanka and recent graduates (within one year from the release
+            of their final examination results) are eligible to apply for this
+            award.
+          </li>
         </ul>
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
           Eligibility Criteria for the Best Creative Designer Award
@@ -89,7 +95,7 @@ export default function Terms() {
         </ul>
       </div>
       <p className="text-sm font-medium leading-none [&:not(:first-child)]:mt-6 text-slate-500">
-        Last updated: 2025.07.09
+        Last updated: 2025.07.12
       </p>
     </section>
   );

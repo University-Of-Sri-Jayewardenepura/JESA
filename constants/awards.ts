@@ -213,7 +213,7 @@ export const awards = [
     name: "Best Innovator",
     image: "/images/awards/best-innovator.png",
     description:
-      "Dedicated to motivating young inventors and this year onwards it’s open to brilliant young innovators from other universities too. The ability of a competitor to do an invention successfully and implementation to fit the task is conferred as well",
+      "Dedicated to motivating young inventors from the University of Sri Jayewardenepura as well as talented innovators from all other state universities across Sri Lanka. The Ability of a competitor to do an invention successfully and implementation to fit the task is conferred as well.",
     sponsors: [
       {
         year: 2019,
@@ -369,7 +369,7 @@ export const awards = [
     name: "BESA - Inter University Award",
     image: "/images/awards/besa.png",
     description:
-      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from universities other than USJ. The winner is excelled in academics, sports, and other extracurricular activities.",
+      "Introducing this award for the first time this year, BESA Inter University Award is open to undergraduates from the University of Sri Jayewardenepura as well as all other state universities across Sri Lanka. This award recognizes a truly well-rounded individual who has demonstrated excellence in academics, sports, and other extracurricular activities.",
     sponsors: [],
   },
   {

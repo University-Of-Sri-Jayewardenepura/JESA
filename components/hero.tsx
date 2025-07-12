@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md">
           <div className="w-5/7 sm:w-1/2">
-            <CtaButton href="/">Registration Coming Soon</CtaButton>
+            <CtaButton href="/register">Register Now</CtaButton>
           </div>
 
           <div className="w-5/7 sm:w-1/2">

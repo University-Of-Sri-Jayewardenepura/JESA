@@ -26,7 +26,7 @@ const Nav: React.FC = () => {
             src="/images/jesa-min.png"
             width={72}
             height={20}
-            alt="JESA 2024"
+            alt="JESA 2025"
             className="ml-[-0.4rem] lg:ml-[-1.2rem] w-auto h-auto"
           />
           <span className="sr-only">JESA</span>
@@ -69,10 +69,10 @@ const Nav: React.FC = () => {
             className="bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full text-md h-8"
           >
             <Link
-              href="/"
+              href="/register"
               className="px-2  hover:text-slate-300 transition-colors"
             >
-              Registration Coming Soon
+              Register Now
             </Link>
           </Button>
         </div>
