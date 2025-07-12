@@ -75,7 +75,6 @@ App Structure
 │   └── ...
 ├── models
 ├── public
-│   └── fonts
 │   └── images
 ├── lib
 │   └── utils.ts
