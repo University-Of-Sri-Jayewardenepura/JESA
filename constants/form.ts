@@ -26,11 +26,11 @@ export enum UNIVERSITY {
 }
 
 export enum ACADEMICYEAR {
-  Year1 = "1st Year (22/23)",
-  Year2 = "2nd Year (21/22)",
-  Year3 = "3rd Year (20/21)",
-  Year4 = "4th Year (19/20)",
-  Year5 = "5th Year (18/19)",
+  Year1 = "1st Year (23/24)",
+  Year2 = "2nd Year (22/23)",
+  Year3 = "3rd Year (21/22)",
+  Year4 = "4th Year (20/21)",
+  Year5 = "5th Year (19/20)",
 }
 
 export enum FACULTY {
