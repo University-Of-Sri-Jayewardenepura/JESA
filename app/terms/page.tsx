@@ -41,6 +41,16 @@ export default function Terms() {
           </li>
         </ul>
         <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+          Eligibility Criteria for the BESA Inter University Award
+        </h3>
+        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md text-slate-400 max-w-2xl ">
+          <li>
+            ⁠Undergraduate students from any state university in Sri Lanka are
+            eligible to apply. (This includes students from any faculty or
+            degree program.)
+          </li>
+        </ul>
+        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
           Eligibility Criteria for the Best Innovator Award
         </h3>
         <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
@@ -90,7 +100,7 @@ export default function Terms() {
         </ul>
       </div>
       <p className="text-sm font-medium leading-none [&:not(:first-child)]:mt-6 text-slate-500">
-        Last updated: 2025.07.12
+        Last updated: 2025.07.13 at 02:48 PM
       </p>
     </section>
   );
