@@ -90,6 +90,7 @@ function InternalRegisterForm() {
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    mode: "onBlur",
     defaultValues: {
       Name: "",
       Gender: "",

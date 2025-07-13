@@ -87,7 +87,7 @@ function ExternalRegisterForm() {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    mode: "onChange",
+    mode: "onBlur",
   });
 
   // Watch Award1 and Award2 values to determine if industry question should show
