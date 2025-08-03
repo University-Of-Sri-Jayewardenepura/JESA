@@ -114,7 +114,7 @@ App Structure
 
 ### Analytics
 
-- <a href="https://analytics.google.com/">Google Analytics GA4</a>
+- <a href="https://clarity.microsoft.com/">Microsoft Clarity</a>
 
 ### Data Validation
 
