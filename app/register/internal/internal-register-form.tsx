@@ -566,7 +566,12 @@ function InternalRegisterForm() {
                   <FormLabel>Award 1 (Optional)</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        // Allow clearing the selection
+                        field.onChange(
+                          value === "CLEAR_SELECTION" ? "" : value
+                        );
+                      }}
                       value={field.value || ""}
                     >
                       <SelectTrigger className="w-full">
@@ -575,7 +580,13 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          <SelectItem value="">None</SelectItem>
+                          {field.value && (
+                            <SelectItem value="CLEAR_SELECTION">
+                              <span className="text-slate-400">
+                                Clear selection
+                              </span>
+                            </SelectItem>
+                          )}
                           {getAvailableAwards(field.value || "").map(
                             (award, index) => (
                               <SelectItem
@@ -604,7 +615,12 @@ function InternalRegisterForm() {
                   <FormLabel>Award 2 (Optional)</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        // Allow clearing the selection
+                        field.onChange(
+                          value === "CLEAR_SELECTION" ? "" : value
+                        );
+                      }}
                       value={field.value || ""}
                     >
                       <SelectTrigger className="w-full">
@@ -613,7 +629,13 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          <SelectItem value="">None</SelectItem>
+                          {field.value && (
+                            <SelectItem value="CLEAR_SELECTION">
+                              <span className="text-slate-400">
+                                Clear selection
+                              </span>
+                            </SelectItem>
+                          )}
                           {getAvailableAwards(field.value || "").map(
                             (award, index) => (
                               <SelectItem
@@ -642,7 +664,12 @@ function InternalRegisterForm() {
                   <FormLabel>Award 3 (Optional)</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        // Allow clearing the selection
+                        field.onChange(
+                          value === "CLEAR_SELECTION" ? "" : value
+                        );
+                      }}
                       value={field.value || ""}
                     >
                       <SelectTrigger className="w-full">
@@ -651,7 +678,13 @@ function InternalRegisterForm() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Award</SelectLabel>
-                          <SelectItem value="">None</SelectItem>
+                          {field.value && (
+                            <SelectItem value="CLEAR_SELECTION">
+                              <span className="text-slate-400">
+                                Clear selection
+                              </span>
+                            </SelectItem>
+                          )}
                           {getAvailableAwards(field.value || "").map(
                             (award, index) => (
                               <SelectItem
