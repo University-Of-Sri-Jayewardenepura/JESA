@@ -17,7 +17,7 @@ Organized by the Career Skills Development Society of the University, this highl
 Prerequisites :
 
 - Install [Git](https://www.git-scm.com/downloads).
-- Install [Nodejs](https://nodejs.org/en) or [Bun](https://bun.sh/).
+- Install [Bun](https://bun.sh/).
 
 Install Bun:
 
@@ -33,8 +33,8 @@ We recomment using Bun for faster development and runtime
 
 - `git clone https://github.com/University-Of-Sri-Jayewardenepura/jesa`
 - `cd jesa`
-- `bun install` or `npm install`
-- `bun run dev` or `npm run dev`
+- `bun install` 
+- `bun run dev`
 
 App Structure
 
