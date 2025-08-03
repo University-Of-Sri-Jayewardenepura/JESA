@@ -106,7 +106,7 @@ App Structure
 
 ### Animations
 
-- <a href="https://www.framer.com/motion/animation/">Framer Motion</a>
+- <a href="[https://motion.dev/">Motion</a>
 
 ### Icons
 
