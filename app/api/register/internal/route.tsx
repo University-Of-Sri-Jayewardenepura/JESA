@@ -95,9 +95,9 @@ function getValidAwardsForFaculty(
     return ["Best Innovator"];
   }
 
-  // For all other years, exclude Best Innovator
+  // For all other years, they can apply for ALL awards (including Best Innovator)
   let defaultAwards = Object.values(AWARDS).filter(
-    (award) => !award.startsWith("BESA") && award !== "Best Innovator"
+    (award) => !award.startsWith("BESA")
   );
 
   // Get faculty-specific BESA awards (only for the selected faculty)
@@ -156,19 +156,6 @@ export async function POST(request: NextRequest) {
     // Validate each selected award is valid for the faculty and academic year
     for (const award of selectedAwards) {
       if (typeof award === "string" && !validAwards.includes(award)) {
-        // Special message for Best Innovator award restriction
-        if (
-          award === "Best Innovator" &&
-          validatedData.AcademicYear !== "5th Year"
-        ) {
-          return NextResponse.json(
-            {
-              message:
-                "Best Innovator award is only available for 5th year students",
-            },
-            { status: 401 }
-          );
-        }
         // Special message for 5th year students trying to apply for other awards
         if (
           validatedData.AcademicYear === "5th Year" &&

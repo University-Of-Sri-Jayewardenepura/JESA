@@ -235,15 +235,15 @@ function InternalRegisterForm() {
       return ["Best Innovator"];
     }
 
-    // For all other years, exclude Best Innovator
+    // For all other years, they can apply for ALL awards (including Best Innovator)
     let defaultAwards = Object.values(AWARDS).filter(
-      (award) => !award.startsWith("BESA") && award !== "Best Innovator"
+      (award) => !award.startsWith("BESA")
     );
 
     // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
-    // Add BESA Inter University Award as it's available to all (except 5th year)
+    // Add BESA Inter University Award as it's available to all
     const besaInterUniversity = "BESA - Inter University Award";
 
     // Combine general awards with faculty-specific BESA awards and inter-university award
@@ -547,15 +547,10 @@ function InternalRegisterForm() {
           <div className="space-y-4">
             <div className="text-sm font-medium text-slate-200">
               Awards (Select 1-3 awards) *
-              {form.watch("AcademicYear") === "5th Year" ? (
+              {form.watch("AcademicYear") === "5th Year" && (
                 <div className="text-xs text-slate-400 mt-1">
                   Note: 5th year students can only apply for "Best Innovator"
                   award
-                </div>
-              ) : (
-                <div className="text-xs text-slate-400 mt-1">
-                  Note: "Best Innovator" award is only available for 5th year
-                  students
                 </div>
               )}
             </div>
