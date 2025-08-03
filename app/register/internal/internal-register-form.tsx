@@ -216,8 +216,8 @@ function InternalRegisterForm() {
   function getRelevantAwards(faculty: string, academicYear: string): string[] {
     console.log("getRelevantAwards called with:", { faculty, academicYear }); // Debug log
 
-    // If 5th year, they can ONLY apply for Best Innovator
-    if (academicYear === "5th Year") {
+    // Fix: Use the correct 5th year value from constants
+    if (academicYear === "5th Year (19/20)") {
       console.log("Returning only Best Innovator for 5th year"); // Debug log
       return ["Best Innovator"];
     }
@@ -556,7 +556,7 @@ function InternalRegisterForm() {
           <div className="space-y-4">
             <div className="text-sm font-medium text-slate-200">
               Awards (Select 1-3 awards) *
-              {form.watch("AcademicYear") === "5th Year" && (
+              {form.watch("AcademicYear") === "5th Year (19/20)" && (
                 <div className="text-xs text-slate-400 mt-1">
                   Note: 5th year students can only apply for "Best Innovator"
                   award

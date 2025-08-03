@@ -91,7 +91,7 @@ function getValidAwardsForFaculty(
   };
 
   // If 5th year, they can ONLY apply for Best Innovator
-  if (academicYear === "5th Year") {
+  if (academicYear === "5th Year (19/20)") {
     return ["Best Innovator"];
   }
 
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
       if (typeof award === "string" && !validAwards.includes(award)) {
         // Special message for 5th year students trying to apply for other awards
         if (
-          validatedData.AcademicYear === "5th Year" &&
+          validatedData.AcademicYear === "5th Year (19/20)" &&
           award !== "Best Innovator"
         ) {
           return NextResponse.json(
