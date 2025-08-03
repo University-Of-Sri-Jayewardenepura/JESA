@@ -90,15 +90,15 @@ function getValidAwardsForFaculty(
     "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
   };
 
-  // General awards available to all internal students (excluding ALL BESA awards)
-  let defaultAwards = Object.values(AWARDS).filter(
-    (award) => !award.startsWith("BESA")
-  );
-
-  // Filter out "Best Innovator" award if not 5th year
-  if (academicYear !== "5th Year") {
-    defaultAwards = defaultAwards.filter((award) => award !== "Best Innovator");
+  // If 5th year, they can ONLY apply for Best Innovator
+  if (academicYear === "5th Year") {
+    return ["Best Innovator"];
   }
+
+  // For all other years, exclude Best Innovator
+  let defaultAwards = Object.values(AWARDS).filter(
+    (award) => !award.startsWith("BESA") && award !== "Best Innovator"
+  );
 
   // Get faculty-specific BESA awards (only for the selected faculty)
   const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
@@ -165,6 +165,19 @@ export async function POST(request: NextRequest) {
             {
               message:
                 "Best Innovator award is only available for 5th year students",
+            },
+            { status: 401 }
+          );
+        }
+        // Special message for 5th year students trying to apply for other awards
+        if (
+          validatedData.AcademicYear === "5th Year" &&
+          award !== "Best Innovator"
+        ) {
+          return NextResponse.json(
+            {
+              message:
+                "5th year students can only apply for the Best Innovator award",
             },
             { status: 401 }
           );

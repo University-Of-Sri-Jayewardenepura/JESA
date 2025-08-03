@@ -230,22 +230,20 @@ function InternalRegisterForm() {
       "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
     };
 
-    // General awards available to all internal students (excluding ALL BESA awards and BESA Inter University)
-    let defaultAwards = Object.values(AWARDS).filter(
-      (award) => !award.startsWith("BESA")
-    );
-
-    // Filter out "Best Innovator" award if not 5th year
-    if (academicYear !== "5th Year") {
-      defaultAwards = defaultAwards.filter(
-        (award) => award !== "Best Innovator"
-      );
+    // If 5th year, they can ONLY apply for Best Innovator
+    if (academicYear === "5th Year") {
+      return ["Best Innovator"];
     }
+
+    // For all other years, exclude Best Innovator
+    let defaultAwards = Object.values(AWARDS).filter(
+      (award) => !award.startsWith("BESA") && award !== "Best Innovator"
+    );
 
     // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
-    // Add BESA Inter University Award as it's available to all
+    // Add BESA Inter University Award as it's available to all (except 5th year)
     const besaInterUniversity = "BESA - Inter University Award";
 
     // Combine general awards with faculty-specific BESA awards and inter-university award
@@ -549,7 +547,12 @@ function InternalRegisterForm() {
           <div className="space-y-4">
             <div className="text-sm font-medium text-slate-200">
               Awards (Select 1-3 awards) *
-              {form.watch("AcademicYear") !== "5th Year" && (
+              {form.watch("AcademicYear") === "5th Year" ? (
+                <div className="text-xs text-slate-400 mt-1">
+                  Note: 5th year students can only apply for "Best Innovator"
+                  award
+                </div>
+              ) : (
                 <div className="text-xs text-slate-400 mt-1">
                   Note: "Best Innovator" award is only available for 5th year
                   students

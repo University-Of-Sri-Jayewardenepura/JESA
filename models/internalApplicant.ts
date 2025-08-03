@@ -61,17 +61,15 @@ const internalApplicantSchema = new Schema(
     },
     Award1: {
       type: String,
-      required: true,
-      // Remove enum validation to allow for dynamic award values
+      required: false, // Changed to optional since at least one award is validated in application logic
     },
     Award2: {
       type: String,
-      required: true,
-      // Remove enum validation to allow for dynamic award values
+      required: false, // Changed to optional
     },
     Award3: {
       type: String,
-      // Remove enum validation to allow for dynamic award values
+      required: false, // Already optional
     },
   },
   { timestamps: true }
