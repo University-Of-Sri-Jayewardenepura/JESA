@@ -33,21 +33,19 @@ const internalApplicantSchema = z
       .string()
       .optional()
       .transform((val) => (val === "" ? undefined : val)),
-    Award3: z
-      .string()
-      .optional()
-      .transform((val) => (val === "" ? undefined : val)),
+    Award3: z.boolean().optional(), // Changed to boolean for BESA Inter University checkbox
     TermsAndConditions: z.boolean().refine((val) => val === true, {
       message: "You must accept terms and conditions",
     }),
   })
   .refine(
     (data) => {
-      // At least one award must be selected
-      const awards = [data.Award1, data.Award2, data.Award3].filter(
+      // At least one award must be selected (Award1, Award2, or Award3 checkbox)
+      const awards = [data.Award1, data.Award2].filter(
         (award) => award && award.trim() !== ""
       );
-      return awards.length >= 1;
+      const besaInterUniversity = data.Award3;
+      return awards.length >= 1 || besaInterUniversity;
     },
     {
       message: "At least one award must be selected",
@@ -56,8 +54,8 @@ const internalApplicantSchema = z
   )
   .refine(
     (data) => {
-      // Check for duplicate awards
-      const awards = [data.Award1, data.Award2, data.Award3].filter(
+      // Check for duplicate awards (only for Award1 and Award2)
+      const awards = [data.Award1, data.Award2].filter(
         (award) => award && award.trim() !== ""
       );
       const uniqueAwards = new Set(awards);
@@ -95,7 +93,7 @@ function getValidAwardsForFaculty(
     return ["Best Innovator"];
   }
 
-  // For all other years, they can apply for ALL awards (including Best Innovator)
+  // For all other years, they can apply for ALL awards EXCEPT BESA Inter University (which is now a checkbox)
   let defaultAwards = Object.values(AWARDS).filter(
     (award) => !award.startsWith("BESA")
   );
@@ -146,12 +144,10 @@ export async function POST(request: NextRequest) {
       validatedData.AcademicYear
     );
 
-    // Get selected awards (filter out empty/undefined ones)
-    const selectedAwards = [
-      validatedData.Award1,
-      validatedData.Award2,
-      validatedData.Award3,
-    ].filter((award) => award && award.trim() !== "");
+    // Get selected awards for validation
+    const selectedAwards = [validatedData.Award1, validatedData.Award2].filter(
+      (award) => award && award.trim() !== ""
+    );
 
     // Validate each selected award is valid for the faculty and academic year
     for (const award of selectedAwards) {
@@ -176,6 +172,20 @@ export async function POST(request: NextRequest) {
           { status: 401 }
         );
       }
+    }
+
+    // Validate BESA Inter University checkbox for 5th year students
+    if (
+      validatedData.AcademicYear === "5th Year (19/20)" &&
+      validatedData.Award3
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            "5th year students cannot apply for BESA Inter University Award",
+        },
+        { status: 401 }
+      );
     }
 
     console.log("Connecting to MongoDB...");
@@ -206,6 +216,10 @@ export async function POST(request: NextRequest) {
     // Create InternalApplicant using validated data
     const newApplicant = new InternalApplicant({
       ...validatedData,
+      // Convert Award3 boolean to string for database storage
+      Award3: validatedData.Award3
+        ? "BESA - Inter University Award"
+        : undefined,
       ApplicantId: baseApplicant._id,
     });
 

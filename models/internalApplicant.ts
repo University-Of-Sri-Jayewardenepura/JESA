@@ -61,15 +61,15 @@ const internalApplicantSchema = new Schema(
     },
     Award1: {
       type: String,
-      required: false, // Changed to optional since at least one award is validated in application logic
+      required: false,
     },
     Award2: {
       type: String,
-      required: false, // Changed to optional
+      required: false,
     },
     Award3: {
-      type: String,
-      required: false, // Already optional
+      type: String, // Still stored as string in DB ("BESA - Inter University Award" or undefined)
+      required: false,
     },
   },
   { timestamps: true }

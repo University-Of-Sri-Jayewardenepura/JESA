@@ -67,28 +67,29 @@ const formSchema = z
     OtherDegree: z.string().optional(),
     Award1: z.string().optional(),
     Award2: z.string().optional(),
-    Award3: z.string().optional(),
+    Award3: z.boolean().optional(), // Changed to boolean for checkbox
     TermsAndConditions: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and conditions",
     }),
   })
   .refine(
     (data) => {
-      // At least one award must be selected
-      const awards = [data.Award1, data.Award2, data.Award3].filter(
+      // At least one award must be selected (Award1, Award2, or Award3 checkbox)
+      const awards = [data.Award1, data.Award2].filter(
         (award) => award && award.trim() !== ""
       );
-      return awards.length >= 1;
+      const besaInterUniversity = data.Award3; // checkbox value
+      return awards.length >= 1 || besaInterUniversity;
     },
     {
       message: "At least one award must be selected",
-      path: ["Award1"], // Show error on Award1 field
+      path: ["Award1"],
     }
   )
   .refine(
     (data) => {
-      // Check for duplicate awards
-      const awards = [data.Award1, data.Award2, data.Award3].filter(
+      // Check for duplicate awards only for Award1 and Award2
+      const awards = [data.Award1, data.Award2].filter(
         (award) => award && award.trim() !== ""
       );
       const uniqueAwards = new Set(awards);
@@ -96,7 +97,7 @@ const formSchema = z
     },
     {
       message: "You cannot select the same award multiple times",
-      path: ["Award1"], // Show error on Award1 field
+      path: ["Award1"],
     }
   );
 
@@ -131,7 +132,7 @@ function InternalRegisterForm() {
       OtherDegree: "",
       Award1: "",
       Award2: "",
-      Award3: "",
+      Award3: false, // Changed to boolean default
       TermsAndConditions: false,
     },
   });
@@ -216,7 +217,7 @@ function InternalRegisterForm() {
   function getRelevantAwards(faculty: string, academicYear: string): string[] {
     console.log("getRelevantAwards called with:", { faculty, academicYear }); // Debug log
 
-    // Fix: Use the correct 5th year value from constants
+    // If 5th year, they can ONLY apply for Best Innovator
     if (academicYear === "5th Year (19/20)") {
       console.log("Returning only Best Innovator for 5th year"); // Debug log
       return ["Best Innovator"];
@@ -238,7 +239,7 @@ function InternalRegisterForm() {
       "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
     };
 
-    // For all other years, they can apply for ALL awards (including Best Innovator)
+    // For all other years, they can apply for ALL awards EXCEPT BESA Inter University (which is now a checkbox)
     let defaultAwards = Object.values(AWARDS).filter(
       (award) => !award.startsWith("BESA")
     );
@@ -246,15 +247,8 @@ function InternalRegisterForm() {
     // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
-    // Add BESA Inter University Award as it's available to all non-5th year students
-    const besaInterUniversity = "BESA - Inter University Award";
-
-    // Combine general awards with faculty-specific BESA awards and inter-university award
-    const result = [
-      ...defaultAwards,
-      ...facultySpecificAwards,
-      besaInterUniversity,
-    ];
+    // Combine general awards with faculty-specific BESA awards (exclude BESA Inter University)
+    const result = [...defaultAwards, ...facultySpecificAwards];
     console.log("Returning awards for non-5th year:", result); // Debug log
     return result;
   }
@@ -264,12 +258,10 @@ function InternalRegisterForm() {
     form.watch("AcademicYear")
   );
 
-  // Get currently selected awards to filter out from other dropdowns
-  const selectedAwards = [
-    form.watch("Award1"),
-    form.watch("Award2"),
-    form.watch("Award3"),
-  ].filter((award) => award && award.trim() !== "");
+  // Get currently selected awards to filter out from other dropdowns (only Award1 and Award2)
+  const selectedAwards = [form.watch("Award1"), form.watch("Award2")].filter(
+    (award) => award && award.trim() !== ""
+  );
 
   // Function to get available awards for each dropdown (excluding already selected ones)
   const getAvailableAwards = (currentFieldValue: string) => {
@@ -432,7 +424,7 @@ function InternalRegisterForm() {
                       // Reset awards when academic year changes
                       form.setValue("Award1", "");
                       form.setValue("Award2", "");
-                      form.setValue("Award3", "");
+                      form.setValue("Award3", false);
                     }}
                     value={field.value || ""}
                   >
@@ -470,7 +462,7 @@ function InternalRegisterForm() {
                       // Reset awards when faculty changes
                       form.setValue("Award1", "");
                       form.setValue("Award2", "");
-                      form.setValue("Award3", "");
+                      form.setValue("Award3", false);
                     }}
                     value={field.value || ""}
                   >
@@ -555,7 +547,7 @@ function InternalRegisterForm() {
           {/* Awards Section */}
           <div className="space-y-4">
             <div className="text-sm font-medium text-slate-200">
-              Awards (Select 1-3 awards) *
+              Awards (Select at least 1 award) *
               {form.watch("AcademicYear") === "5th Year (19/20)" && (
                 <div className="text-xs text-slate-400 mt-1">
                   Note: 5th year students can only apply for "Best Innovator"
@@ -574,7 +566,6 @@ function InternalRegisterForm() {
                   <FormControl>
                     <Select
                       onValueChange={(value) => {
-                        // Allow clearing the selection
                         field.onChange(
                           value === "CLEAR_SELECTION" ? "" : value
                         );
@@ -623,7 +614,6 @@ function InternalRegisterForm() {
                   <FormControl>
                     <Select
                       onValueChange={(value) => {
-                        // Allow clearing the selection
                         field.onChange(
                           value === "CLEAR_SELECTION" ? "" : value
                         );
@@ -662,54 +652,32 @@ function InternalRegisterForm() {
               )}
             />
 
-            {/* Award 3 - Optional */}
-            <FormField
-              control={form.control}
-              name="Award3"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Award 3 (Optional)</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={(value) => {
-                        // Allow clearing the selection
-                        field.onChange(
-                          value === "CLEAR_SELECTION" ? "" : value
-                        );
-                      }}
-                      value={field.value || ""}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Award (Optional)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Select Award</SelectLabel>
-                          {field.value && (
-                            <SelectItem value="CLEAR_SELECTION">
-                              <span className="text-slate-400">
-                                Clear selection
-                              </span>
-                            </SelectItem>
-                          )}
-                          {getAvailableAwards(field.value || "").map(
-                            (award, index) => (
-                              <SelectItem
-                                key={`award3-${award}-${index}`}
-                                value={award}
-                              >
-                                {award}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* BESA Inter University Award - Checkbox */}
+            {form.watch("AcademicYear") !== "5th Year (19/20)" && (
+              <FormField
+                control={form.control}
+                name="Award3"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <div className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value || false}
+                          onCheckedChange={field.onChange}
+                          className="mt-1"
+                        />
+                      </FormControl>
+                      <div className="flex-1">
+                        <FormLabel className="text-sm font-normal leading-relaxed">
+                          BESA - Inter University Award
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
 
           <FormField
