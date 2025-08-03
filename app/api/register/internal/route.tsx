@@ -95,7 +95,7 @@ function getValidAwardsForFaculty(
 
   // For all other years, they can apply for ALL awards EXCEPT BESA Inter University (which is now a checkbox)
   let defaultAwards = Object.values(AWARDS).filter(
-    (award) => !award.startsWith("BESA")
+    (award) => !award.startsWith("BESA - Inter University")
   );
 
   // Get faculty-specific BESA awards (only for the selected faculty)
