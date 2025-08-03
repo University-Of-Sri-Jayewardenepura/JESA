@@ -73,6 +73,8 @@ App Structure
 │   └── form.ts
 │   └── ...
 ├── models
+│   └── RegTable.ts
+│   └── ...
 ├── public
 │   └── images
 ├── lib
