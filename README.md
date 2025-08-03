@@ -4,7 +4,7 @@
       <source media="(prefers-color-scheme: dark)">
       <img src="./public/images/jesa-logo.png" height="128">
     </picture>
-    <h1 align="center">JESA</h1>
+    <h1 align="center">JESA 2025</h1>
   </a>
 </p>
 
