@@ -10,30 +10,64 @@ export async function GET() {
   return NextResponse.json({ message: "Internal registration API is working" });
 }
 
-const internalApplicantSchema = z.object({
-  Name: z.string().min(1, "Name is required"),
-  Gender: z.enum(["Male", "Female", "Other"]),
-  Email: z.string().email("Invalid email format"),
-  Whatsapp: z.string().min(10, "WhatsApp number must be at least 10 digits"),
-  University: z.string().min(1, "University is required"),
-  UniversityRegisterId: z.string().min(1, "Registration ID is required"),
-  AcademicYear: z.string().min(1, "Academic year is required"),
-  Faculty: z.string().min(1, "Faculty is required"),
-  Degree: z.string().min(1, "Degree is required"),
-  OtherDegree: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-  Award1: z.string().min(1, "First award is required"),
-  Award2: z.string().min(1, "Second award is required"),
-  Award3: z
-    .string()
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-  TermsAndConditions: z.boolean().refine((val) => val === true, {
-    message: "You must accept terms and conditions",
-  }),
-});
+const internalApplicantSchema = z
+  .object({
+    Name: z.string().min(1, "Name is required"),
+    Gender: z.enum(["Male", "Female", "Other"]),
+    Email: z.string().email("Invalid email format"),
+    Whatsapp: z.string().min(10, "WhatsApp number must be at least 10 digits"),
+    University: z.string().min(1, "University is required"),
+    UniversityRegisterId: z.string().min(1, "Registration ID is required"),
+    AcademicYear: z.string().min(1, "Academic year is required"),
+    Faculty: z.string().min(1, "Faculty is required"),
+    Degree: z.string().min(1, "Degree is required"),
+    OtherDegree: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    Award1: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    Award2: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    Award3: z
+      .string()
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+    TermsAndConditions: z.boolean().refine((val) => val === true, {
+      message: "You must accept terms and conditions",
+    }),
+  })
+  .refine(
+    (data) => {
+      // At least one award must be selected
+      const awards = [data.Award1, data.Award2, data.Award3].filter(
+        (award) => award && award.trim() !== ""
+      );
+      return awards.length >= 1;
+    },
+    {
+      message: "At least one award must be selected",
+      path: ["Award1"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Check for duplicate awards
+      const awards = [data.Award1, data.Award2, data.Award3].filter(
+        (award) => award && award.trim() !== ""
+      );
+      const uniqueAwards = new Set(awards);
+      return uniqueAwards.size === awards.length;
+    },
+    {
+      message: "You cannot select the same award multiple times",
+      path: ["Award1"],
+    }
+  );
 
 // Helper function to get valid awards for a faculty
 function getValidAwardsForFaculty(faculty: string): string[] {
@@ -101,58 +135,19 @@ export async function POST(request: NextRequest) {
     // Get valid awards for the selected faculty
     const validAwards = getValidAwardsForFaculty(validatedData.Faculty);
 
-    // Validate Award1 and Award2 are valid for the faculty
-    if (!validAwards.includes(validatedData.Award1)) {
-      return NextResponse.json(
-        {
-          message: `Award 1 "${validatedData.Award1}" is not available for your faculty`,
-        },
-        { status: 401 }
-      );
-    }
+    // Get selected awards (filter out empty/undefined ones)
+    const selectedAwards = [
+      validatedData.Award1,
+      validatedData.Award2,
+      validatedData.Award3,
+    ].filter((award) => award && award.trim() !== "");
 
-    if (!validAwards.includes(validatedData.Award2)) {
-      return NextResponse.json(
-        {
-          message: `Award 2 "${validatedData.Award2}" is not available for your faculty`,
-        },
-        { status: 401 }
-      );
-    }
-
-    // Validate Award3 if provided
-    if (
-      validatedData.Award3 &&
-      validatedData.Award3 !== "BESA - Inter University Award"
-    ) {
-      return NextResponse.json(
-        {
-          message: "Award 3 can only be BESA - Inter University Award",
-        },
-        { status: 401 }
-      );
-    }
-
-    // Check for duplicate awards between Award1 and Award2
-    if (validatedData.Award1 === validatedData.Award2) {
-      return NextResponse.json(
-        {
-          message: "You cannot select the same award for Award 1 and Award 2!",
-        },
-        { status: 401 }
-      );
-    }
-
-    // Check if Award1 or Award2 conflicts with Award3
-    if (validatedData.Award3) {
-      if (
-        validatedData.Award1 === validatedData.Award3 ||
-        validatedData.Award2 === validatedData.Award3
-      ) {
+    // Validate each selected award is valid for the faculty
+    for (const award of selectedAwards) {
+      if (award !== undefined && !validAwards.includes(award)) {
         return NextResponse.json(
           {
-            message:
-              "BESA - Inter University Award cannot be selected as Award 1 or Award 2!",
+            message: `Award "${award}" is not available for your faculty`,
           },
           { status: 401 }
         );

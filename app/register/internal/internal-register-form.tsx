@@ -46,38 +46,65 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const formSchema = z.object({
-  Name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  Gender: z.string().min(1, "Gender is required."),
-  Email: z
-    .string()
-    .email({ message: "Invalid email address." })
-    .min(1, "Email is required."),
-  Whatsapp: z
-    .string()
-    .min(10, { message: "Mobile number should be 10 characters." }),
-  University: z.string().min(1, "University is required."),
-  UniversityRegisterId: z
-    .string()
-    .min(1, "University Registration Number is required."),
-  AcademicYear: z.string().min(1, "Academic Year is required."),
-  Faculty: z.string().min(1, "Faculty is required."),
-  Degree: z.string().min(1, "Degree is required."),
-  OtherDegree: z.string().optional(),
-  Award1: z.string().min(1, "Award is required."),
-  Award2: z.string().min(1, "Award is required."),
-  Award3: z.string().optional(), // BESA - Inter University Award (optional)
-  TermsAndConditions: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions",
-  }),
-});
+const formSchema = z
+  .object({
+    Name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+    Gender: z.string().min(1, "Gender is required."),
+    Email: z
+      .string()
+      .email({ message: "Invalid email address." })
+      .min(1, "Email is required."),
+    Whatsapp: z
+      .string()
+      .min(10, { message: "Mobile number should be 10 characters." }),
+    University: z.string().min(1, "University is required."),
+    UniversityRegisterId: z
+      .string()
+      .min(1, "University Registration Number is required."),
+    AcademicYear: z.string().min(1, "Academic Year is required."),
+    Faculty: z.string().min(1, "Faculty is required."),
+    Degree: z.string().min(1, "Degree is required."),
+    OtherDegree: z.string().optional(),
+    Award1: z.string().optional(),
+    Award2: z.string().optional(),
+    Award3: z.string().optional(),
+    TermsAndConditions: z.boolean().refine((val) => val === true, {
+      message: "You must accept the terms and conditions",
+    }),
+  })
+  .refine(
+    (data) => {
+      // At least one award must be selected
+      const awards = [data.Award1, data.Award2, data.Award3].filter(
+        (award) => award && award.trim() !== ""
+      );
+      return awards.length >= 1;
+    },
+    {
+      message: "At least one award must be selected",
+      path: ["Award1"], // Show error on Award1 field
+    }
+  )
+  .refine(
+    (data) => {
+      // Check for duplicate awards
+      const awards = [data.Award1, data.Award2, data.Award3].filter(
+        (award) => award && award.trim() !== ""
+      );
+      const uniqueAwards = new Set(awards);
+      return uniqueAwards.size === awards.length;
+    },
+    {
+      message: "You cannot select the same award multiple times",
+      path: ["Award1"], // Show error on Award1 field
+    }
+  );
 
 type FormData = z.infer<typeof formSchema>;
 
 function InternalRegisterForm() {
   const router = useRouter();
 
-  // Fix: Properly type the degree options with a union type
   type DegreeOption = string;
 
   const [degreeOptions, setDegreeOptions] = useState<DegreeOption[]>([]);
@@ -104,11 +131,11 @@ function InternalRegisterForm() {
       OtherDegree: "",
       Award1: "",
       Award2: "",
+      Award3: "",
       TermsAndConditions: false,
     },
   });
 
-  // Fix: Properly type the degree change handler
   const handleDegreeChange = (value: string) => {
     setSelectedDegree(value);
     setIsOtherSelected(value === "Other");
@@ -162,15 +189,6 @@ function InternalRegisterForm() {
     setIsSubmitting(true);
 
     try {
-      // Check for duplicate awards between Award1 and Award2
-      if (values.Award1 === values.Award2) {
-        toast.error(
-          "You cannot select the same award for Award 1 and Award 2!"
-        );
-        setIsSubmitting(false);
-        return;
-      }
-
       const response = await fetch("/api/register/internal", {
         method: "POST",
         headers: {
@@ -220,11 +238,28 @@ function InternalRegisterForm() {
     // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
-    // Combine general awards with faculty-specific BESA awards
-    return [...defaultAwards, ...facultySpecificAwards];
+    // Add BESA Inter University Award as it's available to all
+    const besaInterUniversity = "BESA - Inter University Award";
+
+    // Combine general awards with faculty-specific BESA awards and inter-university award
+    return [...defaultAwards, ...facultySpecificAwards, besaInterUniversity];
   }
 
   const relevantAwards = getRelevantAwards(form.watch("Faculty"));
+
+  // Get currently selected awards to filter out from other dropdowns
+  const selectedAwards = [
+    form.watch("Award1"),
+    form.watch("Award2"),
+    form.watch("Award3"),
+  ].filter((award) => award && award.trim() !== "");
+
+  // Function to get available awards for each dropdown (excluding already selected ones)
+  const getAvailableAwards = (currentFieldValue: string) => {
+    return relevantAwards.filter(
+      (award) => !selectedAwards.includes(award) || award === currentFieldValue
+    );
+  };
 
   return (
     <div className="w-full max-w-xl mx-auto px-4">
@@ -490,108 +525,126 @@ function InternalRegisterForm() {
             />
           )}
 
-          {/* Award 1 - Required */}
-          <FormField
-            control={form.control}
-            name="Award1"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Award 1</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || ""}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Award" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Select Award</SelectLabel>
-                        {relevantAwards.map((award, index) => (
-                          <SelectItem
-                            key={`award1-${award}-${index}`}
-                            value={award}
-                          >
-                            {award}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Awards Section */}
+          <div className="space-y-4">
+            <div className="text-sm font-medium text-slate-200">
+              Awards (Select 1-3 awards) *
+            </div>
 
-          {/* Award 2 - Required */}
-          <FormField
-            control={form.control}
-            name="Award2"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Award 2</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || ""}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Award" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Select Award</SelectLabel>
-                        {relevantAwards.map((award, index) => (
-                          <SelectItem
-                            key={`award2-${award}-${index}`}
-                            value={award}
-                          >
-                            {award}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Award 3 - Optional BESA Inter University Award */}
-          <FormField
-            control={form.control}
-            name="Award3"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <div className="flex flex-row items-start space-x-3 space-y-0">
+            {/* Award 1 - Optional but at least one award is required */}
+            <FormField
+              control={form.control}
+              name="Award1"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Award 1 (Optional)</FormLabel>
                   <FormControl>
-                    <Checkbox
-                      checked={field.value === "BESA - Inter University Award"}
-                      onCheckedChange={(checked) => {
-                        field.onChange(
-                          checked ? "BESA - Inter University Award" : ""
-                        );
-                      }}
-                      className="mt-1"
-                    />
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Award (Optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Award</SelectLabel>
+                          <SelectItem value="">None</SelectItem>
+                          {getAvailableAwards(field.value || "").map(
+                            (award, index) => (
+                              <SelectItem
+                                key={`award1-${award}-${index}`}
+                                value={award}
+                              >
+                                {award}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
-                  <div className="flex-1">
-                    <FormLabel className="text-sm font-normal leading-relaxed">
-                      Also apply for BESA - Inter University Award (Optional)
-                    </FormLabel>
-                    <FormDescription className="text-xs text-slate-400">
-                      You can apply for this award in addition to your 2 main
-                      awards
-                    </FormDescription>
-                    <FormMessage />
-                  </div>
-                </div>
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Award 2 - Optional */}
+            <FormField
+              control={form.control}
+              name="Award2"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Award 2 (Optional)</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Award (Optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Award</SelectLabel>
+                          <SelectItem value="">None</SelectItem>
+                          {getAvailableAwards(field.value || "").map(
+                            (award, index) => (
+                              <SelectItem
+                                key={`award2-${award}-${index}`}
+                                value={award}
+                              >
+                                {award}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Award 3 - Optional */}
+            <FormField
+              control={form.control}
+              name="Award3"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Award 3 (Optional)</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Award (Optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Award</SelectLabel>
+                          <SelectItem value="">None</SelectItem>
+                          {getAvailableAwards(field.value || "").map(
+                            (award, index) => (
+                              <SelectItem
+                                key={`award3-${award}-${index}`}
+                                value={award}
+                              >
+                                {award}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
