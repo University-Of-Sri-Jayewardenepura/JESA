@@ -213,7 +213,7 @@ function InternalRegisterForm() {
     }
   }
 
-  function getRelevantAwards(faculty: string): string[] {
+  function getRelevantAwards(faculty: string, academicYear: string): string[] {
     const facultyToBesaAwardsMap: Record<string, string[]> = {
       "Faculty of Management Studies & Commerce": [
         AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE,
@@ -231,9 +231,16 @@ function InternalRegisterForm() {
     };
 
     // General awards available to all internal students (excluding ALL BESA awards and BESA Inter University)
-    const defaultAwards = Object.values(AWARDS).filter(
+    let defaultAwards = Object.values(AWARDS).filter(
       (award) => !award.startsWith("BESA")
     );
+
+    // Filter out "Best Innovator" award if not 5th year
+    if (academicYear !== "5th Year") {
+      defaultAwards = defaultAwards.filter(
+        (award) => award !== "Best Innovator"
+      );
+    }
 
     // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
@@ -245,7 +252,10 @@ function InternalRegisterForm() {
     return [...defaultAwards, ...facultySpecificAwards, besaInterUniversity];
   }
 
-  const relevantAwards = getRelevantAwards(form.watch("Faculty"));
+  const relevantAwards = getRelevantAwards(
+    form.watch("Faculty"),
+    form.watch("AcademicYear")
+  );
 
   // Get currently selected awards to filter out from other dropdowns
   const selectedAwards = [
@@ -410,7 +420,13 @@ function InternalRegisterForm() {
                 <FormLabel>Select Academic Year</FormLabel>
                 <FormControl>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      // Reset awards when academic year changes
+                      form.setValue("Award1", "");
+                      form.setValue("Award2", "");
+                      form.setValue("Award3", "");
+                    }}
                     value={field.value || ""}
                   >
                     <SelectTrigger className="w-full">
@@ -444,6 +460,10 @@ function InternalRegisterForm() {
                     onValueChange={(value) => {
                       field.onChange(value);
                       handleFacultyChange(value);
+                      // Reset awards when faculty changes
+                      form.setValue("Award1", "");
+                      form.setValue("Award2", "");
+                      form.setValue("Award3", "");
                     }}
                     value={field.value || ""}
                   >
@@ -529,6 +549,12 @@ function InternalRegisterForm() {
           <div className="space-y-4">
             <div className="text-sm font-medium text-slate-200">
               Awards (Select 1-3 awards) *
+              {form.watch("AcademicYear") !== "5th Year" && (
+                <div className="text-xs text-slate-400 mt-1">
+                  Note: "Best Innovator" award is only available for 5th year
+                  students
+                </div>
+              )}
             </div>
 
             {/* Award 1 - Optional but at least one award is required */}

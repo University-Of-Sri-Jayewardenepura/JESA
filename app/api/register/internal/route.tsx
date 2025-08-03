@@ -69,8 +69,11 @@ const internalApplicantSchema = z
     }
   );
 
-// Helper function to get valid awards for a faculty
-function getValidAwardsForFaculty(faculty: string): string[] {
+// Helper function to get valid awards for a faculty and academic year
+function getValidAwardsForFaculty(
+  faculty: string,
+  academicYear: string
+): string[] {
   const facultyToBesaAwardsMap: Record<string, string[]> = {
     "Faculty of Management Studies & Commerce": [
       AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE,
@@ -88,9 +91,14 @@ function getValidAwardsForFaculty(faculty: string): string[] {
   };
 
   // General awards available to all internal students (excluding ALL BESA awards)
-  const defaultAwards = Object.values(AWARDS).filter(
+  let defaultAwards = Object.values(AWARDS).filter(
     (award) => !award.startsWith("BESA")
   );
+
+  // Filter out "Best Innovator" award if not 5th year
+  if (academicYear !== "5th Year") {
+    defaultAwards = defaultAwards.filter((award) => award !== "Best Innovator");
+  }
 
   // Get faculty-specific BESA awards (only for the selected faculty)
   const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
@@ -132,8 +140,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get valid awards for the selected faculty
-    const validAwards = getValidAwardsForFaculty(validatedData.Faculty);
+    // Get valid awards for the selected faculty and academic year
+    const validAwards = getValidAwardsForFaculty(
+      validatedData.Faculty,
+      validatedData.AcademicYear
+    );
 
     // Get selected awards (filter out empty/undefined ones)
     const selectedAwards = [
@@ -142,12 +153,25 @@ export async function POST(request: NextRequest) {
       validatedData.Award3,
     ].filter((award) => award && award.trim() !== "");
 
-    // Validate each selected award is valid for the faculty
+    // Validate each selected award is valid for the faculty and academic year
     for (const award of selectedAwards) {
-      if (award !== undefined && !validAwards.includes(award)) {
+      if (typeof award === "string" && !validAwards.includes(award)) {
+        // Special message for Best Innovator award restriction
+        if (
+          award === "Best Innovator" &&
+          validatedData.AcademicYear !== "5th Year"
+        ) {
+          return NextResponse.json(
+            {
+              message:
+                "Best Innovator award is only available for 5th year students",
+            },
+            { status: 401 }
+          );
+        }
         return NextResponse.json(
           {
-            message: `Award "${award}" is not available for your faculty`,
+            message: `Award "${award}" is not available for your faculty or academic year`,
           },
           { status: 401 }
         );
