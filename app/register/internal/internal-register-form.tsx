@@ -214,6 +214,14 @@ function InternalRegisterForm() {
   }
 
   function getRelevantAwards(faculty: string, academicYear: string): string[] {
+    console.log("getRelevantAwards called with:", { faculty, academicYear }); // Debug log
+
+    // If 5th year, they can ONLY apply for Best Innovator
+    if (academicYear === "5th Year") {
+      console.log("Returning only Best Innovator for 5th year"); // Debug log
+      return ["Best Innovator"];
+    }
+
     const facultyToBesaAwardsMap: Record<string, string[]> = {
       "Faculty of Management Studies & Commerce": [
         AWARDS.BESA_MANAGEMENT_STUDIES_AND_COMMERCE,
@@ -230,11 +238,6 @@ function InternalRegisterForm() {
       "Faculty of Urban & Aquatic Bio-resources": [AWARDS.BESA_URBAN_AQUATIC],
     };
 
-    // If 5th year, they can ONLY apply for Best Innovator
-    if (academicYear === "5th Year") {
-      return ["Best Innovator"];
-    }
-
     // For all other years, they can apply for ALL awards (including Best Innovator)
     let defaultAwards = Object.values(AWARDS).filter(
       (award) => !award.startsWith("BESA")
@@ -243,11 +246,17 @@ function InternalRegisterForm() {
     // Get faculty-specific BESA awards (only for the selected faculty)
     const facultySpecificAwards = facultyToBesaAwardsMap[faculty] || [];
 
-    // Add BESA Inter University Award as it's available to all
+    // Add BESA Inter University Award as it's available to all non-5th year students
     const besaInterUniversity = "BESA - Inter University Award";
 
     // Combine general awards with faculty-specific BESA awards and inter-university award
-    return [...defaultAwards, ...facultySpecificAwards, besaInterUniversity];
+    const result = [
+      ...defaultAwards,
+      ...facultySpecificAwards,
+      besaInterUniversity,
+    ];
+    console.log("Returning awards for non-5th year:", result); // Debug log
+    return result;
   }
 
   const relevantAwards = getRelevantAwards(
