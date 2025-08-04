@@ -8,7 +8,7 @@
   </a>
 </p>
 
-JESA (J'pura Employability Skills Awards), the ultimate platform for honoring the accomplishments of young talents. With 13 prestigious awards exclusively dedicated to undergraduates of the University of Sri Jayewardenepura, and a new special award open to students from other universities, JESA sets a remarkable standard for recognition.
+JESA (J'pura Employability Skills Awards), the ultimate platform for honoring the accomplishments of young talents. With 17 prestigious awards exclusively dedicated to undergraduates of the University of Sri Jayewardenepura, and a new special award open to students from other universities, JESA sets a remarkable standard for recognition.
 
 Organized by the Career Skills Development Society of the University, this highly regarded award ceremony, initiated in 2015, continues to captivate audiences. Join us this year to witness the expansion of the JESA legacy, as talented undergraduates from diverse institutions compete for the coveted Best Innovator Award.
 
