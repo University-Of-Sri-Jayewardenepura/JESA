@@ -4,7 +4,8 @@ import "./globals.css";
 import Announcement from "@/components/annoucement";
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
-import MSClarity from "@/components/ms-clarity";
+import MSClarity from "@/components/core/ms-clarity";
+import FacebookPixel from "@/components/core/facebook-pixel";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} antialiased`}>
         <MSClarity />
+        <FacebookPixel />
         <div>
           <main
             className="flex min-w-[340px] flex-col font-sans text-slate-200 antialiased overflow-hidden"
