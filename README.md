@@ -59,7 +59,6 @@ App Structure
 │   └── page.tsx
 │   └── error.tsx
 │   └── sitemap.ts
-│   └── fonts.ts
 ├── components
 │   ├── ui
 │   │   ├── button.tsx
