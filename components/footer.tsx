@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
               Sri Jayewardenepura Contacts
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2">
             <div>
               <h2 className="mb-6 tracking-tighter font-medium">Contacts</h2>
               <ul className="gap-4 grid">
@@ -108,18 +108,19 @@ const Footer: React.FC = () => {
             . All Rights Reserved.
           </span>
           <div className="flex space-x-5 sm:justify-center sm:mt-0">
-            <Link href="https://facebook.com/jesa2022" target="_blank">
-              <Facebook className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
-              <span className="sr-only">Facebook</span>
-            </Link>
             <Link
-              href="https://www.linkedin.com/showcase/j-pura-employability-skills-awards/"
+              href="https://www.linkedin.com/showcase/jesa-csds/"
               target="_blank"
             >
               <Linkedin className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
               <span className="sr-only">LinkedIn</span>
             </Link>
-            <Link href="https://www.instagram.com/jesa_2023/" target="_blank">
+            <Link href="https://facebook.com/jesa.csds" target="_blank">
+              <Facebook className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <span className="sr-only">Facebook</span>
+            </Link>
+
+            <Link href="https://www.instagram.com/jesa.csds" target="_blank">
               <Instagram className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
               <span className="sr-only">Instagram</span>
             </Link>
