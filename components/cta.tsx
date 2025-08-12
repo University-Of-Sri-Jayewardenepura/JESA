@@ -13,12 +13,12 @@ const CTA: React.FC = () => {
         </h2>
         <p className="mt-5 max-w-[262px] text-center text-slate-500 tracking-tight md:max-w-none md:text-lg lg:mt-6 lg:text-xl">
           Be part of the legacy.
-          <br className="block md:hidden" /> Register now and step into
-          excellence.
+          <br className="block md:hidden" /> Look at the past and wait for your
+          chance to shine.
         </p>
         <div className="relative flex justify-center">
           <div className="mt-5 w-fit md:mt-6 lg:mt-8">
-            <CtaButton href="/register">Register Now</CtaButton>
+            <CtaButton href="/hall-of-fame">Hall of Fame</CtaButton>
           </div>
         </div>
       </div>

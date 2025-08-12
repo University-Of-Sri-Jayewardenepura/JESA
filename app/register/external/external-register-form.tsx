@@ -137,7 +137,7 @@ function ExternalRegisterForm() {
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(OnSubmit)}
+          // onSubmit={form.handleSubmit(OnSubmit)}
           className="space-y-6 p-10 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
         >
           <FormField
