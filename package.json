@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "backup": "bun run lib/backup.ts"
+    "backup": "bun run lib/backup.ts",
+    "data": "bun run data/data.ts",
+    "contacts": "bun run data/contacts.ts",
+    "regtable": "bun run data/populate-regtable.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -37,6 +40,8 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "xlsx": "^0.18.5",
+    "csv-parser": "^3.2.0"
   }
 }

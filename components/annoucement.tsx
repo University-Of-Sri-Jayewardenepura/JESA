@@ -12,16 +12,16 @@ const Announcement: React.FC = () => {
     >
       <div className="flex items-center gap-x-3.5">
         <p className=" text-sm leading-snug tracking-tighter  space-x-2">
-          Registration are now closed! &nbsp;
-          {/* <span className="opacity-30">|</span>
-          &nbsp; */}
-          {/* <Link
-            href="/register"
+          Check your registrations &nbsp;
+          <span className="opacity-30">|</span>
+          &nbsp;
+          <Link
+            href="/check-registration"
             className="group hover:text-slate-300 transition-colors"
           >
             Learn more &nbsp;
             <ArrowRight className="inline h-4 w-4 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-slate-300" />
-          </Link> */}
+          </Link>
         </p>
       </div>
     </div>

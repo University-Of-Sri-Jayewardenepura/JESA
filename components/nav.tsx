@@ -68,12 +68,12 @@ const Nav: React.FC = () => {
             variant="outline"
             className="bg-transparent border border-gray-600  hover:border-slate-400 transition-colors rounded-full text-md h-8"
           >
-            {/* <Link
-              href="/register"
+            <Link
+              href="/check-registration"
               className="px-2  hover:text-slate-300 transition-colors"
             >
-              Register Now
-            </Link> */}
+              Check Registrations
+            </Link>
           </Button>
         </div>
 
@@ -126,9 +126,9 @@ const Nav: React.FC = () => {
               >
                 <Link href="/terms">Terms & Conditions</Link>
               </CtaButton>
-              {/* <CtaButton asChild className="w-full" onClick={toggleMenu}>
-                <Link href="/">Registration Coming Soon</Link>
-              </CtaButton> */}
+              <CtaButton asChild className="w-full" onClick={toggleMenu}>
+                <Link href="/check-registration">Check Registrations</Link>
+              </CtaButton>
             </div>
           </div>
         </div>
