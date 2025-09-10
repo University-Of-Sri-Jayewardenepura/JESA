@@ -1,4 +1,4 @@
-import { Metadata } from "next/types";
+import type { Metadata } from "next/types";
 import CheckRegistrationForm from "./check-registration-form";
 
 export const metadata: Metadata = {

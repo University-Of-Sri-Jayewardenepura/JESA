@@ -1,16 +1,13 @@
 "use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import toast, { Toaster } from "react-hot-toast";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { UNIVERSITY, ACADEMICYEAR, AWARDS } from "@/constants/form";
-import toast, { Toaster } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import {
   Form,
   FormControl,
@@ -20,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -30,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ACADEMICYEAR, AWARDS, UNIVERSITY } from "@/constants/form";
 
 const formSchema = z.object({
   Name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -117,28 +115,28 @@ function ExternalRegisterForm() {
       body: JSON.stringify(values),
     });
 
-    if (!response.ok) {
+    if (response.ok) {
+      const data = await response.json();
+      router.push("/register/success");
+    } else {
       const errorText = await response.text();
       const errorData = JSON.parse(errorText);
       const errorMessage = errorData.message;
       toast.error(errorMessage);
       setIsSubmitting(false);
-    } else {
-      const data = await response.json();
-      router.push("/register/success");
     }
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto px-4">
-      <h2 className="pb-8 bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text text-center font-title text-[32px] leading-[1.125] tracking-tight text-transparent md:text-[40px] lg:text-[48px]">
+    <div className="mx-auto w-full max-w-xl px-4">
+      <h2 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-8 text-center font-title text-[32px] text-transparent leading-[1.125] tracking-tight md:text-[40px] lg:text-[48px]">
         External Registration
       </h2>
 
       <Form {...form}>
         <form
           // onSubmit={form.handleSubmit(OnSubmit)}
-          className="space-y-6 p-10 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
+          className="space-y-6 rounded-2xl border border-slate-700/50 bg-slate-900/50 p-10 backdrop-blur-sm"
         >
           <FormField
             control={form.control}
@@ -436,18 +434,18 @@ function ExternalRegisterForm() {
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      onCheckedChange={field.onChange}
                       className="mt-1"
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
                   <div className="flex-1">
-                    <FormLabel className="text-sm font-normal leading-relaxed">
+                    <FormLabel className="font-normal text-sm leading-relaxed">
                       <span>
                         I confirm that the information above is accurate to the
                         best of my knowledge and in accordance with the&ensp;
                         <Link
+                          className="text-blue-400 underline hover:text-blue-300"
                           href="/terms"
-                          className="underline text-blue-400 hover:text-blue-300"
                         >
                           terms and conditions.
                         </Link>
@@ -462,9 +460,9 @@ function ExternalRegisterForm() {
 
           <div className="pt-4">
             <Button
-              type="submit"
+              className="w-full rounded-[8px] py-3 font-medium text-base"
               disabled={isSubmitting}
-              className="w-full rounded-[8px] py-3 text-base font-medium"
+              type="submit"
             >
               {isSubmitting ? "Submitting..." : "Submit Registration"}
             </Button>

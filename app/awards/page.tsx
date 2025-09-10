@@ -1,4 +1,4 @@
-import { Metadata } from "next/types";
+import type { Metadata } from "next/types";
 import AwardsPage from "./awards-card";
 
 export const metadata: Metadata = {

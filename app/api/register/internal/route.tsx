@@ -1,9 +1,9 @@
-import connectMongoDB from "@/lib/mongodb";
-import InternalApplicant from "@/models/internalApplicant";
-import BaseApplicant from "@/models/BaseApplicant";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { AWARDS } from "@/constants/form";
+import connectMongoDB from "@/lib/mongodb";
+import BaseApplicant from "@/models/BaseApplicant";
+import InternalApplicant from "@/models/internalApplicant";
 
 // Add a simple GET method for testing
 export async function GET() {
@@ -94,7 +94,7 @@ function getValidAwardsForFaculty(
   }
 
   // For all other years, they can apply for ALL awards EXCEPT BESA Inter University (which is now a checkbox)
-  let defaultAwards = Object.values(AWARDS).filter(
+  const defaultAwards = Object.values(AWARDS).filter(
     (award) => !award.startsWith("BESA - Inter University")
   );
 

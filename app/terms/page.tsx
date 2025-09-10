@@ -1,12 +1,12 @@
 export default function Terms() {
   return (
-    <section className="max-w-3xl mx-auto py-[140px] px-6">
+    <section className="mx-auto max-w-3xl px-6 py-[140px]">
       <h3 className="secondary-title">Terms & Conditions</h3>
       <div>
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
           Common Eligibility Criteria for JESA 2025
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
+        <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
             To be eligible to apply for the JESA 2025 Awards, you must be a
             currently enrolled undergraduate student at our university. Recent
@@ -26,10 +26,10 @@ export default function Terms() {
             category.
           </li>
         </ul>
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
           Eligibility Criteria for BESA Awards
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md text-slate-400 max-w-2xl ">
+        <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
             Students can only apply for the BESA award of their respective
             faculty.
@@ -40,20 +40,20 @@ export default function Terms() {
             apply for the Best Innovator Award.
           </li>
         </ul>
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
           Eligibility Criteria for the BESA Inter University Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md text-slate-400 max-w-2xl ">
+        <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
             ⁠Undergraduate students from any state university in Sri Lanka are
             eligible to apply. (This includes students from any faculty or
             degree program.)
           </li>
         </ul>
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
           Eligibility Criteria for the Best Innovator Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
+        <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
             Undergraduate students from any state university in Sri Lanka can
             apply for this.
@@ -72,10 +72,10 @@ export default function Terms() {
             award.
           </li>
         </ul>
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
           Eligibility Criteria for the Best Creative Designer Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
+        <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
             Undergraduate students from any faculty of University of Sri
             Jayewardenepura can apply for this.
@@ -86,10 +86,10 @@ export default function Terms() {
             other creative medium)
           </li>
         </ul>
-        <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
           Eligibility Criteria for the Best Communicator Award
         </h3>
-        <ul className="my-6 ml-6 list-disc [&>li]:mt-2 text-md max-w-2xl text-slate-400">
+        <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
             Undergraduate students from any faculty of University of Sri
             Jayewardenepura can apply for this.
@@ -99,7 +99,7 @@ export default function Terms() {
           </li>
         </ul>
       </div>
-      <p className="text-sm font-medium leading-none [&:not(:first-child)]:mt-6 text-slate-500">
+      <p className="font-medium text-slate-500 text-sm leading-none [&:not(:first-child)]:mt-6">
         Last updated: 2025.07.13 at 02:48 PM
       </p>
     </section>

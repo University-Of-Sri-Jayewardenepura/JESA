@@ -1,7 +1,7 @@
-import CTA from "@/components/cta";
-import ImageWall from "@/components/image-wall";
-import Hero from "@/components/hero";
 import Awards from "@/components/awards";
+import CTA from "@/components/cta";
+import Hero from "@/components/hero";
+import ImageWall from "@/components/image-wall";
 import WhatIsJesa from "@/components/what-is";
 
 export default function Home() {

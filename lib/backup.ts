@@ -1,10 +1,10 @@
-import connectMongoDB from "./mongodb";
-import BaseApplicant from "../models/BaseApplicant";
-import RegTable from "../models/RegTable";
-import InternalApplicant from "../models/internalApplicant";
-import ExternalApplicant from "../models/externalApplicant";
 import fs from "fs";
 import path from "path";
+import BaseApplicant from "../models/BaseApplicant";
+import ExternalApplicant from "../models/externalApplicant";
+import InternalApplicant from "../models/internalApplicant";
+import RegTable from "../models/RegTable";
+import connectMongoDB from "./mongodb";
 
 export async function createBackup() {
   try {

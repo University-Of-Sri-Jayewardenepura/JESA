@@ -1,13 +1,13 @@
 import mongoose, { Schema } from "mongoose";
+import { getEnumValues } from "@/lib/utils";
 import {
+  ACADEMICYEAR,
+  AWARDS,
+  DEGREE,
+  FACULTY,
   GENDER,
   UNIVERSITY,
-  ACADEMICYEAR,
-  FACULTY,
-  DEGREE,
-  AWARDS,
 } from "../constants/form";
-import { getEnumValues } from "@/lib/utils";
 
 const internalApplicantSchema = new Schema(
   {
