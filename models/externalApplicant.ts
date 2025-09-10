@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-
-import { ACADEMICYEAR, AWARDS, GENDER, UNIVERSITY } from "../constants/form";
 import { getEnumValues } from "@/lib/utils";
+import { ACADEMICYEAR, AWARDS, GENDER, UNIVERSITY } from "../constants/form";
 
 const externalApplicantSchema = new Schema(
   {

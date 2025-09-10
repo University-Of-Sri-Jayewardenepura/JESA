@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import connectMongoDB from "@/lib/mongodb";
+import { type NextRequest, NextResponse } from "next/server";
 import z from "zod";
+import connectMongoDB from "@/lib/mongodb";
 import RegTable from "@/models/RegTable";
 
 // Define schema using zod
@@ -16,12 +16,18 @@ export async function POST(request: NextRequest) {
 
     // Return error response if validation fails
     if (!validation.success) {
-      return NextResponse.json({ error: validation.error.errors }, { status: 400 });
+      return NextResponse.json(
+        { error: validation.error.errors },
+        { status: 400 }
+      );
     }
 
     // Check if the phone number length is valid
     if (body.Whatsapp.length < 9) {
-      return NextResponse.json({ message: "Please check phone number" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Please check phone number" },
+        { status: 400 }
+      );
     }
 
     // Connect to MongoDB
@@ -36,12 +42,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Return success response with the user data
-    return NextResponse.json({ message: "Applicant found successfully", user }, { status: 200 });
-
+    return NextResponse.json(
+      { message: "Applicant found successfully", user },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     // Return error response for any other errors
-    return NextResponse.json({ message: "Sorry! We are unable to process your request." }, { status: 500 });
+    return NextResponse.json(
+      { message: "Sorry! We are unable to process your request." },
+      { status: 500 }
+    );
   }
 }
 

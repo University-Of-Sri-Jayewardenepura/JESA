@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-import { Facebook, Linkedin, Instagram } from "lucide-react";
-import Link from "next/link";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import type React from "react";
 import { contactNames } from "@/constants/contacts";
 
 const Footer: React.FC = () => {
@@ -11,55 +11,55 @@ const Footer: React.FC = () => {
     <footer>
       <hr />
       <div className="mx-auto w-full max-w-screen-xl xl:pb-2">
-        <div className="md:flex md:justify-between px-8 p-4 py-16 sm:pb-16 gap-4">
-          <div className="mb-12 flex-col flex gap-4">
+        <div className="gap-4 p-4 px-8 py-16 sm:pb-16 md:flex md:justify-between">
+          <div className="mb-12 flex flex-col gap-4">
             <Link className="flex items-center gap-2" href="/">
               <Image
+                alt="JESA 2025"
+                className="mt-[-1.6rem] ml-[-1.2rem] h-auto w-auto"
+                height={20}
                 src="/images/jesa-min.png"
                 width={72}
-                height={20}
-                alt="JESA 2025"
-                className="ml-[-1.2rem] mt-[-1.6rem] w-auto h-auto"
               />
               <span className="sr-only">JESA</span>
             </Link>
-            <div className="flex justify-start items-center space-x-2">
+            <div className="flex items-center justify-start space-x-2">
               <Image
                 alt="USJP Logo"
+                className="pointer-events-none select-none"
+                height={40}
                 src="/images/usjp.jpg"
                 width={40}
-                height={40}
-                className="select-none pointer-events-none"
               />
               <Image
                 alt="CSDS Logo"
+                className="pointer-events-none select-none"
+                height={40}
                 src="/images/csds.png"
                 width={40}
-                height={40}
-                className="select-none pointer-events-none"
               />
             </div>
-            <p className="max-w-xs text-sm text-slate-500">
+            <p className="max-w-xs text-slate-500 text-sm">
               Career Skills Development Society • 2025/2026 <br />
               in collaboration with Career Guidance Unit of <br /> University of
               Sri Jayewardenepura Contacts
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10">
             <div>
-              <h2 className="mb-6 tracking-tighter font-medium">Contacts</h2>
-              <ul className="gap-4 grid">
+              <h2 className="mb-6 font-medium tracking-tighter">Contacts</h2>
+              <ul className="grid gap-4">
                 {contactNames.map((contact, index) => (
                   <li key={index}>
                     <Link
-                      className="cursor-pointer duration-200 text-slate-500"
+                      className="cursor-pointer text-slate-500 duration-200"
                       href={contact.linkedin}
                     >
                       {contact.name}
                     </Link>{" "}
                     <br />
                     <Link
-                      className="cursor-pointer duration-200 text-slate-700"
+                      className="cursor-pointer text-slate-700 duration-200"
                       href={`tel:${contact.phone}`}
                     >
                       {contact.phone}
@@ -69,11 +69,11 @@ const Footer: React.FC = () => {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 tracking-tighter font-medium">Show</h2>
-              <ul className="gap-4 grid">
+              <h2 className="mb-6 font-medium tracking-tighter">Show</h2>
+              <ul className="grid gap-4">
                 <li>
                   <Link
-                    className="cursor-pointer duration-200 text-slate-500"
+                    className="cursor-pointer text-slate-500 duration-200"
                     href="awards"
                   >
                     Awards{" "}
@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
-                    className="cursor-pointer duration-200 text-slate-500"
+                    className="cursor-pointer text-slate-500 duration-200"
                     href="/hall-of-fame"
                   >
                     Hall of Fame{" "}
@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
                 </li>
                 <li>
                   <Link
-                    className="cursor-pointer duration-200 text-slate-500"
+                    className="cursor-pointer text-slate-500 duration-200"
                     href="/terms"
                   >
                     Terms & Conditions{" "}
@@ -99,29 +99,29 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between rounded-md py-4 px-8 gap-4">
-          <span className="text-sm text-slate-500 sm:text-center">
+        <div className="flex flex-col-reverse gap-4 rounded-md px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-slate-500 text-sm sm:text-center">
             Copyright © 2025{" "}
             <a className="cursor-pointer" href="/">
               CDSD
             </a>
             . All Rights Reserved.
           </span>
-          <div className="flex space-x-5 sm:justify-center sm:mt-0">
+          <div className="flex space-x-5 sm:mt-0 sm:justify-center">
             <Link
               href="https://www.linkedin.com/showcase/jesa-csds/"
               target="_blank"
             >
-              <Linkedin className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <Linkedin className="h-6 w-6 text-gray-100 transition-colors hover:text-gray-300" />
               <span className="sr-only">LinkedIn</span>
             </Link>
             <Link href="https://facebook.com/jesa.csds" target="_blank">
-              <Facebook className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <Facebook className="h-6 w-6 text-gray-100 transition-colors hover:text-gray-300" />
               <span className="sr-only">Facebook</span>
             </Link>
 
             <Link href="https://www.instagram.com/jesa.csds" target="_blank">
-              <Instagram className="h-6 w-6 text-gray-100 hover:text-gray-300 transition-colors" />
+              <Instagram className="h-6 w-6 text-gray-100 transition-colors hover:text-gray-300" />
               <span className="sr-only">Instagram</span>
             </Link>
           </div>

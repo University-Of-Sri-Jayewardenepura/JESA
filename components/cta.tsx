@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 
 import { CtaButton } from "@/components/ui/cta-button";
 
 const CTA: React.FC = () => {
   return (
-    <section className="cta relative px-safe pb-[120px] pt-[124px] md:pb-[136px] md:pt-[142px] lg:pb-[160px] lg:pt-[232px] xl:pb-[162px] xl:pt-[180px]">
+    <section className="cta relative px-safe pt-[124px] pb-[120px] md:pt-[142px] md:pb-[136px] lg:pt-[232px] lg:pb-[160px] xl:pt-[180px] xl:pb-[162px]">
       <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl">
         <h2 className="cta-title">
           Ready to Shine <br className="block lg:hidden" /> Among the Best?
@@ -23,8 +23,8 @@ const CTA: React.FC = () => {
         </div>
       </div>
       <div
-        className="absolute inset-x-0 bottom-0 -z-30 h-[490px] md:h-[629px] lg:h-[641px] xl:h-[689px]"
         aria-hidden="true"
+        className="-z-30 absolute inset-x-0 bottom-0 h-[490px] md:h-[629px] lg:h-[641px] xl:h-[689px]"
       >
         <div className="absolute inset-0 z-0 opacity-30" />
         <div className="absolute inset-0 z-10" />

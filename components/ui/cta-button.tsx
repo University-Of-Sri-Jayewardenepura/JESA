@@ -1,9 +1,9 @@
 "use client";
 
-import * as React from "react";
+import Link from "next/link";
+import type * as React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 interface CtaButtonProps extends React.ComponentProps<typeof Button> {
   href?: string;
@@ -24,9 +24,9 @@ export function CtaButton({
 
   return (
     <div className="relative w-full">
-      <div className="group relative rounded-full p-1 transition-colors w-full">
+      <div className="group relative w-full rounded-full p-1 transition-colors">
         {/* Border around button */}
-        <div className="absolute -inset-px rounded-full bg-gradient-to-b from-slate-500 to-slate-900" />
+        <div className="-inset-px absolute rounded-full bg-gradient-to-b from-slate-500 to-slate-900" />
 
         {/* Gold gradient background - for both default and secondary variants */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-300/10 via-background to-slate-300/10" />
@@ -34,16 +34,16 @@ export function CtaButton({
         {/* Regular button in the middle */}
         <Button
           asChild={asChild || Boolean(href)}
-          variant={isDefault ? "default" : "ghost"}
           className={cn(
-            "relative rounded-full z-10 w-full transition-all font-semibold",
+            "relative z-10 w-full rounded-full font-semibold transition-all",
             isDefault ? "bg-white hover:bg-slate-100" : "",
             className
           )}
+          variant={isDefault ? "default" : "ghost"}
           {...props}
         >
           {href ? (
-            <Link className="w-full block text-center" href={href}>
+            <Link className="block w-full text-center" href={href}>
               {children}
             </Link>
           ) : (
@@ -55,8 +55,8 @@ export function CtaButton({
       {/* Glow effect - only for default variant */}
       {isDefault && (
         <div
-          className="pointer-events-none absolute -bottom-1 left-1/2 z-20 h-[66px] w-[187px] -translate-x-1/2 bg-gradient-to-b from-transparent to-yellow-400/20 opacity-40 mix-blend-plus-lighter blur-3xl"
           aria-hidden="true"
+          className="-bottom-1 -translate-x-1/2 pointer-events-none absolute left-1/2 z-20 h-[66px] w-[187px] bg-gradient-to-b from-transparent to-yellow-400/20 opacity-40 mix-blend-plus-lighter blur-3xl"
         />
       )}
     </div>

@@ -1,6 +1,6 @@
+import csv from "csv-parser";
 import fs from "fs";
 import path from "path";
-import csv from "csv-parser";
 import * as XLSX from "xlsx";
 import connectMongoDB from "@/lib/mongodb";
 import RegTable from "@/models/RegTable";
@@ -190,7 +190,7 @@ async function verifyDatabase() {
           `     ⚠️  MISMATCH: Expected ${sourceAwards.length} records, found ${dbRecords.length}`
         );
       } else {
-        console.log(`     ✅ MATCH`);
+        console.log("     ✅ MATCH");
       }
       console.log("");
     }

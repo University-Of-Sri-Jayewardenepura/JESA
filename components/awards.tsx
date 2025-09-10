@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import { awards } from "@/constants/awards";
 
 // Add isNew property to specific awards (you can modify this logic later)
@@ -65,7 +65,7 @@ export default function Awards() {
   };
 
   return (
-    <section className="overflow-hidden pb-[76px] pt-[120px] px-safe md:pb-0 md:pt-[146px] lg:pt-44 xl:pt-[117px]">
+    <section className="overflow-hidden px-safe pt-[120px] pb-[76px] md:pt-[146px] md:pb-0 lg:pt-44 xl:pt-[117px]">
       <div className="container mx-auto px-5 md:px-8">
         <h2 className="secondary-title">Award Categories</h2>
       </div>
@@ -73,7 +73,7 @@ export default function Awards() {
         <div className="relative z-10">
           <div className="overflow-hidden pl-5 md:pl-8">
             <div
-              className="flex items-center justify-start gap-4 lg:gap-5 pr-5 md:pr-8 pb-4 transition-transform duration-500 ease-out"
+              className="flex items-center justify-start gap-4 pr-5 pb-4 transition-transform duration-500 ease-out md:pr-8 lg:gap-5"
               style={{
                 transform: `translateX(-${adjustedIndex * getItemWidth()}px)`,
               }}
@@ -81,20 +81,19 @@ export default function Awards() {
               {awardCategories.map((category, index) => {
                 return (
                   <div
+                    className="relative h-[348px] w-[264px] flex-shrink-0 lg:h-[400px] lg:w-80"
                     key={index}
-                    className="relative h-[348px] w-[264px] lg:h-[400px] lg:w-80 flex-shrink-0"
                   >
                     <div className="relative h-full w-full overflow-hidden">
                       {/* Award image centered */}
                       <div className="absolute inset-0 flex items-center justify-center p-8 pt-[100px]">
                         <Image
-                          src={category.image}
                           alt={category.title}
-                          width={180}
+                          className="h-fit w-[90px] object-contain lg:w-[100px]"
                           height={180}
-                          className="h-fit
-                          w-[90px] lg:w-[100px] object-contain"
                           priority={index < 2}
+                          src={category.image}
+                          width={180}
                         />
                       </div>
                       <div
@@ -105,7 +104,7 @@ export default function Awards() {
                           opacity: 0.1,
                           mixBlendMode: "overlay",
                         }}
-                      ></div>
+                      />
                       <div
                         className="pointer-events-none absolute inset-0"
                         style={{
@@ -113,21 +112,21 @@ export default function Awards() {
                           mixBlendMode: "overlay",
                           opacity: 0.5,
                         }}
-                      ></div>
-                      <h3 className="absolute left-5 top-5 max-w-44 text-[20px] font-medium leading-tight tracking-tightest lg:left-6 lg:top-6 lg:text-[24px]">
+                      />
+                      <h3 className="absolute top-5 left-5 max-w-44 font-medium text-[20px] leading-tight tracking-tightest lg:top-6 lg:left-6 lg:text-[24px]">
                         {category.title}
                       </h3>
 
                       {category.isNew && (
-                        <span className="absolute right-5 top-[23px] flex h-5 items-center justify-center rounded bg-emerald-400/[0.5] px-3 text-[8px] font-semibold uppercase leading-none tracking-tighter text-gray-90 backdrop-blur-[2px] lg:right-6 lg:top-[29px]">
+                        <span className="absolute top-[23px] right-5 flex h-5 items-center justify-center rounded bg-emerald-400/[0.5] px-3 font-semibold text-[8px] text-gray-90 uppercase leading-none tracking-tighter backdrop-blur-[2px] lg:top-[29px] lg:right-6">
                           New
                         </span>
                       )}
 
                       <div
-                        className="pointer-events-none absolute inset-0 rounded-[10px] border border-slate-700 opacity-60 mix-blend-overlay"
                         aria-hidden="true"
-                      ></div>
+                        className="pointer-events-none absolute inset-0 rounded-[10px] border border-slate-700 opacity-60 mix-blend-overlay"
+                      />
                     </div>
                   </div>
                 );
@@ -138,18 +137,18 @@ export default function Awards() {
           {/* Navigation Buttons */}
           <div className="relative pl-5 md:pl-8">
             <button
-              onClick={handlePrev}
-              className="group absolute -bottom-[68px] right-[76px] flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-[85px] lg:top-[-490px] lg:right-[90px] z-20"
               aria-label="Previous slide"
+              className="group -bottom-[68px] absolute right-[76px] z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-[85px] lg:top-[-490px] lg:right-[90px]"
+              onClick={handlePrev}
             >
               <ArrowLeft size={20} />
               <span className="sr-only">Previous slide</span>
             </button>
 
             <button
-              onClick={handleNext}
-              className="group absolute -bottom-[68px] right-5 flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-8 lg:top-[-490px] lg:right-8 z-20"
               aria-label="Next slide"
+              className="group -bottom-[68px] absolute right-5 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gray-12 transition-colors hover:bg-gray-20 focus-visible:rounded-full md:right-8 lg:top-[-490px] lg:right-8"
+              onClick={handleNext}
             >
               <ArrowRight size={20} />
               <span className="sr-only">Next slide</span>

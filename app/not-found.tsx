@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { CtaButton } from "@/components/ui/cta-button";
 
 const NotFound: React.FC = () => {
@@ -12,7 +12,7 @@ const NotFound: React.FC = () => {
           The page you're looking for doesn't exist.
           <br className="block md:hidden" /> Let's get you back on track.
         </p>
-        <div className="relative flex justify-center mt-5 md:mt-6 lg:mt-8">
+        <div className="relative mt-5 flex justify-center md:mt-6 lg:mt-8">
           <CtaButton href="/">Go Home</CtaButton>
         </div>
       </div>

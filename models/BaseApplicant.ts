@@ -1,8 +1,9 @@
 import mongoose, { Schema } from "mongoose";
+
 const AutoIncrementFactory = require("mongoose-sequence");
 
-import { UNIVERSITY } from "../constants/form";
 import { getEnumValues } from "@/lib/utils";
+import { UNIVERSITY } from "../constants/form";
 
 // Initialize AutoIncrement
 const AutoIncrement = AutoIncrementFactory(mongoose);

@@ -1,9 +1,9 @@
-import connectMongoDB from "@/lib/mongodb";
-import ExternalApplicant from "@/models/externalApplicant";
-import BaseApplicant from "@/models/BaseApplicant";
-import { NextRequest, NextResponse } from "next/server";
-import { UNIVERSITY, AWARDS, GENDER, ACADEMICYEAR } from "@/constants/form";
+import { type NextRequest, NextResponse } from "next/server";
 import z from "zod";
+import { ACADEMICYEAR, AWARDS, GENDER, UNIVERSITY } from "@/constants/form";
+import connectMongoDB from "@/lib/mongodb";
+import BaseApplicant from "@/models/BaseApplicant";
+import ExternalApplicant from "@/models/externalApplicant";
 
 const enumValues = <T extends Record<string, string>>(
   enumObject: T
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
       NIC: body.NIC,
       Gender: body.Gender,
       Email: body.Email,
-      Whatsapp: parseInt(body.Whatsapp),
+      Whatsapp: Number.parseInt(body.Whatsapp),
       University: body.University,
       Faculty: body.Faculty,
       UniversityRegisterId: body.UniversityRegisterId,

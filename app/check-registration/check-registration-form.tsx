@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -95,21 +95,21 @@ export default function CheckRegistrationForm() {
   }
 
   return (
-    <section className="register relative px-safe pb-[120px] pt-[124px] md:pb-[136px] md:pt-[142px] lg:pb-[160px] lg:pt-[232px] xl:pb-[162px] xl:pt-[180px]">
+    <section className="register relative px-safe pt-[124px] pb-[120px] md:pt-[142px] md:pb-[136px] lg:pt-[232px] lg:pb-[160px] xl:pt-[180px] xl:pb-[162px]">
       <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl">
-        <h1 className="relative z-20 max-w-[340px] bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 text-center font-title text-[40px] leading-[1.125] tracking-tight text-transparent md:max-w-none md:text-[56px] lg:text-[64px] xl:text-[72px]">
+        <h1 className="relative z-20 max-w-[340px] bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 text-center font-title text-[40px] text-transparent leading-[1.125] tracking-tight md:max-w-none md:text-[56px] lg:text-[64px] xl:text-[72px]">
           <span className="block bg-[linear-gradient(180deg,rgba(251,191,36,1)_0%,rgba(251,191,36,0)_70%)] bg-clip-text text-white md:inline md:text-transparent">
             Check Registration
           </span>
         </h1>
 
-        <div className="w-full max-w-xl mx-auto px-4 pt-[32px]">
+        <div className="mx-auto w-full max-w-xl px-4 pt-[32px]">
           <Form {...form}>
             <form
+              className="space-y-6 rounded-2xl border border-slate-700/50 bg-slate-900/50 px-10 py-6 backdrop-blur-sm"
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-6 px-10 py-6 rounded-2xl bg-slate-900/50 backdrop-blur-sm border border-slate-700/50"
             >
-              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+              <h3 className="scroll-m-20 font-semibold text-2xl tracking-tight">
                 Enter your WhatsApp number
               </h3>
               <FormField
@@ -122,9 +122,9 @@ export default function CheckRegistrationForm() {
                         <Input
                           placeholder="7XXXXXXXX"
                           {...field}
-                          maxLength={9}
-                          inputMode="numeric"
                           className="flex-1"
+                          inputMode="numeric"
+                          maxLength={9}
                         />
                       </FormControl>
                     </div>
@@ -135,44 +135,44 @@ export default function CheckRegistrationForm() {
 
               <div className="pt-4">
                 <Button
-                  type="submit"
+                  className="w-full rounded-[8px] py-3 font-medium text-base"
                   disabled={isPending}
-                  className="w-full rounded-[8px] py-3 text-base font-medium"
+                  type="submit"
                 >
                   {isPending ? "Checking..." : "Check Registration"}
                 </Button>
               </div>
 
               {responseData && (
-                <div className="mt-6 rounded-[8px] border bg-card/50 p-6 text-card-foreground shadow-sm backdrop-blur ">
+                <div className="mt-6 rounded-[8px] border bg-card/50 p-6 text-card-foreground shadow-sm backdrop-blur">
                   <div className="space-y-4">
                     <div className="space-y-1 text-center">
-                      <h3 className="text-2xl font-bold bg-gradient-to-br from-sky-300 to-sky-500 bg-clip-text text-transparent">
+                      <h3 className="bg-gradient-to-br from-sky-300 to-sky-500 bg-clip-text font-bold text-2xl text-transparent">
                         {responseData.user[0]?.Name}
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         WhatsApp Number: +94
                         {responseData.user[0]?.Whatsapp}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         Email: {responseData.user[0]?.Email}
                       </p>
                     </div>
 
                     <div className="space-y-2">
-                      <h4 className="text-lg font-semibold">
+                      <h4 className="font-semibold text-lg">
                         Awards Applied For
                       </h4>
                       <ul className="divide-y divide-border rounded-[4px] border">
                         {responseData.user.map((item, index) => (
                           <li
-                            className="flex items-center justify-between p-3 "
+                            className="flex items-center justify-between p-3"
                             key={index}
                           >
                             <div className="font-medium">
                               {regNoToAward(item.RegNo)}
                             </div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-muted-foreground text-sm">
                               {item.RegNo}
                             </div>
                           </li>

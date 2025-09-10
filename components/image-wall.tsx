@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { imageSrcs } from "@/constants/gallery";
 import Image from "next/image";
+import { imageSrcs } from "@/constants/gallery";
 
 export default function ImageWall() {
   // Split images into two rows
@@ -20,32 +20,32 @@ export default function ImageWall() {
   return (
     <div className="relative w-full overflow-hidden py-8">
       {/* Desktop: Two rows */}
-      <div className="hidden md:block space-y-4">
+      <div className="hidden space-y-4 md:block">
         {/* First row - moving left */}
         <div className="relative overflow-hidden">
           <motion.div
-            className="flex gap-4 "
             animate={{
               x: [-firstRowWidth, 0],
             }}
+            className="flex gap-4"
             transition={{
               duration: 50,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
               repeatType: "loop",
             }}
           >
             {[...firstRow, ...firstRow, ...firstRow].map((src, index) => (
               <div
+                className="h-64 w-96 flex-shrink-0 overflow-hidden rounded-[4px]"
                 key={`row1-${index}`}
-                className="flex-shrink-0 w-96 h-64 overflow-hidden rounded-[4px]"
               >
                 <Image
-                  src={src}
                   alt={`Gallery image ${index + 1}`}
-                  width={384}
+                  className="h-full w-full rounded-[4px] object-cover transition-transform duration-300 hover:scale-105"
                   height={256}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 rounded-[4px]"
+                  src={src}
+                  width={384}
                 />
               </div>
             ))}
@@ -55,28 +55,28 @@ export default function ImageWall() {
         {/* Second row - moving right */}
         <div className="relative overflow-hidden">
           <motion.div
-            className="flex gap-4"
             animate={{
               x: [0, -secondRowWidth],
             }}
+            className="flex gap-4"
             transition={{
               duration: 50,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
               repeatType: "loop",
             }}
           >
             {[...secondRow, ...secondRow, ...secondRow].map((src, index) => (
               <div
+                className="h-64 w-96 flex-shrink-0 overflow-hidden rounded-[4px]"
                 key={`row2-${index}`}
-                className="flex-shrink-0 w-96 h-64 overflow-hidden rounded-[4px]"
               >
                 <Image
-                  src={src}
                   alt={`Gallery image ${index + 1}`}
-                  width={384}
+                  className="h-full w-full rounded-[4px] object-cover transition-transform duration-300 hover:scale-105"
                   height={256}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 rounded-[4px]"
+                  src={src}
+                  width={384}
                 />
               </div>
             ))}
@@ -88,28 +88,28 @@ export default function ImageWall() {
       <div className="md:hidden">
         <div className="relative overflow-hidden">
           <motion.div
-            className="flex gap-4"
             animate={{
               x: [-allImagesWidth, 0],
             }}
+            className="flex gap-4"
             transition={{
               duration: 100,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
               repeatType: "loop",
             }}
           >
             {[...imageSrcs, ...imageSrcs, ...imageSrcs].map((src, index) => (
               <div
+                className="h-64 w-96 flex-shrink-0 overflow-hidden rounded-[4px]"
                 key={`mobile-${index}`}
-                className="flex-shrink-0 w-96 h-64 rounded-[4px] overflow-hidden"
               >
                 <Image
-                  src={src}
                   alt={`Gallery image ${index + 1}`}
-                  width={384}
+                  className="h-full w-full rounded-[4px] object-cover"
                   height={256}
-                  className="w-full h-full object-cover rounded-[4px]"
+                  src={src}
+                  width={384}
                 />
               </div>
             ))}
@@ -117,8 +117,8 @@ export default function ImageWall() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/7 md:w-1/5 bg-gradient-to-r from-background-dark via-background-dark/90 to-transparent"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/7 md:w-1/5 bg-gradient-to-l from-background-dark via-background-dark/90 to-transparent"></div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/7 bg-gradient-to-r from-background-dark via-background-dark/90 to-transparent md:w-1/5" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/7 bg-gradient-to-l from-background-dark via-background-dark/90 to-transparent md:w-1/5" />
     </div>
   );
 }

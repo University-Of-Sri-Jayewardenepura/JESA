@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 
 const WhatIsJesa: React.FC = () => {
   const content = [
@@ -42,16 +42,16 @@ const WhatIsJesa: React.FC = () => {
   ];
 
   return (
-    <section className="relative px-5 sm:px-8 lg:px-[75px] pt-[124px] md:pb-[136px] md:pt-[142px] lg:pb-[160px] lg:pt-[232px] xl:pb-[162px] xl:pt-[180px]">
+    <section className="relative px-5 pt-[124px] sm:px-8 md:pt-[142px] md:pb-[136px] lg:px-[75px] lg:pt-[232px] lg:pb-[160px] xl:pt-[180px] xl:pb-[162px]">
       <div className="container mx-auto flex flex-col items-center justify-center lg:w-[890px]">
         <h2 className="cta-title">What is JESA?</h2>
-        <div className="mt-8 lg:mt-10 text-center space-y-8 lg:space-y-10">
+        <div className="mt-8 space-y-8 text-center lg:mt-10 lg:space-y-10">
           {content.map((paragraph, index) => (
             <p
-              key={index}
-              className={`text-center text-[20px] font-medium leading-snug -tracking-tightest text-slate-400 md:text-[28px] lg:text-[32px] [&_span]:font-title [&_span]:text-white ${
+              className={`-tracking-tightest text-center font-medium text-[20px] text-slate-400 leading-snug md:text-[28px] lg:text-[32px] [&_span]:font-title [&_span]:text-white ${
                 index === 2 || index === 3 ? "hidden md:block" : ""
               }`}
+              key={index}
             >
               {paragraph.text}
               {paragraph.highlights.map((highlight, hIndex) => (

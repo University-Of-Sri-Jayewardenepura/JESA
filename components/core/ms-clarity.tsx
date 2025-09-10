@@ -9,14 +9,14 @@ interface MSClarityProps {
 const MSClarity: React.FC<MSClarityProps> = ({ projectId = "scjikv5n2k" }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
-      (function (c: any, l: Document, a: string, r: string, i: string) {
+      ((c: any, l: Document, a: string, r: string, i: string) => {
         let t: HTMLScriptElement;
         let y: Element;
         c[a] =
           c[a] ||
-          function () {
+          (() => {
             (c[a].q = c[a].q || []).push(arguments);
-          };
+          });
         t = l.createElement(r) as HTMLScriptElement;
         t.async = true;
         t.src = "https://www.clarity.ms/tag/" + i;
