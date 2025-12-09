@@ -71,7 +71,7 @@ export default function Awards() {
       </div>
       <div className="relative mx-auto mt-8 w-full lg:mt-9">
         <div className="relative z-10">
-          <div className="overflow-hidden pl-5 md:pl-8">
+          <div className="overflow-hidden" style={{ paddingLeft: 'max(calc((100vw - 1280px) / 2 + 2rem), 2rem)' }}>
             <div
               className="flex items-center justify-start gap-4 pr-5 pb-4 transition-transform duration-500 ease-out md:pr-8 lg:gap-5"
               style={{

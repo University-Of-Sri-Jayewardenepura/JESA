@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type React from "react";
 
 const WhatIsJesa: React.FC = () => {
@@ -47,22 +48,34 @@ const WhatIsJesa: React.FC = () => {
         <h2 className="cta-title">What is JESA?</h2>
         <div className="mt-8 space-y-8 text-center lg:mt-10 lg:space-y-10">
           {content.map((paragraph, index) => (
-            <p
-              className={`-tracking-tightest text-center font-medium text-[20px] text-slate-400 leading-snug md:text-[28px] lg:text-[32px] [&_span]:font-title [&_span]:text-white ${
-                index === 2 || index === 3 ? "hidden md:block" : ""
-              }`}
-              key={index}
-            >
-              {paragraph.text}
-              {paragraph.highlights.map((highlight, hIndex) => (
-                <span key={hIndex}>{highlight}</span>
-              ))}
-              {paragraph.continuation}
-              {paragraph.highlights2.map((highlight, hIndex) => (
-                <span key={hIndex}>{highlight}</span>
-              ))}
-              {paragraph.ending}
-            </p>
+            <div key={index}>
+              <p
+                className={`-tracking-tightest text-center font-medium text-[20px] text-slate-400 leading-snug md:text-[28px] lg:text-[32px] [&_span]:font-title [&_span]:text-white ${
+                  index === 2 || index === 3 ? "hidden md:block" : ""
+                }`}
+              >
+                {paragraph.text}
+                {paragraph.highlights.map((highlight, hIndex) => (
+                  <span key={hIndex}>{highlight}</span>
+                ))}
+                {paragraph.continuation}
+                {paragraph.highlights2.map((highlight, hIndex) => (
+                  <span key={hIndex}>{highlight}</span>
+                ))}
+                {paragraph.ending}
+              </p>
+              {index === 1 && (
+                <div className="mx-auto py-6 pt-12 w-full max-w-[1216px]">
+                  <Image
+                    alt="JESA Awards Ceremony"
+                    className="h-auto w-full rounded-lg"
+                    height={1080}
+                    src="/images/jesa-awards.png"
+                    width={1920}
+                  />
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
