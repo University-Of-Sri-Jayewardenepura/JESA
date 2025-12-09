@@ -12,14 +12,14 @@ const Announcement: React.FC = () => {
     >
       <div className="flex items-center gap-x-3.5">
         <p className="space-x-2 text-sm leading-snug tracking-tighter">
-          Check your registrations &nbsp;
+          JESA 2025 Digital Magazine is Out &nbsp;
           <span className="opacity-30">|</span>
           &nbsp;
           <Link
             className="group transition-colors hover:text-slate-300"
-            href="/check-registration"
+            href="/magazine"
           >
-            Learn more &nbsp;
+            Get the Magazine &nbsp;
             <ArrowRight className="inline h-4 w-4 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-slate-300" />
           </Link>
         </p>
