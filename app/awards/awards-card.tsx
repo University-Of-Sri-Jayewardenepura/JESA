@@ -15,10 +15,10 @@ export const AwardsPage: React.FC = () => {
             Awards
           </span>
         </h1>
-        <div className="mt-5 max-w-[340px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
+        <div className="mt-5 max-w-[380px] text-center text-slate-500 tracking-tight md:max-w-[600px] md:text-lg lg:mt-6 lg:text-xl">
           <TextAnimate
             animation="blurInUp"
-            by="character"
+            by="word"
             delay={0.3}
             duration={0.5}
             once
