@@ -133,6 +133,12 @@
   }
 }
 
+/* Selection color */
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
 /* Utility classes for hiding scrollbars */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */

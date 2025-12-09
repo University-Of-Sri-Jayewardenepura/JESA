@@ -53,6 +53,15 @@ const Nav: React.FC = () => {
               <Link href="/hall-of-fame">Hall of Fame</Link>
             </Button>
           </li>
+                    <li>
+            <Button
+              asChild
+              className="px-2.5 py-1.5 text-md transition-colors hover:text-slate-300"
+              variant="ghost"
+            >
+              <Link href="/magazine">Magazine</Link>
+            </Button>
+          </li>
         </ul>
 
         {/* Right Side Actions - Desktop */}
@@ -71,9 +80,9 @@ const Nav: React.FC = () => {
           >
             <Link
               className="px-2 transition-colors hover:text-slate-300"
-              href="/check-registration"
+              href="/magazine"
             >
-              Check Registrations
+              Get the Magazine
             </Link>
           </Button>
         </div>
@@ -113,6 +122,17 @@ const Nav: React.FC = () => {
                   >
                     <Link href="/hall-of-fame" onClick={toggleMenu}>
                       Hall of Fame
+                    </Link>
+                  </Button>
+                </li>
+                <li className="group/navitem relative border-slate-900 border-b">
+                  <Button
+                    asChild
+                    className="flex h-auto w-full items-center justify-start gap-x-1.5 whitespace-pre rounded-full py-5 text-lg text-slate-300 leading-none transition-colors duration-200 hover:text-slate-100"
+                    variant="ghost"
+                  >
+                    <Link href="/magazine" onClick={toggleMenu}>
+                      Magazine
                     </Link>
                   </Button>
                 </li>
