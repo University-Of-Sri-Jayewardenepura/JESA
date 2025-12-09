@@ -14,9 +14,9 @@ const MSClarity: React.FC<MSClarityProps> = ({ projectId = "scjikv5n2k" }) => {
         let y: Element;
         c[a] =
           c[a] ||
-          (() => {
+          function () {
             (c[a].q = c[a].q || []).push(arguments);
-          });
+          };
         t = l.createElement(r) as HTMLScriptElement;
         t.async = true;
         t.src = "https://www.clarity.ms/tag/" + i;
