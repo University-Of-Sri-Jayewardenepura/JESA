@@ -5,18 +5,53 @@ import React from "react";
 import HTMLFlipBook from "react-pageflip";
 import Image from "next/image";
 import { TextAnimate } from "@/components/core/text-animate";
+import { CtaButton } from "@/components/ui/cta-button";
 
 const pages = [
   { src: "/images/magazine/cover.png", alt: "JESA 2025 Magazine Cover - Featuring JESA Awards Logo" },
   { src: "/images/magazine/page1.png", alt: "JESA 2025 Past Winners and Achievements" },
   { src: "/images/magazine/page2.png", alt: "JESA 2025 Stories of Success and Partner Quotes" },
-  { src: "/images/magazine/end.png", alt: "JESA 2025 Magazine Back Cover" },
+  { src: "/images/magazine/page3.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page4.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page5.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page6.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page7.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page8.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page9.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page10.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page11.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page12.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page13.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page14.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page15.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page16.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page17.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page18.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page19.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page20.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page21.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page22.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page23.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page24.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page25.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page26.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page27.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page28.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page29.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page30.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page31.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page32.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page33.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page34.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page35.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/page36.png", alt: "JESA 2025 Magazine Page" },
+  { src: "/images/magazine/end.png", alt: "JESA 2025 Magazine Ending Page" },
 ];
 
 export default function MagazineFlip() {
   return (
     <section className="relative px-safe pt-[140px] pb-[120px] md:pt-[148px] md:pb-[136px] lg:pt-[180px] lg:pb-[160px] xl:pb-[162px] min-h-screen flex flex-col items-center">
-      <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl mb-12">
+      <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl mb-8">
         <h1 className="relative z-20 max-w-[340px] bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 text-center font-title text-[40px] text-transparent leading-[1.125] tracking-tight md:max-w-none md:text-[56px] lg:text-[64px] xl:text-[72px]">
           <span className="bg-[linear-gradient(180deg,rgba(251,191,36,1)_0%,rgba(251,191,36,0)_70%)] bg-clip-text text-white md:text-transparent">
             Magazine
@@ -81,6 +116,19 @@ export default function MagazineFlip() {
             </div>
           ))}
         </HTMLFlipBook>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <p className="mt-4 max-w-[262px] text-center text-slate-500 tracking-tight md:max-w-none md:mt-6 md:text-lg lg:mt-16 lg:text-xl">
+          Download the digital magazine.
+          <br className="block md:hidden" /> Look at the past and wait for your
+          chance to shine.
+        </p>
+        <div className="relative flex justify-center">
+          <div className="mt-4 w-fit md:mt-5 lg:mt-6">
+            <CtaButton href="https://drive.google.com/uc?export=download&id=1gyFn5VpYAOdvwlhUvR42yhMUYNPiajmV">Download</CtaButton>
+          </div>
+        </div>
       </div>
 
       <div
