@@ -74,9 +74,17 @@ const Footer: React.FC = () => {
                 <li>
                   <Link
                     className="cursor-pointer text-slate-500 duration-200"
-                    href="awards"
+                    href="/awards"
                   >
                     Awards{" "}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="cursor-pointer text-slate-500 duration-200"
+                    href="/magazine"
+                  >
+                    Magazine{" "}
                   </Link>
                 </li>
                 <li>

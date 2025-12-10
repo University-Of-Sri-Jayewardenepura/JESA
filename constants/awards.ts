@@ -49,6 +49,24 @@ export const awards = [
         imgSrc: "/images/companies/macksons.png",
         link: "https://www.multilac.com",
       },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/aberdeen-holdings.png",
+        link: "https://aberdeenholdings.com/",
+      },
+      {
+        year: 2025,
+        type: "Gold",
+        imgSrc: "/images/companies/aberdeen-holdings.png",
+        link: "https://aberdeenholdings.com/",
+      },
+      {
+        year: 2025,
+        type: "Silver",
+        imgSrc: "/images/companies/aberdeen-holdings.png",
+        link: "https://aberdeenholdings.com/",
+      },
     ],
   },
   {
@@ -100,6 +118,12 @@ export const awards = [
         type: "Silver",
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
+      },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/john-keells-group.png",
+        link: "https://www.keells.com/",
       },
     ],
   },
@@ -153,6 +177,12 @@ export const awards = [
         imgSrc: "/images/companies/codegen.png",
         link: "https://codegen.co.uk/",
       },
+      {
+        year: 2025,
+        type: "Silver",
+        imgSrc: "/images/companies/alan-story.png",
+        link: "https://www.alanstory.lk/",
+      },
     ],
   },
   {
@@ -204,6 +234,12 @@ export const awards = [
         type: "Silver",
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
+      },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/alpha-apparels.png",
+        link: "https://www.alpha.lk/",
       },
     ],
   },
@@ -257,6 +293,12 @@ export const awards = [
         imgSrc: "/images/companies/araliyagroup.png",
         link: "https://araliya.lk/",
       },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/iconique.png",
+        link: "https://www.iconique.lk/",
+      },
     ],
   },
   {
@@ -308,6 +350,12 @@ export const awards = [
         type: "Silver",
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
+      },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/brandix.png",
+        link: "https://brandix.com/",
       },
     ],
   },
@@ -361,6 +409,12 @@ export const awards = [
         imgSrc: "/images/companies/astron.png",
         link: "https://www.astron.lk/",
       },
+      {
+        year: 2025,
+        type: "Silver",
+        imgSrc: "/images/companies/modern-pack.png",
+        link: "https://www.modernpacklanka.com/",
+      },
     ],
   },
   {
@@ -370,7 +424,20 @@ export const awards = [
     image: "/images/awards/besa.png",
     description:
       "Introducing this award for the first time this year, BESA Inter University Award is open to undergraduates from the University of Sri Jayewardenepura as well as all other state universities across Sri Lanka. This award recognizes a truly well-rounded individual who has demonstrated excellence in academics, sports, and other extracurricular activities.",
-    sponsors: [],
+    sponsors: [
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/celogen.png",
+        link: "https://www.celogenlanka.com/",
+      },
+      {
+        year: 2025,
+        type: "Silver",
+        imgSrc: "/images/companies/hayleys.png",
+        link: "https://www.hayleys.com/",
+      },
+    ],
   },
   {
     id: "8",
@@ -474,6 +541,12 @@ export const awards = [
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
       },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/cic-holdings.png",
+        link: "https://www.cic.lk/",
+      },
     ],
   },
   {
@@ -525,6 +598,18 @@ export const awards = [
         type: "Silver",
         imgSrc: "/images/companies/online-accounting.png",
         link: "https://www.onlineaccounting.lk/",
+      },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/dimo.png",
+        link: "https://www.dimolanka.com/",
+      },
+      {
+        year: 2025,
+        type: "Gold",
+        imgSrc: "/images/companies/abans.png",
+        link: "https://www.abans.lk/",
       },
     ],
   },
@@ -578,6 +663,12 @@ export const awards = [
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
       },
+      {
+        year: 2025,
+        type: "Silver",
+        imgSrc: "/images/companies/professional-outsourcing.png",
+        link: "https://www.pocl.lk/",
+      },
     ],
   },
   {
@@ -629,6 +720,12 @@ export const awards = [
         type: "Silver",
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
+      },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/creative-software.png",
+        link: "https://www.creativesoftware.com/",
       },
     ],
   },
@@ -682,6 +779,12 @@ export const awards = [
         imgSrc: "/images/companies/alan-story.png",
         link: "http://careerskills.sjp.ac.lk/",
       },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/mobitel.png",
+        link: "https://www.mobitel.lk/",
+      },
     ],
   },
   {
@@ -733,6 +836,12 @@ export const awards = [
         type: "Silver",
         imgSrc: "/images/companies/csds.png",
         link: "http://careerskills.sjp.ac.lk/",
+      },
+      {
+        year: 2025,
+        type: "Platinum",
+        imgSrc: "/images/companies/hemas-hospital.png",
+        link: "https://www.hemashospitals.com/",
       },
     ],
   },
