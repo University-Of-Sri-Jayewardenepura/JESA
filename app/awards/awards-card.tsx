@@ -116,59 +116,98 @@ export const AwardsPage: React.FC = () => {
 
                       <div>
                         <h4 className="mb-4 font-semibold text-lg text-white">
-                          Who will be the Sponsors of 2025?
+                          Sponsors of 2025
                         </h4>
                         <div className="flex flex-wrap justify-start gap-3 md:gap-6">
-                          <div className="flex flex-col items-center space-y-2">
-                            <span className="bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text font-semibold text-transparent text-xs">
-                              2025
-                            </span>
-                            <Image
-                              alt="Gold Sponsor 2025"
-                              className="rounded-[4px] shadow-lg"
-                              height={75}
-                              quality={100}
-                              src="/images/companies/question.png"
-                              width={75}
-                            />
-                            <span className="bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text font-semibold text-transparent text-xs">
-                              Gold
-                            </span>
-                          </div>
+                          {/* Gold Sponsor 2025 */}
+                          {(() => {
+                            const goldSponsor = award.sponsors?.find(
+                              (s) => s.year === 2025 && s.type === "Gold"
+                            );
+                            return (
+                              <Link
+                                className="group"
+                                href={goldSponsor?.link || "http://careerskills.sjp.ac.lk/"}
+                              >
+                                <div className="flex flex-col items-center space-y-2">
+                                  <span className="bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text font-semibold text-transparent text-xs">
+                                    2025
+                                  </span>
+                                  <Image
+                                    alt="Gold Sponsor 2025"
+                                    className="w-[60px] rounded-[4px] shadow-lg transition-transform group-hover:scale-105 md:w-[75px]"
+                                    height={75}
+                                    quality={100}
+                                    src={goldSponsor?.imgSrc || "/images/companies/csds.png"}
+                                    width={75}
+                                  />
+                                  <span className="bg-gradient-to-t from-amber-500 to-amber-300 bg-clip-text font-semibold text-transparent text-xs">
+                                    Gold
+                                  </span>
+                                </div>
+                              </Link>
+                            );
+                          })()}
 
-                          <div className="flex flex-col items-center space-y-2">
-                            <span className="bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text font-semibold text-transparent text-xs">
-                              2025
-                            </span>
-                            <Image
-                              alt="Platinum Sponsor 2025"
-                              className="rounded-[4px] shadow-lg"
-                              height={90}
-                              quality={100}
-                              src="/images/companies/question.png"
-                              width={90}
-                            />
-                            <span className="bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text font-semibold text-transparent text-xs">
-                              Platinum
-                            </span>
-                          </div>
+                          {/* Platinum Sponsor 2025 */}
+                          {(() => {
+                            const platinumSponsor = award.sponsors?.find(
+                              (s) => s.year === 2025 && s.type === "Platinum"
+                            );
+                            return (
+                              <Link
+                                className="group"
+                                href={platinumSponsor?.link || "http://careerskills.sjp.ac.lk/"}
+                              >
+                                <div className="flex flex-col items-center space-y-2">
+                                  <span className="bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text font-semibold text-transparent text-xs">
+                                    2025
+                                  </span>
+                                  <Image
+                                    alt="Platinum Sponsor 2025"
+                                    className="w-[70px] rounded-[4px] shadow-lg transition-transform group-hover:scale-105 md:w-[90px]"
+                                    height={90}
+                                    quality={100}
+                                    src={platinumSponsor?.imgSrc || "/images/companies/csds.png"}
+                                    width={90}
+                                  />
+                                  <span className="bg-gradient-to-t from-slate-400 to-slate-300 bg-clip-text font-semibold text-transparent text-xs">
+                                    Platinum
+                                  </span>
+                                </div>
+                              </Link>
+                            );
+                          })()}
 
-                          <div className="flex flex-col items-center space-y-2">
-                            <span className="bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text font-semibold text-transparent text-xs">
-                              2025
-                            </span>
-                            <Image
-                              alt="Silver Sponsor 2025"
-                              className="rounded-[4px] shadow-lg"
-                              height={75}
-                              quality={100}
-                              src="/images/companies/question.png"
-                              width={75}
-                            />
-                            <span className="bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text font-semibold text-transparent text-xs">
-                              Silver
-                            </span>
-                          </div>
+                          {/* Silver Sponsor 2025 */}
+                          {(() => {
+                            const silverSponsor = award.sponsors?.find(
+                              (s) => s.year === 2025 && s.type === "Silver"
+                            );
+                            return (
+                              <Link
+                                className="group"
+                                href={silverSponsor?.link || "http://careerskills.sjp.ac.lk/"}
+                              >
+                                <div className="flex flex-col items-center space-y-2">
+                                  <span className="bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text font-semibold text-transparent text-xs">
+                                    2025
+                                  </span>
+                                  <Image
+                                    alt="Silver Sponsor 2025"
+                                    className="w-[60px] rounded-[4px] shadow-lg transition-transform group-hover:scale-105 md:w-[75px]"
+                                    height={75}
+                                    quality={100}
+                                    src={silverSponsor?.imgSrc || "/images/companies/csds.png"}
+                                    width={75}
+                                  />
+                                  <span className="bg-gradient-to-t from-slate-300 to-slate-100 bg-clip-text font-semibold text-transparent text-xs">
+                                    Silver
+                                  </span>
+                                </div>
+                              </Link>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>
