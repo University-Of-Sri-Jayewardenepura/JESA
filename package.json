@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "private": true,
   "author": "Pruthivi Thejan",
+  "overrides": {
+    "lodash": "^4.17.23"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
