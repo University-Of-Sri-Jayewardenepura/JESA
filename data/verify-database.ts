@@ -1,7 +1,7 @@
 import csv from "csv-parser";
+import ExcelJS from "exceljs";
 import fs from "fs";
 import path from "path";
-import * as XLSX from "xlsx";
 import connectMongoDB from "@/lib/mongodb";
 import RegTable from "@/models/RegTable";
 
@@ -38,21 +38,43 @@ async function readCSVFile(filePath: string): Promise<ApplicantData[]> {
 }
 
 async function readExcelFile(filePath: string): Promise<ApplicantData[]> {
-  const workbook = XLSX.readFile(filePath);
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
-  const jsonData = XLSX.utils.sheet_to_json(worksheet);
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(filePath);
+  const worksheet = workbook.worksheets[0];
 
-  return jsonData
-    .filter((row: any) => row.Name && row.Email && row.Whatsapp)
-    .map((row: any) => ({
-      Name: row.Name?.toString().trim(),
-      Email: row.Email?.toString().trim(),
-      Whatsapp: row.Whatsapp?.toString().trim(),
-      Award1: row.Award1?.toString().trim(),
-      Award2: row.Award2?.toString().trim(),
-      Award3: row.Award3?.toString().trim(),
-    }));
+  const results: ApplicantData[] = [];
+  const headers: string[] = [];
+
+  worksheet.eachRow((row, rowNumber) => {
+    if (rowNumber === 1) {
+      // First row is headers
+      row.eachCell((cell) => {
+        headers.push(cell.value?.toString() || "");
+      });
+    } else {
+      // Data rows
+      const rowData: Record<string, string> = {};
+      row.eachCell((cell, colNumber) => {
+        const header = headers[colNumber - 1];
+        if (header) {
+          rowData[header] = cell.value?.toString()?.trim() || "";
+        }
+      });
+
+      if (rowData.Name && rowData.Email && rowData.Whatsapp) {
+        results.push({
+          Name: rowData.Name,
+          Email: rowData.Email,
+          Whatsapp: rowData.Whatsapp,
+          Award1: rowData.Award1,
+          Award2: rowData.Award2,
+          Award3: rowData.Award3,
+        });
+      }
+    }
+  });
+
+  return results;
 }
 
 async function getAllSourceData(): Promise<ApplicantData[]> {
