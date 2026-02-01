@@ -28,7 +28,7 @@
     "mongoose": "^8.20.2",
     "mongoose-sequence": "^6.0.1",
     "motion": "^12.23.25",
-    "next": "15.3.4",
+    "next": "^16.1.6",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.68.0",
