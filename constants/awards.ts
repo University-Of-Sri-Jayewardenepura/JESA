@@ -400,7 +400,7 @@ export const awards = [
       {
         year: 2024,
         type: "Platinum",
-        imgSrc: "/images/companies/csds.png",
+        imgSrc: "/images/companies/wristband.png",
         link: "http://careerskills.sjp.ac.lk/",
       },
       {
