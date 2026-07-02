@@ -22,6 +22,7 @@ interface AcademicInfo {
   faculty: string;
   degree: string;
   otherDegree?: string;
+  graduationYear?: string;
 }
 
 type AwardType =
@@ -51,6 +52,7 @@ interface AwardSelection {
 interface BestInnovatorQuestions {
   industry: string;
   innovationCompletionPercentage: boolean;
+  otherIndustry?: string;
 }
 
 interface BestCSRQuestions {
@@ -128,6 +130,7 @@ const ACADEMIC_YEARS = [
   { value: 'year-2', label: 'Year 2' },
   { value: 'year-3', label: 'Year 3' },
   { value: 'year-4', label: 'Year 4' },
+  { value: 'recent-graduate', label: 'Recent Graduate (Within One Year)' },
 ];
 
 const GENDER_OPTIONS = [
@@ -444,7 +447,11 @@ const Step1PersonalInfo: React.FC = () => {
 
 const Step2AcademicInfo: React.FC = () => {
   const { formData, updateAcademicInfo, setCurrentStep } = useFormContext();
-  const { academicInfo } = formData;
+  const { applicantType, academicInfo } = formData;
+  const isRecentGraduate = academicInfo.academicYear === 'recent-graduate';
+  const academicYearOptions = ACADEMIC_YEARS.filter(
+    (opt) => applicantType === 'internal' || opt.value !== 'recent-graduate'
+  );
 
   const isValid = () => {
     const { university, universityRegistrationNumber, universityEmail, academicYear, faculty, degree } = academicInfo;
@@ -454,6 +461,10 @@ const Step2AcademicInfo: React.FC = () => {
   return (
     <div className="space-y-6">
       <StepHeader title="Academic Information" subtitle="Step 2" />
+
+      {isRecentGraduate && (
+        <InfoBanner message="Only recent graduates who completed their degree within one year of the release of their final examination results are eligible to apply for the Best Innovator Award." />
+      )}
 
       <Card className="space-y-5">
         <Field label="University" required>
@@ -487,7 +498,7 @@ const Step2AcademicInfo: React.FC = () => {
           <Select
             value={academicInfo.academicYear || ''}
             onChange={(value) => updateAcademicInfo({ academicYear: value })}
-            options={ACADEMIC_YEARS}
+            options={academicYearOptions}
             placeholder="Select academic year"
           />
         </Field>
@@ -518,6 +529,17 @@ const Step2AcademicInfo: React.FC = () => {
             onChange={(e) => updateAcademicInfo({ otherDegree: e.target.value })}
           />
         </Field>
+
+        {isRecentGraduate && (
+          <Field label="Graduation Year">
+            <Input
+              type="text"
+              placeholder="Enter your graduation year"
+              value={academicInfo.graduationYear || ''}
+              onChange={(e) => updateAcademicInfo({ graduationYear: e.target.value })}
+            />
+          </Field>
+        )}
       </Card>
 
       <StepNav onBack={() => setCurrentStep(1)} onNext={() => setCurrentStep(3)} nextDisabled={!isValid()} />
@@ -530,9 +552,13 @@ const Step3AwardSelection: React.FC = () => {
   const { applicantType, academicInfo, awardSelection } = formData;
   const { selectedAwards = [], hasConditionalAwards = false } = awardSelection;
   const isInternal = applicantType === 'internal';
+  const isRecentGraduate = academicInfo.academicYear === 'recent-graduate';
   const faculty = academicInfo.faculty;
 
   const getAvailableAwards = (): { id: AwardType; label: string }[] => {
+    if (isRecentGraduate) {
+      return [{ id: 'best-innovator' as AwardType, label: JESA_AWARDS['best-innovator'] }];
+    }
     if (isInternal) {
       const awards: { id: AwardType; label: string }[] = [];
       Object.entries(JESA_AWARDS).forEach(([id, label]) => {
@@ -567,7 +593,10 @@ const Step3AwardSelection: React.FC = () => {
     });
   };
 
-  const isValid = () => selectedAwards.length >= (isInternal ? 2 : 1);
+  const isValid = () => {
+    if (isRecentGraduate) return selectedAwards.length >= 1;
+    return selectedAwards.length >= 1;
+  };
 
   const handleContinue = () => {
     if (isValid()) {
@@ -583,13 +612,17 @@ const Step3AwardSelection: React.FC = () => {
     <div className="space-y-6">
       <StepHeader title="Award Selection" subtitle="Step 3" />
 
-      <InfoBanner
-        message={
-          isInternal
-            ? 'Select 2 or more JESA and/or BESA awards. Your faculty determines which BESA awards are available.'
-            : 'Select 1 or more awards from the available options.'
-        }
-      />
+      {isRecentGraduate ? (
+        <InfoBanner message="Recent Graduates are only eligible to apply for the Best Innovator Award." />
+      ) : (
+        <InfoBanner
+          message={
+            isInternal
+              ? 'Select a minimum of 1 award and a maximum of 2 + BESA – Inter University Award'
+              : 'Select 1 or more awards from the available options.'
+          }
+        />
+      )}
 
       <Card className="space-y-3">
         {availableAwards.map(({ id, label }) => (
@@ -627,7 +660,10 @@ const Step4AwardQuestions: React.FC = () => {
 
   const isInnovatorValid = () => {
     if (!hasBestInnovator) return true;
-    return bestInnovatorQuestions?.industry && bestInnovatorQuestions?.innovationCompletionPercentage === true;
+    const { industry, otherIndustry, innovationCompletionPercentage } = bestInnovatorQuestions || {};
+    if (!industry) return false;
+    if (industry === 'Other' && !otherIndustry) return false;
+    return innovationCompletionPercentage === true;
   };
 
   const isCSRValid = () => {
@@ -662,6 +698,17 @@ const Step4AwardQuestions: React.FC = () => {
               placeholder="Select industry"
             />
           </Field>
+
+          {bestInnovatorQuestions?.industry === 'Other' && (
+            <Field label="Please specify your industry" required>
+              <Input
+                type="text"
+                placeholder="Enter your industry"
+                value={bestInnovatorQuestions?.otherIndustry || ''}
+                onChange={(e) => updateBestInnovatorQuestions({ otherIndustry: e.target.value })}
+              />
+            </Field>
+          )}
 
           <Checkbox
             id="innovationCompletion"
