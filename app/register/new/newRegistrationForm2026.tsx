@@ -1,9 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback, createContext, useContext } from 'react';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+import React, { useState, useCallback, createContext, useContext, useRef } from "react";
+import { AlertCircle, CheckCircle, Loader2, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { createNewApplication } from "./service/application.service";
 
-type ApplicantType = 'internal' | 'external';
+type ApplicantType = "internal" | "external";
 
 interface PersonalInfo {
   publicDisplayName: string;
@@ -26,23 +30,23 @@ interface AcademicInfo {
 }
 
 type AwardType =
-  | 'best-leader'
-  | 'best-team-player'
-  | 'best-creative-designer'
-  | 'best-communicator'
-  | 'best-innovator'
-  | 'best-young-entrepreneur'
-  | 'best-csr'
-  | 'besa-inter-university'
-  | 'besa-fhss'
-  | 'besa-fas'
-  | 'besa-fmsc'
-  | 'besa-fms'
-  | 'besa-fot'
-  | 'besa-foe'
-  | 'besa-fahs'
-  | 'besa-fuab'
-  | 'besa-fds';
+  | "best-leader"
+  | "best-team-player"
+  | "best-creative-designer"
+  | "best-communicator"
+  | "best-innovator"
+  | "best-young-entrepreneur"
+  | "best-csr"
+  | "besa-inter-university"
+  | "besa-fhss"
+  | "besa-fas"
+  | "besa-fmsc"
+  | "besa-fms"
+  | "besa-fot"
+  | "besa-foe"
+  | "besa-fahs"
+  | "besa-fuab"
+  | "besa-fds";
 
 interface AwardSelection {
   selectedAwards: AwardType[];
@@ -84,85 +88,103 @@ interface ApplicationFormData {
 }
 
 const JESA_AWARDS: Record<string, string> = {
-  'best-leader': 'Best Leader',
-  'best-team-player': 'Best Team Player',
-  'best-creative-designer': 'Best Creative Designer',
-  'best-communicator': 'Best Communicator',
-  'best-innovator': 'Best Innovator',
-  'best-young-entrepreneur': 'Best Young Entrepreneur',
-  'best-csr': 'Best CSR',
+  "best-leader": "Best Leader",
+  "best-team-player": "Best Team Player",
+  "best-creative-designer": "Best Creative Designer",
+  "best-communicator": "Best Communicator",
+  "best-innovator": "Best Innovator",
+  "best-young-entrepreneur": "Best Young Entrepreneur",
+  "best-csr": "Best CSR",
 };
 
 const BESA_AWARDS: Record<string, string> = {
-  'besa-inter-university': 'BESA – Inter University Award',
-  'besa-fhss': 'BESA – FHSS (Faculty of Humanities and Social Sciences)',
-  'besa-fas': 'BESA – FAS (Faculty of Applied Sciences)',
-  'besa-fmsc': 'BESA – FMSC (Faculty of Management Studies and Commerce)',
-  'besa-fms': 'BESA – FMS (Faculty of Medical Sciences)',
-  'besa-fot': 'BESA – FOT (Faculty of Technology)',
-  'besa-foe': 'BESA – FOE (Faculty of Engineering)',
-  'besa-fahs': 'BESA – FAHS (Faculty of Allied Health Sciences)',
-  'besa-fuab': 'BESA – FUAB (Faculty of Urban and Aquatic Bioresources)',
-  'besa-fds': 'BESA – FDS (Faculty of Dental Sciences)',
+  "besa-inter-university": "BESA – Inter University Award",
+  "besa-fhss": "BESA – FHSS (Faculty of Humanities and Social Sciences)",
+  "besa-fas": "BESA – FAS (Faculty of Applied Sciences)",
+  "besa-fmsc": "BESA – FMSC (Faculty of Management Studies and Commerce)",
+  "besa-fms": "BESA – FMS (Faculty of Medical Sciences)",
+  "besa-fot": "BESA – FOT (Faculty of Technology)",
+  "besa-foe": "BESA – FOE (Faculty of Engineering)",
+  "besa-fahs": "BESA – FAHS (Faculty of Allied Health Sciences)",
+  "besa-fuab": "BESA – FUAB (Faculty of Urban and Aquatic Bioresources)",
+  "besa-fds": "BESA – FDS (Faculty of Dental Sciences)",
 };
 
-const FACULTIES = ['FHSS', 'FAS', 'FMSC', 'FMS', 'FOT', 'FOE', 'FAHS', 'FUAB', 'FDS'];
+const FACULTIES = [
+  "FHSS",
+  "FAS",
+  "FMSC",
+  "FMS",
+  "FOT",
+  "FOE",
+  "FAHS",
+  "FUAB",
+  "FDS",
+];
 
 const BESA_FACULTY_MAP: Record<string, AwardType> = {
-  FHSS: 'besa-fhss',
-  FAS: 'besa-fas',
-  FMSC: 'besa-fmsc',
-  FMS: 'besa-fms',
-  FOT: 'besa-fot',
-  FOE: 'besa-foe',
-  FAHS: 'besa-fahs',
-  FUAB: 'besa-fuab',
-  FDS: 'besa-fds',
+  FHSS: "besa-fhss",
+  FAS: "besa-fas",
+  FMSC: "besa-fmsc",
+  FMS: "besa-fms",
+  FOT: "besa-fot",
+  FOE: "besa-foe",
+  FAHS: "besa-fahs",
+  FUAB: "besa-fuab",
+  FDS: "besa-fds",
 };
 
 const INDUSTRIES = [
-  'Technology', 'Healthcare', 'Finance', 'Education', 'Agriculture',
-  'Manufacturing', 'Energy', 'Transportation', 'Retail', 'Other',
+  "Technology",
+  "Healthcare",
+  "Finance",
+  "Education",
+  "Agriculture",
+  "Manufacturing",
+  "Energy",
+  "Transportation",
+  "Retail",
+  "Other",
 ];
 
 const ACADEMIC_YEARS = [
-  { value: 'year-1', label: 'Year 1' },
-  { value: 'year-2', label: 'Year 2' },
-  { value: 'year-3', label: 'Year 3' },
-  { value: 'year-4', label: 'Year 4' },
-  { value: 'recent-graduate', label: 'Recent Graduate (Within One Year)' },
+  { value: "year-1", label: "Year 1" },
+  { value: "year-2", label: "Year 2" },
+  { value: "year-3", label: "Year 3" },
+  { value: "year-4", label: "Year 4" },
+  { value: "recent-graduate", label: "Recent Graduate (Within One Year)" },
 ];
 
 const GENDER_OPTIONS = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-  { value: 'other', label: 'Other' },
-  { value: 'prefer-not-to-say', label: 'Prefer not to say' },
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "other", label: "Other" },
+  { value: "prefer-not-to-say", label: "Prefer not to say" },
 ];
 
 const SRI_LANKAN_UNIVERSITIES = [
-  'University of Colombo',
-  'University of Peradeniya',
-  'University of Kelaniya',
-  'University of Moratuwa',
-  'University of Ruhuna',
-  'University of Jaffna',
-  'Eastern University of Sri Lanka',
-  'Sabaragamuwa University of Sri Lanka',
-  'Wayamba University of Sri Lanka',
-  'Uva Wellassa University of Sri Lanka',
-  'South Eastern University of Sri Lanka',
-  'University of the Visual and Performing Arts',
-  'Open University of Sri Lanka',
-  'General Sir John Kotelawala Defence University',
+  "University of Colombo",
+  "University of Peradeniya",
+  "University of Kelaniya",
+  "University of Moratuwa",
+  "University of Ruhuna",
+  "University of Jaffna",
+  "Eastern University of Sri Lanka",
+  "Sabaragamuwa University of Sri Lanka",
+  "Wayamba University of Sri Lanka",
+  "Uva Wellassa University of Sri Lanka",
+  "South Eastern University of Sri Lanka",
+  "University of the Visual and Performing Arts",
+  "Open University of Sri Lanka",
+  "General Sir John Kotelawala Defence University",
 ];
 
 const STEP_TITLES = {
-  1: 'Personal Information',
-  2: 'Academic Information',
-  3: 'Award Selection',
-  4: 'Award Questions',
-  5: 'Declaration',
+  1: "Personal Information",
+  2: "Academic Information",
+  3: "Award Selection",
+  4: "Award Questions",
+  5: "Declaration",
 };
 
 const INITIAL_FORM_DATA: ApplicationFormData = {
@@ -184,7 +206,9 @@ interface FormContextType {
   updatePersonalInfo: (info: Partial<PersonalInfo>) => void;
   updateAcademicInfo: (info: Partial<AcademicInfo>) => void;
   updateAwardSelection: (selection: Partial<AwardSelection>) => void;
-  updateBestInnovatorQuestions: (questions: Partial<BestInnovatorQuestions>) => void;
+  updateBestInnovatorQuestions: (
+    questions: Partial<BestInnovatorQuestions>,
+  ) => void;
   updateBestCSRQuestions: (questions: Partial<BestCSRQuestions>) => void;
   updateDeclaration: (declaration: Partial<Declaration>) => void;
   resetForm: () => void;
@@ -194,20 +218,27 @@ const FormContext = createContext<FormContextType | undefined>(undefined);
 
 const useFormContext = () => {
   const context = useContext(FormContext);
-  if (!context) throw new Error('useFormContext must be used within FormProvider');
+  if (!context)
+    throw new Error("useFormContext must be used within FormProvider");
   return context;
 };
 
 const inputBase =
-  'w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700/60 text-slate-50 placeholder-slate-500 rounded-lg transition-colors ' +
-  'focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:border-blue-500';
+  "w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700/60 text-slate-50 placeholder-slate-500 rounded-lg transition-colors " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:border-blue-500";
 
-const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
-  <input {...props} className={`${inputBase} ${props.className || ''}`} />
-);
+const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (
+  props,
+) => <input {...props} className={`${inputBase} ${props.className || ""}`} />;
 
-const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({ children, htmlFor }) => (
-  <label htmlFor={htmlFor} className="block text-slate-200 text-sm font-medium mb-1.5">
+const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
+  children,
+  htmlFor,
+}) => (
+  <label
+    htmlFor={htmlFor}
+    className="block text-slate-200 text-sm font-medium mb-1.5"
+  >
     {children}
   </label>
 );
@@ -227,7 +258,10 @@ const Checkbox: React.FC<{
       className="mt-0.5 w-5 h-5 shrink-0 rounded border-2 border-slate-600 bg-slate-900/80 cursor-pointer accent-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
     />
     {label && (
-      <label htmlFor={id} className="text-slate-200 cursor-pointer flex-1 leading-relaxed text-sm">
+      <label
+        htmlFor={id}
+        className="text-slate-200 cursor-pointer flex-1 leading-relaxed text-sm"
+      >
         {label}
       </label>
     )}
@@ -246,12 +280,12 @@ const Select: React.FC<{
     className={`${inputBase} appearance-none cursor-pointer`}
     style={{
       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-      backgroundPosition: 'right 0.75rem center',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: '1.25rem',
+      backgroundPosition: "right 0.75rem center",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "1.25rem",
     }}
   >
-    <option value="">{placeholder || 'Select an option'}</option>
+    <option value="">{placeholder || "Select an option"}</option>
     {options.map((opt) => (
       <option key={opt.value} value={opt.value}>
         {opt.label}
@@ -263,41 +297,51 @@ const Select: React.FC<{
 const Button: React.FC<{
   onClick: () => void;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary';
+  variant?: "primary" | "secondary";
   children: React.ReactNode;
-}> = ({ onClick, disabled, variant = 'primary', children }) => (
+}> = ({ onClick, disabled, variant = "primary", children }) => (
   <button
     onClick={onClick}
     disabled={disabled}
     className={`px-6 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
-      variant === 'primary'
-        ? 'bg-blue-600 hover:bg-blue-500 text-white focus-visible:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600'
-        : 'border border-slate-600 text-slate-300 hover:bg-slate-800 focus-visible:ring-slate-400 disabled:opacity-50 disabled:cursor-not-allowed'
+      variant === "primary"
+        ? "bg-blue-600 hover:bg-blue-500 text-white focus-visible:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+        : "border border-slate-600 text-slate-300 hover:bg-slate-800 focus-visible:ring-slate-400 disabled:opacity-50 disabled:cursor-not-allowed"
     }`}
   >
     {children}
   </button>
 );
 
-const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <div className={`p-6 md:p-8 rounded-xl bg-slate-900/50 border border-slate-700/50 shadow-sm ${className}`}>
+const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className = "",
+}) => (
+  <div
+    className={`p-6 md:p-8 rounded-xl bg-slate-900/50 border border-slate-700/50 shadow-sm ${className}`}
+  >
     {children}
   </div>
 );
 
-const StepHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
+const StepHeader: React.FC<{ title: string; subtitle: string }> = ({
+  title,
+  subtitle,
+}) => (
   <div className="mb-8">
-    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-50">{title}</h2>
+    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-50">
+      {title}
+    </h2>
     <p className="text-slate-400 text-sm mt-1.5">{subtitle}</p>
   </div>
 );
 
-const StepNav: React.FC<{ onBack: () => void; onNext?: () => void; nextDisabled?: boolean; nextLabel?: string }> = ({
-  onBack,
-  onNext,
-  nextDisabled,
-  nextLabel = 'Continue →',
-}) => (
+const StepNav: React.FC<{
+  onBack: () => void;
+  onNext?: () => void;
+  nextDisabled?: boolean;
+  nextLabel?: string;
+}> = ({ onBack, onNext, nextDisabled, nextLabel = "Continue →" }) => (
   <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-2">
     <Button onClick={onBack} variant="secondary">
       ← Back
@@ -336,35 +380,42 @@ const Step0Landing: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <StepHeader title="Select applicant type" subtitle="Choose the category that applies to you" />
+      <StepHeader
+        title="Select applicant type"
+        subtitle="Choose the category that applies to you"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {(['internal', 'external'] as const).map((type) => (
+        {(["internal", "external"] as const).map((type) => (
           <button
             key={type}
             onClick={() => updateApplicantType(type)}
             className={`p-6 rounded-xl border-2 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
               applicantType === type
-                ? 'border-blue-600 bg-blue-600/10'
-                : 'border-slate-700/50 bg-slate-900/50 hover:border-slate-600'
+                ? "border-blue-600 bg-blue-600/10"
+                : "border-slate-700/50 bg-slate-900/50 hover:border-slate-600"
             }`}
           >
             <div className="flex items-start gap-3">
               <div
                 className={`mt-0.5 w-6 h-6 rounded-full border-2 shrink-0 flex items-center justify-center ${
-                  applicantType === type ? 'bg-blue-600 border-blue-600' : 'border-slate-600'
+                  applicantType === type
+                    ? "bg-blue-600 border-blue-600"
+                    : "border-slate-600"
                 }`}
               >
-                {applicantType === type && <div className="w-2 h-2 bg-white rounded-full" />}
+                {applicantType === type && (
+                  <div className="w-2 h-2 bg-white rounded-full" />
+                )}
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-slate-50 capitalize">
                   {type} student
                 </h3>
                 <p className="text-sm text-slate-400 mt-1">
-                  {type === 'internal'
-                    ? 'University of Sri Jayewardenepura'
-                    : 'Other Sri Lankan state universities'}
+                  {type === "internal"
+                    ? "University of Sri Jayewardenepura"
+                    : "Other Sri Lankan state universities"}
                 </p>
               </div>
             </div>
@@ -386,11 +437,19 @@ const Step0Landing: React.FC = () => {
 const Step1PersonalInfo: React.FC = () => {
   const { formData, updatePersonalInfo, setCurrentStep } = useFormContext();
   const { applicantType, personalInfo } = formData;
-  const isExternal = applicantType === 'external';
+  const isExternal = applicantType === "external";
 
   const isValid = () => {
-    const { publicDisplayName, email, whatsappNumber, mobileNumber, gender } = personalInfo;
-    if (!publicDisplayName || !email || !whatsappNumber || !mobileNumber || !gender) return false;
+    const { publicDisplayName, email, whatsappNumber, mobileNumber, gender } =
+      personalInfo;
+    if (
+      !publicDisplayName ||
+      !email ||
+      !whatsappNumber ||
+      !mobileNumber ||
+      !gender
+    )
+      return false;
     if (isExternal && !personalInfo.nic) return false;
     return true;
   };
@@ -404,8 +463,10 @@ const Step1PersonalInfo: React.FC = () => {
           <Input
             type="text"
             placeholder="Enter your display name"
-            value={personalInfo.publicDisplayName || ''}
-            onChange={(e) => updatePersonalInfo({ publicDisplayName: e.target.value })}
+            value={personalInfo.publicDisplayName || ""}
+            onChange={(e) =>
+              updatePersonalInfo({ publicDisplayName: e.target.value })
+            }
           />
         </Field>
 
@@ -414,7 +475,7 @@ const Step1PersonalInfo: React.FC = () => {
             <Input
               type="text"
               placeholder="Enter your NIC number"
-              value={personalInfo.nic || ''}
+              value={personalInfo.nic || ""}
               onChange={(e) => updatePersonalInfo({ nic: e.target.value })}
             />
           </Field>
@@ -422,7 +483,7 @@ const Step1PersonalInfo: React.FC = () => {
 
         <Field label="Gender" required>
           <Select
-            value={personalInfo.gender || ''}
+            value={personalInfo.gender || ""}
             onChange={(value) => updatePersonalInfo({ gender: value })}
             options={GENDER_OPTIONS}
             placeholder="Select gender"
@@ -433,7 +494,7 @@ const Step1PersonalInfo: React.FC = () => {
           <Input
             type="email"
             placeholder="Enter your email address"
-            value={personalInfo.email || ''}
+            value={personalInfo.email || ""}
             onChange={(e) => updatePersonalInfo({ email: e.target.value })}
           />
         </Field>
@@ -442,8 +503,10 @@ const Step1PersonalInfo: React.FC = () => {
           <Input
             type="tel"
             placeholder="Enter your WhatsApp number"
-            value={personalInfo.whatsappNumber || ''}
-            onChange={(e) => updatePersonalInfo({ whatsappNumber: e.target.value })}
+            value={personalInfo.whatsappNumber || ""}
+            onChange={(e) =>
+              updatePersonalInfo({ whatsappNumber: e.target.value })
+            }
           />
         </Field>
 
@@ -451,13 +514,19 @@ const Step1PersonalInfo: React.FC = () => {
           <Input
             type="tel"
             placeholder="Enter your mobile number"
-            value={personalInfo.mobileNumber || ''}
-            onChange={(e) => updatePersonalInfo({ mobileNumber: e.target.value })}
+            value={personalInfo.mobileNumber || ""}
+            onChange={(e) =>
+              updatePersonalInfo({ mobileNumber: e.target.value })
+            }
           />
         </Field>
       </Card>
 
-      <StepNav onBack={() => setCurrentStep(0)} onNext={() => setCurrentStep(2)} nextDisabled={!isValid()} />
+      <StepNav
+        onBack={() => setCurrentStep(0)}
+        onNext={() => setCurrentStep(2)}
+        nextDisabled={!isValid()}
+      />
     </div>
   );
 };
@@ -465,14 +534,28 @@ const Step1PersonalInfo: React.FC = () => {
 const Step2AcademicInfo: React.FC = () => {
   const { formData, updateAcademicInfo, setCurrentStep } = useFormContext();
   const { applicantType, academicInfo } = formData;
-  const isRecentGraduate = academicInfo.academicYear === 'recent-graduate';
+  const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
   const academicYearOptions = ACADEMIC_YEARS.filter(
-    (opt) => applicantType === 'internal' || opt.value !== 'recent-graduate'
+    (opt) => applicantType === "internal" || opt.value !== "recent-graduate",
   );
 
   const isValid = () => {
-    const { university, universityRegistrationNumber, universityEmail, academicYear, faculty, degree } = academicInfo;
-    return university && universityRegistrationNumber && universityEmail && academicYear && faculty && degree;
+    const {
+      university,
+      universityRegistrationNumber,
+      universityEmail,
+      academicYear,
+      faculty,
+      degree,
+    } = academicInfo;
+    return (
+      university &&
+      universityRegistrationNumber &&
+      universityEmail &&
+      academicYear &&
+      faculty &&
+      degree
+    );
   };
 
   return (
@@ -485,34 +568,53 @@ const Step2AcademicInfo: React.FC = () => {
 
       <Card className="space-y-5">
         <Field label="University" required>
-          {applicantType === 'external' ? (
+          {applicantType === "external" ? (
             <>
               <Select
-                value={academicInfo.university && SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university) ? academicInfo.university : academicInfo.university ? 'Other' : ''}
+                value={
+                  academicInfo.university &&
+                  SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university)
+                    ? academicInfo.university
+                    : academicInfo.university
+                      ? "Other"
+                      : ""
+                }
                 onChange={(value) => updateAcademicInfo({ university: value })}
                 options={[
-                  ...SRI_LANKAN_UNIVERSITIES.map((u) => ({ value: u, label: u })),
-                  { value: 'Other', label: 'Other' },
+                  ...SRI_LANKAN_UNIVERSITIES.map((u) => ({
+                    value: u,
+                    label: u,
+                  })),
+                  { value: "Other", label: "Other" },
                 ]}
                 placeholder="Select your university"
               />
-              {academicInfo.university && !SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university) && (
-                <div className="mt-3">
-                  <Input
-                    type="text"
-                    placeholder="Enter your university name"
-                    value={academicInfo.university === 'Other' ? '' : academicInfo.university}
-                    onChange={(e) => updateAcademicInfo({ university: e.target.value })}
-                  />
-                </div>
-              )}
+              {academicInfo.university &&
+                !SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university) && (
+                  <div className="mt-3">
+                    <Input
+                      type="text"
+                      placeholder="Enter your university name"
+                      value={
+                        academicInfo.university === "Other"
+                          ? ""
+                          : academicInfo.university
+                      }
+                      onChange={(e) =>
+                        updateAcademicInfo({ university: e.target.value })
+                      }
+                    />
+                  </div>
+                )}
             </>
           ) : (
             <Input
               type="text"
               placeholder="Enter your university name"
-              value={academicInfo.university || ''}
-              onChange={(e) => updateAcademicInfo({ university: e.target.value })}
+              value={academicInfo.university || ""}
+              onChange={(e) =>
+                updateAcademicInfo({ university: e.target.value })
+              }
             />
           )}
         </Field>
@@ -521,8 +623,12 @@ const Step2AcademicInfo: React.FC = () => {
           <Input
             type="text"
             placeholder="Enter your registration number"
-            value={academicInfo.universityRegistrationNumber || ''}
-            onChange={(e) => updateAcademicInfo({ universityRegistrationNumber: e.target.value })}
+            value={academicInfo.universityRegistrationNumber || ""}
+            onChange={(e) =>
+              updateAcademicInfo({
+                universityRegistrationNumber: e.target.value,
+              })
+            }
           />
         </Field>
 
@@ -530,14 +636,16 @@ const Step2AcademicInfo: React.FC = () => {
           <Input
             type="email"
             placeholder="Enter your university email"
-            value={academicInfo.universityEmail || ''}
-            onChange={(e) => updateAcademicInfo({ universityEmail: e.target.value })}
+            value={academicInfo.universityEmail || ""}
+            onChange={(e) =>
+              updateAcademicInfo({ universityEmail: e.target.value })
+            }
           />
         </Field>
 
         <Field label="Academic Year" required>
           <Select
-            value={academicInfo.academicYear || ''}
+            value={academicInfo.academicYear || ""}
             onChange={(value) => updateAcademicInfo({ academicYear: value })}
             options={academicYearOptions}
             placeholder="Select academic year"
@@ -545,16 +653,16 @@ const Step2AcademicInfo: React.FC = () => {
         </Field>
 
         <Field label="Faculty" required>
-          {applicantType === 'external' ? (
+          {applicantType === "external" ? (
             <Input
               type="text"
               placeholder="Enter your faculty name"
-              value={academicInfo.faculty || ''}
+              value={academicInfo.faculty || ""}
               onChange={(e) => updateAcademicInfo({ faculty: e.target.value })}
             />
           ) : (
             <Select
-              value={academicInfo.faculty || ''}
+              value={academicInfo.faculty || ""}
               onChange={(value) => updateAcademicInfo({ faculty: value })}
               options={FACULTIES.map((f) => ({ value: f, label: f }))}
               placeholder="Select faculty"
@@ -566,7 +674,7 @@ const Step2AcademicInfo: React.FC = () => {
           <Input
             type="text"
             placeholder="Enter your degree name"
-            value={academicInfo.degree || ''}
+            value={academicInfo.degree || ""}
             onChange={(e) => updateAcademicInfo({ degree: e.target.value })}
           />
         </Field>
@@ -575,8 +683,10 @@ const Step2AcademicInfo: React.FC = () => {
           <Input
             type="text"
             placeholder="Enter any other degree if applicable"
-            value={academicInfo.otherDegree || ''}
-            onChange={(e) => updateAcademicInfo({ otherDegree: e.target.value })}
+            value={academicInfo.otherDegree || ""}
+            onChange={(e) =>
+              updateAcademicInfo({ otherDegree: e.target.value })
+            }
           />
         </Field>
 
@@ -585,14 +695,20 @@ const Step2AcademicInfo: React.FC = () => {
             <Input
               type="text"
               placeholder="Enter your graduation year"
-              value={academicInfo.graduationYear || ''}
-              onChange={(e) => updateAcademicInfo({ graduationYear: e.target.value })}
+              value={academicInfo.graduationYear || ""}
+              onChange={(e) =>
+                updateAcademicInfo({ graduationYear: e.target.value })
+              }
             />
           </Field>
         )}
       </Card>
 
-      <StepNav onBack={() => setCurrentStep(1)} onNext={() => setCurrentStep(3)} nextDisabled={!isValid()} />
+      <StepNav
+        onBack={() => setCurrentStep(1)}
+        onNext={() => setCurrentStep(3)}
+        nextDisabled={!isValid()}
+      />
     </div>
   );
 };
@@ -601,24 +717,32 @@ const Step3AwardSelection: React.FC = () => {
   const { formData, updateAwardSelection, setCurrentStep } = useFormContext();
   const { applicantType, academicInfo, awardSelection } = formData;
   const { selectedAwards = [], hasConditionalAwards = false } = awardSelection;
-  const isInternal = applicantType === 'internal';
-  const isRecentGraduate = academicInfo.academicYear === 'recent-graduate';
+  const isInternal = applicantType === "internal";
+  const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
   const faculty = academicInfo.faculty;
 
-  const mainAwards: { id: AwardType; label: string }[] = Object.entries(JESA_AWARDS).map(([id, label]) => ({
-    id: id as AwardType, label,
+  const mainAwards: { id: AwardType; label: string }[] = Object.entries(
+    JESA_AWARDS,
+  ).map(([id, label]) => ({
+    id: id as AwardType,
+    label,
   }));
   if (faculty && BESA_FACULTY_MAP[faculty]) {
-    mainAwards.push({ id: BESA_FACULTY_MAP[faculty], label: `${BESA_AWARDS[BESA_FACULTY_MAP[faculty]]} (Faculty wise award)` });
+    mainAwards.push({
+      id: BESA_FACULTY_MAP[faculty],
+      label: `${BESA_AWARDS[BESA_FACULTY_MAP[faculty]]} (Faculty wise award)`,
+    });
   }
 
-  const mainSelectedCount = selectedAwards.filter((id) => id !== 'besa-inter-university').length;
+  const mainSelectedCount = selectedAwards.filter(
+    (id) => id !== "besa-inter-university",
+  ).length;
   const mainMaxReached = mainSelectedCount >= 2;
   const totalMaxReached = selectedAwards.length >= 3;
 
   const handleAwardToggle = (awardId: AwardType) => {
     const alreadySelected = selectedAwards.includes(awardId);
-    const isMain = awardId !== 'besa-inter-university';
+    const isMain = awardId !== "besa-inter-university";
 
     if (!alreadySelected && isMain && mainMaxReached) return;
     if (!alreadySelected && !isMain && totalMaxReached) return;
@@ -628,8 +752,8 @@ const Step3AwardSelection: React.FC = () => {
       : [...selectedAwards, awardId];
 
     const hasConditional =
-      newSelected.includes('best-innovator') ||
-      newSelected.includes('best-csr');
+      newSelected.includes("best-innovator") ||
+      newSelected.includes("best-csr");
 
     updateAwardSelection({
       selectedAwards: newSelected,
@@ -661,7 +785,7 @@ const Step3AwardSelection: React.FC = () => {
       />
       <label
         htmlFor={id}
-        className={`${disabled ? 'text-slate-600 cursor-not-allowed' : 'text-slate-200 cursor-pointer'} flex-1 text-sm`}
+        className={`${disabled ? "text-slate-600 cursor-not-allowed" : "text-slate-200 cursor-pointer"} flex-1 text-sm`}
       >
         {label}
       </label>
@@ -678,55 +802,78 @@ const Step3AwardSelection: React.FC = () => {
         <InfoBanner
           message={
             isInternal
-              ? 'Select up to 2 awards from the list below, plus the BESA – Inter University Award (3 awards total)'
-              : 'Select 1 or more awards from the available options.'
+              ? "Select up to 2 awards from the list below, plus the BESA – Inter University Award (3 awards total)"
+              : "Select 1 or more awards from the available options."
           }
         />
       )}
 
       {isRecentGraduate ? (
         <Card className="space-y-3">
-          {renderCheckbox('best-innovator', JESA_AWARDS['best-innovator'])}
+          {renderCheckbox("best-innovator", JESA_AWARDS["best-innovator"])}
         </Card>
       ) : isInternal ? (
         <Card className="space-y-1">
           {mainAwards.map(({ id, label }) =>
-            renderCheckbox(id, label, !selectedAwards.includes(id) && mainMaxReached)
+            renderCheckbox(
+              id,
+              label,
+              !selectedAwards.includes(id) && mainMaxReached,
+            ),
           )}
 
           <hr className="border-slate-700/50 my-3" />
 
-          {renderCheckbox('besa-inter-university', BESA_AWARDS['besa-inter-university'], !selectedAwards.includes('besa-inter-university') && totalMaxReached)}
+          {renderCheckbox(
+            "besa-inter-university",
+            BESA_AWARDS["besa-inter-university"],
+            !selectedAwards.includes("besa-inter-university") &&
+              totalMaxReached,
+          )}
         </Card>
       ) : (
         <Card className="space-y-3">
-          {renderCheckbox('besa-inter-university', BESA_AWARDS['besa-inter-university'])}
-          {renderCheckbox('best-innovator', JESA_AWARDS['best-innovator'])}
+          {renderCheckbox(
+            "besa-inter-university",
+            BESA_AWARDS["besa-inter-university"],
+          )}
+          {renderCheckbox("best-innovator", JESA_AWARDS["best-innovator"])}
         </Card>
       )}
 
       <p className="text-sm text-slate-400">
-        Selected: {selectedAwards.length} award{selectedAwards.length !== 1 ? 's' : ''}
+        Selected: {selectedAwards.length} award
+        {selectedAwards.length !== 1 ? "s" : ""}
       </p>
 
-      <StepNav onBack={() => setCurrentStep(2)} onNext={handleContinue} nextDisabled={!isValid()} />
+      <StepNav
+        onBack={() => setCurrentStep(2)}
+        onNext={handleContinue}
+        nextDisabled={!isValid()}
+      />
     </div>
   );
 };
 
 const Step4AwardQuestions: React.FC = () => {
-  const { formData, updateBestInnovatorQuestions, updateBestCSRQuestions, setCurrentStep } = useFormContext();
+  const {
+    formData,
+    updateBestInnovatorQuestions,
+    updateBestCSRQuestions,
+    setCurrentStep,
+  } = useFormContext();
   const { awardSelection, bestInnovatorQuestions, bestCSRQuestions } = formData;
   const { selectedAwards = [] } = awardSelection;
 
-  const hasBestInnovator = selectedAwards.includes('best-innovator');
-  const hasBestCSR = selectedAwards.includes('best-csr');
+  const hasBestInnovator = selectedAwards.includes("best-innovator");
+  const hasBestCSR = selectedAwards.includes("best-csr");
 
   const isInnovatorValid = () => {
     if (!hasBestInnovator) return true;
-    const { industry, otherIndustry, innovationCompletionPercentage } = bestInnovatorQuestions || {};
+    const { industry, otherIndustry, innovationCompletionPercentage } =
+      bestInnovatorQuestions || {};
     if (!industry) return false;
-    if (industry === 'Other' && !otherIndustry) return false;
+    if (industry === "Other" && !otherIndustry) return false;
     return innovationCompletionPercentage === true;
   };
 
@@ -752,33 +899,45 @@ const Step4AwardQuestions: React.FC = () => {
 
       {hasBestInnovator && (
         <Card className="space-y-5">
-          <h3 className="text-lg font-semibold text-slate-50">Best Innovator Award</h3>
+          <h3 className="text-lg font-semibold text-slate-50">
+            Best Innovator Award
+          </h3>
 
           <Field label="Which industry is your innovation related to?" required>
             <Select
-              value={bestInnovatorQuestions?.industry || ''}
-              onChange={(value) => updateBestInnovatorQuestions({ industry: value })}
+              value={bestInnovatorQuestions?.industry || ""}
+              onChange={(value) =>
+                updateBestInnovatorQuestions({ industry: value })
+              }
               options={INDUSTRIES.map((ind) => ({ value: ind, label: ind }))}
               placeholder="Select industry"
             />
           </Field>
 
-          {bestInnovatorQuestions?.industry === 'Other' && (
+          {bestInnovatorQuestions?.industry === "Other" && (
             <Field label="Please specify your industry" required>
               <Input
                 type="text"
                 placeholder="Enter your industry"
-                value={bestInnovatorQuestions?.otherIndustry || ''}
-                onChange={(e) => updateBestInnovatorQuestions({ otherIndustry: e.target.value })}
+                value={bestInnovatorQuestions?.otherIndustry || ""}
+                onChange={(e) =>
+                  updateBestInnovatorQuestions({
+                    otherIndustry: e.target.value,
+                  })
+                }
               />
             </Field>
           )}
 
           <Checkbox
             id="innovationCompletion"
-            checked={bestInnovatorQuestions?.innovationCompletionPercentage === true}
+            checked={
+              bestInnovatorQuestions?.innovationCompletionPercentage === true
+            }
             onChange={(checked) =>
-              updateBestInnovatorQuestions({ innovationCompletionPercentage: checked })
+              updateBestInnovatorQuestions({
+                innovationCompletionPercentage: checked,
+              })
             }
             label="I declare that my innovation is more than 75% completed"
           />
@@ -787,17 +946,25 @@ const Step4AwardQuestions: React.FC = () => {
 
       {hasBestCSR && (
         <Card className="space-y-5">
-          <h3 className="text-lg font-semibold text-slate-50">Best CSR Award</h3>
+          <h3 className="text-lg font-semibold text-slate-50">
+            Best CSR Award
+          </h3>
 
           <div className="space-y-5 pb-5 border-b border-slate-700/50">
-            <h4 className="text-sm font-semibold text-slate-300">Club Advisor Information</h4>
+            <h4 className="text-sm font-semibold text-slate-300">
+              Club Advisor Information
+            </h4>
 
             <Field label="Club Advisor Name & Title" required>
               <Input
                 type="text"
                 placeholder="Enter advisor name and title"
-                value={bestCSRQuestions?.clubAdvisorNameTitle || ''}
-                onChange={(e) => updateBestCSRQuestions({ clubAdvisorNameTitle: e.target.value })}
+                value={bestCSRQuestions?.clubAdvisorNameTitle || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({
+                    clubAdvisorNameTitle: e.target.value,
+                  })
+                }
               />
             </Field>
 
@@ -805,21 +972,29 @@ const Step4AwardQuestions: React.FC = () => {
               <Input
                 type="email"
                 placeholder="Enter advisor email"
-                value={bestCSRQuestions?.clubAdvisorEmail || ''}
-                onChange={(e) => updateBestCSRQuestions({ clubAdvisorEmail: e.target.value })}
+                value={bestCSRQuestions?.clubAdvisorEmail || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({ clubAdvisorEmail: e.target.value })
+                }
               />
             </Field>
           </div>
 
           <div className="space-y-5 pb-5 border-b border-slate-700/50">
-            <h4 className="text-sm font-semibold text-slate-300">Member Attending Interview & Workshops</h4>
+            <h4 className="text-sm font-semibold text-slate-300">
+              Member Attending Interview & Workshops
+            </h4>
 
             <Field label="Member Name" required>
               <Input
                 type="text"
                 placeholder="Enter member name"
-                value={bestCSRQuestions?.memberAttendingName || ''}
-                onChange={(e) => updateBestCSRQuestions({ memberAttendingName: e.target.value })}
+                value={bestCSRQuestions?.memberAttendingName || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({
+                    memberAttendingName: e.target.value,
+                  })
+                }
               />
             </Field>
 
@@ -827,21 +1002,29 @@ const Step4AwardQuestions: React.FC = () => {
               <Input
                 type="tel"
                 placeholder="Enter member WhatsApp number"
-                value={bestCSRQuestions?.memberAttendingWhatsapp || ''}
-                onChange={(e) => updateBestCSRQuestions({ memberAttendingWhatsapp: e.target.value })}
+                value={bestCSRQuestions?.memberAttendingWhatsapp || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({
+                    memberAttendingWhatsapp: e.target.value,
+                  })
+                }
               />
             </Field>
           </div>
 
           <div className="space-y-5">
-            <h4 className="text-sm font-semibold text-slate-300">Club President Information</h4>
+            <h4 className="text-sm font-semibold text-slate-300">
+              Club President Information
+            </h4>
 
             <Field label="Club President Name" required>
               <Input
                 type="text"
                 placeholder="Enter president name"
-                value={bestCSRQuestions?.clubPresidentName || ''}
-                onChange={(e) => updateBestCSRQuestions({ clubPresidentName: e.target.value })}
+                value={bestCSRQuestions?.clubPresidentName || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({ clubPresidentName: e.target.value })
+                }
               />
             </Field>
 
@@ -849,8 +1032,12 @@ const Step4AwardQuestions: React.FC = () => {
               <Input
                 type="tel"
                 placeholder="Enter president WhatsApp number"
-                value={bestCSRQuestions?.clubPresidentWhatsapp || ''}
-                onChange={(e) => updateBestCSRQuestions({ clubPresidentWhatsapp: e.target.value })}
+                value={bestCSRQuestions?.clubPresidentWhatsapp || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({
+                    clubPresidentWhatsapp: e.target.value,
+                  })
+                }
               />
             </Field>
 
@@ -858,15 +1045,141 @@ const Step4AwardQuestions: React.FC = () => {
               <Input
                 type="email"
                 placeholder="Enter president email"
-                value={bestCSRQuestions?.clubPresidentEmail || ''}
-                onChange={(e) => updateBestCSRQuestions({ clubPresidentEmail: e.target.value })}
+                value={bestCSRQuestions?.clubPresidentEmail || ""}
+                onChange={(e) =>
+                  updateBestCSRQuestions({ clubPresidentEmail: e.target.value })
+                }
               />
             </Field>
           </div>
         </Card>
       )}
 
-      <StepNav onBack={() => setCurrentStep(3)} onNext={() => setCurrentStep(5)} nextDisabled={!isValid()} />
+      <StepNav
+        onBack={() => setCurrentStep(3)}
+        onNext={() => setCurrentStep(5)}
+        nextDisabled={!isValid()}
+      />
+    </div>
+  );
+};
+
+const SwipeToSubmit: React.FC<{
+  onSubmit: () => Promise<void>;
+  disabled?: boolean;
+  onSuccess?: () => void;
+}> = ({ onSubmit, disabled = false, onSuccess }) => {
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const trackRef = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);
+  const startOffsetRef = useRef(0);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (disabled || status !== 'idle') return;
+    e.preventDefault();
+    const track = trackRef.current;
+    if (!track) return;
+    track.setPointerCapture(e.pointerId);
+    draggingRef.current = true;
+    startOffsetRef.current = track.getBoundingClientRect().left;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!draggingRef.current) return;
+    e.preventDefault();
+    const track = trackRef.current;
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const dx = e.clientX - startOffsetRef.current;
+    const pct = Math.min(100, Math.max(0, (dx / rect.width) * 100));
+    setProgress(pct);
+  };
+
+  const handlePointerUp = async (e: React.PointerEvent) => {
+    if (!draggingRef.current) return;
+    draggingRef.current = false;
+    const track = trackRef.current;
+    if (track) track.releasePointerCapture(e.pointerId);
+
+    if (progress >= 90) {
+      setStatus('loading');
+      setProgress(100);
+      try {
+        await onSubmit();
+        setStatus('success');
+        onSuccess?.();
+      } catch {
+        setStatus('idle');
+        setProgress(0);
+      }
+    } else {
+      setStatus('idle');
+      setProgress(0);
+    }
+  };
+
+  const canDrag = !disabled && status === 'idle';
+
+  return (
+    <div
+      ref={trackRef}
+      className={`relative w-full h-14 rounded-xl select-none overflow-hidden border transition-colors ${
+        disabled
+          ? 'border-slate-700/50 opacity-60'
+          : status === 'success'
+            ? 'border-green-500/50 bg-green-600/15'
+            : 'border-slate-700/50 bg-slate-800/80'
+      }`}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      style={{ touchAction: 'none' }}
+    >
+      <div
+        className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-600/30 to-blue-500/40 rounded-xl transition-[width] duration-75"
+        style={{ width: `${progress}%` }}
+      />
+
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+        <span className={`text-sm font-medium ${
+          status === 'success' ? 'text-green-400' : status === 'loading' ? 'text-blue-300' : disabled ? 'text-slate-500' : 'text-slate-400'
+        }`}>
+          {status === 'success'
+            ? 'Application Submitted!'
+            : status === 'loading'
+              ? 'Submitting Application...'
+              : disabled
+                ? 'Accept all declarations to submit'
+                : 'Swipe to Submit'}
+        </span>
+      </div>
+
+      <div
+        className={`absolute top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-20 transition-shadow ${
+          canDrag
+            ? 'cursor-grab active:cursor-grabbing bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg shadow-blue-900/50 hover:shadow-blue-800/50'
+            : status === 'loading'
+              ? 'bg-blue-600 shadow-md'
+              : status === 'success'
+                ? 'bg-green-600 shadow-md'
+                : 'bg-slate-600 cursor-not-allowed'
+        }`}
+        style={{
+          left: status === 'loading' || status === 'success'
+            ? 'calc(100% - 3rem)'
+            : `calc(0.375rem + ${progress}% * (100% - 3.375rem) / 100%)`,
+        }}
+        onPointerDown={handlePointerDown}
+      >
+        {status === 'success' ? (
+          <CheckCircle className="w-5 h-5 text-white" />
+        ) : status === 'loading' ? (
+          <Loader2 className="w-5 h-5 text-white animate-spin" />
+        ) : (
+          <ArrowRight className="w-5 h-5 text-white" />
+        )}
+      </div>
     </div>
   );
 };
@@ -884,52 +1197,80 @@ const Step5Declaration: React.FC = () => {
     consentPublicity = false,
   } = declaration;
 
-  const isValid = () => confirmAccuracy && agreeDisqualification && agreePhysicalInterview && permitVerification && consentPublicity;
+  const isValid = () =>
+    confirmAccuracy &&
+    agreeDisqualification &&
+    agreePhysicalInterview &&
+    permitVerification &&
+    consentPublicity;
 
-  const handleSubmit = () => {
-    if (isValid()) {
-      console.log('Application submitted:', formData);
-      alert('Application submitted successfully!');
-    }
-  };
+
+const handleSubmit = async () => {
+  try {
+    const appId = await createNewApplication(formData);
+
+    console.log("Application created:", appId);
+
+    // Navigate to success page or show success message
+  } catch (error) {
+    console.error("Failed to create application:", error);
+
+    // Show error toast/message
+  }
+};
 
   const handleBack = () => {
     setCurrentStep(hasConditionalAwards ? 4 : 3);
   };
 
+  const router = useRouter();
+
   return (
     <div className="space-y-6">
-      <StepHeader title="Declaration" subtitle={hasConditionalAwards ? 'Step 5' : 'Step 4'} />
+      <StepHeader
+        title="Declaration"
+        subtitle={hasConditionalAwards ? "Step 5" : "Step 4"}
+      />
 
       <Card className="space-y-5">
         <Checkbox
           id="confirmAccuracy"
           checked={confirmAccuracy}
-          onChange={(checked) => updateDeclaration({ confirmAccuracy: checked })}
+          onChange={(checked) =>
+            updateDeclaration({ confirmAccuracy: checked })
+          }
           label="I confirm all provided information is true."
         />
         <Checkbox
           id="agreeDisqualification"
           checked={agreeDisqualification}
-          onChange={(checked) => updateDeclaration({ agreeDisqualification: checked })}
+          onChange={(checked) =>
+            updateDeclaration({ agreeDisqualification: checked })
+          }
           label="I agree that false information will result in disqualification."
         />
         <Checkbox
           id="agreePhysicalInterview"
           checked={agreePhysicalInterview}
-          onChange={(checked) => updateDeclaration({ agreePhysicalInterview: checked })}
+          onChange={(checked) =>
+            updateDeclaration({ agreePhysicalInterview: checked })
+          }
           label="I agree that not attending physical interview on the given date will result in disqualification."
         />
         <Checkbox
           id="permitVerification"
           checked={permitVerification}
-          onChange={(checked) => updateDeclaration({ permitVerification: checked })}
+          onChange={(checked) =>
+            updateDeclaration({ permitVerification: checked })
+          }
           label="I permit the organizing committee to verify my submissions."
         />
         <Checkbox
           id="consentPublicity"
           checked={consentPublicity}
-          onChange={(checked) => updateDeclaration({ consentPublicity: checked })}
+          onChange={(checked) =>
+            updateDeclaration({ consentPublicity: checked })
+          }
           label="I consent to the use of my name, photograph, and submitted materials for publicity related to the awards."
         />
       </Card>
@@ -943,7 +1284,22 @@ const Step5Declaration: React.FC = () => {
         </div>
       )}
 
-      <StepNav onBack={handleBack} onNext={handleSubmit} nextDisabled={!isValid()} nextLabel="Submit Application" />
+      <div className="space-y-4">
+        <SwipeToSubmit
+          onSubmit={handleSubmit}
+          disabled={!isValid()}
+          onSuccess={() => router.push('/register/success')}
+        />
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="text-sm text-slate-400 hover:text-slate-300 transition-colors"
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -955,7 +1311,7 @@ const Sidebar: React.FC = () => {
   const steps = [1, 2, 3, 4, 5];
 
   const getStepTitle = (step: number) => {
-    if (step === 4 && !hasConditionalAwards) return 'Declaration';
+    if (step === 4 && !hasConditionalAwards) return "Declaration";
     return STEP_TITLES[step as keyof typeof STEP_TITLES];
   };
 
@@ -966,7 +1322,12 @@ const Sidebar: React.FC = () => {
   };
 
   const isStepCompleted = (step: number) => {
-    const adjustedStep = currentStep === 0 ? 0 : !hasConditionalAwards && currentStep > 3 ? currentStep - 1 : currentStep;
+    const adjustedStep =
+      currentStep === 0
+        ? 0
+        : !hasConditionalAwards && currentStep > 3
+          ? currentStep - 1
+          : currentStep;
     return step < (currentStep === 0 ? 1 : adjustedStep);
   };
 
@@ -974,8 +1335,12 @@ const Sidebar: React.FC = () => {
     <aside className="w-full lg:w-60 xl:w-64 shrink-0">
       <div className="lg:sticky lg:top-28 space-y-6">
         <div className="hidden lg:block space-y-2">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">JESA 2026</p>
-          <h1 className="text-xl font-bold text-slate-50">Awards Application</h1>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+            JESA 2026
+          </p>
+          <h1 className="text-xl font-bold text-slate-50">
+            Awards Application
+          </h1>
         </div>
 
         <nav className="flex lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
@@ -990,31 +1355,43 @@ const Sidebar: React.FC = () => {
               disabled={!isStepCompleted(step) && !isStepActive(step)}
               className={`flex items-center gap-3 py-2.5 px-3.5 rounded-lg transition-all duration-200 text-left shrink-0 ${
                 isStepActive(step)
-                  ? 'bg-blue-600/20 text-blue-300'
+                  ? "bg-blue-600/20 text-blue-300"
                   : isStepCompleted(step)
-                  ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                  : 'text-slate-600 cursor-not-allowed'
+                    ? "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                    : "text-slate-600 cursor-not-allowed"
               }`}
             >
               <div
                 className={`flex items-center justify-center w-8 h-8 rounded-full border-2 font-semibold text-sm shrink-0 ${
                   isStepActive(step)
-                    ? 'border-blue-400 bg-blue-600 text-white'
+                    ? "border-blue-400 bg-blue-600 text-white"
                     : isStepCompleted(step)
-                    ? 'border-blue-600 bg-blue-600/20 text-blue-300'
-                    : 'border-slate-700 text-slate-600'
+                      ? "border-blue-600 bg-blue-600/20 text-blue-300"
+                      : "border-slate-700 text-slate-600"
                 }`}
               >
                 {isStepCompleted(step) ? (
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 ) : (
                   step
                 )}
               </div>
               <div className="flex-1 min-w-0 hidden lg:block">
-                <div className="text-sm font-medium truncate">{getStepTitle(step)}</div>
+                <div className="text-sm font-medium truncate">
+                  {getStepTitle(step)}
+                </div>
                 <div className="text-xs text-slate-500">Step {step}</div>
               </div>
             </button>
@@ -1024,7 +1401,7 @@ const Sidebar: React.FC = () => {
         <div className="hidden lg:block pt-4 border-t border-slate-800">
           <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
             <span>Progress</span>
-            <span>{currentStep === 0 ? 'Start' : `${currentStep} of 5`}</span>
+            <span>{currentStep === 0 ? "Start" : `${currentStep} of 5`}</span>
           </div>
           <div className="w-full bg-slate-800 rounded-full h-1.5">
             <div
@@ -1039,7 +1416,8 @@ const Sidebar: React.FC = () => {
 };
 
 export default function NewRegistrationForm2026() {
-  const [formData, setFormData] = useState<ApplicationFormData>(INITIAL_FORM_DATA);
+  const [formData, setFormData] =
+    useState<ApplicationFormData>(INITIAL_FORM_DATA);
   const [currentStep, setCurrentStep] = useState(0);
 
   const updateApplicantType = useCallback((type: ApplicantType) => {
@@ -1060,26 +1438,38 @@ export default function NewRegistrationForm2026() {
     }));
   }, []);
 
-  const updateAwardSelection = useCallback((selection: Partial<AwardSelection>) => {
-    setFormData((prev) => ({
-      ...prev,
-      awardSelection: { ...prev.awardSelection, ...selection },
-    }));
-  }, []);
+  const updateAwardSelection = useCallback(
+    (selection: Partial<AwardSelection>) => {
+      setFormData((prev) => ({
+        ...prev,
+        awardSelection: { ...prev.awardSelection, ...selection },
+      }));
+    },
+    [],
+  );
 
-  const updateBestInnovatorQuestions = useCallback((questions: Partial<BestInnovatorQuestions>) => {
-    setFormData((prev) => ({
-      ...prev,
-      bestInnovatorQuestions: { ...prev.bestInnovatorQuestions, ...questions },
-    }));
-  }, []);
+  const updateBestInnovatorQuestions = useCallback(
+    (questions: Partial<BestInnovatorQuestions>) => {
+      setFormData((prev) => ({
+        ...prev,
+        bestInnovatorQuestions: {
+          ...prev.bestInnovatorQuestions,
+          ...questions,
+        },
+      }));
+    },
+    [],
+  );
 
-  const updateBestCSRQuestions = useCallback((questions: Partial<BestCSRQuestions>) => {
-    setFormData((prev) => ({
-      ...prev,
-      bestCSRQuestions: { ...prev.bestCSRQuestions, ...questions },
-    }));
-  }, []);
+  const updateBestCSRQuestions = useCallback(
+    (questions: Partial<BestCSRQuestions>) => {
+      setFormData((prev) => ({
+        ...prev,
+        bestCSRQuestions: { ...prev.bestCSRQuestions, ...questions },
+      }));
+    },
+    [],
+  );
 
   const updateDeclaration = useCallback((declaration: Partial<Declaration>) => {
     setFormData((prev) => ({
@@ -1109,13 +1499,20 @@ export default function NewRegistrationForm2026() {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 0: return <Step0Landing />;
-      case 1: return <Step1PersonalInfo />;
-      case 2: return <Step2AcademicInfo />;
-      case 3: return <Step3AwardSelection />;
-      case 4: return <Step4AwardQuestions />;
-      case 5: return <Step5Declaration />;
-      default: return <Step0Landing />;
+      case 0:
+        return <Step0Landing />;
+      case 1:
+        return <Step1PersonalInfo />;
+      case 2:
+        return <Step2AcademicInfo />;
+      case 3:
+        return <Step3AwardSelection />;
+      case 4:
+        return <Step4AwardQuestions />;
+      case 5:
+        return <Step5Declaration />;
+      default:
+        return <Step0Landing />;
     }
   };
 
@@ -1125,9 +1522,7 @@ export default function NewRegistrationForm2026() {
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
             <Sidebar />
-            <main className="flex-1 min-w-0 max-w-3xl">
-              {renderStep()}
-            </main>
+            <main className="flex-1 min-w-0 max-w-3xl">{renderStep()}</main>
           </div>
         </div>
       </div>
