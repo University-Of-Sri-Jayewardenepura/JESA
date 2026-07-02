@@ -1,0 +1,256 @@
+import { z } from "zod";
+
+/* =========================
+   ENUMS
+========================= */
+
+const GenderEnum = z.enum(["male", "female", "other", "prefer-not-to-say"]);
+
+const AcademicYearEnum = z.enum([
+  "year-1",
+  "year-2",
+  "year-3",
+  "year-4",
+  "recent-graduate",
+]);
+
+const AwardEnum = z.enum([
+  "best-leader",
+  "best-team-player",
+  "best-creative-designer",
+  "best-communicator",
+  "best-innovator",
+  "best-young-entrepreneur",
+  "best-csr",
+  "besa-inter-university",
+  "besa-fhss",
+  "besa-fas",
+  "besa-fmsc",
+  "besa-fms",
+  "besa-fot",
+  "besa-foe",
+  "besa-fahs",
+  "besa-fuab",
+  "besa-fds",
+]);
+
+/* =========================
+   PERSONAL INFO
+========================= */
+
+const personalInfoSchema = z.object({
+  publicDisplayName: z.string().min(1, "Name is required"),
+
+  nic: z.string().min(1, "NIC is required"),
+
+  gender: GenderEnum,
+
+  email: z.string().email("Invalid email format"),
+
+  whatsappNumber: z
+    .string()
+    .min(10, "WhatsApp number must be at least 10 characters"),
+
+  mobileNumber: z.string().min(10, "Mobile number is required"),
+});
+
+/* =========================
+   ACADEMIC INFO
+========================= */
+
+const academicInfoSchema = z.object({
+  university: z.string().min(1, "University is required"),
+
+  universityRegistrationNumber: z
+    .string()
+    .min(1, "Registration number is required"),
+
+  universityEmail: z.string().email("Invalid university email"),
+
+  academicYear: AcademicYearEnum,
+
+  faculty: z.string().min(1, "Faculty is required"),
+
+  degree: z.string().min(1, "Degree is required"),
+
+  otherDegree: z.string().optional(),
+
+  graduationYear: z.string().optional(),
+});
+
+/* =========================
+   AWARD SELECTION
+========================= */
+
+const awardSelectionSchema = z.object({
+  selectedAwards: z
+    .array(AwardEnum)
+    .min(1, "At least one award must be selected"),
+
+  hasConditionalAwards: z.boolean(),
+});
+
+/* =========================
+   QUESTIONS
+========================= */
+
+const bestInnovatorSchema = z
+  .object({
+    industry: z.string().min(1).optional(),
+    innovationCompletionPercentage: z.boolean().optional(),
+    otherIndustry: z.string().optional(),
+  })
+  .optional();
+
+const bestCSRSchema = z
+  .object({
+    clubAdvisorNameTitle: z.string().min(1).optional(),
+    clubAdvisorEmail: z.string().email().optional(),
+    memberAttendingName: z.string().optional(),
+    memberAttendingWhatsapp: z.string().optional(),
+    clubPresidentName: z.string().optional(),
+    clubPresidentWhatsapp: z.string().optional(),
+    clubPresidentEmail: z.string().email().optional(),
+  })
+  .optional();
+
+/* =========================
+   DECLARATION
+========================= */
+
+const declarationSchema = z.object({
+  confirmAccuracy: z.boolean(),
+  agreeDisqualification: z.boolean(),
+  agreePhysicalInterview: z.boolean(),
+  permitVerification: z.boolean(),
+  consentPublicity: z.boolean(),
+});
+
+/* =========================
+   MAIN SCHEMA
+========================= */
+
+export const applicationSchema = z.object({
+  applicantType: z.enum(["internal", "external"]),
+
+  personalInfo: personalInfoSchema,
+
+  academicInfo: academicInfoSchema,
+
+  awardSelection: awardSelectionSchema,
+
+  bestInnovatorQuestions: bestInnovatorSchema,
+
+  bestCSRQuestions: bestCSRSchema,
+
+  declaration: declarationSchema,
+});
+
+/* =========================
+   BUSINESS RULES
+========================= */
+
+export const applicationBusinessSchema = applicationSchema
+  .refine(
+    (data) =>
+      new Set(data.awardSelection.selectedAwards).size ===
+      data.awardSelection.selectedAwards.length,
+    {
+      message: "You cannot select duplicate awards",
+      path: ["awardSelection.selectedAwards"],
+    }
+  )
+
+  .refine(
+    (data) => {
+      const isUSJ =
+        data.academicInfo.university ===
+        "University of Sri Jayewardenepura";
+
+      if (isUSJ) return true;
+
+      return data.awardSelection.selectedAwards.every(
+        (a) =>
+          a === "best-innovator" || a === "besa-inter-university"
+      );
+    },
+    {
+      message:
+        "Only Best Innovator and BESA Inter University are open to external universities",
+      path: ["awardSelection.selectedAwards"],
+    }
+  )
+
+  .refine(
+    (data) => {
+      const isUSJ =
+        data.academicInfo.university ===
+        "University of Sri Jayewardenepura";
+
+      return isUSJ
+        ? data.awardSelection.selectedAwards.length <= 3
+        : data.awardSelection.selectedAwards.length <= 2;
+    },
+    {
+      message:
+        "USJ students max 3 awards, others max 2 awards",
+      path: ["awardSelection.selectedAwards"],
+    }
+  )
+
+  .refine(
+    (data) => {
+      if (!data.awardSelection.selectedAwards.includes("best-innovator"))
+        return true;
+
+      return data.bestInnovatorQuestions?.innovationCompletionPercentage === true;
+    },
+    {
+      message: "Invalid Best Innovator submission",
+      path: ["bestInnovatorQuestions"],
+    }
+  )
+
+  .refine(
+    (data) => {
+      if (
+        !data.awardSelection.selectedAwards.includes("besa-inter-university")
+      )
+        return true;
+
+      return data.academicInfo.university.length > 0;
+    },
+    {
+      message:
+        "BESA Inter University is only for Sri Lankan state universities",
+      path: ["awardSelection.selectedAwards"],
+    }
+  )
+
+  .refine(
+    (data) => {
+      const besaAwards = data.awardSelection.selectedAwards.filter((a) =>
+        a.startsWith("besa-")
+      );
+
+      if (besaAwards.length === 0) return true;
+
+      const allowed = [
+        "FOT",
+        "FAS",
+        "FOE",
+        "FMSC",
+        "FMS",
+        "FAHS",
+        "FHSS",
+        "FUAB",
+        "FDS",
+      ];
+
+      return allowed.includes(data.academicInfo.faculty);
+    },
+    {
+      message: "You are not eligible for selected BESA awards",
+      path: ["academicInfo.faculty"],
+    }
+  );

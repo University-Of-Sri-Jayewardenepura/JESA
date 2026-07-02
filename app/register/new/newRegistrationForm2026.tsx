@@ -3,8 +3,6 @@
 import React, { useState, useCallback, createContext, useContext, useRef } from "react";
 import { AlertCircle, CheckCircle, Loader2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { createNewApplication } from "./service/application.service";
 
 type ApplicantType = "internal" | "external";
@@ -536,6 +534,12 @@ const Step2AcademicInfo: React.FC = () => {
     (opt) => applicantType === "internal" || opt.value !== "recent-graduate",
   );
 
+  React.useEffect(() => {
+    if (applicantType === "internal" && academicInfo.university !== "University of Sri Jayewardenepura") {
+      updateAcademicInfo({ university: "University of Sri Jayewardenepura" });
+    }
+  }, [applicantType]);
+
   const isValid = () => {
     const {
       university,
@@ -607,8 +611,11 @@ const Step2AcademicInfo: React.FC = () => {
           ) : (
             <Input
               type="text"
-              placeholder="Enter your university name"
-              value={academicInfo.university || ""}
+              value={
+                academicInfo.university || "University of Sri Jayewardenepura"
+              }
+              disabled
+              
               onChange={(e) =>
                 updateAcademicInfo({ university: e.target.value })
               }
@@ -1201,26 +1208,23 @@ const Step5Declaration: React.FC = () => {
     permitVerification &&
     consentPublicity;
 
+  const router = useRouter();
+  const [toast, setToast] = useState<{ message: string; type: 'error' } | null>(null);
 
-const handleSubmit = async () => {
-  try {
-    const appId = await createNewApplication(formData);
-
-    console.log("Application created:", appId);
-
-    // Navigate to success page or show success message
-  } catch (error) {
-    console.error("Failed to create application:", error);
-
-    // Show error toast/message
-  }
-};
+  const handleSubmit = async (): Promise<void> => {
+    try {
+      await createNewApplication(formData);
+      router.push('/register/success');
+    } catch (error) {
+      setToast({ message: error instanceof Error ? error.message : 'Failed to submit application. Please try again.', type: 'error' });
+      setTimeout(() => setToast(null), 8000);
+      throw error;
+    }
+  };
 
   const handleBack = () => {
     setCurrentStep(hasConditionalAwards ? 4 : 3);
   };
-
-  const router = useRouter();
 
   return (
     <div className="space-y-6">
@@ -1281,11 +1285,28 @@ const handleSubmit = async () => {
         </div>
       )}
 
+      {toast && (
+        <div className="fixed top-6 right-6 z-50">
+          <div className="p-4 rounded-xl bg-red-900/40 border border-red-500/40 flex gap-3 shadow-xl backdrop-blur-sm max-w-sm">
+            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-red-200">Submission Failed</p>
+              <p className="text-xs text-red-300/80 mt-1">{toast.message}</p>
+            </div>
+            <button
+              onClick={() => setToast(null)}
+              className="text-red-300 hover:text-red-200 shrink-0"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-4">
         <SwipeToSubmit
           onSubmit={handleSubmit}
           disabled={!isValid()}
-          onSuccess={() => router.push('/register/success')}
         />
         <div className="flex justify-center">
           <button
