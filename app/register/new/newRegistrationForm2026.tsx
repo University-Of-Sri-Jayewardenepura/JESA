@@ -437,20 +437,19 @@ const Step0Landing: React.FC = () => {
 const Step1PersonalInfo: React.FC = () => {
   const { formData, updatePersonalInfo, setCurrentStep } = useFormContext();
   const { applicantType, personalInfo } = formData;
-  const isExternal = applicantType === "external";
 
   const isValid = () => {
-    const { publicDisplayName, email, whatsappNumber, mobileNumber, gender } =
+    const { publicDisplayName, email, whatsappNumber, mobileNumber, gender, nic } =
       personalInfo;
     if (
       !publicDisplayName ||
       !email ||
       !whatsappNumber ||
       !mobileNumber ||
-      !gender
+      !gender ||
+      !nic
     )
       return false;
-    if (isExternal && !personalInfo.nic) return false;
     return true;
   };
 
@@ -470,8 +469,7 @@ const Step1PersonalInfo: React.FC = () => {
           />
         </Field>
 
-        {isExternal && (
-          <Field label="NIC" required>
+        <Field label="NIC" required>
             <Input
               type="text"
               placeholder="Enter your NIC number"
@@ -479,7 +477,6 @@ const Step1PersonalInfo: React.FC = () => {
               onChange={(e) => updatePersonalInfo({ nic: e.target.value })}
             />
           </Field>
-        )}
 
         <Field label="Gender" required>
           <Select
