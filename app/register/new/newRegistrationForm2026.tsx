@@ -140,6 +140,23 @@ const GENDER_OPTIONS = [
   { value: 'prefer-not-to-say', label: 'Prefer not to say' },
 ];
 
+const SRI_LANKAN_UNIVERSITIES = [
+  'University of Colombo',
+  'University of Peradeniya',
+  'University of Kelaniya',
+  'University of Moratuwa',
+  'University of Ruhuna',
+  'University of Jaffna',
+  'Eastern University of Sri Lanka',
+  'Sabaragamuwa University of Sri Lanka',
+  'Wayamba University of Sri Lanka',
+  'Uva Wellassa University of Sri Lanka',
+  'South Eastern University of Sri Lanka',
+  'University of the Visual and Performing Arts',
+  'Open University of Sri Lanka',
+  'General Sir John Kotelawala Defence University',
+];
+
 const STEP_TITLES = {
   1: 'Personal Information',
   2: 'Academic Information',
@@ -468,12 +485,36 @@ const Step2AcademicInfo: React.FC = () => {
 
       <Card className="space-y-5">
         <Field label="University" required>
-          <Input
-            type="text"
-            placeholder="Enter your university name"
-            value={academicInfo.university || ''}
-            onChange={(e) => updateAcademicInfo({ university: e.target.value })}
-          />
+          {applicantType === 'external' ? (
+            <>
+              <Select
+                value={academicInfo.university && SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university) ? academicInfo.university : academicInfo.university ? 'Other' : ''}
+                onChange={(value) => updateAcademicInfo({ university: value })}
+                options={[
+                  ...SRI_LANKAN_UNIVERSITIES.map((u) => ({ value: u, label: u })),
+                  { value: 'Other', label: 'Other' },
+                ]}
+                placeholder="Select your university"
+              />
+              {academicInfo.university && !SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university) && (
+                <div className="mt-3">
+                  <Input
+                    type="text"
+                    placeholder="Enter your university name"
+                    value={academicInfo.university === 'Other' ? '' : academicInfo.university}
+                    onChange={(e) => updateAcademicInfo({ university: e.target.value })}
+                  />
+                </div>
+              )}
+            </>
+          ) : (
+            <Input
+              type="text"
+              placeholder="Enter your university name"
+              value={academicInfo.university || ''}
+              onChange={(e) => updateAcademicInfo({ university: e.target.value })}
+            />
+          )}
         </Field>
 
         <Field label="University Registration Number" required>
@@ -504,12 +545,21 @@ const Step2AcademicInfo: React.FC = () => {
         </Field>
 
         <Field label="Faculty" required>
-          <Select
-            value={academicInfo.faculty || ''}
-            onChange={(value) => updateAcademicInfo({ faculty: value })}
-            options={FACULTIES.map((f) => ({ value: f, label: f }))}
-            placeholder="Select faculty"
-          />
+          {applicantType === 'external' ? (
+            <Input
+              type="text"
+              placeholder="Enter your faculty name"
+              value={academicInfo.faculty || ''}
+              onChange={(e) => updateAcademicInfo({ faculty: e.target.value })}
+            />
+          ) : (
+            <Select
+              value={academicInfo.faculty || ''}
+              onChange={(value) => updateAcademicInfo({ faculty: value })}
+              options={FACULTIES.map((f) => ({ value: f, label: f }))}
+              placeholder="Select faculty"
+            />
+          )}
         </Field>
 
         <Field label="Degree" required>
@@ -555,48 +605,39 @@ const Step3AwardSelection: React.FC = () => {
   const isRecentGraduate = academicInfo.academicYear === 'recent-graduate';
   const faculty = academicInfo.faculty;
 
-  const getAvailableAwards = (): { id: AwardType; label: string }[] => {
-    if (isRecentGraduate) {
-      return [{ id: 'best-innovator' as AwardType, label: JESA_AWARDS['best-innovator'] }];
-    }
-    if (isInternal) {
-      const awards: { id: AwardType; label: string }[] = [];
-      Object.entries(JESA_AWARDS).forEach(([id, label]) => {
-        awards.push({ id: id as AwardType, label });
-      });
-      awards.push({ id: 'besa-inter-university', label: BESA_AWARDS['besa-inter-university'] });
-      if (faculty && BESA_FACULTY_MAP[faculty]) {
-        awards.push({ id: BESA_FACULTY_MAP[faculty], label: BESA_AWARDS[BESA_FACULTY_MAP[faculty]] });
-      }
-      return awards;
-    }
-    return [
-      { id: 'besa-inter-university' as AwardType, label: BESA_AWARDS['besa-inter-university'] },
-      { id: 'best-innovator' as AwardType, label: JESA_AWARDS['best-innovator'] },
-    ];
-  };
+  const mainAwards: { id: AwardType; label: string }[] = Object.entries(JESA_AWARDS).map(([id, label]) => ({
+    id: id as AwardType, label,
+  }));
+  if (faculty && BESA_FACULTY_MAP[faculty]) {
+    mainAwards.push({ id: BESA_FACULTY_MAP[faculty], label: `${BESA_AWARDS[BESA_FACULTY_MAP[faculty]]} (Faculty wise award)` });
+  }
 
-  const availableAwards = getAvailableAwards();
+  const mainSelectedCount = selectedAwards.filter((id) => id !== 'besa-inter-university').length;
+  const mainMaxReached = mainSelectedCount >= 2;
+  const totalMaxReached = selectedAwards.length >= 3;
 
   const handleAwardToggle = (awardId: AwardType) => {
-    const newSelectedAwards = selectedAwards.includes(awardId)
+    const alreadySelected = selectedAwards.includes(awardId);
+    const isMain = awardId !== 'besa-inter-university';
+
+    if (!alreadySelected && isMain && mainMaxReached) return;
+    if (!alreadySelected && !isMain && totalMaxReached) return;
+
+    const newSelected = alreadySelected
       ? selectedAwards.filter((id) => id !== awardId)
       : [...selectedAwards, awardId];
 
     const hasConditional =
-      newSelectedAwards.includes('best-innovator') ||
-      newSelectedAwards.includes('best-csr');
+      newSelected.includes('best-innovator') ||
+      newSelected.includes('best-csr');
 
     updateAwardSelection({
-      selectedAwards: newSelectedAwards,
+      selectedAwards: newSelected,
       hasConditionalAwards: hasConditional,
     });
   };
 
-  const isValid = () => {
-    if (isRecentGraduate) return selectedAwards.length >= 1;
-    return selectedAwards.length >= 1;
-  };
+  const isValid = () => selectedAwards.length >= 1;
 
   const handleContinue = () => {
     if (isValid()) {
@@ -608,6 +649,25 @@ const Step3AwardSelection: React.FC = () => {
     }
   };
 
+  const renderCheckbox = (id: AwardType, label: string, disabled = false) => (
+    <div key={id} className="flex items-center gap-3 py-1">
+      <input
+        type="checkbox"
+        id={id}
+        checked={selectedAwards.includes(id)}
+        onChange={() => handleAwardToggle(id)}
+        disabled={disabled}
+        className="mt-0.5 w-5 h-5 shrink-0 rounded border-2 border-slate-600 bg-slate-900/80 cursor-pointer accent-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"
+      />
+      <label
+        htmlFor={id}
+        className={`${disabled ? 'text-slate-600 cursor-not-allowed' : 'text-slate-200 cursor-pointer'} flex-1 text-sm`}
+      >
+        {label}
+      </label>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       <StepHeader title="Award Selection" subtitle="Step 3" />
@@ -618,28 +678,32 @@ const Step3AwardSelection: React.FC = () => {
         <InfoBanner
           message={
             isInternal
-              ? 'Select a minimum of 1 award and a maximum of 2 + BESA – Inter University Award'
+              ? 'Select up to 2 awards from the list below, plus the BESA – Inter University Award (3 awards total)'
               : 'Select 1 or more awards from the available options.'
           }
         />
       )}
 
-      <Card className="space-y-3">
-        {availableAwards.map(({ id, label }) => (
-          <div key={id} className="flex items-center gap-3 py-1">
-            <input
-              type="checkbox"
-              id={id}
-              checked={selectedAwards.includes(id)}
-              onChange={() => handleAwardToggle(id)}
-              className="mt-0.5 w-5 h-5 shrink-0 rounded border-2 border-slate-600 bg-slate-900/80 cursor-pointer accent-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-            />
-            <label htmlFor={id} className="text-slate-200 cursor-pointer flex-1 text-sm">
-              {label}
-            </label>
-          </div>
-        ))}
-      </Card>
+      {isRecentGraduate ? (
+        <Card className="space-y-3">
+          {renderCheckbox('best-innovator', JESA_AWARDS['best-innovator'])}
+        </Card>
+      ) : isInternal ? (
+        <Card className="space-y-1">
+          {mainAwards.map(({ id, label }) =>
+            renderCheckbox(id, label, !selectedAwards.includes(id) && mainMaxReached)
+          )}
+
+          <hr className="border-slate-700/50 my-3" />
+
+          {renderCheckbox('besa-inter-university', BESA_AWARDS['besa-inter-university'], !selectedAwards.includes('besa-inter-university') && totalMaxReached)}
+        </Card>
+      ) : (
+        <Card className="space-y-3">
+          {renderCheckbox('besa-inter-university', BESA_AWARDS['besa-inter-university'])}
+          {renderCheckbox('best-innovator', JESA_AWARDS['best-innovator'])}
+        </Card>
+      )}
 
       <p className="text-sm text-slate-400">
         Selected: {selectedAwards.length} award{selectedAwards.length !== 1 ? 's' : ''}
