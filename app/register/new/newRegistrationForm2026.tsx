@@ -4,6 +4,10 @@ import React, { useState, useCallback, createContext, useContext, useRef } from 
 import { AlertCircle, CheckCircle, Loader2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createNewApplication } from "./service/application.service";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 type ApplicantType = "internal" | "external";
 
@@ -221,51 +225,6 @@ const useFormContext = () => {
   return context;
 };
 
-const inputBase =
-  "w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700/60 text-slate-50 placeholder-slate-500 rounded-lg transition-colors " +
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:border-blue-500";
-
-const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (
-  props,
-) => <input {...props} className={`${inputBase} ${props.className || ""}`} />;
-
-const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
-  children,
-  htmlFor,
-}) => (
-  <label
-    htmlFor={htmlFor}
-    className="block text-slate-200 text-sm font-medium mb-1.5"
-  >
-    {children}
-  </label>
-);
-
-const Checkbox: React.FC<{
-  id: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-  label?: string;
-}> = ({ id, checked, onChange, label }) => (
-  <div className="flex items-start gap-3">
-    <input
-      type="checkbox"
-      id={id}
-      checked={checked}
-      onChange={(e) => onChange(e.target.checked)}
-      className="mt-0.5 w-5 h-5 shrink-0 rounded border-2 border-slate-600 bg-slate-900/80 cursor-pointer accent-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-    />
-    {label && (
-      <label
-        htmlFor={id}
-        className="text-slate-200 cursor-pointer flex-1 leading-relaxed text-sm"
-      >
-        {label}
-      </label>
-    )}
-  </div>
-);
-
 const Select: React.FC<{
   value: string;
   onChange: (value: string) => void;
@@ -275,7 +234,7 @@ const Select: React.FC<{
   <select
     value={value}
     onChange={(e) => onChange(e.target.value)}
-    className={`${inputBase} appearance-none cursor-pointer`}
+    className="flex h-10 w-full min-w-0 rounded-[8px] border border-slate-700/60 bg-slate-900/80 px-3 py-2 text-sm text-slate-50 shadow-xs outline-none transition-[color,box-shadow] placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-[3px] focus-visible:ring-blue-500/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer"
     style={{
       backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
       backgroundPosition: "right 0.75rem center",
@@ -292,31 +251,12 @@ const Select: React.FC<{
   </select>
 );
 
-const Button: React.FC<{
-  onClick: () => void;
-  disabled?: boolean;
-  variant?: "primary" | "secondary";
-  children: React.ReactNode;
-}> = ({ onClick, disabled, variant = "primary", children }) => (
-  <button
-    onClick={onClick}
-    disabled={disabled}
-    className={`px-6 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
-      variant === "primary"
-        ? "bg-blue-600 hover:bg-blue-500 text-white focus-visible:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
-        : "border border-slate-600 text-slate-300 hover:bg-slate-800 focus-visible:ring-slate-400 disabled:opacity-50 disabled:cursor-not-allowed"
-    }`}
-  >
-    {children}
-  </button>
-);
-
 const Card: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
   className = "",
 }) => (
   <div
-    className={`p-6 md:p-8 rounded-xl bg-slate-900/50 border border-slate-700/50 shadow-sm ${className}`}
+    className={`rounded-2xl border border-slate-700/50 bg-slate-900/50 p-6 md:p-8 lg:p-10 backdrop-blur-sm ${className}`}
   >
     {children}
   </div>
@@ -327,10 +267,10 @@ const StepHeader: React.FC<{ title: string; subtitle: string }> = ({
   subtitle,
 }) => (
   <div className="mb-8">
-    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-50">
+    <h2 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-[32px] text-transparent leading-[1.125] tracking-tight md:text-[40px] lg:text-[48px]">
       {title}
     </h2>
-    <p className="text-slate-400 text-sm mt-1.5">{subtitle}</p>
+    <p className="mt-2 text-slate-400 text-sm">{subtitle}</p>
   </div>
 );
 
@@ -341,11 +281,11 @@ const StepNav: React.FC<{
   nextLabel?: string;
 }> = ({ onBack, onNext, nextDisabled, nextLabel = "Continue →" }) => (
   <div className="flex flex-col-reverse sm:flex-row justify-between gap-3 pt-2">
-    <Button onClick={onBack} variant="secondary">
+    <Button onClick={onBack} variant="outline" className="rounded-[8px] border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-slate-100">
       ← Back
     </Button>
     {onNext && (
-      <Button onClick={onNext} disabled={nextDisabled}>
+      <Button onClick={onNext} disabled={nextDisabled} className="rounded-[8px] py-3 font-medium text-base">
         {nextLabel}
       </Button>
     )}
@@ -364,8 +304,8 @@ const Field: React.FC<{
   required?: boolean;
   children: React.ReactNode;
 }> = ({ label, required, children }) => (
-  <div>
-    <Label>
+  <div className="space-y-1.5">
+    <Label className="text-slate-200">
       {label} {required && <span className="text-blue-400">*</span>}
     </Label>
     {children}
@@ -388,7 +328,7 @@ const Step0Landing: React.FC = () => {
           <button
             key={type}
             onClick={() => updateApplicantType(type)}
-            className={`p-6 rounded-xl border-2 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
+            className={`p-6 rounded-2xl border-2 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
               applicantType === type
                 ? "border-blue-600 bg-blue-600/10"
                 : "border-slate-700/50 bg-slate-900/50 hover:border-slate-600"
@@ -424,7 +364,7 @@ const Step0Landing: React.FC = () => {
       <InfoBanner message="You must be a currently enrolled undergraduate at a Sri Lankan state university to apply. Your applicant type determines which awards you can apply for." />
 
       <div className="flex justify-end pt-2">
-        <Button onClick={() => setCurrentStep(1)} disabled={!applicantType}>
+        <Button onClick={() => setCurrentStep(1)} disabled={!applicantType} className="rounded-[8px] py-3 font-medium text-base">
           Continue →
         </Button>
       </div>
@@ -527,18 +467,22 @@ const Step1PersonalInfo: React.FC = () => {
 };
 
 const Step2AcademicInfo: React.FC = () => {
-  const { formData, updateAcademicInfo, setCurrentStep } = useFormContext();
-  const { applicantType, academicInfo } = formData;
+  const { formData, updateAcademicInfo, updateAwardSelection, setCurrentStep } = useFormContext();
+  const { applicantType, academicInfo, awardSelection } = formData;
   const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
-  const academicYearOptions = ACADEMIC_YEARS.filter(
-    (opt) => applicantType === "internal" || opt.value !== "recent-graduate",
-  );
+  const academicYearOptions = ACADEMIC_YEARS;
 
   React.useEffect(() => {
     if (applicantType === "internal" && academicInfo.university !== "University of Sri Jayewardenepura") {
       updateAcademicInfo({ university: "University of Sri Jayewardenepura" });
     }
   }, [applicantType]);
+
+  React.useEffect(() => {
+    if (isRecentGraduate && (awardSelection.selectedAwards?.length ?? 0) > 0) {
+      updateAwardSelection({ selectedAwards: [], hasConditionalAwards: false });
+    }
+  }, [academicInfo.academicYear]);
 
   const isValid = () => {
     const {
@@ -778,21 +722,20 @@ const Step3AwardSelection: React.FC = () => {
   };
 
   const renderCheckbox = (id: AwardType, label: string, disabled = false) => (
-    <div key={id} className="flex items-center gap-3 py-1">
-      <input
-        type="checkbox"
+    <div key={id} className="flex items-start gap-3 py-1">
+      <Checkbox
         id={id}
         checked={selectedAwards.includes(id)}
-        onChange={() => handleAwardToggle(id)}
+        onCheckedChange={() => handleAwardToggle(id)}
         disabled={disabled}
-        className="mt-0.5 w-5 h-5 shrink-0 rounded border-2 border-slate-600 bg-slate-900/80 cursor-pointer accent-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:opacity-40 disabled:cursor-not-allowed"
+        className="mt-0.5 shrink-0"
       />
-      <label
+      <Label
         htmlFor={id}
-        className={`${disabled ? "text-slate-600 cursor-not-allowed" : "text-slate-200 cursor-pointer"} flex-1 text-sm`}
+        className={`${disabled ? "text-slate-600 cursor-not-allowed" : "text-slate-200 cursor-pointer"} flex-1 font-normal leading-relaxed text-sm`}
       >
         {label}
-      </label>
+      </Label>
     </div>
   );
 
@@ -806,8 +749,8 @@ const Step3AwardSelection: React.FC = () => {
         <InfoBanner
           message={
             isInternal
-              ? "Select up to 2 awards from the list below, plus the BESA – Inter University Award (3 awards total)"
-              : "Select 1 or more awards from the available options."
+              ? "You must select at least 1 award. You may choose up to 2 awards from the list below, plus the BESA – Inter University Award (3 awards total)."
+              : "You must select at least 1 award. External students may apply for the Best Innovator Award and/or the BESA – Inter University Award."
           }
         />
       )}
@@ -933,18 +876,23 @@ const Step4AwardQuestions: React.FC = () => {
             </Field>
           )}
 
-          <Checkbox
-            id="innovationCompletion"
-            checked={
-              bestInnovatorQuestions?.innovationCompletionPercentage === true
-            }
-            onChange={(checked) =>
-              updateBestInnovatorQuestions({
-                innovationCompletionPercentage: checked,
-              })
-            }
-            label="I declare that my innovation is more than 75% completed"
-          />
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="innovationCompletion"
+              checked={
+                bestInnovatorQuestions?.innovationCompletionPercentage === true
+              }
+              onCheckedChange={(checked) =>
+                updateBestInnovatorQuestions({
+                  innovationCompletionPercentage: checked === true,
+                })
+              }
+              className="mt-0.5"
+            />
+            <Label htmlFor="innovationCompletion" className="cursor-pointer font-normal text-slate-200 leading-relaxed text-sm">
+              I declare that my innovation is more than 75% completed
+            </Label>
+          </div>
         </Card>
       )}
 
@@ -1234,46 +1182,71 @@ const Step5Declaration: React.FC = () => {
       />
 
       <Card className="space-y-5">
-        <Checkbox
-          id="confirmAccuracy"
-          checked={confirmAccuracy}
-          onChange={(checked) =>
-            updateDeclaration({ confirmAccuracy: checked })
-          }
-          label="I confirm all provided information is true."
-        />
-        <Checkbox
-          id="agreeDisqualification"
-          checked={agreeDisqualification}
-          onChange={(checked) =>
-            updateDeclaration({ agreeDisqualification: checked })
-          }
-          label="I agree that false information will result in disqualification."
-        />
-        <Checkbox
-          id="agreePhysicalInterview"
-          checked={agreePhysicalInterview}
-          onChange={(checked) =>
-            updateDeclaration({ agreePhysicalInterview: checked })
-          }
-          label="I agree that not attending physical interview on the given date will result in disqualification."
-        />
-        <Checkbox
-          id="permitVerification"
-          checked={permitVerification}
-          onChange={(checked) =>
-            updateDeclaration({ permitVerification: checked })
-          }
-          label="I permit the organizing committee to verify my submissions."
-        />
-        <Checkbox
-          id="consentPublicity"
-          checked={consentPublicity}
-          onChange={(checked) =>
-            updateDeclaration({ consentPublicity: checked })
-          }
-          label="I consent to the use of my name, photograph, and submitted materials for publicity related to the awards."
-        />
+        <div className="flex items-start gap-3">
+          <Checkbox
+            id="confirmAccuracy"
+            checked={confirmAccuracy}
+            onCheckedChange={(checked) =>
+              updateDeclaration({ confirmAccuracy: checked === true })
+            }
+            className="mt-0.5"
+          />
+          <Label htmlFor="confirmAccuracy" className="cursor-pointer font-normal text-slate-200 leading-relaxed text-sm">
+            I confirm all provided information is true.
+          </Label>
+        </div>
+        <div className="flex items-start gap-3">
+          <Checkbox
+            id="agreeDisqualification"
+            checked={agreeDisqualification}
+            onCheckedChange={(checked) =>
+              updateDeclaration({ agreeDisqualification: checked === true })
+            }
+            className="mt-0.5"
+          />
+          <Label htmlFor="agreeDisqualification" className="cursor-pointer font-normal text-slate-200 leading-relaxed text-sm">
+            I agree that false information will result in disqualification.
+          </Label>
+        </div>
+        <div className="flex items-start gap-3">
+          <Checkbox
+            id="agreePhysicalInterview"
+            checked={agreePhysicalInterview}
+            onCheckedChange={(checked) =>
+              updateDeclaration({ agreePhysicalInterview: checked === true })
+            }
+            className="mt-0.5"
+          />
+          <Label htmlFor="agreePhysicalInterview" className="cursor-pointer font-normal text-slate-200 leading-relaxed text-sm">
+            I agree that not attending physical interview on the given date will result in disqualification.
+          </Label>
+        </div>
+        <div className="flex items-start gap-3">
+          <Checkbox
+            id="permitVerification"
+            checked={permitVerification}
+            onCheckedChange={(checked) =>
+              updateDeclaration({ permitVerification: checked === true })
+            }
+            className="mt-0.5"
+          />
+          <Label htmlFor="permitVerification" className="cursor-pointer font-normal text-slate-200 leading-relaxed text-sm">
+            I permit the organizing committee to verify my submissions.
+          </Label>
+        </div>
+        <div className="flex items-start gap-3">
+          <Checkbox
+            id="consentPublicity"
+            checked={consentPublicity}
+            onCheckedChange={(checked) =>
+              updateDeclaration({ consentPublicity: checked === true })
+            }
+            className="mt-0.5"
+          />
+          <Label htmlFor="consentPublicity" className="cursor-pointer font-normal text-slate-200 leading-relaxed text-sm">
+            I consent to the use of my name, photograph, and submitted materials for publicity related to the awards.
+          </Label>
+        </div>
       </Card>
 
       {isValid() && (

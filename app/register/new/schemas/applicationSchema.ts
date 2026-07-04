@@ -183,6 +183,23 @@ export const applicationBusinessSchema = applicationSchema
 
   .refine(
     (data) => {
+      if (data.academicInfo.academicYear !== "recent-graduate")
+        return true;
+
+      return (
+        data.awardSelection.selectedAwards.length === 1 &&
+        data.awardSelection.selectedAwards[0] === "best-innovator"
+      );
+    },
+    {
+      message:
+        "Recent graduates can only apply for the Best Innovator Award",
+      path: ["awardSelection.selectedAwards"],
+    }
+  )
+
+  .refine(
+    (data) => {
       const isUSJ =
         data.academicInfo.university ===
         "University of Sri Jayewardenepura";
@@ -229,11 +246,11 @@ export const applicationBusinessSchema = applicationSchema
 
   .refine(
     (data) => {
-      const besaAwards = data.awardSelection.selectedAwards.filter((a) =>
-        a.startsWith("besa-")
+      const facultyBesaAwards = data.awardSelection.selectedAwards.filter(
+        (a) => a.startsWith("besa-") && a !== "besa-inter-university"
       );
 
-      if (besaAwards.length === 0) return true;
+      if (facultyBesaAwards.length === 0) return true;
 
       const allowed = [
         "FOT",
