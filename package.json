@@ -27,6 +27,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.15.0",
     "lucide-react": "^0.524.0",
     "mongoose": "^8.20.2",
     "mongoose-sequence": "^6.0.1",
