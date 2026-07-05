@@ -1,6 +1,15 @@
 import { z } from "zod";
 
 /* =========================
+   VALIDATION CONSTANTS
+========================= */
+
+export const SRI_LANKA_PHONE_REGEX =
+  /^\+94[\s]?(?:7\d\s?\d{3}\s?\d{4}|\d{2}\s?\d{3}\s?\d{4}|\d{3}\s?\d{4})$/;
+
+export const SRI_LANKA_NIC_REGEX = /^[0-9]{9}[vVxX]$|^[0-9]{12}$/;
+
+/* =========================
    ENUMS
 ========================= */
 
@@ -41,7 +50,13 @@ const AwardEnum = z.enum([
 const personalInfoSchema = z.object({
   publicDisplayName: z.string().min(1, "Name is required"),
 
-  nic: z.string().min(1, "NIC is required"),
+  nic: z
+    .string()
+    .min(1, "NIC is required")
+    .regex(
+      SRI_LANKA_NIC_REGEX,
+      "NIC must be 9 digits followed by V/X or 12 digits"
+    ),
 
   gender: GenderEnum,
 
@@ -49,9 +64,21 @@ const personalInfoSchema = z.object({
 
   whatsappNumber: z
     .string()
-    .min(10, "WhatsApp number must be at least 10 characters"),
+    .min(1, "WhatsApp number is required")
+    .refine(
+      (val) => SRI_LANKA_PHONE_REGEX.test(val),
+      "Enter a valid Sri Lankan number (+94 7X XXX XXXX)"
+    )
+    .transform((val) => val.replace(/\s/g, "")),
 
-  mobileNumber: z.string().min(10, "Mobile number is required"),
+  mobileNumber: z
+    .string()
+    .min(1, "Mobile number is required")
+    .refine(
+      (val) => SRI_LANKA_PHONE_REGEX.test(val),
+      "Enter a valid Sri Lankan number (+94 7X XXX XXXX)"
+    )
+    .transform((val) => val.replace(/\s/g, "")),
 });
 
 /* =========================

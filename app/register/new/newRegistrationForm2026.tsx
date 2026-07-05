@@ -4,6 +4,10 @@ import React, { useState, useCallback, createContext, useContext, useRef } from 
 import { AlertCircle, CheckCircle, Loader2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createNewApplication } from "./service/application.service";
+import {
+  SRI_LANKA_PHONE_REGEX,
+  SRI_LANKA_NIC_REGEX,
+} from "./schemas/applicationSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -388,7 +392,11 @@ const Step1PersonalInfo: React.FC = () => {
       !nic
     )
       return false;
-    return true;
+    return (
+      SRI_LANKA_NIC_REGEX.test(nic) &&
+      SRI_LANKA_PHONE_REGEX.test(whatsappNumber) &&
+      SRI_LANKA_PHONE_REGEX.test(mobileNumber)
+    );
   };
 
   return (
@@ -408,13 +416,17 @@ const Step1PersonalInfo: React.FC = () => {
         </Field>
 
         <Field label="NIC" required>
-            <Input
-              type="text"
-              placeholder="Enter your NIC number"
-              value={personalInfo.nic || ""}
-              onChange={(e) => updatePersonalInfo({ nic: e.target.value })}
-            />
-          </Field>
+          <Input
+            type="text"
+            placeholder="000000000V or 000000000000"
+            value={personalInfo.nic || ""}
+            onChange={(e) =>
+              updatePersonalInfo({
+                nic: e.target.value.toUpperCase(),
+              })
+            }
+          />
+        </Field>
 
         <Field label="Gender" required>
           <Select
@@ -437,7 +449,7 @@ const Step1PersonalInfo: React.FC = () => {
         <Field label="WhatsApp Number" required>
           <Input
             type="tel"
-            placeholder="Enter your WhatsApp number"
+            placeholder="+94 7X XXX XXXX"
             value={personalInfo.whatsappNumber || ""}
             onChange={(e) =>
               updatePersonalInfo({ whatsappNumber: e.target.value })
@@ -448,7 +460,7 @@ const Step1PersonalInfo: React.FC = () => {
         <Field label="Mobile Number" required>
           <Input
             type="tel"
-            placeholder="Enter your mobile number"
+            placeholder="+94 7X XXX XXXX"
             value={personalInfo.mobileNumber || ""}
             onChange={(e) =>
               updatePersonalInfo({ mobileNumber: e.target.value })
