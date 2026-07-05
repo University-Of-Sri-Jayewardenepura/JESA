@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 type ApplicantType = "internal" | "external";
 
@@ -308,15 +309,73 @@ const InfoBanner: React.FC<{ message: string }> = ({ message }) => (
 const Field: React.FC<{
   label: string;
   required?: boolean;
+  error?: string;
   children: React.ReactNode;
-}> = ({ label, required, children }) => (
+}> = ({ label, required, error, children }) => (
   <div className="space-y-1.5">
     <Label className="text-slate-200">
       {label} {required && <span className="text-blue-400">*</span>}
     </Label>
     {children}
+    {error && <p className="text-destructive text-xs">{error}</p>}
   </div>
 );
+
+const normalizePhoneLocalPart = (local: string): string => {
+  const digits = local.replace(/\D/g, "");
+  if (digits.length === 10 && digits.startsWith("0")) {
+    return digits.slice(1);
+  }
+  return digits;
+};
+
+const PhoneInput: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  hasError?: boolean;
+}> = ({ value, onChange, placeholder, hasError }) => {
+  const [localValue, setLocalValue] = React.useState("");
+
+  React.useEffect(() => {
+    setLocalValue(value.replace(/^\+94/, ""));
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setLocalValue(digits);
+    const normalized = normalizePhoneLocalPart(digits);
+    onChange(`+94${normalized}`);
+  };
+
+  const handleBlur = () => {
+    const normalized = normalizePhoneLocalPart(localValue);
+    setLocalValue(normalized);
+    onChange(`+94${normalized}`);
+  };
+
+  return (
+    <div
+      className={cn(
+        "flex items-center rounded-[8px] border bg-slate-900/80 overflow-hidden transition-[color,box-shadow] focus-within:border-blue-500 focus-within:ring-[3px] focus-within:ring-blue-500/50",
+        hasError ? "border-destructive" : "border-slate-700/60"
+      )}
+    >
+      <span className="px-3 text-sm text-slate-400 border-r border-slate-700/60 bg-slate-900/80 h-10 flex items-center shrink-0 select-none">
+        +94
+      </span>
+      <input
+        type="tel"
+        inputMode="numeric"
+        value={localValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder={placeholder || "7X XXX XXXX"}
+        className="flex-1 bg-transparent px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 outline-none h-10"
+      />
+    </div>
+  );
+};
 
 const Step0Landing: React.FC = () => {
   const { formData, updateApplicantType, setCurrentStep } = useFormContext();
@@ -380,25 +439,54 @@ const Step0Landing: React.FC = () => {
 
 const Step1PersonalInfo: React.FC = () => {
   const { formData, updatePersonalInfo, setCurrentStep } = useFormContext();
-  const { applicantType, personalInfo } = formData;
+  const { personalInfo } = formData;
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const isValid = () => {
+  const validate = () => {
+    const nextErrors: Record<string, string> = {};
     const { publicDisplayName, email, whatsappNumber, mobileNumber, gender, nic } =
       personalInfo;
-    if (
-      !publicDisplayName ||
-      !email ||
-      !whatsappNumber ||
-      !mobileNumber ||
-      !gender ||
-      !nic
-    )
-      return false;
-    return (
-      SRI_LANKA_NIC_REGEX.test(nic) &&
-      SRI_LANKA_PHONE_REGEX.test(whatsappNumber) &&
-      SRI_LANKA_PHONE_REGEX.test(mobileNumber)
-    );
+
+    if (!publicDisplayName?.trim()) {
+      nextErrors.publicDisplayName = "Name is required";
+    }
+
+    if (!nic?.trim()) {
+      nextErrors.nic = "NIC is required";
+    } else if (!SRI_LANKA_NIC_REGEX.test(nic)) {
+      nextErrors.nic = "NIC must be 9 digits followed by V/X or 12 digits";
+    }
+
+    if (!gender) {
+      nextErrors.gender = "Gender is required";
+    }
+
+    if (!email?.trim()) {
+      nextErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      nextErrors.email = "Enter a valid email address";
+    }
+
+    if (!whatsappNumber?.trim()) {
+      nextErrors.whatsappNumber = "WhatsApp number is required";
+    } else if (!SRI_LANKA_PHONE_REGEX.test(whatsappNumber)) {
+      nextErrors.whatsappNumber = "Enter a valid Sri Lankan number";
+    }
+
+    if (!mobileNumber?.trim()) {
+      nextErrors.mobileNumber = "Mobile number is required";
+    } else if (!SRI_LANKA_PHONE_REGEX.test(mobileNumber)) {
+      nextErrors.mobileNumber = "Enter a valid Sri Lankan number";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      setCurrentStep(2);
+    }
   };
 
   return (
@@ -406,7 +494,7 @@ const Step1PersonalInfo: React.FC = () => {
       <StepHeader title="Personal Information" subtitle="Step 1" />
 
       <Card className="space-y-5">
-        <Field label="Public Display Name" required>
+        <Field label="Public Display Name" required error={errors.publicDisplayName}>
           <Input
             type="text"
             placeholder="Enter your display name"
@@ -414,10 +502,11 @@ const Step1PersonalInfo: React.FC = () => {
             onChange={(e) =>
               updatePersonalInfo({ publicDisplayName: e.target.value })
             }
+            className={errors.publicDisplayName ? "border-destructive" : ""}
           />
         </Field>
 
-        <Field label="NIC" required>
+        <Field label="NIC" required error={errors.nic}>
           <Input
             type="text"
             placeholder="000000000V or 000000000000"
@@ -427,10 +516,11 @@ const Step1PersonalInfo: React.FC = () => {
                 nic: e.target.value.toUpperCase(),
               })
             }
+            className={errors.nic ? "border-destructive" : ""}
           />
         </Field>
 
-        <Field label="Gender" required>
+        <Field label="Gender" required error={errors.gender}>
           <Select
             value={personalInfo.gender || ""}
             onChange={(value) => updatePersonalInfo({ gender: value })}
@@ -439,42 +529,42 @@ const Step1PersonalInfo: React.FC = () => {
           />
         </Field>
 
-        <Field label="Email Address" required>
+        <Field label="Email Address" required error={errors.email}>
           <Input
             type="email"
             placeholder="Enter your email address"
             value={personalInfo.email || ""}
             onChange={(e) => updatePersonalInfo({ email: e.target.value })}
+            className={errors.email ? "border-destructive" : ""}
           />
         </Field>
 
-        <Field label="WhatsApp Number" required>
-          <Input
-            type="tel"
-            placeholder="+94 7X XXX XXXX"
-            value={personalInfo.whatsappNumber || ""}
-            onChange={(e) =>
-              updatePersonalInfo({ whatsappNumber: e.target.value })
+        <Field label="WhatsApp Number" required error={errors.whatsappNumber}>
+          <PhoneInput
+            value={personalInfo.whatsappNumber || "+94"}
+            onChange={(value) =>
+              updatePersonalInfo({ whatsappNumber: value })
             }
+            placeholder="7X XXX XXXX"
+            hasError={Boolean(errors.whatsappNumber)}
           />
         </Field>
 
-        <Field label="Mobile Number" required>
-          <Input
-            type="tel"
-            placeholder="+94 7X XXX XXXX"
-            value={personalInfo.mobileNumber || ""}
-            onChange={(e) =>
-              updatePersonalInfo({ mobileNumber: e.target.value })
+        <Field label="Mobile Number" required error={errors.mobileNumber}>
+          <PhoneInput
+            value={personalInfo.mobileNumber || "+94"}
+            onChange={(value) =>
+              updatePersonalInfo({ mobileNumber: value })
             }
+            placeholder="7X XXX XXXX"
+            hasError={Boolean(errors.mobileNumber)}
           />
         </Field>
       </Card>
 
       <StepNav
         onBack={() => setCurrentStep(0)}
-        onNext={() => setCurrentStep(2)}
-        nextDisabled={!isValid()}
+        onNext={handleNext}
       />
     </div>
   );

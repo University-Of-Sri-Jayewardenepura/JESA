@@ -4,8 +4,7 @@ import { z } from "zod";
    VALIDATION CONSTANTS
 ========================= */
 
-export const SRI_LANKA_PHONE_REGEX =
-  /^\+94[\s]?(?:7\d\s?\d{3}\s?\d{4}|\d{2}\s?\d{3}\s?\d{4}|\d{3}\s?\d{4})$/;
+export const SRI_LANKA_PHONE_REGEX = /^\+94(?:[1-9]\d{8}|\d{7})$/;
 
 export const SRI_LANKA_NIC_REGEX = /^[0-9]{9}[vVxX]$|^[0-9]{12}$/;
 
