@@ -1,4 +1,4 @@
-import { applicationBusinessSchema } from "@/app/register/new/schemas/applicationSchema";
+import { applicationBusinessSchema } from "../schemas/applicationSchema";
 import {
   runTransaction,
   doc,
