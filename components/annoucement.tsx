@@ -12,7 +12,7 @@ const Announcement: React.FC = () => {
     >
       <div className="flex items-center gap-x-3.5">
         <p className="space-x-2 text-sm leading-snug tracking-tighter">
-          JESA 2026 Digital Magazine is Out &nbsp;
+          JESA 2025 Digital Magazine is Out &nbsp;
           <span className="opacity-30">|</span>
           &nbsp;
           <Link
