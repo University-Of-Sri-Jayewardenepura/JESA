@@ -106,6 +106,10 @@ function getValidAwardsForFaculty(
 }
 
 export async function POST(request: NextRequest) {
+  if (true as boolean) {
+    return NextResponse.json({ message: "Not found" }, { status: 404 });
+  }
+
   console.log("POST request received at /api/register/internal");
 
   try {
