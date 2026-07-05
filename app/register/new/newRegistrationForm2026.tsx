@@ -173,16 +173,18 @@ const SRI_LANKAN_UNIVERSITIES = [
   "University of Peradeniya",
   "University of Kelaniya",
   "University of Moratuwa",
-  "University of Ruhuna",
   "University of Jaffna",
-  "Eastern University of Sri Lanka",
+  "University of Ruhuna",
+  "The Open University of Sri Lanka",
+  "Eastern University, Sri Lanka",
+  "South Eastern University of Sri Lanka",
+  "Rajarata University of Sri Lanka",
   "Sabaragamuwa University of Sri Lanka",
   "Wayamba University of Sri Lanka",
-  "Uva Wellassa University of Sri Lanka",
-  "South Eastern University of Sri Lanka",
-  "University of the Visual and Performing Arts",
-  "Open University of Sri Lanka",
-  "General Sir John Kotelawala Defence University",
+  "Uva Wellassa University",
+  "University of the Visual & Performing Arts",
+  "Gampaha Wickramarachchi University of Indigenous Medicine",
+  "University of Vauniya, Sri Lanka",
 ];
 
 const STEP_TITLES = {
@@ -526,44 +528,20 @@ const Step2AcademicInfo: React.FC = () => {
       <Card className="space-y-5">
         <Field label="University" required>
           {applicantType === "external" ? (
-            <>
-              <Select
-                value={
-                  academicInfo.university &&
-                  SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university)
-                    ? academicInfo.university
-                    : academicInfo.university
-                      ? "Other"
-                      : ""
-                }
-                onChange={(value) => updateAcademicInfo({ university: value })}
-                options={[
-                  ...SRI_LANKAN_UNIVERSITIES.map((u) => ({
-                    value: u,
-                    label: u,
-                  })),
-                  { value: "Other", label: "Other" },
-                ]}
-                placeholder="Select your university"
-              />
-              {academicInfo.university &&
-                !SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university) && (
-                  <div className="mt-3">
-                    <Input
-                      type="text"
-                      placeholder="Enter your university name"
-                      value={
-                        academicInfo.university === "Other"
-                          ? ""
-                          : academicInfo.university
-                      }
-                      onChange={(e) =>
-                        updateAcademicInfo({ university: e.target.value })
-                      }
-                    />
-                  </div>
-                )}
-            </>
+            <Select
+              value={
+                academicInfo.university &&
+                SRI_LANKAN_UNIVERSITIES.includes(academicInfo.university)
+                  ? academicInfo.university
+                  : ""
+              }
+              onChange={(value) => updateAcademicInfo({ university: value })}
+              options={SRI_LANKAN_UNIVERSITIES.map((u) => ({
+                value: u,
+                label: u,
+              }))}
+              placeholder="Select your university"
+            />
           ) : (
             <Input
               type="text"
@@ -571,7 +549,6 @@ const Step2AcademicInfo: React.FC = () => {
                 academicInfo.university || "University of Sri Jayewardenepura"
               }
               disabled
-              
               onChange={(e) =>
                 updateAcademicInfo({ university: e.target.value })
               }
@@ -1424,7 +1401,7 @@ export default function NewRegistrationForm2026() {
   const [currentStep, setCurrentStep] = useState(0);
 
   const updateApplicantType = useCallback((type: ApplicantType) => {
-    setFormData((prev) => ({ ...prev, applicantType: type }));
+    setFormData({ ...INITIAL_FORM_DATA, applicantType: type });
   }, []);
 
   const updatePersonalInfo = useCallback((info: Partial<PersonalInfo>) => {
