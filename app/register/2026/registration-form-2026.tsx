@@ -338,7 +338,7 @@ const PhoneInput: React.FC<{
   const [localValue, setLocalValue] = React.useState("");
 
   React.useEffect(() => {
-    setLocalValue(value.replace(/^\+94/, ""));
+    setLocalValue(value.replace(/^\+94/, "").replace(/\D/g, ""));
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -575,6 +575,7 @@ const Step2AcademicInfo: React.FC = () => {
   const { applicantType, academicInfo, awardSelection } = formData;
   const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
   const academicYearOptions = ACADEMIC_YEARS;
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   React.useEffect(() => {
     if (applicantType === "internal" && academicInfo.university !== "University of Sri Jayewardenepura") {
@@ -588,7 +589,8 @@ const Step2AcademicInfo: React.FC = () => {
     }
   }, [academicInfo.academicYear]);
 
-  const isValid = () => {
+  const validate = () => {
+    const nextErrors: Record<string, string> = {};
     const {
       university,
       universityRegistrationNumber,
@@ -597,14 +599,41 @@ const Step2AcademicInfo: React.FC = () => {
       faculty,
       degree,
     } = academicInfo;
-    return (
-      university &&
-      universityRegistrationNumber &&
-      universityEmail &&
-      academicYear &&
-      faculty &&
-      degree
-    );
+
+    if (!university?.trim()) {
+      nextErrors.university = "University is required";
+    }
+
+    if (!universityRegistrationNumber?.trim()) {
+      nextErrors.universityRegistrationNumber = "Registration number is required";
+    }
+
+    if (!universityEmail?.trim()) {
+      nextErrors.universityEmail = "University email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(universityEmail)) {
+      nextErrors.universityEmail = "Enter a valid email address";
+    }
+
+    if (!academicYear) {
+      nextErrors.academicYear = "Academic year is required";
+    }
+
+    if (!faculty?.trim()) {
+      nextErrors.faculty = "Faculty is required";
+    }
+
+    if (!degree?.trim()) {
+      nextErrors.degree = "Degree is required";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validate()) {
+      setCurrentStep(3);
+    }
   };
 
   return (
@@ -616,7 +645,7 @@ const Step2AcademicInfo: React.FC = () => {
       )}
 
       <Card className="space-y-5">
-        <Field label="University" required>
+        <Field label="University" required error={errors.university}>
           {applicantType === "external" ? (
             <Select
               value={
@@ -646,7 +675,7 @@ const Step2AcademicInfo: React.FC = () => {
           )}
         </Field>
 
-        <Field label="University Registration Number" required>
+        <Field label="University Registration Number" required error={errors.universityRegistrationNumber}>
           <Input
             type="text"
             placeholder="Enter your registration number"
@@ -656,10 +685,11 @@ const Step2AcademicInfo: React.FC = () => {
                 universityRegistrationNumber: e.target.value,
               })
             }
+            className={errors.universityRegistrationNumber ? "border-destructive" : ""}
           />
         </Field>
 
-        <Field label="University Email" required>
+        <Field label="University Email" required error={errors.universityEmail}>
           <Input
             type="email"
             placeholder="Enter your university email"
@@ -667,10 +697,11 @@ const Step2AcademicInfo: React.FC = () => {
             onChange={(e) =>
               updateAcademicInfo({ universityEmail: e.target.value })
             }
+            className={errors.universityEmail ? "border-destructive" : ""}
           />
         </Field>
 
-        <Field label="Academic Year" required>
+        <Field label="Academic Year" required error={errors.academicYear}>
           <Select
             value={academicInfo.academicYear || ""}
             onChange={(value) => updateAcademicInfo({ academicYear: value })}
@@ -679,13 +710,14 @@ const Step2AcademicInfo: React.FC = () => {
           />
         </Field>
 
-        <Field label="Faculty" required>
+        <Field label="Faculty" required error={errors.faculty}>
           {applicantType === "external" ? (
             <Input
               type="text"
               placeholder="Enter your faculty name"
               value={academicInfo.faculty || ""}
               onChange={(e) => updateAcademicInfo({ faculty: e.target.value })}
+              className={errors.faculty ? "border-destructive" : ""}
             />
           ) : (
             <Select
@@ -697,12 +729,13 @@ const Step2AcademicInfo: React.FC = () => {
           )}
         </Field>
 
-        <Field label="Degree" required>
+        <Field label="Degree" required error={errors.degree}>
           <Input
             type="text"
             placeholder="Enter your degree name"
             value={academicInfo.degree || ""}
             onChange={(e) => updateAcademicInfo({ degree: e.target.value })}
+            className={errors.degree ? "border-destructive" : ""}
           />
         </Field>
 
@@ -733,8 +766,7 @@ const Step2AcademicInfo: React.FC = () => {
 
       <StepNav
         onBack={() => setCurrentStep(1)}
-        onNext={() => setCurrentStep(3)}
-        nextDisabled={!isValid()}
+        onNext={handleNext}
       />
     </div>
   );
@@ -788,15 +820,20 @@ const Step3AwardSelection: React.FC = () => {
     });
   };
 
+  const [error, setError] = useState("");
+
   const isValid = () => selectedAwards.length >= 1;
 
   const handleContinue = () => {
     if (isValid()) {
+      setError("");
       if (hasConditionalAwards) {
         setCurrentStep(4);
       } else {
         setCurrentStep(5);
       }
+    } else {
+      setError("Please select at least one award to continue.");
     }
   };
 
@@ -872,10 +909,13 @@ const Step3AwardSelection: React.FC = () => {
         {selectedAwards.length !== 1 ? "s" : ""}
       </p>
 
+      {error && (
+        <p className="text-destructive text-xs">{error}</p>
+      )}
+
       <StepNav
         onBack={() => setCurrentStep(2)}
         onNext={handleContinue}
-        nextDisabled={!isValid()}
       />
     </div>
   );
@@ -890,34 +930,71 @@ const Step4AwardQuestions: React.FC = () => {
   } = useFormContext();
   const { awardSelection, bestInnovatorQuestions, bestCSRQuestions } = formData;
   const { selectedAwards = [] } = awardSelection;
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const hasBestInnovator = selectedAwards.includes("best-innovator");
   const hasBestCSR = selectedAwards.includes("best-csr");
 
-  const isInnovatorValid = () => {
-    if (!hasBestInnovator) return true;
-    const { industry, otherIndustry, innovationCompletionPercentage } =
-      bestInnovatorQuestions || {};
-    if (!industry) return false;
-    if (industry === "Other" && !otherIndustry) return false;
-    return innovationCompletionPercentage === true;
+  const validate = () => {
+    const nextErrors: Record<string, string> = {};
+
+    if (hasBestInnovator) {
+      if (!bestInnovatorQuestions?.industry) {
+        nextErrors.industry = "Industry is required";
+      }
+      if (
+        bestInnovatorQuestions?.industry === "Other" &&
+        !bestInnovatorQuestions?.otherIndustry?.trim()
+      ) {
+        nextErrors.otherIndustry = "Please specify your industry";
+      }
+      if (bestInnovatorQuestions?.innovationCompletionPercentage !== true) {
+        nextErrors.innovationCompletionPercentage =
+          "You must confirm your innovation is more than 75% completed";
+      }
+    }
+
+    if (hasBestCSR) {
+      if (!bestCSRQuestions?.clubAdvisorNameTitle?.trim()) {
+        nextErrors.clubAdvisorNameTitle = "Advisor name and title are required";
+      }
+      if (!bestCSRQuestions?.clubAdvisorEmail?.trim()) {
+        nextErrors.clubAdvisorEmail = "Advisor email is required";
+      } else if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bestCSRQuestions.clubAdvisorEmail)
+      ) {
+        nextErrors.clubAdvisorEmail = "Enter a valid email address";
+      }
+      if (!bestCSRQuestions?.memberAttendingName?.trim()) {
+        nextErrors.memberAttendingName = "Member name is required";
+      }
+      if (!bestCSRQuestions?.memberAttendingWhatsapp?.trim()) {
+        nextErrors.memberAttendingWhatsapp = "Member WhatsApp number is required";
+      }
+      if (!bestCSRQuestions?.clubPresidentName?.trim()) {
+        nextErrors.clubPresidentName = "President name is required";
+      }
+      if (!bestCSRQuestions?.clubPresidentWhatsapp?.trim()) {
+        nextErrors.clubPresidentWhatsapp = "President WhatsApp number is required";
+      }
+      if (!bestCSRQuestions?.clubPresidentEmail?.trim()) {
+        nextErrors.clubPresidentEmail = "President email is required";
+      } else if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bestCSRQuestions.clubPresidentEmail)
+      ) {
+        nextErrors.clubPresidentEmail = "Enter a valid email address";
+      }
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
-  const isCSRValid = () => {
-    if (!hasBestCSR) return true;
-    const csr = bestCSRQuestions;
-    return (
-      csr?.clubAdvisorNameTitle &&
-      csr?.clubAdvisorEmail &&
-      csr?.memberAttendingName &&
-      csr?.memberAttendingWhatsapp &&
-      csr?.clubPresidentName &&
-      csr?.clubPresidentWhatsapp &&
-      csr?.clubPresidentEmail
-    );
+  const handleNext = () => {
+    if (validate()) {
+      setCurrentStep(5);
+    }
   };
-
-  const isValid = () => isInnovatorValid() && isCSRValid();
 
   return (
     <div className="space-y-6">
@@ -929,7 +1006,7 @@ const Step4AwardQuestions: React.FC = () => {
             Best Innovator Award
           </h3>
 
-          <Field label="Which industry is your innovation related to?" required>
+          <Field label="Which industry is your innovation related to?" required error={errors.industry}>
             <Select
               value={bestInnovatorQuestions?.industry || ""}
               onChange={(value) =>
@@ -941,7 +1018,7 @@ const Step4AwardQuestions: React.FC = () => {
           </Field>
 
           {bestInnovatorQuestions?.industry === "Other" && (
-            <Field label="Please specify your industry" required>
+            <Field label="Please specify your industry" required error={errors.otherIndustry}>
               <Input
                 type="text"
                 placeholder="Enter your industry"
@@ -951,6 +1028,7 @@ const Step4AwardQuestions: React.FC = () => {
                     otherIndustry: e.target.value,
                   })
                 }
+                className={errors.otherIndustry ? "border-destructive" : ""}
               />
             </Field>
           )}
@@ -972,6 +1050,9 @@ const Step4AwardQuestions: React.FC = () => {
               I declare that my innovation is more than 75% completed
             </Label>
           </div>
+          {errors.innovationCompletionPercentage && (
+            <p className="text-destructive text-xs">{errors.innovationCompletionPercentage}</p>
+          )}
         </Card>
       )}
 
@@ -986,7 +1067,7 @@ const Step4AwardQuestions: React.FC = () => {
               Club Advisor Information
             </h4>
 
-            <Field label="Club Advisor Name & Title" required>
+            <Field label="Club Advisor Name & Title" required error={errors.clubAdvisorNameTitle}>
               <Input
                 type="text"
                 placeholder="Enter advisor name and title"
@@ -996,10 +1077,11 @@ const Step4AwardQuestions: React.FC = () => {
                     clubAdvisorNameTitle: e.target.value,
                   })
                 }
+                className={errors.clubAdvisorNameTitle ? "border-destructive" : ""}
               />
             </Field>
 
-            <Field label="Club Advisor Email" required>
+            <Field label="Club Advisor Email" required error={errors.clubAdvisorEmail}>
               <Input
                 type="email"
                 placeholder="Enter advisor email"
@@ -1007,6 +1089,7 @@ const Step4AwardQuestions: React.FC = () => {
                 onChange={(e) =>
                   updateBestCSRQuestions({ clubAdvisorEmail: e.target.value })
                 }
+                className={errors.clubAdvisorEmail ? "border-destructive" : ""}
               />
             </Field>
           </div>
@@ -1016,7 +1099,7 @@ const Step4AwardQuestions: React.FC = () => {
               Member Attending Interview & Workshops
             </h4>
 
-            <Field label="Member Name" required>
+            <Field label="Member Name" required error={errors.memberAttendingName}>
               <Input
                 type="text"
                 placeholder="Enter member name"
@@ -1026,10 +1109,11 @@ const Step4AwardQuestions: React.FC = () => {
                     memberAttendingName: e.target.value,
                   })
                 }
+                className={errors.memberAttendingName ? "border-destructive" : ""}
               />
             </Field>
 
-            <Field label="Member WhatsApp Number" required>
+            <Field label="Member WhatsApp Number" required error={errors.memberAttendingWhatsapp}>
               <Input
                 type="tel"
                 placeholder="Enter member WhatsApp number"
@@ -1039,6 +1123,7 @@ const Step4AwardQuestions: React.FC = () => {
                     memberAttendingWhatsapp: e.target.value,
                   })
                 }
+                className={errors.memberAttendingWhatsapp ? "border-destructive" : ""}
               />
             </Field>
           </div>
@@ -1048,7 +1133,7 @@ const Step4AwardQuestions: React.FC = () => {
               Club President Information
             </h4>
 
-            <Field label="Club President Name" required>
+            <Field label="Club President Name" required error={errors.clubPresidentName}>
               <Input
                 type="text"
                 placeholder="Enter president name"
@@ -1056,10 +1141,11 @@ const Step4AwardQuestions: React.FC = () => {
                 onChange={(e) =>
                   updateBestCSRQuestions({ clubPresidentName: e.target.value })
                 }
+                className={errors.clubPresidentName ? "border-destructive" : ""}
               />
             </Field>
 
-            <Field label="Club President WhatsApp Number" required>
+            <Field label="Club President WhatsApp Number" required error={errors.clubPresidentWhatsapp}>
               <Input
                 type="tel"
                 placeholder="Enter president WhatsApp number"
@@ -1069,10 +1155,11 @@ const Step4AwardQuestions: React.FC = () => {
                     clubPresidentWhatsapp: e.target.value,
                   })
                 }
+                className={errors.clubPresidentWhatsapp ? "border-destructive" : ""}
               />
             </Field>
 
-            <Field label="Club President Email" required>
+            <Field label="Club President Email" required error={errors.clubPresidentEmail}>
               <Input
                 type="email"
                 placeholder="Enter president email"
@@ -1080,6 +1167,7 @@ const Step4AwardQuestions: React.FC = () => {
                 onChange={(e) =>
                   updateBestCSRQuestions({ clubPresidentEmail: e.target.value })
                 }
+                className={errors.clubPresidentEmail ? "border-destructive" : ""}
               />
             </Field>
           </div>
@@ -1088,8 +1176,7 @@ const Step4AwardQuestions: React.FC = () => {
 
       <StepNav
         onBack={() => setCurrentStep(3)}
-        onNext={() => setCurrentStep(5)}
-        nextDisabled={!isValid()}
+        onNext={handleNext}
       />
     </div>
   );
