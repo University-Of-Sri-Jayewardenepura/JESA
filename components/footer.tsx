@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
           <div className="mb-12 flex flex-col gap-4">
             <Link className="flex items-center gap-2" href="/">
               <Image
-                alt="JESA 2025"
+                alt="JESA 2026"
                 className="mt-[-1.6rem] ml-[-1.2rem] h-auto w-auto"
                 height={20}
                 src="/images/jesa-min.png"
@@ -109,7 +109,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="flex flex-col-reverse gap-4 rounded-md px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-slate-500 text-sm sm:text-center">
-            Copyright © 2025{" "}
+            Copyright © 2026{" "}
             <a className="cursor-pointer" href="/">
               CDSD
             </a>

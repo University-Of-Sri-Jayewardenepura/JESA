@@ -2,7 +2,7 @@ import type { Metadata } from "next/types";
 // import { CtaButton } from "@/components/ui/cta-button";
 
 export const metadata: Metadata = {
-  title: "JESA 2025 | Register",
+  title: "JESA 2026 | Register",
   description:
     "Register Now! This is your moment to make history. Your achievements deserve a grand celebration. Bask in the spotlight of recognition at the most prestigious and elegant award gala ever organized.",
 };
@@ -12,7 +12,7 @@ export default function Register() {
     <section className="register relative px-safe pt-[124px] pb-[120px] md:pt-[142px] md:pb-[136px] lg:pt-[232px] lg:pb-[160px] xl:pt-[180px] xl:pb-[162px]">
       <div className="container mx-auto flex flex-col items-center justify-center lg:max-w-5xl">
         <h1 className="relative z-20 max-w-[340px] bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text pb-2 text-center font-title text-[40px] text-transparent leading-[1.125] tracking-tight md:max-w-none md:text-[56px] lg:text-[64px] xl:text-[72px]">
-          JESA 2025 <br />
+          JESA 2026 <br />
           <span className="block bg-[linear-gradient(180deg,rgba(251,191,36,1)_0%,rgba(251,191,36,0)_70%)] bg-clip-text text-rose-200 md:inline md:text-transparent">
             Registrations are now closed!
           </span>
