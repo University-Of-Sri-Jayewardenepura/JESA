@@ -1088,12 +1088,12 @@ const SwipeToSubmit: React.FC<{
   return (
     <div
       ref={trackRef}
-      className={`relative w-full h-14 rounded-xl select-none overflow-hidden border transition-colors ${
+      className={`relative w-full h-16 rounded-full select-none overflow-hidden border transition-colors ${
         disabled
           ? 'border-slate-700/50 opacity-60'
           : status === 'success'
-            ? 'border-green-500/50 bg-green-600/15'
-            : 'border-slate-700/50 bg-slate-800/80'
+            ? 'border-emerald-500/50 bg-emerald-600/15'
+            : 'border-slate-700/50 bg-slate-900/80'
       }`}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -1101,47 +1101,47 @@ const SwipeToSubmit: React.FC<{
       style={{ touchAction: 'none' }}
     >
       <div
-        className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-600/30 to-blue-500/40 rounded-xl transition-[width] duration-75"
+        className="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-400/40 via-amber-300/30 to-amber-400/20 rounded-full transition-[width] duration-75"
         style={{ width: `${progress}%` }}
       />
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-        <span className={`text-sm font-medium ${
-          status === 'success' ? 'text-green-400' : status === 'loading' ? 'text-blue-300' : disabled ? 'text-slate-500' : 'text-slate-400'
+        <span className={`text-sm font-medium tracking-wide ${
+          status === 'success' ? 'text-emerald-400' : status === 'loading' ? 'text-amber-300' : disabled ? 'text-slate-500' : 'text-slate-400'
         }`}>
           {status === 'success'
-            ? 'Application Submitted!'
+            ? 'Submitted'
             : status === 'loading'
-              ? 'Submitting Application...'
+              ? 'Submitting...'
               : disabled
-                ? 'Accept all declarations to submit'
-                : 'Swipe to Submit'}
+                ? 'Accept all declarations'
+                : 'Swipe to submit'}
         </span>
       </div>
 
       <div
-        className={`absolute top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-20 transition-shadow ${
+        className={`absolute top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center z-20 transition-shadow ${
           canDrag
-            ? 'cursor-grab active:cursor-grabbing bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg shadow-blue-900/50 hover:shadow-blue-800/50'
+            ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_20px_rgba(251,191,36,0.35)] hover:shadow-[0_0_28px_rgba(251,191,36,0.5)]'
             : status === 'loading'
-              ? 'bg-blue-600 shadow-md'
+              ? 'bg-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.35)]'
               : status === 'success'
-                ? 'bg-green-600 shadow-md'
+                ? 'bg-emerald-500 shadow-md'
                 : 'bg-slate-600 cursor-not-allowed'
         }`}
         style={{
           left: status === 'loading' || status === 'success'
-            ? 'calc(100% - 3rem)'
-            : `calc(0.375rem + ${progress}% * (100% - 3.375rem) / 100%)`,
+            ? 'calc(100% - 3.25rem)'
+            : `calc(0.5rem + ${progress}% * (100% - 3.75rem) / 100%)`,
         }}
         onPointerDown={handlePointerDown}
       >
         {status === 'success' ? (
           <CheckCircle className="w-5 h-5 text-white" />
         ) : status === 'loading' ? (
-          <Loader2 className="w-5 h-5 text-white animate-spin" />
+          <Loader2 className="w-5 h-5 text-slate-950 animate-spin" />
         ) : (
-          <ArrowRight className="w-5 h-5 text-white" />
+          <ArrowRight className="w-5 h-5 text-slate-950" />
         )}
       </div>
     </div>
