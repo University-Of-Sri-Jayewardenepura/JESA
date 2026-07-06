@@ -1464,8 +1464,8 @@ const Step5Declaration: React.FC = () => {
 const Sidebar: React.FC = () => {
   const { currentStep, setCurrentStep, formData } = useFormContext();
   const { hasConditionalAwards = false } = formData.awardSelection;
-
-  const steps = [1, 2, 3, 4, 5];
+  const totalSteps = hasConditionalAwards ? 5 : 4;
+  const visibleSteps = hasConditionalAwards ? [1, 2, 3, 4, 5] : [1, 2, 3, 4];
 
   const getStepTitle = (step: number) => {
     if (step === 4 && !hasConditionalAwards) return "Declaration";
@@ -1474,18 +1474,11 @@ const Sidebar: React.FC = () => {
 
   const isStepActive = (step: number) => {
     if (currentStep === 0) return step === 1;
-    if (!hasConditionalAwards && step === 4) return false;
     return step === currentStep;
   };
 
   const isStepCompleted = (step: number) => {
-    const adjustedStep =
-      currentStep === 0
-        ? 0
-        : !hasConditionalAwards && currentStep > 3
-          ? currentStep - 1
-          : currentStep;
-    return step < (currentStep === 0 ? 1 : adjustedStep);
+    return step < currentStep;
   };
 
   return (
@@ -1501,7 +1494,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <nav className="flex lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
-          {steps.map((step) => (
+          {visibleSteps.map((step) => (
             <button
               key={step}
               onClick={() => {
@@ -1558,12 +1551,12 @@ const Sidebar: React.FC = () => {
         <div className="hidden lg:block pt-4 border-t border-slate-800">
           <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
             <span>Progress</span>
-            <span>{currentStep === 0 ? "Start" : `${currentStep} of 5`}</span>
+            <span>{currentStep === 0 ? "Start" : `${Math.min(currentStep, totalSteps)} of ${totalSteps}`}</span>
           </div>
           <div className="w-full bg-slate-800 rounded-full h-1.5">
             <div
               className="bg-blue-500 h-1.5 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${(Math.max(0, currentStep) / 5) * 100}%` }}
+              style={{ width: `${(Math.max(0, Math.min(currentStep, totalSteps)) / totalSteps) * 100}%` }}
             />
           </div>
         </div>
