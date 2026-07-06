@@ -1,4 +1,4 @@
-import { AuthProvider } from "./providers/auth-provider";
+import { AuthProvider } from "@/app/admin/providers/auth-provider";
 
 export default function AdminLayout({
   children,

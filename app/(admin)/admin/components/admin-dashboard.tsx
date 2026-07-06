@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useAuth } from "../providers/auth-provider";
+import { useAuth } from "@/app/admin/providers/auth-provider";
+import AdminRequests from "./admin-requests";
 import {
   Search,
   Download,
@@ -13,6 +14,8 @@ import {
   AlertCircle,
   X,
   Filter,
+  RotateCcw,
+  Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,9 +75,14 @@ interface Application {
 interface AdminDashboardProps {
   userEmail: string;
   userName?: string | null;
+  isSuperAdmin: boolean;
 }
 
-export default function AdminDashboard({ userEmail, userName }: AdminDashboardProps) {
+export default function AdminDashboard({
+  userEmail,
+  userName,
+  isSuperAdmin,
+}: AdminDashboardProps) {
   const { signOut } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,10 +90,32 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<"all" | "internal" | "external">("all");
   const [awardFilter, setAwardFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [universityFilter, setUniversityFilter] = useState("all");
+  const [facultyFilter, setFacultyFilter] = useState("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [selected, setSelected] = useState<Application | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Application | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const hasActiveFilters =
+    search ||
+    typeFilter !== "all" ||
+    awardFilter !== "all" ||
+    universityFilter !== "all" ||
+    facultyFilter !== "all" ||
+    dateFrom ||
+    dateTo;
+
+  const clearFilters = () => {
+    setSearch("");
+    setTypeFilter("all");
+    setAwardFilter("all");
+    setUniversityFilter("all");
+    setFacultyFilter("all");
+    setDateFrom("");
+    setDateTo("");
+  };
 
   const fetchApplications = useCallback(async () => {
     setLoading(true);
@@ -114,6 +144,26 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
     return Array.from(awards).sort();
   }, [applications]);
 
+  const universityOptions = useMemo(() => {
+    const universities = new Set<string>();
+    applications.forEach((app) => {
+      if (app.academicInfo?.university) {
+        universities.add(app.academicInfo.university);
+      }
+    });
+    return Array.from(universities).sort();
+  }, [applications]);
+
+  const facultyOptions = useMemo(() => {
+    const faculties = new Set<string>();
+    applications.forEach((app) => {
+      if (app.academicInfo?.faculty) {
+        faculties.add(app.academicInfo.faculty);
+      }
+    });
+    return Array.from(faculties).sort();
+  }, [applications]);
+
   const stats = useMemo(() => {
     return {
       total: applications.length,
@@ -124,13 +174,15 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
 
   const filteredApplications = useMemo(() => {
     return applications.filter((app) => {
-      const term = search.toLowerCase();
+      const term = search.toLowerCase().trim();
       const matchesSearch =
         !term ||
         app.personalInfo?.publicDisplayName?.toLowerCase().includes(term) ||
         app.personalInfo?.email?.toLowerCase().includes(term) ||
+        app.personalInfo?.nic?.toLowerCase().includes(term) ||
         app.academicInfo?.university?.toLowerCase().includes(term) ||
-        app.academicInfo?.universityRegistrationNumber?.toLowerCase().includes(term);
+        app.academicInfo?.universityRegistrationNumber?.toLowerCase().includes(term) ||
+        app.academicInfo?.universityEmail?.toLowerCase().includes(term);
 
       const matchesType =
         typeFilter === "all" || app.applicantType === typeFilter;
@@ -139,12 +191,41 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
         awardFilter === "all" ||
         app.awardSelection?.selectedAwards?.includes(awardFilter);
 
-      const matchesStatus =
-        statusFilter === "all" || app.status === statusFilter;
+      const matchesUniversity =
+        universityFilter === "all" ||
+        app.academicInfo?.university === universityFilter;
 
-      return matchesSearch && matchesType && matchesAward && matchesStatus;
+      const matchesFaculty =
+        facultyFilter === "all" ||
+        app.academicInfo?.faculty === facultyFilter;
+
+      const submittedAt = app.submittedAt ? new Date(app.submittedAt) : null;
+      const fromDate = dateFrom ? new Date(dateFrom) : null;
+      const toDate = dateTo ? new Date(dateTo) : null;
+
+      const matchesDateFrom = !fromDate || !submittedAt || submittedAt >= fromDate;
+      const matchesDateTo = !toDate || !submittedAt || submittedAt <= toDate;
+
+      return (
+        matchesSearch &&
+        matchesType &&
+        matchesAward &&
+        matchesUniversity &&
+        matchesFaculty &&
+        matchesDateFrom &&
+        matchesDateTo
+      );
     });
-  }, [applications, search, typeFilter, awardFilter, statusFilter]);
+  }, [
+    applications,
+    search,
+    typeFilter,
+    awardFilter,
+    universityFilter,
+    facultyFilter,
+    dateFrom,
+    dateTo,
+  ]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -256,7 +337,7 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
 
   return (
     <div className="min-h-screen bg-slate-950 pb-16">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 pb-8">
         <div className="rounded-2xl border border-slate-700/50 bg-slate-900/50 p-6 md:p-8 backdrop-blur-sm">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
             <div>
@@ -298,7 +379,7 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <Input
@@ -343,13 +424,55 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
             <div className="relative">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
+                value={universityFilter}
+                onChange={(e) => setUniversityFilter(e.target.value)}
                 className="flex h-9 w-full min-w-0 rounded-[8px] border border-input bg-transparent px-3 py-1 pl-9 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
               >
-                <option value="all">All Statuses</option>
-                <option value="submitted">Submitted</option>
+                <option value="all">All Universities</option>
+                {universityOptions.map((university) => (
+                  <option key={university} value={university}>
+                    {university}
+                  </option>
+                ))}
               </select>
+            </div>
+
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <select
+                value={facultyFilter}
+                onChange={(e) => setFacultyFilter(e.target.value)}
+                className="flex h-9 w-full min-w-0 rounded-[8px] border border-input bg-transparent px-3 py-1 pl-9 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
+              >
+                <option value="all">All Faculties</option>
+                {facultyOptions.map((faculty) => (
+                  <option key={faculty} value={faculty}>
+                    {faculty}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Input
+                type="date"
+                placeholder="From date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="pl-9 rounded-[8px]"
+              />
+            </div>
+
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Input
+                type="date"
+                placeholder="To date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="pl-9 rounded-[8px]"
+              />
             </div>
 
             <div className="flex gap-2">
@@ -371,6 +494,23 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
               </Button>
             </div>
           </div>
+
+          {hasActiveFilters && (
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-slate-400 text-sm">
+                Active filters applied
+              </p>
+              <Button
+                onClick={clearFilters}
+                variant="ghost"
+                size="sm"
+                className="text-slate-400 hover:text-slate-100"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Clear Filters
+              </Button>
+            </div>
+          )}
 
           <div className="mb-4 flex items-center justify-between">
             <p className="text-slate-400 text-sm">
@@ -480,6 +620,12 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
             </table>
           </div>
         </div>
+
+        {isSuperAdmin && (
+          <div className="mt-8">
+            <AdminRequests userEmail={userEmail} />
+          </div>
+        )}
       </div>
 
       <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
