@@ -970,12 +970,20 @@ const Step4AwardQuestions: React.FC = () => {
       }
       if (!bestCSRQuestions?.memberAttendingWhatsapp?.trim()) {
         nextErrors.memberAttendingWhatsapp = "Member WhatsApp number is required";
+      } else if (
+        !SRI_LANKA_PHONE_REGEX.test(bestCSRQuestions.memberAttendingWhatsapp)
+      ) {
+        nextErrors.memberAttendingWhatsapp = "Enter a valid Sri Lankan number";
       }
       if (!bestCSRQuestions?.clubPresidentName?.trim()) {
         nextErrors.clubPresidentName = "President name is required";
       }
       if (!bestCSRQuestions?.clubPresidentWhatsapp?.trim()) {
         nextErrors.clubPresidentWhatsapp = "President WhatsApp number is required";
+      } else if (
+        !SRI_LANKA_PHONE_REGEX.test(bestCSRQuestions.clubPresidentWhatsapp)
+      ) {
+        nextErrors.clubPresidentWhatsapp = "Enter a valid Sri Lankan number";
       }
       if (!bestCSRQuestions?.clubPresidentEmail?.trim()) {
         nextErrors.clubPresidentEmail = "President email is required";
@@ -1114,16 +1122,15 @@ const Step4AwardQuestions: React.FC = () => {
             </Field>
 
             <Field label="Member WhatsApp Number" required error={errors.memberAttendingWhatsapp}>
-              <Input
-                type="tel"
-                placeholder="Enter member WhatsApp number"
-                value={bestCSRQuestions?.memberAttendingWhatsapp || ""}
-                onChange={(e) =>
+              <PhoneInput
+                value={bestCSRQuestions?.memberAttendingWhatsapp || "+94"}
+                onChange={(value) =>
                   updateBestCSRQuestions({
-                    memberAttendingWhatsapp: e.target.value,
+                    memberAttendingWhatsapp: value,
                   })
                 }
-                className={errors.memberAttendingWhatsapp ? "border-destructive" : ""}
+                placeholder="7X XXX XXXX"
+                hasError={Boolean(errors.memberAttendingWhatsapp)}
               />
             </Field>
           </div>
@@ -1146,16 +1153,15 @@ const Step4AwardQuestions: React.FC = () => {
             </Field>
 
             <Field label="Club President WhatsApp Number" required error={errors.clubPresidentWhatsapp}>
-              <Input
-                type="tel"
-                placeholder="Enter president WhatsApp number"
-                value={bestCSRQuestions?.clubPresidentWhatsapp || ""}
-                onChange={(e) =>
+              <PhoneInput
+                value={bestCSRQuestions?.clubPresidentWhatsapp || "+94"}
+                onChange={(value) =>
                   updateBestCSRQuestions({
-                    clubPresidentWhatsapp: e.target.value,
+                    clubPresidentWhatsapp: value,
                   })
                 }
-                className={errors.clubPresidentWhatsapp ? "border-destructive" : ""}
+                placeholder="7X XXX XXXX"
+                hasError={Boolean(errors.clubPresidentWhatsapp)}
               />
             </Field>
 
@@ -1242,7 +1248,6 @@ const SwipeToSubmit: React.FC<{
 
   const canDrag = !disabled && status === 'idle';
   const isComplete = status === 'loading' || status === 'success';
-  const knobTravel = 'calc(100% - 3.5rem)';
 
   return (
     <div
@@ -1292,7 +1297,7 @@ const SwipeToSubmit: React.FC<{
                 : 'bg-slate-600 cursor-not-allowed'
         }`}
         style={{
-          transform: `translateX(${isComplete ? knobTravel : `calc(${progress}% * (100% - 3.5rem) / 100%)`})`,
+          transform: `translateX(calc(${isComplete ? 1 : progress / 100} * (100% - 3.5rem)))`,
           transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onPointerDown={handlePointerDown}

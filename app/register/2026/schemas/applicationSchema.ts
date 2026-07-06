@@ -133,9 +133,15 @@ const bestCSRSchema = z
     clubAdvisorNameTitle: z.string().min(1).optional(),
     clubAdvisorEmail: z.string().email().optional(),
     memberAttendingName: z.string().optional(),
-    memberAttendingWhatsapp: z.string().optional(),
+    memberAttendingWhatsapp: z
+      .string()
+      .regex(SRI_LANKA_PHONE_REGEX, "Enter a valid Sri Lankan number")
+      .optional(),
     clubPresidentName: z.string().optional(),
-    clubPresidentWhatsapp: z.string().optional(),
+    clubPresidentWhatsapp: z
+      .string()
+      .regex(SRI_LANKA_PHONE_REGEX, "Enter a valid Sri Lankan number")
+      .optional(),
     clubPresidentEmail: z.string().email().optional(),
   })
   .optional();
