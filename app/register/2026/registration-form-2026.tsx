@@ -300,7 +300,7 @@ const StepNav: React.FC<{
 );
 
 const InfoBanner: React.FC<{ message: string }> = ({ message }) => (
-  <div className="p-4 rounded-xl bg-blue-600/10 border border-blue-600/30 flex gap-3">
+  <div className="p-4 rounded-2xl bg-blue-600/10 border border-blue-600/30 flex gap-3">
     <AlertCircle className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
     <p className="text-sm text-slate-300">{message}</p>
   </div>
@@ -1189,6 +1189,7 @@ const SwipeToSubmit: React.FC<{
 }> = ({ onSubmit, disabled = false, onSuccess }) => {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [isDragging, setIsDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
   const startOffsetRef = useRef(0);
@@ -1200,6 +1201,7 @@ const SwipeToSubmit: React.FC<{
     if (!track) return;
     track.setPointerCapture(e.pointerId);
     draggingRef.current = true;
+    setIsDragging(true);
     startOffsetRef.current = track.getBoundingClientRect().left;
   };
 
@@ -1217,6 +1219,7 @@ const SwipeToSubmit: React.FC<{
   const handlePointerUp = async (e: React.PointerEvent) => {
     if (!draggingRef.current) return;
     draggingRef.current = false;
+    setIsDragging(false);
     const track = trackRef.current;
     if (track) track.releasePointerCapture(e.pointerId);
 
@@ -1238,11 +1241,13 @@ const SwipeToSubmit: React.FC<{
   };
 
   const canDrag = !disabled && status === 'idle';
+  const isComplete = status === 'loading' || status === 'success';
+  const knobTravel = 'calc(100% - 3.5rem)';
 
   return (
     <div
       ref={trackRef}
-      className={`relative w-full h-16 rounded-full select-none overflow-hidden border transition-colors ${
+      className={`relative w-full h-16 rounded-full select-none overflow-hidden border transition-colors duration-300 ${
         disabled
           ? 'border-slate-700/50 opacity-60'
           : status === 'success'
@@ -1255,12 +1260,15 @@ const SwipeToSubmit: React.FC<{
       style={{ touchAction: 'none' }}
     >
       <div
-        className="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-400/40 via-amber-300/30 to-amber-400/20 rounded-full transition-[width] duration-75"
-        style={{ width: `${progress}%` }}
+        className="absolute inset-y-0 left-0 right-0 origin-left bg-gradient-to-r from-amber-300/50 via-amber-400/40 to-amber-300/30 will-change-transform"
+        style={{
+          transform: `scaleX(${progress / 100})`,
+          transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
       />
 
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-        <span className={`text-sm font-medium tracking-wide ${
+        <span className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
           status === 'success' ? 'text-emerald-400' : status === 'loading' ? 'text-amber-300' : disabled ? 'text-slate-500' : 'text-slate-400'
         }`}>
           {status === 'success'
@@ -1274,19 +1282,18 @@ const SwipeToSubmit: React.FC<{
       </div>
 
       <div
-        className={`absolute top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center z-20 transition-shadow ${
+        className={`absolute top-1/2 -translate-y-1/2 left-2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-300 ${
           canDrag
-            ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_20px_rgba(251,191,36,0.35)] hover:shadow-[0_0_28px_rgba(251,191,36,0.5)]'
+            ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_24px_rgba(251,191,36,0.4)] hover:shadow-[0_0_32px_rgba(251,191,36,0.55)]'
             : status === 'loading'
-              ? 'bg-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.35)]'
+              ? 'bg-amber-400 shadow-[0_0_24px_rgba(251,191,36,0.4)]'
               : status === 'success'
-                ? 'bg-emerald-500 shadow-md'
+                ? 'bg-emerald-500 shadow-[0_0_24px_rgba(16,185,129,0.4)]'
                 : 'bg-slate-600 cursor-not-allowed'
         }`}
         style={{
-          left: status === 'loading' || status === 'success'
-            ? 'calc(100% - 3.25rem)'
-            : `calc(0.5rem + ${progress}% * (100% - 3.75rem) / 100%)`,
+          transform: `translateX(${isComplete ? knobTravel : `calc(${progress}% * (100% - 3.5rem) / 100%)`})`,
+          transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onPointerDown={handlePointerDown}
       >
@@ -1416,8 +1423,8 @@ const Step5Declaration: React.FC = () => {
       </Card>
 
       {isValid() && (
-        <div className="p-4 rounded-xl bg-green-600/10 border border-green-600/30 flex gap-3">
-          <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex gap-3">
+          <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <p className="text-sm text-slate-300">
             All declarations accepted. You're ready to submit your application.
           </p>
@@ -1426,7 +1433,7 @@ const Step5Declaration: React.FC = () => {
 
       {toast && (
         <div className="fixed top-6 right-6 z-50">
-          <div className="p-4 rounded-xl bg-red-900/40 border border-red-500/40 flex gap-3 shadow-xl backdrop-blur-sm max-w-sm">
+          <div className="p-4 rounded-2xl bg-red-900/40 border border-red-500/40 flex gap-3 shadow-xl backdrop-blur-sm max-w-sm">
             <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-red-200">Submission Failed</p>
