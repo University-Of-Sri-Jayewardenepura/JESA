@@ -302,4 +302,15 @@ export const applicationBusinessSchema = applicationSchema
       message: "You are not eligible for selected BESA awards",
       path: ["academicInfo.faculty"],
     }
+  )
+
+  .refine(
+    (data) => {
+      if (data.academicInfo.academicYear !== "recent-graduate") return true;
+      return (data.academicInfo.graduationYear?.trim().length ?? 0) > 0;
+    },
+    {
+      message: "Graduation year is required for recent graduates",
+      path: ["academicInfo.graduationYear"],
+    }
   );

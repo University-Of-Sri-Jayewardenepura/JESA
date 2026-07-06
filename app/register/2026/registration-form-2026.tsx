@@ -626,6 +626,10 @@ const Step2AcademicInfo: React.FC = () => {
       nextErrors.degree = "Degree is required";
     }
 
+    if (isRecentGraduate && !academicInfo.graduationYear?.trim()) {
+      nextErrors.graduationYear = "Graduation year is required for recent graduates";
+    }
+
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
@@ -751,7 +755,7 @@ const Step2AcademicInfo: React.FC = () => {
         </Field>
 
         {isRecentGraduate && (
-          <Field label="Graduation Year">
+          <Field label="Graduation Year" required error={errors.graduationYear}>
             <Input
               type="text"
               placeholder="Enter your graduation year"
@@ -759,6 +763,7 @@ const Step2AcademicInfo: React.FC = () => {
               onChange={(e) =>
                 updateAcademicInfo({ graduationYear: e.target.value })
               }
+              className={errors.graduationYear ? "border-destructive" : ""}
             />
           </Field>
         )}
