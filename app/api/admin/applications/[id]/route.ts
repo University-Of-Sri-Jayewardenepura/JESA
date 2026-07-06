@@ -13,7 +13,24 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    await adminDb.collection("applications").doc(id).delete();
+    const appRef = adminDb.collection("applications").doc(id);
+    const appDoc = await appRef.get();
+
+    if (!appDoc.exists) {
+      return NextResponse.json({ error: "Application not found" }, { status: 404 });
+    }
+
+    const data = appDoc.data();
+    const nic = data?.personalInfo?.nic;
+    const whatsapp = data?.personalInfo?.whatsappNumber;
+    const email = data?.academicInfo?.universityEmail;
+
+    const batch = adminDb.batch();
+    batch.delete(appRef);
+    if (nic) batch.delete(adminDb.collection("unique_constraints").doc(`nic_${nic}`));
+    if (whatsapp) batch.delete(adminDb.collection("unique_constraints").doc(`wa_${whatsapp}`));
+    if (email) batch.delete(adminDb.collection("unique_constraints").doc(`email_${email}`));
+    await batch.commit();
 
     return NextResponse.json({ success: true });
   } catch (error) {

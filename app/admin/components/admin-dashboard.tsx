@@ -48,6 +48,21 @@ interface Application {
   };
   awardSelection?: {
     selectedAwards?: string[];
+    hasConditionalAwards?: boolean;
+  };
+  bestInnovatorQuestions?: {
+    industry?: string;
+    otherIndustry?: string;
+    innovationCompletionPercentage?: boolean;
+  };
+  bestCSRQuestions?: {
+    clubAdvisorNameTitle?: string;
+    clubAdvisorEmail?: string;
+    memberAttendingName?: string;
+    memberAttendingWhatsapp?: string;
+    clubPresidentName?: string;
+    clubPresidentWhatsapp?: string;
+    clubPresidentEmail?: string;
   };
   status?: string;
   submittedAt?: string | null;
@@ -66,6 +81,7 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<"all" | "internal" | "external">("all");
   const [awardFilter, setAwardFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [selected, setSelected] = useState<Application | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Application | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -97,6 +113,14 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
     return Array.from(awards).sort();
   }, [applications]);
 
+  const stats = useMemo(() => {
+    return {
+      total: applications.length,
+      internal: applications.filter((a) => a.applicantType === "internal").length,
+      external: applications.filter((a) => a.applicantType === "external").length,
+    };
+  }, [applications]);
+
   const filteredApplications = useMemo(() => {
     return applications.filter((app) => {
       const term = search.toLowerCase();
@@ -114,9 +138,12 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
         awardFilter === "all" ||
         app.awardSelection?.selectedAwards?.includes(awardFilter);
 
-      return matchesSearch && matchesType && matchesAward;
+      const matchesStatus =
+        statusFilter === "all" || app.status === statusFilter;
+
+      return matchesSearch && matchesType && matchesAward && matchesStatus;
     });
-  }, [applications, search, typeFilter, awardFilter]);
+  }, [applications, search, typeFilter, awardFilter, statusFilter]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -167,6 +194,15 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
       { header: "Faculty", key: "faculty", width: 18 },
       { header: "Degree", key: "degree", width: 36 },
       { header: "Awards", key: "awards", width: 48 },
+      { header: "Innovator Industry", key: "innovatorIndustry", width: 28 },
+      { header: ">75% Complete", key: "innovatorComplete", width: 16 },
+      { header: "CSR Advisor", key: "csrAdvisor", width: 32 },
+      { header: "CSR Advisor Email", key: "csrAdvisorEmail", width: 32 },
+      { header: "CSR Member", key: "csrMember", width: 24 },
+      { header: "CSR Member WhatsApp", key: "csrMemberWhatsapp", width: 20 },
+      { header: "CSR President", key: "csrPresident", width: 24 },
+      { header: "CSR President WhatsApp", key: "csrPresidentWhatsapp", width: 20 },
+      { header: "CSR President Email", key: "csrPresidentEmail", width: 32 },
       { header: "Submitted At", key: "submittedAt", width: 24 },
     ];
 
@@ -187,6 +223,20 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
         faculty: app.academicInfo?.faculty,
         degree: app.academicInfo?.degree,
         awards: app.awardSelection?.selectedAwards?.join(", "),
+        innovatorIndustry:
+          app.bestInnovatorQuestions?.industry === "Other"
+            ? app.bestInnovatorQuestions?.otherIndustry
+            : app.bestInnovatorQuestions?.industry,
+        innovatorComplete: app.bestInnovatorQuestions?.innovationCompletionPercentage
+          ? "Yes"
+          : "No",
+        csrAdvisor: app.bestCSRQuestions?.clubAdvisorNameTitle,
+        csrAdvisorEmail: app.bestCSRQuestions?.clubAdvisorEmail,
+        csrMember: app.bestCSRQuestions?.memberAttendingName,
+        csrMemberWhatsapp: app.bestCSRQuestions?.memberAttendingWhatsapp,
+        csrPresident: app.bestCSRQuestions?.clubPresidentName,
+        csrPresidentWhatsapp: app.bestCSRQuestions?.clubPresidentWhatsapp,
+        csrPresidentEmail: app.bestCSRQuestions?.clubPresidentEmail,
         submittedAt: app.submittedAt,
       });
     });
@@ -232,7 +282,22 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4">
+              <p className="text-slate-400 text-xs uppercase tracking-wider">Total Applications</p>
+              <p className="text-2xl font-bold text-slate-100 mt-1">{stats.total}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4">
+              <p className="text-slate-400 text-xs uppercase tracking-wider">Internal</p>
+              <p className="text-2xl font-bold text-blue-300 mt-1">{stats.internal}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-4">
+              <p className="text-slate-400 text-xs uppercase tracking-wider">External</p>
+              <p className="text-2xl font-bold text-amber-300 mt-1">{stats.external}</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <Input
@@ -271,6 +336,18 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
                     {award}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div className="relative">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="flex h-9 w-full min-w-0 rounded-[8px] border border-input bg-transparent px-3 py-1 pl-9 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
+              >
+                <option value="all">All Statuses</option>
+                <option value="submitted">Submitted</option>
               </select>
             </div>
 
@@ -449,6 +526,31 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
                   )) || "—"}
                 </div>
               </div>
+
+              {selected.awardSelection?.selectedAwards?.includes("best-innovator") && selected.bestInnovatorQuestions && (
+                <div className="pt-4 border-t border-slate-700/50">
+                  <p className="text-slate-400 mb-2">Best Innovator Details</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <DetailItem label="Industry" value={selected.bestInnovatorQuestions.industry === "Other" ? selected.bestInnovatorQuestions.otherIndustry : selected.bestInnovatorQuestions.industry} />
+                    <DetailItem label=">75% Completed" value={selected.bestInnovatorQuestions.innovationCompletionPercentage ? "Yes" : "No"} />
+                  </div>
+                </div>
+              )}
+
+              {selected.awardSelection?.selectedAwards?.includes("best-csr") && selected.bestCSRQuestions && (
+                <div className="pt-4 border-t border-slate-700/50 space-y-4">
+                  <p className="text-slate-400 mb-2">Best CSR Details</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <DetailItem label="Club Advisor" value={selected.bestCSRQuestions.clubAdvisorNameTitle} />
+                    <DetailItem label="Advisor Email" value={selected.bestCSRQuestions.clubAdvisorEmail} />
+                    <DetailItem label="Member Attending" value={selected.bestCSRQuestions.memberAttendingName} />
+                    <DetailItem label="Member WhatsApp" value={selected.bestCSRQuestions.memberAttendingWhatsapp} />
+                    <DetailItem label="Club President" value={selected.bestCSRQuestions.clubPresidentName} />
+                    <DetailItem label="President WhatsApp" value={selected.bestCSRQuestions.clubPresidentWhatsapp} />
+                    <DetailItem label="President Email" value={selected.bestCSRQuestions.clubPresidentEmail} />
+                  </div>
+                </div>
+              )}
 
               <div className="pt-4 border-t border-slate-700/50">
                 <p className="text-slate-400 mb-1">Submitted At</p>
