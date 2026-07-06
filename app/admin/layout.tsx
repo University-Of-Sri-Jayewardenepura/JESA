@@ -1,14 +1,9 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "JESA 2026 | Admin Dashboard",
-  description: "Admin dashboard for managing JESA 2026 applications.",
-};
+import { AuthProvider } from "./providers/auth-provider";
 
 export default function AdminLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  return <>{children}</>;
+}) {
+  return <AuthProvider>{children}</AuthProvider>;
 }

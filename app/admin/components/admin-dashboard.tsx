@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { signOut } from "next-auth/react";
+import { useAuth } from "../providers/auth-provider";
 import {
   Search,
   Download,
@@ -75,6 +75,7 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ userEmail, userName }: AdminDashboardProps) {
+  const { signOut } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -268,7 +269,7 @@ export default function AdminDashboard({ userEmail, userName }: AdminDashboardPr
             </div>
             <Button
               variant="outline"
-              onClick={() => signOut({ callbackUrl: "/" })}
+              onClick={() => signOut().then(() => (window.location.href = "/"))}
               className="rounded-[8px] border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-slate-100"
             >
               Sign Out

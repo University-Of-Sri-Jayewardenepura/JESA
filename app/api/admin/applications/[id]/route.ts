@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getAdminUserFromRequest } from "@/app/admin/lib/server-auth";
 import { adminDb } from "@/lib/firebase-admin";
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
+    const user = await getAdminUserFromRequest(request);
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -17,7 +17,10 @@ export async function DELETE(
     const appDoc = await appRef.get();
 
     if (!appDoc.exists) {
-      return NextResponse.json({ error: "Application not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Application not found" },
+        { status: 404 }
+      );
     }
 
     const data = appDoc.data();
@@ -27,9 +30,16 @@ export async function DELETE(
 
     const batch = adminDb.batch();
     batch.delete(appRef);
-    if (nic) batch.delete(adminDb.collection("unique_constraints").doc(`nic_${nic}`));
-    if (whatsapp) batch.delete(adminDb.collection("unique_constraints").doc(`wa_${whatsapp}`));
-    if (email) batch.delete(adminDb.collection("unique_constraints").doc(`email_${email}`));
+    if (nic)
+      batch.delete(adminDb.collection("unique_constraints").doc(`nic_${nic}`));
+    if (whatsapp)
+      batch.delete(
+        adminDb.collection("unique_constraints").doc(`wa_${whatsapp}`)
+      );
+    if (email)
+      batch.delete(
+        adminDb.collection("unique_constraints").doc(`email_${email}`)
+      );
     await batch.commit();
 
     return NextResponse.json({ success: true });
