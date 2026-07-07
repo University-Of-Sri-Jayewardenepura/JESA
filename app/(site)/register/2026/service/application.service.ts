@@ -4,7 +4,7 @@ import {
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getDbClient } from "@/lib/firebase";
 
 export async function createNewApplication(
   formData: any
@@ -21,6 +21,8 @@ export async function createNewApplication(
   const data = result.data;
 
   const appId = crypto.randomUUID();
+
+  const db = getDbClient();
 
   const nic = data.personalInfo.nic;
   const whatsapp = data.personalInfo.whatsappNumber;

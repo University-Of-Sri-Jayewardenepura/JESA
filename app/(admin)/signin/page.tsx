@@ -1,12 +1,7 @@
-"use client";
+import SignInPageClient from "./sign-in-page-client";
 
-import { AuthProvider } from "@/app/admin/providers/auth-provider";
-import SignInForm from "./sign-in-form";
+export const dynamic = "force-dynamic";
 
 export default function SignInPage() {
-  return (
-    <AuthProvider>
-      <SignInForm />
-    </AuthProvider>
-  );
+  return <SignInPageClient />;
 }
