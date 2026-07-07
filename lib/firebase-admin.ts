@@ -1,6 +1,6 @@
 import { initializeApp, getApps, cert, type App } from "firebase-admin/app";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
-import { getAuth, type Auth } from "firebase-admin/auth";
+import { verifyFirebaseIdToken, type DecodedIdToken } from "./firebase-token-verifier";
 
 let cachedApp: App | null = null;
 
@@ -39,7 +39,6 @@ function createFirebaseAdminApp(): App {
 }
 
 let dbInstance: Firestore | null = null;
-let authInstance: Auth | null = null;
 
 export function getAdminDb(): Firestore {
   if (!dbInstance) {
@@ -48,11 +47,13 @@ export function getAdminDb(): Firestore {
   return dbInstance;
 }
 
-export function getAdminAuth(): Auth {
-  if (!authInstance) {
-    authInstance = getAuth(createFirebaseAdminApp());
-  }
-  return authInstance;
+// Drop-in replacement for firebase-admin/auth that avoids the jose/jwks-rsa
+// ESM/CJS bundling conflict on Vercel. Verifies tokens with jsonwebtoken using
+// Google's published public keys.
+export function getAdminAuth(): {
+  verifyIdToken(token: string): Promise<DecodedIdToken>;
+} {
+  return {
+    verifyIdToken: verifyFirebaseIdToken,
+  };
 }
-
-

@@ -26,8 +26,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { getAdminAuth } = await import("@/lib/firebase-admin");
-    await getAdminAuth().listUsers(1);
+    const { getAdminDb } = await import("@/lib/firebase-admin");
+    // A lightweight Firestore operation to confirm Admin SDK connectivity.
+    await getAdminDb().collection("admin_users").limit(1).get();
     checks.firebaseAdminStatus = "connected";
   } catch (error) {
     checks.firebaseAdminStatus =
