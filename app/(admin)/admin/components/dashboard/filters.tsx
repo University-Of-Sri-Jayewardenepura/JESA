@@ -121,11 +121,19 @@ export default function Filters({
     filters.dateTo;
 
   const universities = Array.from(
-    new Set(applications.map((a) => a.academicInfo?.university).filter(Boolean))
+    new Set(
+      applications
+        .map((a) => a.academicInfo?.university)
+        .filter((u): u is string => Boolean(u))
+    )
   ).sort();
 
   const faculties = Array.from(
-    new Set(applications.map((a) => a.academicInfo?.faculty).filter(Boolean))
+    new Set(
+      applications
+        .map((a) => a.academicInfo?.faculty)
+        .filter((f): f is string => Boolean(f))
+    )
   ).sort();
 
   const awardOptions = ALL_AWARD_IDS.filter((award) => {
