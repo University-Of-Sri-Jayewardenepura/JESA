@@ -50,9 +50,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error("Admin request access error:", error);
+    console.error("[Admin API] Request access error:", error);
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to process admin access request";
     return NextResponse.json(
-      { error: "Failed to process admin access request" },
+      { error: message },
       { status: 500 }
     );
   }

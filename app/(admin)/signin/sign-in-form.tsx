@@ -29,11 +29,12 @@ export default function SignInForm() {
           method: "POST",
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to verify admin access");
-        }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to verify admin access");
+      }
 
-        const data = await res.json();
+      const data = await res.json();
 
         if (data.status === "approved") {
           setAccessState("approved");
