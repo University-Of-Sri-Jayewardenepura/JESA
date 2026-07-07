@@ -28,6 +28,10 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  if (true as boolean) {
+    return NextResponse.json({ message: "Not found" }, { status: 404 });
+  }
+
   try {
     const body = await request.json();
     console.log("Received body:", body);

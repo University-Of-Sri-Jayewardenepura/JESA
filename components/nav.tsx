@@ -24,7 +24,7 @@ const Nav: React.FC = () => {
           href="/"
         >
           <Image
-            alt="JESA 2025"
+            alt="JESA 2026"
             className="ml-[-0.4rem] h-auto w-auto lg:ml-[-1.2rem]"
             height={20}
             src="/images/jesa-min.png"
