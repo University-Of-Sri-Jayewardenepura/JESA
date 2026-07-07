@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminUserFromRequest } from "@/app/admin/lib/server-auth";
-import { adminDb } from "@/lib/firebase-admin";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 export async function DELETE(
   request: Request,
@@ -13,7 +13,8 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    const appRef = adminDb.collection("applications").doc(id);
+    const db = getAdminDb();
+    const appRef = db.collection("applications").doc(id);
     const appDoc = await appRef.get();
 
     if (!appDoc.exists) {
@@ -28,17 +29,17 @@ export async function DELETE(
     const whatsapp = data?.personalInfo?.whatsappNumber;
     const email = data?.academicInfo?.universityEmail;
 
-    const batch = adminDb.batch();
+    const batch = db.batch();
     batch.delete(appRef);
     if (nic)
-      batch.delete(adminDb.collection("unique_constraints").doc(`nic_${nic}`));
+      batch.delete(db.collection("unique_constraints").doc(`nic_${nic}`));
     if (whatsapp)
       batch.delete(
-        adminDb.collection("unique_constraints").doc(`wa_${whatsapp}`)
+        db.collection("unique_constraints").doc(`wa_${whatsapp}`)
       );
     if (email)
       batch.delete(
-        adminDb.collection("unique_constraints").doc(`email_${email}`)
+        db.collection("unique_constraints").doc(`email_${email}`)
       );
     await batch.commit();
 

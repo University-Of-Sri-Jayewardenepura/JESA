@@ -1,23 +1,58 @@
-import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import { getAuth } from "firebase-admin/auth";
+import { initializeApp, getApps, cert, type App } from "firebase-admin/app";
+import { getFirestore, type Firestore } from "firebase-admin/firestore";
+import { getAuth, type Auth } from "firebase-admin/auth";
 
-function initFirebaseAdmin() {
-  const apps = getApps();
-  if (apps.length > 0) {
-    return apps[0];
+let cachedApp: App | null = null;
+
+function createFirebaseAdminApp(): App {
+  if (cachedApp) return cachedApp;
+
+  const existingApps = getApps();
+  if (existingApps.length > 0) {
+    cachedApp = existingApps[0];
+    return cachedApp;
   }
 
   if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-    return initializeApp({
-      credential: cert(serviceAccount),
-    });
+    try {
+      const serviceAccount = JSON.parse(
+        process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+      );
+      cachedApp = initializeApp({
+        credential: cert(serviceAccount),
+      });
+      return cachedApp;
+    } catch (error) {
+      console.error(
+        "[Firebase Admin] Failed to parse FIREBASE_SERVICE_ACCOUNT_JSON:",
+        error
+      );
+      throw new Error(
+        "Invalid FIREBASE_SERVICE_ACCOUNT_JSON environment variable"
+      );
+    }
   }
 
-  return initializeApp();
+  // Application Default Credentials (works in Google Cloud / local gcloud auth)
+  cachedApp = initializeApp();
+  return cachedApp;
 }
 
-const app = initFirebaseAdmin();
-export const adminDb = getFirestore(app);
-export const adminAuth = getAuth(app);
+let dbInstance: Firestore | null = null;
+let authInstance: Auth | null = null;
+
+export function getAdminDb(): Firestore {
+  if (!dbInstance) {
+    dbInstance = getFirestore(createFirebaseAdminApp());
+  }
+  return dbInstance;
+}
+
+export function getAdminAuth(): Auth {
+  if (!authInstance) {
+    authInstance = getAuth(createFirebaseAdminApp());
+  }
+  return authInstance;
+}
+
+
