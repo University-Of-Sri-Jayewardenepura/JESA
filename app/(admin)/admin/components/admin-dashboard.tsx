@@ -11,6 +11,7 @@ import StatsCards from "./dashboard/stats-cards";
 import AwardsBreakdown from "./dashboard/awards-breakdown";
 import Filters from "./dashboard/filters";
 import ApplicationsTable from "./dashboard/applications-table";
+import MobileCards from "./dashboard/mobile-cards";
 import DetailDialog from "./dashboard/detail-dialog";
 import DeleteDialog from "./dashboard/delete-dialog";
 import BulkActions from "./dashboard/bulk-actions";
@@ -400,16 +401,30 @@ export default function AdminDashboard({
             loading={bulkLoading}
           />
 
-          <ApplicationsTable
-            applications={filteredApplications}
-            loading={loading}
-            selectedIds={selectedIds}
-            onSelect={toggleSelection}
-            onSelectAll={selectAll}
-            onView={setSelected}
-            onDelete={setDeleteTarget}
-            onStatusChange={handleStatusChange}
-          />
+          <div className="hidden lg:block">
+            <ApplicationsTable
+              applications={filteredApplications}
+              loading={loading}
+              selectedIds={selectedIds}
+              onSelect={toggleSelection}
+              onSelectAll={selectAll}
+              onView={setSelected}
+              onDelete={setDeleteTarget}
+              onStatusChange={handleStatusChange}
+            />
+          </div>
+
+          <div className="lg:hidden">
+            <MobileCards
+              applications={filteredApplications}
+              loading={loading}
+              selectedIds={selectedIds}
+              onSelect={toggleSelection}
+              onView={setSelected}
+              onDelete={setDeleteTarget}
+              onStatusChange={handleStatusChange}
+            />
+          </div>
         </div>
 
         {isSuperAdmin && (
