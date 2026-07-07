@@ -102,54 +102,70 @@ export async function verifyAdminToken(
       isSuperAdmin: false,
       status: "approved",
     };
-  } catch {
+  } catch (error) {
+    console.error("[verifyAdminToken] Token verification failed:", error);
     return null;
   }
 }
 
 export async function getAdminUserFromCookies(): Promise<AdminUser | null> {
-  const token = (await cookies()).get("__session")?.value;
-  return verifyAdminToken(token);
+  try {
+    const token = (await cookies()).get("__session")?.value;
+    return await verifyAdminToken(token);
+  } catch (error) {
+    console.error("[getAdminUserFromCookies] Failed to read admin session:", error);
+    return null;
+  }
 }
 
 export async function getAdminUserFromRequest(
   request: Request
 ): Promise<AdminUser | null> {
-  const cookieHeader = request.headers.get("cookie");
-  const token = getTokenFromCookieHeader(cookieHeader);
-  return verifyAdminToken(token);
+  try {
+    const cookieHeader = request.headers.get("cookie");
+    const token = getTokenFromCookieHeader(cookieHeader);
+    return await verifyAdminToken(token);
+  } catch (error) {
+    console.error("[getAdminUserFromRequest] Failed to verify admin request:", error);
+    return null;
+  }
 }
 
 export async function requestAdminAccess(
   token: string
 ): Promise<{ status: AdminStatus; record?: AdminRecord }> {
-  const decoded = await getAdminAuth().verifyIdToken(token);
-  if (!decoded.email) {
-    throw new Error("Invalid token: no email");
+  try {
+    const decoded = await getAdminAuth().verifyIdToken(token);
+    if (!decoded.email) {
+      throw new Error("Invalid token: no email");
+    }
+
+    if (isSuperAdmin(decoded.email)) {
+      return { status: "approved" };
+    }
+
+    const { status, record } = await checkAdminStatus(decoded.uid, decoded.email);
+
+    if (status === "approved" || status === "pending" || status === "rejected") {
+      return { status, record };
+    }
+
+    // New user: create a pending request
+    const docRef = getAdminDb().collection("admin_users").doc(decoded.uid);
+    const newRecord: AdminRecord = {
+      uid: decoded.uid,
+      email: decoded.email,
+      name: decoded.name || undefined,
+      status: "pending",
+      requestedAt: new Date().toISOString(),
+    };
+
+    await docRef.set(newRecord);
+    return { status: "pending", record: newRecord };
+  } catch (error) {
+    console.error("[requestAdminAccess] Failed to process access request:", error);
+    throw error;
   }
-
-  if (isSuperAdmin(decoded.email)) {
-    return { status: "approved" };
-  }
-
-  const { status, record } = await checkAdminStatus(decoded.uid, decoded.email);
-
-  if (status === "approved" || status === "pending" || status === "rejected") {
-    return { status, record };
-  }
-
-  // New user: create a pending request
-  const docRef = getAdminDb().collection("admin_users").doc(decoded.uid);
-  const newRecord: AdminRecord = {
-    uid: decoded.uid,
-    email: decoded.email,
-    name: decoded.name || undefined,
-    status: "pending",
-    requestedAt: new Date().toISOString(),
-  };
-
-  await docRef.set(newRecord);
-  return { status: "pending", record: newRecord };
 }
 
 export async function listAdminRequests(

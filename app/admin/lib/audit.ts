@@ -25,12 +25,19 @@ interface AuditLogEntry {
   timestamp: Date;
 }
 
+function cleanObject(obj: Record<string, unknown>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => value !== undefined)
+  );
+}
+
 export async function logAuditEvent(entry: AuditLogEntry): Promise<void> {
   try {
-    await getAdminDb().collection("audit_logs").add({
+    const data = cleanObject({
       ...entry,
       timestamp: new Date(),
     });
+    await getAdminDb().collection("audit_logs").add(data);
   } catch (error) {
     // Audit logging should never break the main flow
     console.error("[Audit] Failed to write audit log:", error);
