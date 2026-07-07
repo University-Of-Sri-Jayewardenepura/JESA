@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { Chrome, AlertCircle, Loader2, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { auth } from "@/lib/firebase";
+import { getAuthClient } from "@/lib/firebase";
 import { useAuth } from "@/app/admin/providers/auth-provider";
 
 type AccessState = "checking" | "approved" | "pending" | "rejected" | "error";
@@ -17,6 +17,7 @@ export default function SignInForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    const auth = getAuthClient();
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (!currentUser) {
         setAccessState("checking");

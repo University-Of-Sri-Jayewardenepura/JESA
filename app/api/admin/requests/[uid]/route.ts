@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { updateAdminStatus } from "@/app/admin/lib/server-auth";
+import { logAdminAction } from "@/app/admin/lib/audit";
+import { getAdminAuth } from "@/lib/firebase-admin";
 
 function getTokenFromCookieHeader(
   cookieHeader: string | null
@@ -33,6 +35,24 @@ export async function POST(
     }
 
     await updateAdminStatus(token, uid, status, { revoke });
+
+    try {
+      const decoded = await getAdminAuth().verifyIdToken(token);
+      if (decoded.email) {
+        const action = revoke
+          ? "revoke_admin"
+          : status === "approved"
+          ? "approve_admin"
+          : "reject_admin";
+        await logAdminAction(action, { email: decoded.email, uid: decoded.uid }, request, {
+          targetId: uid,
+          details: { status, revoke },
+        });
+      }
+    } catch {
+      // ignore audit log errors
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Admin update status error:", error);

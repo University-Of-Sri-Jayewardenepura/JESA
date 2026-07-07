@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import { requestAdminAccess } from "@/app/admin/lib/server-auth";
+import { logAdminAction } from "@/app/admin/lib/audit";
+import { checkRateLimit, rateLimitResponse } from "@/app/admin/lib/rate-limit";
+import { getAdminAuth } from "@/lib/firebase-admin";
 
 function getTokenFromCookieHeader(
   cookieHeader: string | null
@@ -14,6 +17,14 @@ function getTokenFromCookieHeader(
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = checkRateLimit(request, {
+      windowMs: 60_000,
+      maxRequests: 10,
+    });
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfter);
+    }
+
     const cookieHeader = request.headers.get("cookie");
     const token = getTokenFromCookieHeader(cookieHeader);
 
@@ -22,6 +33,21 @@ export async function POST(request: Request) {
     }
 
     const result = await requestAdminAccess(token);
+
+    try {
+      const decoded = await getAdminAuth().verifyIdToken(token);
+      if (decoded.email) {
+        await logAdminAction("request_admin_access", {
+          email: decoded.email,
+          uid: decoded.uid,
+        }, request, {
+          details: { status: result.status },
+        });
+      }
+    } catch {
+      // ignore audit log errors
+    }
+
     return NextResponse.json(result);
   } catch (error) {
     console.error("Admin request access error:", error);

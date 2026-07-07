@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { adminAuth, adminDb } from "@/lib/firebase-admin";
+import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
 const superAdminEmails =
   process.env.ADMIN_EMAILS?.split(",").map((email) => email.trim()) || [
@@ -49,7 +49,7 @@ async function checkAdminStatus(
     return { status: "approved" };
   }
 
-  const doc = await adminDb.collection("admin_users").doc(uid).get();
+  const doc = await getAdminDb().collection("admin_users").doc(uid).get();
   if (!doc.exists) {
     return { status: "not_found" };
   }
@@ -78,7 +78,7 @@ export async function verifyAdminToken(
   if (!token) return null;
 
   try {
-    const decoded = await adminAuth.verifyIdToken(token);
+    const decoded = await getAdminAuth().verifyIdToken(token);
     if (!decoded.email) return null;
 
     const superAdmin = isSuperAdmin(decoded.email);
@@ -123,7 +123,7 @@ export async function getAdminUserFromRequest(
 export async function requestAdminAccess(
   token: string
 ): Promise<{ status: AdminStatus; record?: AdminRecord }> {
-  const decoded = await adminAuth.verifyIdToken(token);
+  const decoded = await getAdminAuth().verifyIdToken(token);
   if (!decoded.email) {
     throw new Error("Invalid token: no email");
   }
@@ -139,7 +139,7 @@ export async function requestAdminAccess(
   }
 
   // New user: create a pending request
-  const docRef = adminDb.collection("admin_users").doc(decoded.uid);
+  const docRef = getAdminDb().collection("admin_users").doc(decoded.uid);
   const newRecord: AdminRecord = {
     uid: decoded.uid,
     email: decoded.email,
@@ -155,12 +155,12 @@ export async function requestAdminAccess(
 export async function listAdminRequests(
   token: string
 ): Promise<AdminRecord[]> {
-  const decoded = await adminAuth.verifyIdToken(token);
+  const decoded = await getAdminAuth().verifyIdToken(token);
   if (!decoded.email || !isSuperAdmin(decoded.email)) {
     throw new Error("Forbidden");
   }
 
-  const snapshot = await adminDb
+  const snapshot = await getAdminDb()
     .collection("admin_users")
     .orderBy("requestedAt", "desc")
     .get();
@@ -189,12 +189,12 @@ export async function updateAdminStatus(
   status: "approved" | "rejected",
   options?: { revoke?: boolean }
 ): Promise<void> {
-  const decoded = await adminAuth.verifyIdToken(token);
+  const decoded = await getAdminAuth().verifyIdToken(token);
   if (!decoded.email || !isSuperAdmin(decoded.email)) {
     throw new Error("Forbidden");
   }
 
-  const docRef = adminDb.collection("admin_users").doc(targetUid);
+  const docRef = getAdminDb().collection("admin_users").doc(targetUid);
   const doc = await docRef.get();
 
   if (status === "rejected" && options?.revoke) {

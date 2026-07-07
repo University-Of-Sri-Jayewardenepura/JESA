@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminUserFromRequest } from "@/app/admin/lib/server-auth";
-import { adminDb } from "@/lib/firebase-admin";
+import { logAdminAction } from "@/app/admin/lib/audit";
+import { getAdminDb } from "@/lib/firebase-admin";
 
 export async function GET(request: Request) {
   try {
@@ -9,7 +10,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const snapshot = await adminDb
+    await logAdminAction("view_applications", user, request);
+
+    const snapshot = await getAdminDb()
       .collection("applications")
       .orderBy("submittedAt", "desc")
       .get();
