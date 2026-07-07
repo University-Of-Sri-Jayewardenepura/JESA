@@ -11,7 +11,7 @@ import {
   Square,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Application } from "./types";
+import type { Application, ApplicationStatus } from "./types";
 import { getAwardLabel } from "@/lib/awards";
 
 interface ApplicationsTableProps {
@@ -22,6 +22,7 @@ interface ApplicationsTableProps {
   onSelectAll: (ids: string[]) => void;
   onView: (app: Application) => void;
   onDelete: (app: Application) => void;
+  onStatusChange?: (id: string, status: ApplicationStatus) => void;
 }
 
 const PAGE_SIZE = 25;
@@ -34,6 +35,7 @@ export default function ApplicationsTable({
   onSelectAll,
   onView,
   onDelete,
+  onStatusChange,
 }: ApplicationsTableProps) {
   const [page, setPage] = useState(1);
 
@@ -159,6 +161,20 @@ export default function ApplicationsTable({
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
+                    {onStatusChange && (
+                      <select
+                        value={app.status || "submitted"}
+                        onChange={(e) =>
+                          onStatusChange(app.id, e.target.value as ApplicationStatus)
+                        }
+                        className="h-8 rounded-[8px] border border-slate-600 bg-slate-800/50 px-2 text-xs text-slate-300 outline-none hover:bg-slate-800"
+                      >
+                        <option value="submitted">Submitted</option>
+                        <option value="shortlisted">Shortlisted</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    )}
                     <Button
                       size="sm"
                       variant="ghost"

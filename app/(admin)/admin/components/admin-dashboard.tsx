@@ -8,6 +8,7 @@ import ExcelJS from "exceljs";
 
 import AdminRequests from "./admin-requests";
 import StatsCards from "./dashboard/stats-cards";
+import AwardsBreakdown from "./dashboard/awards-breakdown";
 import Filters from "./dashboard/filters";
 import ApplicationsTable from "./dashboard/applications-table";
 import DetailDialog from "./dashboard/detail-dialog";
@@ -382,6 +383,8 @@ export default function AdminDashboard({
 
           <StatsCards applications={applications} />
 
+          <AwardsBreakdown applications={applications} />
+
           <Filters
             filters={filters}
             onChange={setFilters}
@@ -405,6 +408,7 @@ export default function AdminDashboard({
             onSelectAll={selectAll}
             onView={setSelected}
             onDelete={setDeleteTarget}
+            onStatusChange={handleStatusChange}
           />
         </div>
 
