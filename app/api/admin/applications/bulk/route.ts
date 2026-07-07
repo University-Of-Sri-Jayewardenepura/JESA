@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import { getAdminUserFromRequest } from "@/app/admin/lib/server-auth";
 import { logAdminAction } from "@/app/admin/lib/audit";
+import { checkRateLimit, rateLimitResponse } from "@/app/admin/lib/rate-limit";
 import { getAdminDb } from "@/lib/firebase-admin";
 
 const VALID_STATUSES = ["submitted", "shortlisted", "approved", "rejected"];
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = checkRateLimit(request, {
+      windowMs: 60_000,
+      maxRequests: 30,
+    });
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfter);
+    }
+
     const user = await getAdminUserFromRequest(request);
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

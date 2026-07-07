@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requestAdminAccess } from "@/app/admin/lib/server-auth";
 import { logAdminAction } from "@/app/admin/lib/audit";
+import { checkRateLimit, rateLimitResponse } from "@/app/admin/lib/rate-limit";
 import { getAdminAuth } from "@/lib/firebase-admin";
 
 function getTokenFromCookieHeader(
@@ -16,6 +17,14 @@ function getTokenFromCookieHeader(
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = checkRateLimit(request, {
+      windowMs: 60_000,
+      maxRequests: 10,
+    });
+    if (!rateLimit.allowed) {
+      return rateLimitResponse(rateLimit.retryAfter);
+    }
+
     const cookieHeader = request.headers.get("cookie");
     const token = getTokenFromCookieHeader(cookieHeader);
 
