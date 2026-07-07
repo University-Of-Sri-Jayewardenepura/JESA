@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { listAdminRequests } from "@/app/admin/lib/server-auth";
+import { logAdminAction } from "@/app/admin/lib/audit";
+import { getAdminAuth } from "@/lib/firebase-admin";
 
 function getTokenFromCookieHeader(
   cookieHeader: string | null
@@ -22,6 +24,18 @@ export async function GET(request: Request) {
     }
 
     const requests = await listAdminRequests(token);
+
+    try {
+      const decoded = await getAdminAuth().verifyIdToken(token);
+      if (decoded.email) {
+        await logAdminAction("view_applications", { email: decoded.email, uid: decoded.uid }, request, {
+          details: { action: "list_admin_requests", count: requests.length },
+        });
+      }
+    } catch {
+      // ignore audit log errors
+    }
+
     return NextResponse.json({ requests });
   } catch (error) {
     console.error("Admin list requests error:", error);

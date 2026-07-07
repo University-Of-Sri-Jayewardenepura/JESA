@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminUserFromRequest } from "@/app/admin/lib/server-auth";
+import { logAdminAction } from "@/app/admin/lib/audit";
 import { getAdminDb } from "@/lib/firebase-admin";
 
 const VALID_STATUSES = ["submitted", "shortlisted", "approved", "rejected"];
@@ -47,6 +48,11 @@ export async function POST(request: Request) {
       });
 
       await batch.commit();
+
+      await logAdminAction("bulk_delete_applications", user, request, {
+        details: { count: snapshot.docs.length, ids },
+      });
+
       return NextResponse.json({ success: true, deleted: snapshot.docs.length });
     }
 
@@ -66,6 +72,11 @@ export async function POST(request: Request) {
       });
 
       await batch.commit();
+
+      await logAdminAction("bulk_status_update", user, request, {
+        details: { status, count: ids.length, ids },
+      });
+
       return NextResponse.json({ success: true, updated: ids.length, status });
     }
 

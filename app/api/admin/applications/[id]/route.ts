@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminUserFromRequest } from "@/app/admin/lib/server-auth";
+import { logAdminAction } from "@/app/admin/lib/audit";
 import { getAdminDb } from "@/lib/firebase-admin";
 
 const VALID_STATUSES = ["submitted", "shortlisted", "approved", "rejected"];
@@ -40,6 +41,12 @@ export async function DELETE(
     if (email)
       batch.delete(db.collection("unique_constraints").doc(`email_${email}`));
     await batch.commit();
+
+    await logAdminAction("delete_application", user, request, {
+      targetId: id,
+      targetEmail: data?.personalInfo?.email,
+      details: { name: data?.personalInfo?.publicDisplayName },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -84,6 +91,12 @@ export async function PATCH(
       status,
       updatedAt: new Date(),
       updatedBy: user.email,
+    });
+
+    await logAdminAction("status_update", user, request, {
+      targetId: id,
+      targetEmail: appDoc.data()?.personalInfo?.email,
+      details: { status },
     });
 
     return NextResponse.json({ success: true, status });
