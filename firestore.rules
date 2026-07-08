@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public users can create applications; cannot read/mutate others
+    match /applications/{docId} {
+      allow create: if request.auth != null;
+      allow read, update, delete: if false;
+    }
+
+    // Unique constraints: read + create during registration transaction
+    match /unique_constraints/{docId} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    // Admin collections only accessible via server-side Admin SDK
+    match /admin_users/{docId} {
+      allow read, write: if false;
+    }
+
+    match /audit_logs/{docId} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

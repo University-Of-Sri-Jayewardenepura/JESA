@@ -278,6 +278,20 @@ export const applicationBusinessSchema = applicationSchema
 
   .refine(
     (data) => {
+      if (!data.awardSelection.selectedAwards.includes("best-csr")) return true;
+      const advisor = data.bestCSRQuestions?.clubAdvisorEmail?.trim();
+      const president = data.bestCSRQuestions?.clubPresidentEmail?.trim();
+      if (!advisor || !president) return true;
+      return advisor.toLowerCase() !== president.toLowerCase();
+    },
+    {
+      message: "Club advisor and president emails must be different",
+      path: ["bestCSRQuestions.clubPresidentEmail"],
+    }
+  )
+
+  .refine(
+    (data) => {
       const facultyBesaAwards = data.awardSelection.selectedAwards.filter(
         (a) => a.startsWith("besa-") && a !== "besa-inter-university"
       );

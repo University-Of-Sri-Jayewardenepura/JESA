@@ -997,6 +997,15 @@ const Step4AwardQuestions: React.FC = () => {
       ) {
         nextErrors.clubPresidentEmail = "Enter a valid email address";
       }
+      if (
+        bestCSRQuestions?.clubAdvisorEmail?.trim() &&
+        bestCSRQuestions?.clubPresidentEmail?.trim() &&
+        bestCSRQuestions.clubAdvisorEmail.trim().toLowerCase() ===
+          bestCSRQuestions.clubPresidentEmail.trim().toLowerCase()
+      ) {
+        nextErrors.clubPresidentEmail =
+          "President email must be different from advisor email";
+      }
     }
 
     setErrors(nextErrors);
@@ -1202,18 +1211,31 @@ const SwipeToSubmit: React.FC<{
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const [isDragging, setIsDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const ballRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
-  const startOffsetRef = useRef(0);
+  const dragOffsetRef = useRef(0);
+  const metricsRef = useRef({ leftPadding: 8, ballWidth: 48 });
 
   const handlePointerDown = (e: React.PointerEvent) => {
     if (disabled || status !== 'idle') return;
     e.preventDefault();
     const track = trackRef.current;
-    if (!track) return;
+    const ball = ballRef.current;
+    if (!track || !ball) return;
     track.setPointerCapture(e.pointerId);
+
+    const trackRect = track.getBoundingClientRect();
+    const ballRect = ball.getBoundingClientRect();
+    const ballStyle = window.getComputedStyle(ball);
+    const leftPadding = parseFloat(ballStyle.left) || 8;
+
+    metricsRef.current = {
+      leftPadding,
+      ballWidth: ballRect.width || 48,
+    };
+    dragOffsetRef.current = e.clientX - ballRect.left;
     draggingRef.current = true;
     setIsDragging(true);
-    startOffsetRef.current = track.getBoundingClientRect().left;
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -1221,9 +1243,13 @@ const SwipeToSubmit: React.FC<{
     e.preventDefault();
     const track = trackRef.current;
     if (!track) return;
-    const rect = track.getBoundingClientRect();
-    const dx = e.clientX - startOffsetRef.current;
-    const pct = Math.min(100, Math.max(0, (dx / rect.width) * 100));
+
+    const trackRect = track.getBoundingClientRect();
+    const { leftPadding, ballWidth } = metricsRef.current;
+    const availableWidth = trackRect.width - ballWidth - leftPadding * 2;
+    const relativeX =
+      e.clientX - dragOffsetRef.current - trackRect.left - leftPadding;
+    const pct = Math.min(100, Math.max(0, (relativeX / availableWidth) * 100));
     setProgress(pct);
   };
 
@@ -1292,7 +1318,8 @@ const SwipeToSubmit: React.FC<{
       </div>
 
       <div
-        className={`absolute top-1/2 -translate-y-1/2 left-2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-300 ${
+        ref={ballRef}
+        className={`absolute top-1/2 left-2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-300 ${
           canDrag
             ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_24px_rgba(251,191,36,0.4)] hover:shadow-[0_0_32px_rgba(251,191,36,0.55)]'
             : status === 'loading'
@@ -1302,7 +1329,7 @@ const SwipeToSubmit: React.FC<{
                 : 'bg-slate-600 cursor-not-allowed'
         }`}
         style={{
-          transform: `translateX(calc(${isComplete ? 1 : progress / 100} * (100% - 3.5rem)))`,
+          transform: `translateY(-50%) translateX(calc(${isComplete ? 1 : progress / 100} * (100% - 4rem)))`,
           transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onPointerDown={handlePointerDown}

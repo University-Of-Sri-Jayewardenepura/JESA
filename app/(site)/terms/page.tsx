@@ -35,9 +35,13 @@ export default function Terms() {
             faculty.
           </li>
           <li>
-            Students enrolled in the Batch of 2018/19 of the B.Sc. (General)
-            Degree (3 years) program of the Faculty of Applied Sciences can only
-            apply for the Best Innovator Award.
+            Additionally, students can apply for the BESA Inter University
+            Award.
+          </li>
+          <li>
+            Recent pass-out students (within 1 year of final exam results) are
+            NOT eligible for BESA awards. You are only eligible for the Best
+            Innovator Award.
           </li>
         </ul>
         <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
@@ -45,9 +49,13 @@ export default function Terms() {
         </h3>
         <ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
           <li>
-            ⁠Undergraduate students from any state university in Sri Lanka are
+            Undergraduate students from any STATE university in Sri Lanka are
             eligible to apply. (This includes students from any faculty or
             degree program.)
+          </li>
+          <li>
+            It is compulsory to be a currently enrolled undergraduate. Recent
+            graduates are NOT eligible.
           </li>
         </ul>
         <h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
