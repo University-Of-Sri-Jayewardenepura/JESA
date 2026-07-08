@@ -1,12 +1,12 @@
 export const contactNames = [
   {
-    name: "Mohomed Insaf",
-    phone: "+94 74 352 3151",
-    linkedin: "https://www.linkedin.com/in/mohamed-insaf-512620302/",
+    name: "Muhammed Yusuf",
+    phone: "+94 77 185 7567",
+    linkedin: "https://www.linkedin.com/in/muhammed-yusuf/",
   },
   {
-    name: "Pradeep Wedagedara",
-    phone: "+94 75 455 4776",
-    linkedin: "https://www.linkedin.com/in/pradeep-wedagedara/",
+    name: "Thinul Hettiarachchi",
+    phone: "+94 78 436 9394",
+    linkedin: "https://www.linkedin.com/in/thinul-hettiarachchi/",
   },
 ];
