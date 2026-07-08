@@ -626,8 +626,13 @@ const Step2AcademicInfo: React.FC = () => {
       nextErrors.degree = "Degree is required";
     }
 
-    if (isRecentGraduate && !academicInfo.graduationYear?.trim()) {
-      nextErrors.graduationYear = "Graduation year is required for recent graduates";
+    if (isRecentGraduate) {
+      const gy = academicInfo.graduationYear?.trim();
+      if (!gy) {
+        nextErrors.graduationYear = "Graduation year is required for recent graduates";
+      } else if (!/^(2023|2024|2025|2026)$/.test(gy)) {
+        nextErrors.graduationYear = "Graduation year must be between 2023 and 2026";
+      }
     }
 
     setErrors(nextErrors);
@@ -756,15 +761,27 @@ const Step2AcademicInfo: React.FC = () => {
 
         {isRecentGraduate && (
           <Field label="Graduation Year" required error={errors.graduationYear}>
-            <Input
-              type="text"
-              placeholder="Enter your graduation year"
+            <select
               value={academicInfo.graduationYear || ""}
               onChange={(e) =>
                 updateAcademicInfo({ graduationYear: e.target.value })
               }
-              className={errors.graduationYear ? "border-destructive" : ""}
-            />
+              className={`flex h-10 w-full min-w-0 rounded-[8px] border border-slate-700/60 bg-slate-900/80 px-3 py-2 text-sm text-slate-50 shadow-xs outline-none transition-[color,box-shadow] placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:ring-[3px] focus-visible:ring-blue-500/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer ${
+                errors.graduationYear ? "border-destructive" : ""
+              }`}
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: "right 0.75rem center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "1.25rem",
+              }}
+            >
+              <option value="">Select graduation year</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+            </select>
           </Field>
         )}
       </Card>

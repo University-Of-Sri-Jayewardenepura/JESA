@@ -218,6 +218,24 @@ describe("applicationBusinessSchema", () => {
     expect(result.success).toBe(false);
   });
 
+  it("should reject graduation year before 2023", () => {
+    const data = validData();
+    data.academicInfo.academicYear = "recent-graduate";
+    data.academicInfo.graduationYear = "2022";
+    data.awardSelection.selectedAwards = ["best-innovator"];
+    const result = applicationBusinessSchema.safeParse(data);
+    expect(result.success).toBe(false);
+  });
+
+  it("should reject graduation year after 2026", () => {
+    const data = validData();
+    data.academicInfo.academicYear = "recent-graduate";
+    data.academicInfo.graduationYear = "2027";
+    data.awardSelection.selectedAwards = ["best-innovator"];
+    const result = applicationBusinessSchema.safeParse(data);
+    expect(result.success).toBe(false);
+  });
+
   it("should reject missing innovator completion percentage", () => {
     const data = validData();
     data.bestInnovatorQuestions = undefined;

@@ -101,7 +101,10 @@ const academicInfoSchema = z.object({
 
   otherDegree: z.string().optional(),
 
-  graduationYear: z.string().optional(),
+  graduationYear: z
+    .string()
+    .regex(/^(2023|2024|2025|2026)$/, "Graduation year must be between 2023 and 2026")
+    .optional(),
 });
 
 /* =========================
@@ -324,7 +327,7 @@ export const applicationBusinessSchema = applicationSchema
       return (data.academicInfo.graduationYear?.trim().length ?? 0) > 0;
     },
     {
-      message: "Graduation year is required for recent graduates",
+      message: "Graduation year is required for recent graduates (2023–2026)",
       path: ["academicInfo.graduationYear"],
     }
   );
