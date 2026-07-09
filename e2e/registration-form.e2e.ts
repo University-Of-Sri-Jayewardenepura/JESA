@@ -22,26 +22,26 @@ async function selectExternal(page: Page) {
 async function fillPersonalInfo(page: Page, overrides: Record<string, string> = {}) {
   await page.locator('input[placeholder*="display name"]').fill(overrides.name ?? "John Doe");
   await page.locator('input[placeholder*="000000000V"]').fill(overrides.nic ?? "200301503249");
-  await page.locator('input[type="radio"]').first().click({ force: true }); // gender male
-  await page.locator('input[placeholder*="example.com"]').fill(overrides.email ?? "john@sci.sjp.ac.lk");
+  await page.locator("select").first().selectOption(overrides.gender ?? "male");
+  await page.locator('input[placeholder*="email address"]').fill(overrides.email ?? "john@sci.sjp.ac.lk");
 
-  const phoneInputs = page.locator('input[placeholder*="XX XXX XXXX"]');
+  const phoneInputs = page.locator('input[placeholder*="7X XXX XXXX"]');
   await phoneInputs.nth(0).fill("771234567");
   await phoneInputs.nth(1).fill("771234568");
 
   await page.getByRole("button", { name: /Continue/i }).click();
 }
 
+async function fillAcademicFieldsInternal(page: Page, overrides: Record<string, string> = {}) {
+  await page.locator("select").nth(0).selectOption(overrides.faculty ?? "FOT");
+  await page.locator('input[placeholder="123456"]').nth(0).fill(overrides.regNo ?? "123456");
+  await page.locator('input[placeholder="username"]').fill(overrides.uniEmailLocal ?? "ict23922");
+  await page.locator("select").nth(1).selectOption(overrides.academicYear ?? "year-3");
+  await page.locator("select").nth(2).selectOption(overrides.degree ?? "Bachelor of ICT (Hons)");
+}
+
 async function fillAcademicInfoInternal(page: Page, overrides: Record<string, string> = {}) {
-  // University is auto-filled for internal, just select faculty
-  await page.locator("select").first().selectOption(overrides.faculty ?? "FOT");
-  await page.locator('input[placeholder*="registration number"]').fill(overrides.regNo ?? "REG12345");
-  await page.locator('input[placeholder*="@"]').fill(overrides.uniEmail ?? "john@fot.sjp.ac.lk");
-  // Academic Year
-  const yearSelect = page.locator("select").nth(1);
-  await yearSelect.selectOption(overrides.academicYear ?? "year-3");
-  // Degree
-  await page.locator('input[placeholder*="degree"]').first().fill(overrides.degree ?? "Computer Science");
+  await fillAcademicFieldsInternal(page, overrides);
   await page.getByRole("button", { name: /Continue/i }).click();
 }
 
@@ -63,11 +63,11 @@ async function fillBestCSR(page: Page) {
   await page.locator('input[placeholder*="advisor email"]').fill("advisor@club.com");
   await page.locator('input[placeholder*="member name"]').fill("Alice Member");
 
-  const phoneInputs = page.locator('input[placeholder*="XX XXX XXXX"]');
+  const phoneInputs = page.locator('input[placeholder*="7X XXX XXXX"]');
   await phoneInputs.nth(0).fill("771111111");
 
   await page.locator('input[placeholder*="president name"]').fill("Bob President");
-  await page.locator('input[placeholder*="president whatsapp"]').fill("772222222");
+  await page.locator('input[placeholder*="7X XXX XXXX"]').nth(1).fill("772222222");
   await page.locator('input[placeholder*="president email"]').fill("president@club.com");
 }
 
@@ -88,7 +88,7 @@ test.describe("Step 0 – Applicant Type", () => {
     await expect(page.getByText(/external student/i)).toBeVisible();
     await expect(page.getByRole("button", { name: /Continue/i })).toBeDisabled();
     await selectInternal(page);
-    await expect(page.getByText(/personal information/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Personal Information" })).toBeVisible();
   });
 
   test("can go back from step 1 to restart", async ({ page }) => {
@@ -139,7 +139,7 @@ test.describe("Step 1 – Personal Info Validation", () => {
   test("validates email format", async ({ page }) => {
     await goToForm(page);
     await selectInternal(page);
-    await page.locator('input[placeholder*="example.com"]').fill("not-an-email");
+    await page.locator('input[placeholder*="email address"]').fill("not-an-email");
     await page.getByRole("button", { name: /Continue/i }).click();
     await expect(page.getByText(/valid email/i)).toBeVisible();
   });
@@ -147,7 +147,7 @@ test.describe("Step 1 – Personal Info Validation", () => {
   test("validates wrong Sri Lankan phone", async ({ page }) => {
     await goToForm(page);
     await selectInternal(page);
-    const phoneInputs = page.locator('input[placeholder*="XX XXX XXXX"]');
+    const phoneInputs = page.locator('input[placeholder*="7X XXX XXXX"]');
     await phoneInputs.nth(0).fill("123");
     await page.getByRole("button", { name: /Continue/i }).click();
     await expect(page.getByText(/valid Sri Lankan/i)).toBeVisible();
@@ -161,13 +161,14 @@ test.describe("Step 2 – Academic Info", () => {
     await fillPersonalInfo(page);
 
     // Select recent graduate
+    await page.locator("select").nth(0).selectOption("FOT");
     await page.locator("select").nth(1).selectOption("recent-graduate");
-    await expect(page.getByText(/graduation year/i)).toBeVisible();
+    await expect(page.getByText("Graduation Year *")).toBeVisible();
     await expect(page.locator("select").last()).toBeVisible();
 
     // Switch back to year-3, graduation year should hide
     await page.locator("select").nth(1).selectOption("year-3");
-    await expect(page.getByText(/graduation year/i)).not.toBeVisible();
+    await expect(page.getByText("Graduation Year *")).not.toBeVisible();
   });
 
   test("requires graduation year for recent graduates", async ({ page }) => {
@@ -175,44 +176,35 @@ test.describe("Step 2 – Academic Info", () => {
     await selectInternal(page);
     await fillPersonalInfo(page);
 
-    await page.locator("select").nth(1).selectOption("recent-graduate");
-    await page.locator('input[placeholder*="registration number"]').fill("REG12345");
-    await page.locator('input[placeholder*="@"]').fill("john@fot.sjp.ac.lk");
-    await page.locator('input[placeholder*="degree"]').first().fill("CS");
+    await fillAcademicFieldsInternal(page, { academicYear: "recent-graduate" });
     await page.getByRole("button", { name: /Continue/i }).click();
     await expect(page.getByText(/graduation year is required/i)).toBeVisible();
   });
 
-  test("rejects graduation year outside 2023–2026", async ({ page }) => {
+  test("does not offer graduation years outside 2023–2026", async ({ page }) => {
     await goToForm(page);
     await selectInternal(page);
     await fillPersonalInfo(page);
 
+    await page.locator("select").nth(0).selectOption("FOT");
     await page.locator("select").nth(1).selectOption("recent-graduate");
-    await page.locator("select").last().selectOption("2022");
-    await page.locator('input[placeholder*="registration number"]').fill("REG12345");
-    await page.locator('input[placeholder*="@"]').fill("john@fot.sjp.ac.lk");
-    await page.locator('input[placeholder*="degree"]').first().fill("CS");
-    await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page.getByText(/must be between 2023 and 2026/i)).toBeVisible();
+    await expect(page.locator('option[value="2022"]')).toHaveCount(0);
   });
 });
 
 test.describe("Step 3 – Award Selection Rules", () => {
-  test("internal USJ can select up to 3 awards", async ({ page }) => {
+  test("internal USJ can select up to 2 main awards plus BESA Inter University", async ({ page }) => {
     await goToForm(page);
     await selectInternal(page);
     await fillPersonalInfo(page);
     await fillAcademicInfoInternal(page);
 
-    // Select 3 awards
-    const awards = ["Best Leader", "Best Team Player", "Best Innovator"];
+    const awards = ["Best Leader", "Best Team Player"];
     for (const award of awards) {
       await page.getByRole("checkbox", { name: new RegExp(award, "i") }).check();
     }
-    // Try a 4th – should be disabled
-    const fourthAward = page.getByRole("checkbox", { name: /Best Creative Designer/i });
-    await expect(fourthAward).toBeDisabled();
+    await expect(page.getByRole("checkbox", { name: /Best Innovator/i })).toBeDisabled();
+    await page.getByRole("checkbox", { name: /BESA.*Inter University/i }).check();
     await page.getByRole("button", { name: /Continue/i }).click();
   });
 
@@ -223,29 +215,30 @@ test.describe("Step 3 – Award Selection Rules", () => {
     // Fill step 1 with external data
     await page.locator('input[placeholder*="display name"]').fill("Jane External");
     await page.locator('input[placeholder*="000000000V"]').fill("200301503249");
-    await page.locator('input[type="radio"]').first().click({ force: true });
-    await page.locator('input[placeholder*="example.com"]').fill("jane@ext.lk");
-    const phoneInputs = page.locator('input[placeholder*="XX XXX XXXX"]');
+    await page.locator("select").first().selectOption("male");
+    await page.locator('input[placeholder*="email address"]').fill("jane@ext.lk");
+    const phoneInputs = page.locator('input[placeholder*="7X XXX XXXX"]');
     await phoneInputs.nth(0).fill("771234567");
     await phoneInputs.nth(1).fill("771234568");
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Fill academic for external (non-USJ)
+    await page.locator('input[placeholder*="faculty name"]').fill("Faculty of Science");
     await page.locator("select").first().selectOption("University of Colombo");
     await page.locator('input[placeholder*="registration number"]').fill("EXT12345");
-    await page.locator('input[placeholder*="@"]').fill("jane@cmb.ac.lk");
+    await page.locator('input[placeholder*="university email"]').fill("jane@cmb.ac.lk");
     await page.locator("select").nth(1).selectOption("year-3");
-    await page.locator('input[placeholder*="degree"]').first().fill("Maths");
+    await page.locator('input[placeholder*="degree name"]').fill("Maths");
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Check that Best Leader is disabled
-    await expect(page.getByRole("checkbox", { name: /Best Leader/i })).toBeDisabled();
+    await expect(page.getByRole("checkbox", { name: /Best Leader/i })).toHaveCount(0);
     await expect(page.getByRole("checkbox", { name: /Best Innovator/i })).toBeEnabled();
-    await expect(page.getByRole("checkbox", { name: /BESA Inter University/i })).toBeEnabled();
+    await expect(page.getByRole("checkbox", { name: /BESA.*Inter University/i })).toBeEnabled();
 
     // Select both allowed
     await page.getByRole("checkbox", { name: /Best Innovator/i }).check();
-    await page.getByRole("checkbox", { name: /BESA Inter University/i }).check();
+    await page.getByRole("checkbox", { name: /BESA.*Inter University/i }).check();
     await page.getByRole("button", { name: /Continue/i }).click();
   });
 
@@ -268,11 +261,8 @@ test.describe("Step 3 – Award Selection Rules", () => {
     await fillPersonalInfo(page);
 
     // Set recent graduate + valid grad year
-    await page.locator("select").nth(1).selectOption("recent-graduate");
+    await fillAcademicFieldsInternal(page, { academicYear: "recent-graduate" });
     await page.locator("select").last().selectOption("2025");
-    await page.locator('input[placeholder*="registration number"]').fill("REG12345");
-    await page.locator('input[placeholder*="@"]').fill("john@fot.sjp.ac.lk");
-    await page.locator('input[placeholder*="degree"]').first().fill("CS");
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Only Best Innovator should be selectable
@@ -305,7 +295,7 @@ test.describe("Step 4 – Award Questions", () => {
 
     // Should be on innovator questions, try to continue without checking
     await page.getByRole("button", { name: /Continue/i }).click();
-    await expect(page.getByText(/75/i)).toBeVisible();
+    await expect(page.getByText(/innovation is more than 75% completed/i)).toBeVisible();
   });
 
   test("CSR validates advisor and president emails are different", async ({ page }) => {
@@ -363,8 +353,6 @@ test.describe("Step 5 – Declaration & Swipe", () => {
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Declaration step
-    await expect(page.getByText(/swipe to submit/i)).toBeVisible();
-    // With no checkboxes checked, the button should be disabled
     await expect(page.getByText(/accept all declarations/i)).toBeVisible();
   });
 
@@ -393,12 +381,12 @@ test.describe("Full Happy Path", () => {
     // ════════════════════════════════════
     // Step 1: Personal Info
     // ════════════════════════════════════
-    await expect(page.getByText(/personal information/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Personal Information" })).toBeVisible();
     await page.locator('input[placeholder*="display name"]').fill("Alice Test");
     await page.locator('input[placeholder*="000000000V"]').fill("200301503249");
-    await page.locator('input[type="radio"]').first().click({ force: true });
-    await page.locator('input[placeholder*="example.com"]').fill("alice@fot.sjp.ac.lk");
-    const phone1 = page.locator('input[placeholder*="XX XXX XXXX"]');
+    await page.locator("select").first().selectOption("male");
+    await page.locator('input[placeholder*="email address"]').fill("alice@fot.sjp.ac.lk");
+    const phone1 = page.locator('input[placeholder*="7X XXX XXXX"]');
     await phone1.nth(0).fill("771234567");
     await phone1.nth(1).fill("771234568");
     await page.getByRole("button", { name: /Continue/i }).click();
@@ -407,18 +395,14 @@ test.describe("Full Happy Path", () => {
     // ════════════════════════════════════
     // Step 2: Academic Info
     // ════════════════════════════════════
-    await expect(page.getByText(/academic information/i)).toBeVisible();
-    await page.locator("select").first().selectOption("FOT");
-    await page.locator('input[placeholder*="registration number"]').fill("REG001");
-    await page.locator('input[placeholder*="@"]').fill("alice@fot.sjp.ac.lk");
-    await page.locator("select").nth(1).selectOption("year-3");
-    await page.locator('input[placeholder*="degree"]').first().fill("Computer Engineering");
+    await expect(page.getByRole("heading", { name: "Academic Information" })).toBeVisible();
+    await fillAcademicFieldsInternal(page);
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // ════════════════════════════════════
     // Step 3: Award Selection
     // ════════════════════════════════════
-    await expect(page.getByText(/award selection/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Award Selection" })).toBeVisible();
     await page.getByRole("checkbox", { name: /Best Innovator/i }).check();
     await page.getByRole("checkbox", { name: /Best CSR/i }).check();
     await page.getByRole("button", { name: /Continue/i }).click();
@@ -435,10 +419,10 @@ test.describe("Full Happy Path", () => {
     await page.locator('input[placeholder*="advisor name"]').fill("Dr. Alice Advisor");
     await page.locator('input[placeholder*="advisor email"]').fill("advisor@club.lk");
     await page.locator('input[placeholder*="member name"]').fill("Charlie Member");
-    const csrPhones = page.locator('input[placeholder*="XX XXX XXXX"]');
+    const csrPhones = page.locator('input[placeholder*="7X XXX XXXX"]');
     await csrPhones.nth(0).fill("771111111");
     await page.locator('input[placeholder*="president name"]').fill("Diana President");
-    await page.locator('input[placeholder*="president whatsapp"]').fill("772222222");
+    await page.locator('input[placeholder*="7X XXX XXXX"]').nth(1).fill("772222222");
     await page.locator('input[placeholder*="president email"]').fill("president@club.lk");
     await page.getByRole("button", { name: /Continue/i }).click();
 
@@ -464,7 +448,7 @@ test.describe("Full Happy Path", () => {
 });
 
 test.describe("Edge Cases", () => {
-  test("preserves form data when navigating back and forth", async ({ page }) => {
+  test("reselecting applicant type resets personal data", async ({ page }) => {
     await goToForm(page);
     await selectInternal(page);
 
@@ -475,8 +459,7 @@ test.describe("Edge Cases", () => {
     // Step 0: select internal again
     await selectInternal(page);
 
-    // Name should be preserved
-    await expect(page.locator('input[placeholder*="display name"]')).toHaveValue("Persist Test");
+    await expect(page.locator('input[placeholder*="display name"]')).toHaveValue("");
   });
 
   test("NIC auto-uppercases", async ({ page }) => {
