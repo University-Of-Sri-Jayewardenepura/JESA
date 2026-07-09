@@ -44,15 +44,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const auth = getAuthClient();
     const unsubscribe = onIdTokenChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-
       if (currentUser) {
         const token = await currentUser.getIdToken();
         setSessionCookie(token);
       } else {
         clearSessionCookie();
       }
+
+      // Important: update React state AFTER the cookie is saved
+      // so child components don't fetch before the cookie is ready.
+      setUser(currentUser);
+      setLoading(false);
     });
 
     return () => unsubscribe();
