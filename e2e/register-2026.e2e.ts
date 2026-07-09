@@ -2,7 +2,7 @@ import { test, expect, Page } from "@playwright/test";
 
 // Helper to generate unique identifiers to prevent test collisions in parallel execution
 const generateUniqueNIC = () => `${Math.floor(100000000 + Math.random() * 900000000)}V`;
-const generateUniquePhone = () => `77${Math.floor(1000000 + Math.random() * 9000000)}`;
+const generateUniquePhone = () => `+9477${Math.floor(1000000 + Math.random() * 9000000)}`;
 const generateUniqueEmail = (prefix: string) => `${prefix}${Date.now()}@example.com`;
 const generateUniqueUSJEmail = () => `${Math.floor(100000 + Math.random() * 900000)}@fot.sjp.ac.lk`;
 
