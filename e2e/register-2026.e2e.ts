@@ -2,7 +2,7 @@ import { test, expect, Page } from "@playwright/test";
 
 // Helper to generate unique identifiers to prevent test collisions in parallel execution
 const generateUniqueNIC = () => `${Math.floor(100000000 + Math.random() * 900000000)}V`;
-const generateUniquePhone = () => `+9477${Math.floor(1000000 + Math.random() * 9000000)}`;
+const generateUniquePhone = () => `77${Math.floor(1000000 + Math.random() * 9000000)}`;
 const generateUniqueEmail = (prefix: string) => `${prefix}${Date.now()}@example.com`;
 const generateUniqueUSJEmail = () => `${Math.floor(100000 + Math.random() * 900000)}@fot.sjp.ac.lk`;
 
@@ -75,7 +75,7 @@ test.describe("JESA 2026 Registration Form", () => {
 
     // Wait for success page navigation
     await page.waitForURL("**/register/success");
-    await expect(page.locator("text=Registration Successful")).toBeVisible();
+    await expect(page.locator("text=Registration Successful").first()).toBeVisible();
   });
 
   test("Scenario 2: Complete External Student Submission", async ({ page }) => {
@@ -120,11 +120,13 @@ test.describe("JESA 2026 Registration Form", () => {
     // Submit using bypass
     await bypassSwipeAndSubmit(page);
     await page.waitForURL("**/register/success");
+    await expect(page.locator("h1:has-text('Registration Successful')")).toBeVisible();
   });
 
   test("Scenario 3: Validation Error on Duplicate Submission", async ({ page }) => {
+    // Generate unique data for this test run so it doesn't collide with previous test runs
     const sharedNIC = generateUniqueNIC();
-    const sharedWhatsapp = "770000000";
+    const sharedWhatsapp = generateUniquePhone();
     const sharedEmail = generateUniqueUSJEmail();
 
     // --- Submitting FIRST application ---
@@ -159,6 +161,7 @@ test.describe("JESA 2026 Registration Form", () => {
     
     await bypassSwipeAndSubmit(page);
     await page.waitForURL("**/register/success");
+    await expect(page.locator("h1:has-text('Registration Successful')")).toBeVisible();
 
     // --- Submitting SECOND application with SAME Data ---
     await page.goto("/register/2026");
