@@ -46,7 +46,7 @@ export async function createNewApplication(
       if (emailSnap.exists()) duplicateFields.push("University Email");
 
       if (duplicateFields.length > 0) {
-        throw new Error("DUPLICATE_FOUND");
+        throw new Error(`DUPLICATE_FOUND:${duplicateFields.join(",")}`);
       }
 
       transaction.set(appRef, {
@@ -65,9 +65,11 @@ export async function createNewApplication(
 
     return appId;
   } catch (error) {
-    if (error instanceof Error && error.message === "DUPLICATE_FOUND") {
+    if (error instanceof Error && error.message.startsWith("DUPLICATE_FOUND")) {
+      const fields = error.message.split(":")[1]?.split(",") ?? [];
+      const fieldList = fields.join(" and ");
       throw new Error(
-        "You already submitted an application. Duplicate fields detected."
+        `An application with the same ${fieldList} already exists. If you believe this is a mistake, please contact us.`
       );
     }
 
