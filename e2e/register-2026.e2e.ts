@@ -95,8 +95,8 @@ test.describe("JESA 2026 Registration Form", () => {
     // Step 2: Academic Info (External forms are text inputs mostly)
     await page.getByPlaceholder("Enter your faculty name").fill("Science");
     await page.getByRole("combobox").first().selectOption("University of Colombo");
-    await page.getByPlaceholder("Enter your registration number").fill("2021/SC/123");
-    await page.getByPlaceholder("Enter your university email").fill("sci123@cmb.ac.lk");
+    await page.getByPlaceholder("Enter your registration number").fill(`2021/SC/${Math.floor(100 + Math.random() * 900)}`);
+    await page.getByPlaceholder("Enter your university email").fill(`sci${Date.now()}@cmb.ac.lk`);
     await page.getByRole("combobox").nth(1).selectOption("year-4");
     await page.getByPlaceholder("Enter your degree name").fill("BSc Computer Science");
     await page.getByRole("button", { name: /Continue/i }).click();
