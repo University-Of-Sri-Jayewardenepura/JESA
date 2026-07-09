@@ -1296,6 +1296,7 @@ const SwipeToSubmit: React.FC<{
 
   const canDrag = !disabled && status === 'idle';
   const isComplete = status === 'loading' || status === 'success';
+  const textOpacity = Math.max(0, 1 - progress / 60);
 
   return (
     <div
@@ -1313,32 +1314,44 @@ const SwipeToSubmit: React.FC<{
       style={{ touchAction: 'none' }}
     >
       <div
-        className="absolute inset-y-0 left-0 right-0 origin-left bg-gradient-to-r from-amber-300/50 via-amber-400/40 to-amber-300/30 will-change-transform"
+        className="absolute inset-y-0 left-0 right-0 origin-left bg-gradient-to-r from-amber-400/50 via-amber-400/30 to-transparent will-change-transform"
         style={{
           transform: `scaleX(${progress / 100})`,
           transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       />
 
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+      <div
+        className="absolute inset-y-0 rounded-full will-change-transform"
+        style={{
+          left: `calc(0.5rem + ${progress} * (100% - 4rem) / 100)`,
+          width: '4rem',
+          background: 'radial-gradient(circle, rgba(251,191,36,0.25) 0%, transparent 70%)',
+          transform: 'translateX(-50%)',
+          opacity: isDragging ? 0.8 : 0,
+          transition: isDragging ? 'none' : 'opacity 300ms ease',
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+        style={{ opacity: textOpacity }}
+      >
         <span className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-          status === 'success' ? 'text-emerald-400' : status === 'loading' ? 'text-amber-300' : disabled ? 'text-slate-500' : 'text-slate-400'
+          disabled ? 'text-slate-500' : 'text-slate-400'
         }`}>
-          {status === 'success'
-            ? 'Submitted'
-            : status === 'loading'
-              ? 'Submitting...'
-              : disabled
-                ? 'Accept all declarations'
-                : 'Swipe to submit'}
+          {disabled
+            ? 'Accept all declarations'
+            : 'Swipe to submit'}
         </span>
       </div>
 
       <div
         ref={ballRef}
-        className={`absolute top-1/2 left-2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-300 ${
+        className={`absolute top-1/2 left-2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-200 ${
           canDrag
-            ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_24px_rgba(251,191,36,0.4)] hover:shadow-[0_0_32px_rgba(251,191,36,0.55)]'
+            ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_20px_rgba(251,191,36,0.35)]'
             : status === 'loading'
               ? 'bg-amber-400 shadow-[0_0_24px_rgba(251,191,36,0.4)]'
               : status === 'success'
@@ -1346,8 +1359,10 @@ const SwipeToSubmit: React.FC<{
                 : 'bg-slate-600 cursor-not-allowed'
         }`}
         style={{
-          transform: `translateY(-50%) translateX(calc(${isComplete ? 1 : progress / 100} * (100% - 4rem)))`,
-          transition: isDragging ? 'none' : 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: `translateY(-50%) translateX(calc(${isComplete ? 1 : progress / 100} * (100% - 4rem))) scale(${isDragging ? 1.12 : 1})`,
+          transition: isDragging
+            ? 'none'
+            : 'transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
         onPointerDown={handlePointerDown}
       >
@@ -1356,7 +1371,10 @@ const SwipeToSubmit: React.FC<{
         ) : status === 'loading' ? (
           <Loader2 className="w-5 h-5 text-slate-950 animate-spin" />
         ) : (
-          <ArrowRight className="w-5 h-5 text-slate-950" />
+          <ArrowRight
+            className={`w-5 h-5 text-slate-950 ${canDrag ? 'animate-pulse' : ''}`}
+            style={{ animationDuration: '1.8s' }}
+          />
         )}
       </div>
     </div>
