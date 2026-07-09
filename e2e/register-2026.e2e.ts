@@ -9,7 +9,7 @@ const generateUniqueUSJEmail = () => `${Math.floor(100000 + Math.random() * 9000
 // Helper to bypass the swipe component and force submit
 const bypassSwipeAndSubmit = async (page: Page) => {
   // Find the hidden bypass button and force click it
-  await page.getByTestId("e2e-submit-bypass").click({ force: true });
+  await page.getByTestId("e2e-submit-bypass").evaluate((b: HTMLElement) => b.click());
 };
 
 test.describe("JESA 2026 Registration Form", () => {
@@ -112,7 +112,7 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Step 5: Declaration
-    const checkboxes = page.locator('input[type="checkbox"]');
+    const checkboxes = page.locator('button[role="checkbox"]');
     for (let i = 0; i < await checkboxes.count(); i++) {
       await checkboxes.nth(i).click({ force: true });
     }
@@ -152,7 +152,7 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.locator("label").filter({ hasText: "Best Team Player" }).click();
     await page.getByRole("button", { name: /Continue/i }).click(); // Skip to declaration
 
-    const checkboxes1 = page.locator('input[type="checkbox"]');
+    const checkboxes1 = page.locator('button[role="checkbox"]');
     for (let i = 0; i < await checkboxes1.count(); i++) {
       await checkboxes1.nth(i).click({ force: true });
     }
@@ -183,7 +183,7 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.locator("label").filter({ hasText: "Best Team Player" }).click();
     await page.getByRole("button", { name: /Continue/i }).click(); 
 
-    const checkboxes2 = page.locator('input[type="checkbox"]');
+    const checkboxes2 = page.locator('button[role="checkbox"]');
     for (let i = 0; i < await checkboxes2.count(); i++) {
       await checkboxes2.nth(i).click({ force: true });
     }
@@ -218,17 +218,13 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.locator("label").filter({ hasText: "Best Leader" }).click();
     await page.locator("label").filter({ hasText: "Best Team Player" }).click();
 
-    // Try to select a 3rd main award -> Should be disabled or ignored
-    const thirdAward = page.locator("label").filter({ hasText: "Best Communicator" });
-    await thirdAward.click();
-    
-    // We expect it NOT to be checked
-    const thirdAwardCheckbox = page.locator('input[id="best-communicator"]');
-    await expect(thirdAwardCheckbox).not.toBeChecked();
+    // Try to select a 3rd main award -> Should be disabled
+    const thirdAwardCheckbox = page.locator('button[id="best-communicator"]');
+    await expect(thirdAwardCheckbox).toBeDisabled();
 
     // But BESA Inter University can still be selected
     await page.locator("label").filter({ hasText: "BESA – Inter University Award" }).click();
-    const besaCheckbox = page.locator('input[id="besa-inter-university"]');
+    const besaCheckbox = page.locator('button[id="besa-inter-university"]');
     await expect(besaCheckbox).toBeChecked();
   });
 });
