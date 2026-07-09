@@ -28,6 +28,8 @@ interface AdminDashboardProps {
   isSuperAdmin: boolean;
 }
 
+type AdminTab = "overview" | "list" | "iam";
+
 const INITIAL_FILTERS: DashboardFilters = {
   search: "",
   type: "all",
@@ -58,6 +60,7 @@ export default function AdminDashboard({
   const [deleting, setDeleting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkLoading, setBulkLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<AdminTab>("overview");
 
   const fetchApplications = useCallback(async () => {
     setLoading(true);
@@ -382,52 +385,97 @@ export default function AdminDashboard({
             </div>
           )}
 
-          <StatsCards applications={applications} />
-
-          <AwardsBreakdown applications={applications} />
-
-          <Filters
-            filters={filters}
-            onChange={setFilters}
-            applications={applications}
-            onExportExcel={exportExcel}
-            onExportJson={exportJson}
-          />
-
-          <BulkActions
-            selectedCount={selectedIds.length}
-            onStatusChange={handleBulkStatusChange}
-            onDelete={handleBulkDelete}
-            loading={bulkLoading}
-          />
-
-          <div className="hidden lg:block">
-            <ApplicationsTable
-              applications={filteredApplications}
-              loading={loading}
-              selectedIds={selectedIds}
-              onSelect={toggleSelection}
-              onSelectAll={selectAll}
-              onView={setSelected}
-              onDelete={setDeleteTarget}
-              onStatusChange={handleStatusChange}
-            />
+          <div className="flex flex-wrap items-center gap-2 mb-8 border-b border-slate-700/50 pb-6">
+            <Button
+              variant={activeTab === "overview" ? "default" : "outline"}
+              onClick={() => setActiveTab("overview")}
+              className={`rounded-[8px] ${
+                activeTab === "overview"
+                  ? "bg-slate-100 text-slate-900 hover:bg-white"
+                  : "border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+              }`}
+            >
+              Overview
+            </Button>
+            <Button
+              variant={activeTab === "list" ? "default" : "outline"}
+              onClick={() => setActiveTab("list")}
+              className={`rounded-[8px] ${
+                activeTab === "list"
+                  ? "bg-slate-100 text-slate-900 hover:bg-white"
+                  : "border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+              }`}
+            >
+              Applications List
+            </Button>
+            {isSuperAdmin && (
+              <Button
+                variant={activeTab === "iam" ? "default" : "outline"}
+                onClick={() => setActiveTab("iam")}
+                className={`rounded-[8px] ${
+                  activeTab === "iam"
+                    ? "bg-slate-100 text-slate-900 hover:bg-white"
+                    : "border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-slate-100"
+                }`}
+              >
+                IAM & Requests
+              </Button>
+            )}
           </div>
 
-          <div className="lg:hidden">
-            <MobileCards
-              applications={filteredApplications}
-              loading={loading}
-              selectedIds={selectedIds}
-              onSelect={toggleSelection}
-              onView={setSelected}
-              onDelete={setDeleteTarget}
-              onStatusChange={handleStatusChange}
-            />
-          </div>
+          {activeTab === "overview" && (
+            <>
+              <StatsCards applications={applications} />
+              <AwardsBreakdown applications={applications} />
+            </>
+          )}
+
+          {activeTab === "list" && (
+            <>
+              <Filters
+                filters={filters}
+                onChange={setFilters}
+                applications={applications}
+                onExportExcel={exportExcel}
+                onExportJson={exportJson}
+              />
+
+              <BulkActions
+                selectedCount={selectedIds.length}
+                onStatusChange={handleBulkStatusChange}
+                onDelete={handleBulkDelete}
+                loading={bulkLoading}
+              />
+
+              <div className="hidden lg:block">
+                <ApplicationsTable
+                  applications={filteredApplications}
+                  loading={loading}
+                  selectedIds={selectedIds}
+                  onSelect={toggleSelection}
+                  onSelectAll={selectAll}
+                  onView={setSelected}
+                  onDelete={setDeleteTarget}
+                  onStatusChange={handleStatusChange}
+                />
+              </div>
+
+              <div className="lg:hidden">
+                <MobileCards
+                  applications={filteredApplications}
+                  loading={loading}
+                  selectedIds={selectedIds}
+                  onSelect={toggleSelection}
+                  onView={setSelected}
+                  onDelete={setDeleteTarget}
+                  onStatusChange={handleStatusChange}
+                />
+              </div>
+            </>
+          )}
         </div>
 
-        {isSuperAdmin && (
+        {activeTab === "iam" && isSuperAdmin && (
           <div className="mt-8">
             <AdminRequests userEmail={userEmail} />
           </div>
