@@ -8,6 +8,20 @@ import {
   SRI_LANKA_PHONE_REGEX,
   SRI_LANKA_NIC_REGEX,
 } from "./schemas/applicationSchema";
+import {
+  FACULTY_OTHER_DEGREE,
+  buildFacultyEmail,
+  buildFacultyRegistrationNumber,
+  extractFacultyEmailLocalPart,
+  extractFacultyRegistrationLocalPart,
+  getFacultyConfig,
+  getFacultyDegreeOptions,
+  getFacultyOptions,
+  normalizeFacultyEmailLocalPart,
+  validateFacultyDegree,
+  validateFacultyEmail,
+  validateFacultyRegistrationNumber,
+} from "../../../../constants/faculty-information";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -117,17 +131,7 @@ const BESA_AWARDS: Record<string, string> = {
   "besa-fds": "BESA – FDS (Faculty of Dental Sciences)",
 };
 
-const FACULTIES = [
-  "FHSS",
-  "FAS",
-  "FMSC",
-  "FMS",
-  "FOT",
-  "FOE",
-  "FAHS",
-  "FUAB",
-  "FDS",
-];
+const FACULTIES = getFacultyOptions();
 
 const BESA_FACULTY_MAP: Record<string, AwardType> = {
   FHSS: "besa-fhss",
@@ -377,6 +381,62 @@ const PhoneInput: React.FC<{
   );
 };
 
+const StaticSegment: React.FC<{ children: React.ReactNode; side: "left" | "right" }> = ({
+  children,
+  side,
+}) => (
+  <span
+    className={cn(
+      "h-10 flex items-center bg-slate-900/80 px-3 text-sm text-slate-300 select-none shrink-0",
+      side === "left"
+        ? "border-r border-slate-700/60"
+        : "border-l border-slate-700/60"
+    )}
+  >
+    {children}
+  </span>
+);
+
+const SplitStaticInput: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  prefix?: string;
+  suffix?: string;
+  hasError?: boolean;
+  disabled?: boolean;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+}> = ({
+  value,
+  onChange,
+  placeholder,
+  prefix,
+  suffix,
+  hasError,
+  disabled,
+  inputMode,
+}) => (
+  <div
+    className={cn(
+      "flex items-center rounded-[8px] border bg-slate-900/80 overflow-hidden transition-[color,box-shadow] focus-within:border-blue-500 focus-within:ring-[3px] focus-within:ring-blue-500/50",
+      hasError ? "border-destructive" : "border-slate-700/60",
+      disabled && "opacity-50"
+    )}
+  >
+    {prefix && <StaticSegment side="left">{prefix}</StaticSegment>}
+    <input
+      type="text"
+      inputMode={inputMode}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      placeholder={placeholder}
+      disabled={disabled}
+      className="h-10 min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 outline-none disabled:cursor-not-allowed"
+    />
+    {suffix && <StaticSegment side="right">{suffix}</StaticSegment>}
+  </div>
+);
+
 const Step0Landing: React.FC = () => {
   const { formData, updateApplicantType, setCurrentStep } = useFormContext();
   const { applicantType } = formData;
@@ -573,21 +633,75 @@ const Step1PersonalInfo: React.FC = () => {
 const Step2AcademicInfo: React.FC = () => {
   const { formData, updateAcademicInfo, updateAwardSelection, setCurrentStep } = useFormContext();
   const { applicantType, academicInfo, awardSelection } = formData;
+  const isInternal = applicantType === "internal";
+  const selectedFacultyConfig = getFacultyConfig(academicInfo.faculty);
   const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
   const academicYearOptions = ACADEMIC_YEARS;
+  const degreeOptions = getFacultyDegreeOptions(academicInfo.faculty);
+  const registrationLocalPart = selectedFacultyConfig
+    ? extractFacultyRegistrationLocalPart(
+        selectedFacultyConfig,
+        academicInfo.universityRegistrationNumber
+      )
+    : "";
+  const emailLocalPart = selectedFacultyConfig
+    ? extractFacultyEmailLocalPart(selectedFacultyConfig, academicInfo.universityEmail)
+    : "";
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   React.useEffect(() => {
-    if (applicantType === "internal" && academicInfo.university !== "University of Sri Jayewardenepura") {
+    if (isInternal && academicInfo.university !== "University of Sri Jayewardenepura") {
       updateAcademicInfo({ university: "University of Sri Jayewardenepura" });
     }
-  }, [applicantType]);
+    // NOTE: academicInfo.university intentionally omitted from deps to avoid
+    // an infinite loop: the update itself changes the value, retriggering this
+    // effect. The guard condition above prevents unnecessary calls.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInternal, updateAcademicInfo]);
 
   React.useEffect(() => {
     if (isRecentGraduate && (awardSelection.selectedAwards?.length ?? 0) > 0) {
       updateAwardSelection({ selectedAwards: [], hasConditionalAwards: false });
     }
-  }, [academicInfo.academicYear]);
+  }, [academicInfo.academicYear, isRecentGraduate, awardSelection.selectedAwards, updateAwardSelection]);
+
+  const handleInternalFacultyChange = (faculty: string) => {
+    updateAcademicInfo({
+      faculty,
+      universityRegistrationNumber: "",
+      universityEmail: "",
+      degree: "",
+      otherDegree: "",
+    });
+    updateAwardSelection({ selectedAwards: [], hasConditionalAwards: false });
+    setErrors((previous) => ({
+      ...previous,
+      faculty: "",
+      universityRegistrationNumber: "",
+      universityEmail: "",
+      degree: "",
+      otherDegree: "",
+    }));
+  };
+
+  const handleRegistrationLocalChange = (value: string) => {
+    if (!selectedFacultyConfig) return;
+    const localPart = value.replace(/\D/g, "").slice(0, 6);
+    updateAcademicInfo({
+      universityRegistrationNumber: buildFacultyRegistrationNumber(
+        selectedFacultyConfig,
+        localPart
+      ),
+    });
+  };
+
+  const handleEmailLocalChange = (value: string) => {
+    if (!selectedFacultyConfig) return;
+    const localPart = normalizeFacultyEmailLocalPart(selectedFacultyConfig, value);
+    updateAcademicInfo({
+      universityEmail: buildFacultyEmail(selectedFacultyConfig, localPart),
+    });
+  };
 
   const validate = () => {
     const nextErrors: Record<string, string> = {};
@@ -606,10 +720,21 @@ const Step2AcademicInfo: React.FC = () => {
 
     if (!universityRegistrationNumber?.trim()) {
       nextErrors.universityRegistrationNumber = "Registration number is required";
+    } else if (
+      isInternal &&
+      !validateFacultyRegistrationNumber(faculty, universityRegistrationNumber)
+    ) {
+      nextErrors.universityRegistrationNumber =
+        selectedFacultyConfig?.registration.description ??
+        "Enter a valid registration number";
     }
 
     if (!universityEmail?.trim()) {
       nextErrors.universityEmail = "University email is required";
+    } else if (isInternal && !validateFacultyEmail(faculty, universityEmail)) {
+      nextErrors.universityEmail = selectedFacultyConfig
+        ? `Email must use ${selectedFacultyConfig.email.suffix}`
+        : "Select a valid faculty before entering email";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(universityEmail)) {
       nextErrors.universityEmail = "Enter a valid email address";
     }
@@ -624,6 +749,19 @@ const Step2AcademicInfo: React.FC = () => {
 
     if (!degree?.trim()) {
       nextErrors.degree = "Degree is required";
+    } else if (isInternal && !validateFacultyDegree(faculty, degree, academicInfo.otherDegree)) {
+      nextErrors.degree =
+        degree === FACULTY_OTHER_DEGREE
+          ? "Enter your other degree"
+          : "Select a degree offered by the selected faculty";
+    }
+
+    if (
+      isInternal &&
+      degree === FACULTY_OTHER_DEGREE &&
+      !academicInfo.otherDegree?.trim()
+    ) {
+      nextErrors.otherDegree = "Other degree is required";
     }
 
     if (isRecentGraduate) {
@@ -654,6 +792,25 @@ const Step2AcademicInfo: React.FC = () => {
       )}
 
       <Card className="space-y-5">
+        <Field label="Faculty" required error={errors.faculty}>
+          {applicantType === "external" ? (
+            <Input
+              type="text"
+              placeholder="Enter your faculty name"
+              value={academicInfo.faculty || ""}
+              onChange={(e) => updateAcademicInfo({ faculty: e.target.value })}
+              className={errors.faculty ? "border-destructive" : ""}
+            />
+          ) : (
+            <Select
+              value={academicInfo.faculty || ""}
+              onChange={handleInternalFacultyChange}
+              options={FACULTIES}
+              placeholder="Select faculty"
+            />
+          )}
+        </Field>
+
         <Field label="University" required error={errors.university}>
           {applicantType === "external" ? (
             <Select
@@ -685,29 +842,53 @@ const Step2AcademicInfo: React.FC = () => {
         </Field>
 
         <Field label="University Registration Number" required error={errors.universityRegistrationNumber}>
-          <Input
-            type="text"
-            placeholder="Enter your registration number"
-            value={academicInfo.universityRegistrationNumber || ""}
-            onChange={(e) =>
-              updateAcademicInfo({
-                universityRegistrationNumber: e.target.value,
-              })
-            }
-            className={errors.universityRegistrationNumber ? "border-destructive" : ""}
-          />
+          {isInternal ? (
+            <SplitStaticInput
+              prefix={selectedFacultyConfig?.registration.prefix}
+              value={registrationLocalPart}
+              onChange={handleRegistrationLocalChange}
+              placeholder={selectedFacultyConfig?.registration.placeholder ?? "Select faculty first"}
+              hasError={Boolean(errors.universityRegistrationNumber)}
+              disabled={!selectedFacultyConfig}
+              inputMode="numeric"
+            />
+          ) : (
+            <Input
+              type="text"
+              placeholder="Enter your registration number"
+              value={academicInfo.universityRegistrationNumber || ""}
+              onChange={(e) =>
+                updateAcademicInfo({
+                  universityRegistrationNumber: e.target.value,
+                })
+              }
+              className={errors.universityRegistrationNumber ? "border-destructive" : ""}
+            />
+          )}
         </Field>
 
         <Field label="University Email" required error={errors.universityEmail}>
-          <Input
-            type="email"
-            placeholder="Enter your university email"
-            value={academicInfo.universityEmail || ""}
-            onChange={(e) =>
-              updateAcademicInfo({ universityEmail: e.target.value })
-            }
-            className={errors.universityEmail ? "border-destructive" : ""}
-          />
+          {isInternal ? (
+            <SplitStaticInput
+              suffix={selectedFacultyConfig?.email.suffix}
+              value={emailLocalPart}
+              onChange={handleEmailLocalChange}
+              placeholder="username"
+              hasError={Boolean(errors.universityEmail)}
+              disabled={!selectedFacultyConfig}
+              inputMode="email"
+            />
+          ) : (
+            <Input
+              type="email"
+              placeholder="Enter your university email"
+              value={academicInfo.universityEmail || ""}
+              onChange={(e) =>
+                updateAcademicInfo({ universityEmail: e.target.value })
+              }
+              className={errors.universityEmail ? "border-destructive" : ""}
+            />
+          )}
         </Field>
 
         <Field label="Academic Year" required error={errors.academicYear}>
@@ -719,45 +900,54 @@ const Step2AcademicInfo: React.FC = () => {
           />
         </Field>
 
-        <Field label="Faculty" required error={errors.faculty}>
-          {applicantType === "external" ? (
-            <Input
-              type="text"
-              placeholder="Enter your faculty name"
-              value={academicInfo.faculty || ""}
-              onChange={(e) => updateAcademicInfo({ faculty: e.target.value })}
-              className={errors.faculty ? "border-destructive" : ""}
+        <Field label="Degree" required error={errors.degree}>
+          {isInternal ? (
+            <Select
+              value={academicInfo.degree || ""}
+              onChange={(degree) =>
+                updateAcademicInfo({
+                  degree,
+                  otherDegree:
+                    degree === FACULTY_OTHER_DEGREE
+                      ? academicInfo.otherDegree
+                      : "",
+                })
+              }
+              options={degreeOptions}
+              placeholder={
+                selectedFacultyConfig
+                  ? "Select degree"
+                  : "Select faculty first"
+              }
             />
           ) : (
-            <Select
-              value={academicInfo.faculty || ""}
-              onChange={(value) => updateAcademicInfo({ faculty: value })}
-              options={FACULTIES.map((f) => ({ value: f, label: f }))}
-              placeholder="Select faculty"
+            <Input
+              type="text"
+              placeholder="Enter your degree name"
+              value={academicInfo.degree || ""}
+              onChange={(e) => updateAcademicInfo({ degree: e.target.value })}
+              className={errors.degree ? "border-destructive" : ""}
             />
           )}
         </Field>
 
-        <Field label="Degree" required error={errors.degree}>
-          <Input
-            type="text"
-            placeholder="Enter your degree name"
-            value={academicInfo.degree || ""}
-            onChange={(e) => updateAcademicInfo({ degree: e.target.value })}
-            className={errors.degree ? "border-destructive" : ""}
-          />
-        </Field>
-
-        <Field label="Other Degree">
-          <Input
-            type="text"
-            placeholder="Enter any other degree if applicable"
-            value={academicInfo.otherDegree || ""}
-            onChange={(e) =>
-              updateAcademicInfo({ otherDegree: e.target.value })
-            }
-          />
-        </Field>
+        {(!isInternal || academicInfo.degree === FACULTY_OTHER_DEGREE) && (
+          <Field
+            label="Other Degree"
+            required={isInternal && academicInfo.degree === FACULTY_OTHER_DEGREE}
+            error={errors.otherDegree}
+          >
+            <Input
+              type="text"
+              placeholder="Enter any other degree if applicable"
+              value={academicInfo.otherDegree || ""}
+              onChange={(e) =>
+                updateAcademicInfo({ otherDegree: e.target.value })
+              }
+              className={errors.otherDegree ? "border-destructive" : ""}
+            />
+          </Field>
+        )}
 
         {isRecentGraduate && (
           <Field label="Graduation Year" required error={errors.graduationYear}>
@@ -1526,6 +1716,17 @@ const Step5Declaration: React.FC = () => {
           onSubmit={handleSubmit}
           disabled={!isValid()}
         />
+        <button
+          type="button"
+          data-testid="e2e-submit-bypass"
+          onClick={handleSubmit}
+          disabled={!isValid()}
+          className="opacity-0 absolute w-0 h-0"
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          E2E Submit
+        </button>
         <div className="flex justify-center">
           <button
             type="button"
