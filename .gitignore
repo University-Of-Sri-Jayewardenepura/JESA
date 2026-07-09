@@ -48,3 +48,5 @@ backups/
 data/awards
 data/contacts
 
+test-results/
+playwright-debug.log
