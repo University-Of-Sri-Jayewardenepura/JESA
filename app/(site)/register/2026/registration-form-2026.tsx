@@ -1539,7 +1539,7 @@ const SwipeToSubmit: React.FC<{
 
       <div
         ref={ballRef}
-        className={`absolute top-1/2 left-2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-200 ${
+        className={`absolute top-1/2 w-12 h-12 rounded-full flex items-center justify-center z-20 will-change-transform transition-shadow duration-200 ${
           canDrag
             ? 'cursor-grab active:cursor-grabbing bg-white shadow-[0_0_20px_rgba(251,191,36,0.35)]'
             : status === 'loading'
@@ -1549,10 +1549,11 @@ const SwipeToSubmit: React.FC<{
                 : 'bg-slate-600 cursor-not-allowed'
         }`}
         style={{
-          transform: `translateY(-50%) translateX(calc(${isComplete ? 1 : progress / 100} * (100% - 4rem))) scale(${isDragging ? 1.12 : 1})`,
+          left: `calc(0.5rem + ${isComplete ? 100 : progress} * (100% - 4rem) / 100)`,
+          transform: `translateY(-50%) scale(${isDragging ? 1.12 : 1})`,
           transition: isDragging
             ? 'none'
-            : 'transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+            : 'left 250ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
         onPointerDown={handlePointerDown}
       >
