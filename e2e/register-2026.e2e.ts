@@ -53,7 +53,7 @@ test.describe("JESA 2026 Registration Form", () => {
 
     // Step 3: Award Selection
     await expect(page.locator("h2").filter({ hasText: "Award Selection" })).toBeVisible();
-    await page.locator("label").filter({ hasText: "Best Innovator Award" }).click();
+    await page.locator("label").filter({ hasText: "Best Innovator" }).click();
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Step 4: Award Questions (Conditional for Innovator)
@@ -102,7 +102,7 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Step 3: Award Selection (External can only see limited awards)
-    await page.locator("label").filter({ hasText: "Best Innovator Award" }).click();
+    await page.locator("label").filter({ hasText: "Best Innovator" }).click();
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Step 4: Award Questions
@@ -149,7 +149,7 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Need to pick at least one award not conditional for faster path
-    await page.locator("label").filter({ hasText: "Best Team Player Award" }).click();
+    await page.locator("label").filter({ hasText: "Best Team Player" }).click();
     await page.getByRole("button", { name: /Continue/i }).click(); // Skip to declaration
 
     const checkboxes1 = page.locator('input[type="checkbox"]');
@@ -180,7 +180,7 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.getByRole("combobox").nth(2).selectOption("Bachelor of ICT (Hons)");
     await page.getByRole("button", { name: /Continue/i }).click();
 
-    await page.locator("label").filter({ hasText: "Best Team Player Award" }).click();
+    await page.locator("label").filter({ hasText: "Best Team Player" }).click();
     await page.getByRole("button", { name: /Continue/i }).click(); 
 
     const checkboxes2 = page.locator('input[type="checkbox"]');
@@ -215,11 +215,11 @@ test.describe("JESA 2026 Registration Form", () => {
     await page.getByRole("button", { name: /Continue/i }).click();
 
     // Select 2 main awards
-    await page.locator("label").filter({ hasText: "Best Leader Award" }).click();
-    await page.locator("label").filter({ hasText: "Best Team Player Award" }).click();
+    await page.locator("label").filter({ hasText: "Best Leader" }).click();
+    await page.locator("label").filter({ hasText: "Best Team Player" }).click();
 
     // Try to select a 3rd main award -> Should be disabled or ignored
-    const thirdAward = page.locator("label").filter({ hasText: "Best Communicator Award" });
+    const thirdAward = page.locator("label").filter({ hasText: "Best Communicator" });
     await thirdAward.click();
     
     // We expect it NOT to be checked
