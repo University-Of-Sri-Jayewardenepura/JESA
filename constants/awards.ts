@@ -863,4 +863,13 @@ export const awards = [
       "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the New Dental Sciences Faculty. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the New Dental Sciences Faculty will be awarded as the BESA Silver Medalists accordingly.",
     sponsors: [],
   },
+  {
+    id: "17",
+    uri: "",
+    name: "BESA - FOC",
+    image: "/images/awards/besa.png",
+    description:
+      "Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Faculty of Computing. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Faculty of Computing will be awarded as the BESA Silver Medalists accordingly.",
+    sponsors: [],
+  },
 ];

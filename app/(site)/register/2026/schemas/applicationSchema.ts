@@ -47,6 +47,7 @@ const AwardEnum = z.enum([
 	"besa-fahs",
 	"besa-fuab",
 	"besa-fds",
+	"besa-foc",
 ]);
 
 const BESA_AWARD_BY_FACULTY: Record<string, z.infer<typeof AwardEnum>> = {
@@ -56,7 +57,7 @@ const BESA_AWARD_BY_FACULTY: Record<string, z.infer<typeof AwardEnum>> = {
 	FHSS: "besa-fhss",
 	FMS: "besa-fms",
 	FMSC: "besa-fmsc",
-	FOC: "besa-fot", // FOC students compete under FOT BESA category
+	FOC: "besa-foc",
 	FOE: "besa-foe",
 	FOT: "besa-fot",
 	FUAB: "besa-fuab",

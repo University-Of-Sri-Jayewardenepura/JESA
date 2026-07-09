@@ -15,7 +15,8 @@ export type AwardType =
   | "besa-foe"
   | "besa-fahs"
   | "besa-fuab"
-  | "besa-fds";
+  | "besa-fds"
+  | "besa-foc";
 
 export type AwardCategory = "jesa" | "besa" | "all";
 
@@ -37,6 +38,7 @@ export const JESA_AWARDS: Record<AwardType, string> = {
   "besa-fahs": "BESA – FAHS",
   "besa-fuab": "BESA – FUAB",
   "besa-fds": "BESA – FDS",
+  "besa-foc": "BESA – FOC",
 };
 
 export const AWARD_CATEGORIES: Record<AwardType, AwardCategory> = {
@@ -57,6 +59,7 @@ export const AWARD_CATEGORIES: Record<AwardType, AwardCategory> = {
   "besa-fahs": "besa",
   "besa-fuab": "besa",
   "besa-fds": "besa",
+  "besa-foc": "besa",
 };
 
 export const JESA_AWARD_IDS: AwardType[] = [
@@ -80,6 +83,7 @@ export const BESA_AWARD_IDS: AwardType[] = [
   "besa-fahs",
   "besa-fuab",
   "besa-fds",
+  "besa-foc",
 ];
 
 export const ALL_AWARD_IDS: AwardType[] = [...JESA_AWARD_IDS, ...BESA_AWARD_IDS];
@@ -94,6 +98,7 @@ export const FACULTIES = [
   "FAHS",
   "FUAB",
   "FDS",
+  "FOC",
 ] as const;
 
 export const BESA_FACULTY_MAP: Record<string, AwardType> = {
@@ -106,6 +111,7 @@ export const BESA_FACULTY_MAP: Record<string, AwardType> = {
   FAHS: "besa-fahs",
   FUAB: "besa-fuab",
   FDS: "besa-fds",
+  FOC: "besa-foc",
 };
 
 export function getAwardLabel(id: AwardType | string): string {
