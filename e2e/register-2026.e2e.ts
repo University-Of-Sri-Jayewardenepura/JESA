@@ -75,7 +75,7 @@ test.describe("JESA 2026 Registration Form", () => {
 
     // Wait for success page navigation
     await page.waitForURL("**/register/success");
-    await expect(page.locator("text=Application Submitted Successfully")).toBeVisible();
+    await expect(page.locator("text=Registration Successful")).toBeVisible();
   });
 
   test("Scenario 2: Complete External Student Submission", async ({ page }) => {
