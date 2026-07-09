@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+
 import { Chrome, AlertCircle, Loader2, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getAuthClient } from "@/lib/firebase";
+
 import { useAuth } from "@/app/admin/providers/auth-provider";
 
 type AccessState = "checking" | "approved" | "pending" | "rejected" | "error";
@@ -17,24 +17,27 @@ export default function SignInForm() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const auth = getAuthClient();
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (!currentUser) {
-        setAccessState("checking");
-        return;
-      }
+    if (authLoading) return;
+    if (!user) {
+      setAccessState("checking");
+      return;
+    }
 
+    let isMounted = true;
+
+    async function checkAccess() {
       try {
         const res = await fetch("/api/admin/request-access", {
           method: "POST",
         });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to verify admin access");
-      }
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Failed to verify admin access");
+        }
 
-      const data = await res.json();
+        const data = await res.json();
+        if (!isMounted) return;
 
         if (data.status === "approved") {
           setAccessState("approved");
@@ -47,15 +50,20 @@ export default function SignInForm() {
           setAccessState("pending");
         }
       } catch (err) {
+        if (!isMounted) return;
         setAccessState("error");
         setErrorMessage(
           err instanceof Error ? err.message : "Access check failed"
         );
       }
-    });
+    }
 
-    return () => unsubscribe();
-  }, [router]);
+    checkAccess();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user, authLoading, router]);
 
   const handleSignIn = async () => {
     setAccessState("checking");

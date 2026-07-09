@@ -1,5 +1,5 @@
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, type Auth } from "firebase/auth";
+import { initializeAuth, browserLocalPersistence, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 
 function createFirebaseApp(): FirebaseApp {
@@ -38,7 +38,9 @@ export function getFirebaseApp(): FirebaseApp {
 
 export function getAuthClient(): Auth {
   if (!authInstance) {
-    authInstance = getAuth(getFirebaseApp());
+    authInstance = initializeAuth(getFirebaseApp(), {
+      persistence: browserLocalPersistence
+    });
   }
   return authInstance;
 }
