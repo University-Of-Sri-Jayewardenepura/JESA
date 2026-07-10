@@ -428,13 +428,13 @@ describe("USJ faculty academic validation", () => {
 		expect(result.success).toBe(true);
 	});
 
-	it("FOC student can select besa-fot BESA award (regression for missing FOC in BESA map)", () => {
+	it("FOC student can select besa-foc BESA award", () => {
 		const data = validData();
 		data.academicInfo.faculty = "FOC";
 		data.academicInfo.universityRegistrationNumber = "FC123456";
 		data.academicInfo.universityEmail = "student.123@foc.sjp.ac.lk";
 		data.academicInfo.degree = "B. Comp(hons) in Software Engineering";
-		data.awardSelection.selectedAwards = ["best-leader", "besa-fot"];
+		data.awardSelection.selectedAwards = ["best-leader", "besa-foc"];
 
 		const result = applicationBusinessSchema.safeParse(data);
 		expect(result.success).toBe(true);
