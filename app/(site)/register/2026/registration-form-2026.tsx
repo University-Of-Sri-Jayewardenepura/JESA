@@ -327,10 +327,7 @@ const Field: React.FC<{
 
 const normalizePhoneLocalPart = (local: string): string => {
   const digits = local.replace(/\D/g, "");
-  if (digits.length === 10 && digits.startsWith("0")) {
-    return digits.slice(1);
-  }
-  return digits;
+  return digits.slice(0, 9);
 };
 
 const PhoneInput: React.FC<{
@@ -342,11 +339,11 @@ const PhoneInput: React.FC<{
   const [localValue, setLocalValue] = React.useState("");
 
   React.useEffect(() => {
-    setLocalValue(value.replace(/^\+94/, "").replace(/\D/g, ""));
+    setLocalValue(value.replace(/^\+94/, "").replace(/\D/g, "").slice(0, 9));
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
     setLocalValue(digits);
     const normalized = normalizePhoneLocalPart(digits);
     onChange(`+94${normalized}`);

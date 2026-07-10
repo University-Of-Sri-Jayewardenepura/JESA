@@ -11,7 +11,7 @@ import {
    VALIDATION CONSTANTS
 ========================= */
 
-export const SRI_LANKA_PHONE_REGEX = /^\+94(?:[1-9]\d{8}|\d{7})$/;
+export const SRI_LANKA_PHONE_REGEX = /^\+94[1-9]\d{8}$/;
 
 export const SRI_LANKA_NIC_REGEX = /^[0-9]{9}[vVxX]$|^[0-9]{12}$/;
 

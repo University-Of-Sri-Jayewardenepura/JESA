@@ -42,7 +42,7 @@ export default function AwardsBreakdown({ applications }: AwardsBreakdownProps) 
         {jesaCounts.length === 0 ? (
           <p className="text-slate-500 text-sm">No JESA award applications yet.</p>
         ) : (
-          <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+          <div className="space-y-2">
             {jesaCounts.map(([id, count]) => (
               <div
                 key={id}
@@ -64,7 +64,7 @@ export default function AwardsBreakdown({ applications }: AwardsBreakdownProps) 
         {besaCounts.length === 0 ? (
           <p className="text-slate-500 text-sm">No BESA award applications yet.</p>
         ) : (
-          <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+          <div className="space-y-2">
             {besaCounts.map(([id, count]) => (
               <div
                 key={id}
