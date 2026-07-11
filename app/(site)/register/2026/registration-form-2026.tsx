@@ -337,13 +337,23 @@ const PhoneInput: React.FC<{
   hasError?: boolean;
 }> = ({ value, onChange, placeholder, hasError }) => {
   const [localValue, setLocalValue] = React.useState("");
+  const [showZeroWarning, setShowZeroWarning] = React.useState(false);
 
   React.useEffect(() => {
     setLocalValue(value.replace(/^\+94/, "").replace(/\D/g, "").slice(0, 9));
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+    let rawValue = e.target.value.replace(/\D/g, "");
+    
+    if (rawValue.startsWith("0")) {
+      setShowZeroWarning(true);
+      rawValue = rawValue.replace(/^0+/, "");
+    } else {
+      setShowZeroWarning(false);
+    }
+    
+    const digits = rawValue.slice(0, 9);
     setLocalValue(digits);
     const normalized = normalizePhoneLocalPart(digits);
     onChange(`+94${normalized}`);
@@ -356,24 +366,29 @@ const PhoneInput: React.FC<{
   };
 
   return (
-    <div
-      className={cn(
-        "flex items-center rounded-[8px] border bg-slate-900/80 overflow-hidden transition-[color,box-shadow] focus-within:border-blue-500 focus-within:ring-[3px] focus-within:ring-blue-500/50",
-        hasError ? "border-destructive" : "border-slate-700/60"
+    <div className="flex flex-col gap-1.5 w-full">
+      <div
+        className={cn(
+          "flex items-center rounded-[8px] border bg-slate-900/80 overflow-hidden transition-[color,box-shadow] focus-within:border-blue-500 focus-within:ring-[3px] focus-within:ring-blue-500/50",
+          (hasError || showZeroWarning) ? "border-destructive" : "border-slate-700/60"
+        )}
+      >
+        <span className="px-3 text-sm text-slate-400 border-r border-slate-700/60 bg-slate-900/80 h-10 flex items-center shrink-0 select-none">
+          +94
+        </span>
+        <input
+          type="tel"
+          inputMode="numeric"
+          value={localValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          placeholder={placeholder || "7X XXX XXXX"}
+          className="flex-1 bg-transparent px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 outline-none h-10"
+        />
+      </div>
+      {showZeroWarning && !hasError && (
+        <p className="text-destructive text-xs">Leading zero is automatically removed.</p>
       )}
-    >
-      <span className="px-3 text-sm text-slate-400 border-r border-slate-700/60 bg-slate-900/80 h-10 flex items-center shrink-0 select-none">
-        +94
-      </span>
-      <input
-        type="tel"
-        inputMode="numeric"
-        value={localValue}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder={placeholder || "7X XXX XXXX"}
-        className="flex-1 bg-transparent px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 outline-none h-10"
-      />
     </div>
   );
 };
