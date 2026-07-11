@@ -1595,7 +1595,8 @@ const Step5Declaration: React.FC = () => {
   const handleSubmit = async (): Promise<void> => {
     try {
       await createNewApplication(formData);
-      router.push('/register/success');
+      const awards = formData.awardSelection?.selectedAwards || [];
+      router.push(`/register/success?awards=${awards.join(',')}`);
     } catch (error) {
       setToast({ message: error instanceof Error ? error.message : 'Failed to submit application. Please try again.', type: 'error' });
       setTimeout(() => setToast(null), 8000);
