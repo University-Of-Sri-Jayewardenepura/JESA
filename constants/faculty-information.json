@@ -1,279 +1,277 @@
 {
-  "faculties": {
-    "FAHS": {
-      "name": "Faculty of Allied Health Sciences",
-      "duration": "All 4 Years",
-      "registration": {
-        "prefix": "HS",
-        "placeholder": "123456",
-        "regex": "^HS\\d{6}$",
-        "description": "Must start with HS followed by 6 digits"
-      },
-      "email": {
-        "prefix": "hs",
-        "suffix": "@fahs.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^hs\\d{6}@fahs\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "Bachelor of Pharmacy (Hons)",
-        "BSc (Hons) in Nursing",
-        "BSc (Hons) in Medical Laboratory Sciences",
-        "BSc (Hons) in Optometry"
-      ]
-    },
-    "FOC": {
-      "name": "Faculty of Computing",
-      "duration": "All 4 Years",
-      "registration": {
-        "prefix": "FC",
-        "placeholder": "123456",
-        "regex": "^FC\\d{6}$",
-        "description": "Must start with FC followed by 6 digits"
-      },
-      "email": {
-        "prefix": "fc",
-        "suffix": "@foc.sjp.ac.lk",
-        "placeholder": "115752",
-        "regex": "^fc\\d{6}@foc\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "B. Comp(hons) in Computer Science",
-        "B. Comp(hons) in Software Engineering",
-        "B. Comp(hons) in Information Systems"
-      ]
-    },
-    "FDS": {
-      "name": "Faculty of Dental Sciences",
-      "duration": "5 Years",
-      "registration": {
-        "prefix": "DE",
-        "placeholder": "123456",
-        "regex": "^DE\\d{6}$",
-        "description": "Must start with DE followed by 6 digits"
-      },
-      "email": {
-        "prefix": "",
-        "suffix": "@dental.sjp.ac.lk",
-        "placeholder": "username",
-        "regex": "^[a-zA-Z0-9._%+-]+@dental\\.sjp\\.ac\\.lk$",
-        "note": "Source document only lists the domain 'dental.sjp.ac.lk' without a username example; verify exact format with faculty."
-      },
-      "degrees": [
-        "Bachelor of Dental Surgery (5 Years)"
-      ]
-    },
-    "FOT": {
-      "name": "Faculty of Technology",
-      "duration": "All 4 Years",
-      "registration": {
-        "prefix": "TE",
-        "placeholder": "123456",
-        "regex": "^TE\\d{6}$",
-        "description": "Must start with TE followed by 6 digits"
-      },
-      "email": {
-        "prefix": "",
-        "suffix": "@fot.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^\\d{6}@fot\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "Bachelor of Biosystems Technology (Hons)",
-        "Bachelor of ICT (Hons)",
-        "Bachelor of Engineering Technology (Hons)"
-      ]
-    },
-    "FOE": {
-      "name": "Faculty of Engineering",
-      "duration": "All 4 Years",
-      "registration": {
-        "prefix": "EN",
-        "placeholder": "123456",
-        "regex": "^EN\\d{6}$",
-        "description": "Must start with EN followed by 6 digits"
-      },
-      "email": {
-        "prefix": "",
-        "suffix": "@foe.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^\\d{6}@foe\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "BSc (Hons) in Civil Engineering",
-        "BSc (Hons) in Computer Engineering",
-        "BSc (Hons) in Electrical and Electronic Engineering",
-        "BSc (Hons) in Mechanical Engineering"
-      ]
-    },
-    "FMSC": {
-      "name": "Faculty of Management Studies and Commerce",
-      "duration": "All 4 Years",
-      "registration": {
-        "prefix": "MC",
-        "placeholder": "123456",
-        "regex": "^MC\\d{6}$",
-        "description": "Must start with MC followed by 6 digits"
-      },
-      "email": {
-        "prefix": "",
-        "suffix": "@mgt.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^\\d{6}@mgt\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "BSc Marketing Management (Special)",
-        "BSc Accounting (Special)",
-        "BSc Estate Management & Valuation (Special)",
-        "BSc Human Resource Management (Special)",
-        "BSc Finance (Special)",
-        "BSc Operations & Technology Management (Special)",
-        "BSc Public Management (Special)",
-        "BSc Entrepreneurship (Special)",
-        "BSc Business Information Systems (Special)",
-        "BSc Business Economics (Special)",
-        "BSc Business Administration (Special)",
-        "B.Com (Special)"
-      ]
-    },
-    "FAS": {
-      "name": "Faculty of Applied Sciences",
-      "duration": "Varies (3-4 Years)",
-      "registration": {
-        "prefix": "AS",
-        "placeholder": "123456",
-        "regex": "^AS\\d{6}$",
-        "description": "Must start with AS followed by 6 digits"
-      },
-      "email": {
-        "prefix": "AS",
-        "suffix": "@sci.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^AS\\d{6}@sci\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "BSc in Physical Sciences (3 Years)",
-        "BSc in Biological Sciences (3 Years)",
-        "BSc in ICT (3 Years)",
-        "BSc (Hons) in Polymer Science and Technology (4 Years)",
-        "BSc (Hons) in Food Science and Technology (4 Years)",
-        "BSc (Hons) in Sports Science and Management (4 Years)",
-        "BSc (Hons) in Chemistry",
-        "BSc (Hons) in Plant Biotechnology",
-        "BSc (Hons) in Microbiology",
-        "BSc (Hons) in Plant Biology",
-        "BSc (Hons) in Zoology",
-        "BSc (Hons) in Aquatic Resource Management",
-        "BSc (Hons) in Environmental Management & Forestry",
-        "BSc (Hons) in Forestry and Environmental Science",
-        "BSc (Hons) in Mathematics",
-        "BSc (Hons) in Applied Mathematics",
-        "BSc (Hons) in Physics",
-        "BSc (Hons) in Statistics",
-        "BSc (Hons) in Computer Science",
-        "BSc (Hons) in Biology",
-        "BSc (Hons) in Industrial Chemistry",
-        "BSc (Hons) in Genetics and Molecular Biology",
-        "BSc (Hons) in Electronics and Embedded Systems",
-        "BSc (Hons) in Economics",
-        "BSc (Hons) in Management Science"
-      ],
-      "note": "Source document lists this faculty's degrees twice, with 'Environmental Management & Forestry' in one pass and 'Forestry and Environmental Science' in the other. Both are kept here as distinct entries — verify with the faculty whether they are the same programme or two separate ones."
-    },
-    "FMS": {
-      "name": "Faculty of Medical Sciences",
-      "duration": "Varies (3-5 Years)",
-      "registration": {
-        "prefix": "ME/",
-        "placeholder": "123456",
-        "regex": "^ME/\\d{6}$",
-        "description": "Must start with ME/ followed by 6 digits"
-      },
-      "email": {
-        "prefix": "",
-        "suffix": "@sjp.ac.lk",
-        "placeholder": "fms",
-        "regex": "^[a-zA-Z0-9._%+-]+@sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "Bachelor of Medicine, Bachelor of Surgery (MBBS) (5 Years)",
-        "BSc (Hons) in Human Biology (4 Years)",
-        "BSc in Human Biology (3 Years)"
-      ]
-    },
-    "FUAB": {
-      "name": "Faculty of Urban and Aquatic Bioresources",
-      "duration": "Varies (3-4 Years)",
-      "registration": {
-        "prefix": "BR",
-        "placeholder": "123456",
-        "regex": "^BR\\d{6}$",
-        "description": "Must start with BR followed by 6 digits"
-      },
-      "email": {
-        "prefix": "br",
-        "suffix": "@fuab.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^br\\d{6}@fuab\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "BSc in Aquatic Bioresources (3 Years)",
-        "BSc (Hons) in Aquatic Bioresources (4 Years)",
-        "BSc in Urban Bioresources (3 Years)",
-        "BSc (Hons) in Urban Bioresources (4 Years)"
-      ]
-    },
-    "FHSS": {
-      "name": "Faculty of Humanities and Social Sciences",
-      "duration": "All 4 Years except one",
-      "registration": {
-        "prefix": "AR",
-        "placeholder": "123456",
-        "regex": "^AR\\d{6}$",
-        "description": "Must start with AR followed by 6 digits"
-      },
-      "email": {
-        "prefix": "ar",
-        "suffix": "@fhss.sjp.ac.lk",
-        "placeholder": "123456",
-        "regex": "^ar\\d{6}@fhss\\.sjp\\.ac\\.lk$"
-      },
-      "degrees": [
-        "Bachelor of Arts (General degree) (3 Years)",
-        "BA (Hons) in Anthropology",
-        "BA (Hons) in Economics",
-        "BA (Hons) in Financial Economics",
-        "BA (Hons) in Criminology and Criminal Justice",
-        "BA (Hons) in English",
-        "BA (Hons) Teaching English as a Second Language",
-        "BA (Hons) in Business Statistics",
-        "BA (Hons) in Social Statistics",
-        "BA (Hons) in Information Technology",
-        "BA (Hons) in Sinhala",
-        "BA (Hons) in Mass Communication",
-        "BA (Hons) in Sanskrit",
-        "BA (Hons) in Hindi",
-        "BA (Hons) in Japanese",
-        "BA (Hons) in Chinese",
-        "BA (Hons) in French",
-        "BA (Hons) in Dance and Cultural Studies",
-        "BA (Hons) in History",
-        "BA (Hons) in Archaeology",
-        "BA (Hons) in Music",
-        "BA (Hons) in Creative Music Technology and Production",
-        "BA (Hons) in Pali",
-        "BA (Hons) in Buddhist Civilization",
-        "BA (Hons) in Buddhist Philosophy",
-        "BA (Hons) in Buddhist Heritage and Tourism",
-        "BA (Hons) in Geography",
-        "BA (Hons) in Geo-Spatial Technology",
-        "BA (Hons) in Philosophy",
-        "BA (Hons) in Psychology",
-        "BA (Hons) in Political Science",
-        "BSc (Hons) in Information Technology",
-        "BA (Hons) in Sociology",
-        "BA (Hons) in Social Work"
-      ]
-    }
-  }
+	"faculties": {
+		"FAHS": {
+			"name": "Faculty of Allied Health Sciences",
+			"duration": "All 4 Years",
+			"registration": {
+				"prefix": "HS",
+				"placeholder": "123456",
+				"regex": "^HS\\d{6}$",
+				"description": "Must start with HS followed by 6 digits"
+			},
+			"email": {
+				"prefix": "hs",
+				"suffix": "@fahs.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^hs\\d{6}@fahs\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"Bachelor of Pharmacy (Hons)",
+				"BSc (Hons) in Nursing",
+				"BSc (Hons) in Medical Laboratory Sciences",
+				"BSc (Hons) in Optometry"
+			]
+		},
+		"FOC": {
+			"name": "Faculty of Computing",
+			"duration": "All 4 Years",
+			"registration": {
+				"prefix": "FC",
+				"placeholder": "123456",
+				"regex": "^FC\\d{6}$",
+				"description": "Must start with FC followed by 6 digits"
+			},
+			"email": {
+				"prefix": "fc",
+				"suffix": "@foc.sjp.ac.lk",
+				"placeholder": "115752",
+				"regex": "^fc\\d{6}@foc\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"B. Comp(hons) in Computer Science",
+				"B. Comp(hons) in Software Engineering",
+				"B. Comp(hons) in Information Systems"
+			]
+		},
+		"FDS": {
+			"name": "Faculty of Dental Sciences",
+			"duration": "5 Years",
+			"registration": {
+				"prefix": "DE",
+				"placeholder": "123456",
+				"regex": "^DE\\d{6}$",
+				"description": "Must start with DE followed by 6 digits"
+			},
+			"email": {
+				"prefix": "",
+				"suffix": "@dental.sjp.ac.lk",
+				"placeholder": "username",
+				"regex": "^[a-zA-Z0-9._%+-]+@dental\\.sjp\\.ac\\.lk$",
+				"note": "Source document only lists the domain 'dental.sjp.ac.lk' without a username example; verify exact format with faculty."
+			},
+			"degrees": ["Bachelor of Dental Surgery (5 Years)"]
+		},
+		"FOT": {
+			"name": "Faculty of Technology",
+			"duration": "All 4 Years",
+			"registration": {
+				"prefix": "TE",
+				"placeholder": "123456",
+				"regex": "^TE\\d{6}$",
+				"description": "Must start with TE followed by 6 digits"
+			},
+			"email": {
+				"prefix": "",
+				"suffix": "@fot.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^\\d{6}@fot\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"Bachelor of Biosystems Technology (Hons)",
+				"Bachelor of ICT (Hons)",
+				"Bachelor of Engineering Technology (Hons)"
+			]
+		},
+		"FOE": {
+			"name": "Faculty of Engineering",
+			"duration": "All 4 Years",
+			"registration": {
+				"prefix": "EN",
+				"placeholder": "123456",
+				"regex": "^EN\\d{6}$",
+				"description": "Must start with EN followed by 6 digits"
+			},
+			"email": {
+				"prefix": "",
+				"suffix": "@foe.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^\\d{6}@foe\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"BSc (Hons) in Civil Engineering",
+				"BSc (Hons) in Computer Engineering",
+				"BSc (Hons) in Electrical and Electronic Engineering",
+				"BSc (Hons) in Mechanical Engineering"
+			]
+		},
+		"FMSC": {
+			"name": "Faculty of Management Studies and Commerce",
+			"duration": "All 4 Years",
+			"registration": {
+				"prefix": "MC",
+				"placeholder": "123456",
+				"regex": "^MC\\d{6}$",
+				"description": "Must start with MC followed by 6 digits"
+			},
+			"email": {
+				"prefix": "",
+				"suffix": "@mgt.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^\\d{6}@mgt\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"BSc Marketing Management (Special)",
+				"BSc Accounting (Special)",
+				"BSc Estate Management & Valuation (Special)",
+				"BSc Human Resource Management (Special)",
+				"BSc Finance (Special)",
+				"BSc Operations & Technology Management (Special)",
+				"BSc Public Management (Special)",
+				"BSc Entrepreneurship (Special)",
+				"BSc Business Information Systems (Special)",
+				"BSc Business Economics (Special)",
+				"BSc Business Administration (Special)",
+				"B.Com (Special)"
+			]
+		},
+		"FAS": {
+			"name": "Faculty of Applied Sciences",
+			"duration": "Varies (3-4 Years)",
+			"registration": {
+				"prefix": "AS",
+				"placeholder": "123456",
+				"regex": "^AS\\d{6}$",
+				"description": "Must start with AS followed by 6 digits"
+			},
+			"email": {
+				"prefix": "AS",
+				"suffix": "@sci.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^AS\\d{6}@sci\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"BSc in Physical Sciences (3 Years)",
+				"BSc in Biological Sciences (3 Years)",
+				"BSc in ICT (3 Years)",
+				"BSc (Hons) in Polymer Science and Technology (4 Years)",
+				"BSc (Hons) in Food Science and Technology (4 Years)",
+				"BSc (Hons) in Sports Science and Management (4 Years)",
+				"BSc (Hons) in Chemistry",
+				"BSc (Hons) in Plant Biotechnology",
+				"BSc (Hons) in Microbiology",
+				"BSc (Hons) in Plant Biology",
+				"BSc (Hons) in Zoology",
+				"BSc (Hons) in Aquatic Resource Management",
+				"BSc (Hons) in Environmental Management & Forestry",
+				"BSc (Hons) in Forestry and Environmental Science",
+				"BSc (Hons) in Mathematics",
+				"BSc (Hons) in Applied Mathematics",
+				"BSc (Hons) in Physics",
+				"BSc (Hons) in Statistics",
+				"BSc (Hons) in Computer Science",
+				"BSc (Hons) in Biology",
+				"BSc (Hons) in Industrial Chemistry",
+				"BSc (Hons) in Genetics and Molecular Biology",
+				"BSc (Hons) in Electronics and Embedded Systems",
+				"BSc (Hons) in Economics",
+				"BSc (Hons) in Management Science"
+			],
+			"note": "Source document lists this faculty's degrees twice, with 'Environmental Management & Forestry' in one pass and 'Forestry and Environmental Science' in the other. Both are kept here as distinct entries — verify with the faculty whether they are the same programme or two separate ones."
+		},
+		"FMS": {
+			"name": "Faculty of Medical Sciences",
+			"duration": "Varies (3-5 Years)",
+			"registration": {
+				"prefix": "ME/",
+				"placeholder": "123456",
+				"regex": "^ME/\\d{6}$",
+				"description": "Must start with ME/ followed by 6 digits"
+			},
+			"email": {
+				"prefix": "",
+				"suffix": "@sjp.ac.lk",
+				"placeholder": "fms",
+				"regex": "^[a-zA-Z0-9._%+-]+@sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"Bachelor of Medicine, Bachelor of Surgery (MBBS) (5 Years)",
+				"BSc (Hons) in Human Biology (4 Years)",
+				"BSc in Human Biology (3 Years)"
+			]
+		},
+		"FUAB": {
+			"name": "Faculty of Urban and Aquatic Bioresources",
+			"duration": "Varies (3-4 Years)",
+			"registration": {
+				"prefix": "BR",
+				"placeholder": "123456",
+				"regex": "^BR\\d{6}$",
+				"description": "Must start with BR followed by 6 digits"
+			},
+			"email": {
+				"prefix": "br",
+				"suffix": "@fuab.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^br\\d{6}@fuab\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"BSc in Aquatic Bioresources (3 Years)",
+				"BSc (Hons) in Aquatic Bioresources (4 Years)",
+				"BSc in Urban Bioresources (3 Years)",
+				"BSc (Hons) in Urban Bioresources (4 Years)"
+			]
+		},
+		"FHSS": {
+			"name": "Faculty of Humanities and Social Sciences",
+			"duration": "All 4 Years except one",
+			"registration": {
+				"prefix": "AR",
+				"placeholder": "123456",
+				"regex": "^AR\\d{6}$",
+				"description": "Must start with AR followed by 6 digits"
+			},
+			"email": {
+				"prefix": "ar",
+				"suffix": "@fhss.sjp.ac.lk",
+				"placeholder": "123456",
+				"regex": "^ar\\d{6}@fhss\\.sjp\\.ac\\.lk$"
+			},
+			"degrees": [
+				"Bachelor of Arts (General degree) (3 Years)",
+				"BA (Hons) in Anthropology",
+				"BA (Hons) in Economics",
+				"BA (Hons) in Financial Economics",
+				"BA (Hons) in Criminology and Criminal Justice",
+				"BA (Hons) in English",
+				"BA (Hons) Teaching English as a Second Language",
+				"BA (Hons) in Business Statistics",
+				"BA (Hons) in Social Statistics",
+				"BA (Hons) in Information Technology",
+				"BA (Hons) in Sinhala",
+				"BA (Hons) in Mass Communication",
+				"BA (Hons) in Sanskrit",
+				"BA (Hons) in Hindi",
+				"BA (Hons) in Japanese",
+				"BA (Hons) in Chinese",
+				"BA (Hons) in French",
+				"BA (Hons) in Dance and Cultural Studies",
+				"BA (Hons) in History",
+				"BA (Hons) in Archaeology",
+				"BA (Hons) in Music",
+				"BA (Hons) in Creative Music Technology and Production",
+				"BA (Hons) in Pali",
+				"BA (Hons) in Buddhist Civilization",
+				"BA (Hons) in Buddhist Philosophy",
+				"BA (Hons) in Buddhist Heritage and Tourism",
+				"BA (Hons) in Geography",
+				"BA (Hons) in Geo-Spatial Technology",
+				"BA (Hons) in Philosophy",
+				"BA (Hons) in Psychology",
+				"BA (Hons) in Political Science",
+				"BSc (Hons) in Information Technology",
+				"BA (Hons) in Sociology",
+				"BA (Hons) in Social Work"
+			]
+		}
+	}
 }
