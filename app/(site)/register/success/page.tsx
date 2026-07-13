@@ -2,8 +2,9 @@
 import { useSearchParams } from "next/navigation";
 import { CtaButton } from "@/components/ui/cta-button";
 import { WHATSAPP_LINKS } from "../../../../constants/whatsapp-links";
+import { Suspense } from "react";
 
-const SuccessPage = () => {
+const SuccessPageContent = () => {
   const searchParams = useSearchParams();
   const awardsParam = searchParams.get("awards") || "";
   const selectedAwards = awardsParam ? awardsParam.split(",").filter(Boolean) : [];
@@ -79,4 +80,14 @@ const SuccessPage = () => {
   );
 };
 
-export default SuccessPage;
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <section className="success relative px-safe pt-[124px] pb-[120px] min-h-screen flex flex-col items-center justify-center">
+        <p className="text-slate-400">Loading...</p>
+      </section>
+    }>
+      <SuccessPageContent />
+    </Suspense>
+  );
+}
