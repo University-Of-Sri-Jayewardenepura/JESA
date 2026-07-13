@@ -1,7 +1,7 @@
 export const images = [
 	{
 		year: "JESA 2025",
-		image: "/images/hall-of-fame/2024.png",
+		image: "/images/hall-of-fame/2025.webp",
 	},
 	{
 		year: "JESA 2024",
