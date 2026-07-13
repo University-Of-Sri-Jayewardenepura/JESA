@@ -10,6 +10,7 @@ interface CtaButtonProps extends React.ComponentProps<typeof Button> {
 	children: React.ReactNode;
 	className?: string;
 	variant?: "default" | "secondary";
+	shimmer?: boolean;
 }
 
 export function CtaButton({
@@ -18,18 +19,42 @@ export function CtaButton({
 	className,
 	variant = "default",
 	asChild = false,
+	shimmer = false,
 	...props
 }: CtaButtonProps) {
 	const isDefault = variant === "default";
 
 	return (
 		<div className="relative w-full">
-			<div className="group relative w-full rounded-full p-1 transition-colors">
+			<div
+				className="group relative w-full rounded-full p-1 transition-colors overflow-hidden"
+				style={
+					shimmer
+						? ({
+								"--spread": "90deg",
+								"--shimmer-color": "#dbbe45",
+								"--radius": "100px",
+								"--speed": "3s",
+								"--cut": "0.05em",
+								"--bg": "transparent",
+							} as React.CSSProperties)
+						: undefined
+				}
+			>
 				{/* Border around button */}
 				<div className="-inset-px absolute rounded-full bg-gradient-to-b from-slate-500 to-slate-900" />
 
 				{/* Gold gradient background - for both default and secondary variants */}
 				<div className="absolute inset-0 rounded-full bg-gradient-to-r from-slate-300/10 via-background to-slate-300/10" />
+
+				{/* Shimmer Spark Effect */}
+				{shimmer && (
+					<div className="absolute inset-0 z-0 overflow-hidden rounded-full blur-[1px] @container-[size]">
+						<div className="animate-shimmer-slide absolute inset-0 aspect-[1] h-[100cqh] rounded-none [mask:none]">
+							<div className="animate-spin-around absolute -inset-full w-auto [translate:0_0] rotate-0 [background:conic-gradient(from_calc(270deg-(var(--spread)*0.5)),transparent_0,var(--shimmer-color)_var(--spread),transparent_var(--spread))]" />
+						</div>
+					</div>
+				)}
 
 				{/* Regular button in the middle */}
 				<Button

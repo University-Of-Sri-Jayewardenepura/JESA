@@ -1,12 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import type React from "react";
 import Particles from "@/components/core/particles";
 import { Spotlight } from "@/components/core/spotlight";
 import { CtaButton } from "@/components/ui/cta-button";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 const Hero: React.FC = () => {
 	return (
@@ -29,7 +27,7 @@ const Hero: React.FC = () => {
 				<Particles
 					className="absolute inset-0"
 					color={"#fcd34d"}
-					staticity={150}
+					staticity={350}
 					ease={100}
 					quantity={80}
 					refresh
@@ -54,17 +52,9 @@ const Hero: React.FC = () => {
 
 				<div className="mt-8 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:flex-row">
 					<div className="w-5/7 sm:w-1/2">
-						<Link href="/register/2026" className="w-full block">
-							<ShimmerButton
-								className="w-full font-semibold shadow-2xl h-10 text-sm md:text-base border border-amber-400/20"
-								shimmerColor="#dbbe45"
-								background="rgba(31, 15, 41, 0.8)"
-								shimmerSize="0.08em"
-								shimmerDuration="2.5s"
-							>
-								Register Now
-							</ShimmerButton>
-						</Link>
+						<CtaButton href="/register/2026" shimmer>
+							Register Now
+						</CtaButton>
 					</div>
 
 					<div className="w-5/7 sm:w-1/2">
