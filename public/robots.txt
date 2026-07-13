@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jesa.usjp.ac.lk/sitemap.xml
