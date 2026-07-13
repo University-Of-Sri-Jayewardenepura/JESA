@@ -41,7 +41,7 @@
 
 	/* JESA 2026 Awards Application Theme Variables */
 	/* Re-mapping Tailwind 'slate', 'amber', and 'blue' to the brand colors so the form updates automatically */
-	--color-slate-950: #120919;
+	--color-slate-950: #07030c;
 	--color-slate-900: #170c1e;
 	--color-slate-800: #1f0f29;
 	--color-slate-700: #42293f; /* Royal Mauve */
@@ -125,19 +125,19 @@
 
 :root {
 	/* Dark Purple Backgrounds */
-	--background: #120919;
-	--backgroud-dark: #09040e;
+	--background: #07030c;
+	--backgroud-dark: #040206;
 	--background-gradient: linear-gradient(
 		to right,
-		#09040e 0%,
-		#1d0e27 50%,
-		#09040e 100%
+		#040206 0%,
+		#120919 50%,
+		#040206 100%
 	);
 	--background-card: linear-gradient(
 		to right,
-		#120919 0%,
-		#261432 50%,
-		#120919 100%
+		#07030c 0%,
+		#170c1e 50%,
+		#07030c 100%
 	);
 	--gradient-annoucement: linear-gradient(
 		to right,
@@ -268,4 +268,24 @@
 }
 .scrollbar-hide::-webkit-scrollbar {
 	display: none; /* Chrome, Safari and Opera */
+}
+
+/* Custom Autocomplete / Autofill Input styles to match the dark theme */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+	/* biome-ignore lint/complexity/noImportantStyles: webkit autofill styling requires !important */
+	-webkit-box-shadow: 0 0 0 1000px #170c1e inset !important; /* matches bg-slate-900 */
+	/* biome-ignore lint/complexity/noImportantStyles: webkit autofill styling requires !important */
+	-webkit-text-fill-color: #f8fafc !important; /* text slate-50 */
+	/* biome-ignore lint/complexity/noImportantStyles: webkit autofill styling requires !important */
+	box-shadow: 0 0 0 1000px #170c1e inset !important;
+	transition: background-color 5000s ease-in-out 0s;
 }
