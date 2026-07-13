@@ -10,7 +10,7 @@
 		"lodash": "^4.17.23"
 	},
 	"scripts": {
-		"dev": "next dev --turbopack",
+		"dev": "next dev --webpack",
 		"test:e2e": "playwright test",
 		"build": "next build",
 		"start": "next start",
