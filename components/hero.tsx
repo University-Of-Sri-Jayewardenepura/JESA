@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
 					</span>
 				</h1>
 
-				<p className="mt-5 max-w-[312px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
+				<p className="mt-5 max-w-[312px] text-center text-slate-300 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
 					Bask in the spotlight of recognition at the most prestigious and
 					elegant
 					<br className="block md:hidden" /> award gala ever organized by the
