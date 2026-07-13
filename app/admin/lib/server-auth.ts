@@ -1,237 +1,250 @@
 import { cookies } from "next/headers";
 import { getAdminAuth, getAdminDb } from "@/lib/firebase-admin";
 
-const superAdminEmails =
-  process.env.ADMIN_EMAILS?.split(",").map((email) => email.trim()) || [
-    "warunaudarasam2003@gmail.com",
-  ];
+const superAdminEmails = process.env.ADMIN_EMAILS?.split(",").map((email) =>
+	email.trim(),
+) || ["warunaudarasam2003@gmail.com"];
 
 export type AdminStatus = "approved" | "pending" | "rejected" | "not_found";
 
 export interface AdminUser {
-  uid: string;
-  email: string;
-  name?: string;
-  isSuperAdmin: boolean;
-  status: AdminStatus;
+	uid: string;
+	email: string;
+	name?: string;
+	isSuperAdmin: boolean;
+	status: AdminStatus;
 }
 
 export interface AdminRecord {
-  uid: string;
-  email: string;
-  name?: string;
-  status: AdminStatus;
-  requestedAt?: string;
-  approvedBy?: string;
-  approvedAt?: string;
+	uid: string;
+	email: string;
+	name?: string;
+	status: AdminStatus;
+	requestedAt?: string;
+	approvedBy?: string;
+	approvedAt?: string;
 }
 
 function getTokenFromCookieHeader(
-  cookieHeader: string | null
+	cookieHeader: string | null,
 ): string | undefined {
-  if (!cookieHeader) return undefined;
-  return cookieHeader
-    .split(";")
-    .map((c) => c.trim())
-    .find((c) => c.startsWith("__session="))
-    ?.split("=")[1];
+	if (!cookieHeader) return undefined;
+	return cookieHeader
+		.split(";")
+		.map((c) => c.trim())
+		.find((c) => c.startsWith("__session="))
+		?.split("=")[1];
 }
 
 export function isSuperAdmin(email: string): boolean {
-  return superAdminEmails.includes(email);
+	return superAdminEmails.includes(email);
 }
 
 async function checkAdminStatus(
-  uid: string,
-  email: string
+	uid: string,
+	email: string,
 ): Promise<{ status: AdminStatus; record?: AdminRecord }> {
-  if (isSuperAdmin(email)) {
-    return { status: "approved" };
-  }
+	if (isSuperAdmin(email)) {
+		return { status: "approved" };
+	}
 
-  const doc = await getAdminDb().collection("admin_users").doc(uid).get();
-  if (!doc.exists) {
-    return { status: "not_found" };
-  }
+	const doc = await getAdminDb().collection("admin_users").doc(uid).get();
+	if (!doc.exists) {
+		return { status: "not_found" };
+	}
 
-  const data = doc.data();
-  const record: AdminRecord = {
-    uid,
-    email: data?.email || email,
-    name: data?.name,
-    status: data?.status || "pending",
-    requestedAt: data?.requestedAt?._seconds
-      ? new Date(data.requestedAt._seconds * 1000).toISOString()
-      : undefined,
-    approvedBy: data?.approvedBy,
-    approvedAt: data?.approvedAt?._seconds
-      ? new Date(data.approvedAt._seconds * 1000).toISOString()
-      : undefined,
-  };
+	const data = doc.data();
+	const record: AdminRecord = {
+		uid,
+		email: data?.email || email,
+		name: data?.name,
+		status: data?.status || "pending",
+		requestedAt: data?.requestedAt?._seconds
+			? new Date(data.requestedAt._seconds * 1000).toISOString()
+			: undefined,
+		approvedBy: data?.approvedBy,
+		approvedAt: data?.approvedAt?._seconds
+			? new Date(data.approvedAt._seconds * 1000).toISOString()
+			: undefined,
+	};
 
-  return { status: record.status, record };
+	return { status: record.status, record };
 }
 
 export async function verifyAdminToken(
-  token: string | undefined
+	token: string | undefined,
 ): Promise<AdminUser | null> {
-  if (!token) return null;
+	if (!token) return null;
 
-  try {
-    const decoded = await getAdminAuth().verifyIdToken(token);
-    if (!decoded.email) return null;
+	try {
+		const decoded = await getAdminAuth().verifyIdToken(token);
+		if (!decoded.email) return null;
 
-    const superAdmin = isSuperAdmin(decoded.email);
-    if (superAdmin) {
-      return {
-        uid: decoded.uid,
-        email: decoded.email,
-        name: decoded.name || undefined,
-        isSuperAdmin: true,
-        status: "approved",
-      };
-    }
+		const superAdmin = isSuperAdmin(decoded.email);
+		if (superAdmin) {
+			return {
+				uid: decoded.uid,
+				email: decoded.email,
+				name: decoded.name || undefined,
+				isSuperAdmin: true,
+				status: "approved",
+			};
+		}
 
-    const { status } = await checkAdminStatus(decoded.uid, decoded.email);
-    if (status !== "approved") return null;
+		const { status } = await checkAdminStatus(decoded.uid, decoded.email);
+		if (status !== "approved") return null;
 
-    return {
-      uid: decoded.uid,
-      email: decoded.email,
-      name: decoded.name || undefined,
-      isSuperAdmin: false,
-      status: "approved",
-    };
-  } catch (error) {
-    console.error("[verifyAdminToken] Token verification failed:", error);
-    return null;
-  }
+		return {
+			uid: decoded.uid,
+			email: decoded.email,
+			name: decoded.name || undefined,
+			isSuperAdmin: false,
+			status: "approved",
+		};
+	} catch (error) {
+		console.error("[verifyAdminToken] Token verification failed:", error);
+		return null;
+	}
 }
 
 export async function getAdminUserFromCookies(): Promise<AdminUser | null> {
-  try {
-    const token = (await cookies()).get("__session")?.value;
-    return await verifyAdminToken(token);
-  } catch (error) {
-    console.error("[getAdminUserFromCookies] Failed to read admin session:", error);
-    return null;
-  }
+	try {
+		const token = (await cookies()).get("__session")?.value;
+		return await verifyAdminToken(token);
+	} catch (error) {
+		console.error(
+			"[getAdminUserFromCookies] Failed to read admin session:",
+			error,
+		);
+		return null;
+	}
 }
 
 export async function getAdminUserFromRequest(
-  request: Request
+	request: Request,
 ): Promise<AdminUser | null> {
-  try {
-    const cookieHeader = request.headers.get("cookie");
-    const token = getTokenFromCookieHeader(cookieHeader);
-    return await verifyAdminToken(token);
-  } catch (error) {
-    console.error("[getAdminUserFromRequest] Failed to verify admin request:", error);
-    return null;
-  }
+	try {
+		const cookieHeader = request.headers.get("cookie");
+		const token = getTokenFromCookieHeader(cookieHeader);
+		return await verifyAdminToken(token);
+	} catch (error) {
+		console.error(
+			"[getAdminUserFromRequest] Failed to verify admin request:",
+			error,
+		);
+		return null;
+	}
 }
 
 export async function requestAdminAccess(
-  token: string
+	token: string,
 ): Promise<{ status: AdminStatus; record?: AdminRecord }> {
-  try {
-    const decoded = await getAdminAuth().verifyIdToken(token);
-    if (!decoded.email) {
-      throw new Error("Invalid token: no email");
-    }
+	try {
+		const decoded = await getAdminAuth().verifyIdToken(token);
+		if (!decoded.email) {
+			throw new Error("Invalid token: no email");
+		}
 
-    if (isSuperAdmin(decoded.email)) {
-      return { status: "approved" };
-    }
+		if (isSuperAdmin(decoded.email)) {
+			return { status: "approved" };
+		}
 
-    const { status, record } = await checkAdminStatus(decoded.uid, decoded.email);
+		const { status, record } = await checkAdminStatus(
+			decoded.uid,
+			decoded.email,
+		);
 
-    if (status === "approved" || status === "pending" || status === "rejected") {
-      return { status, record };
-    }
+		if (
+			status === "approved" ||
+			status === "pending" ||
+			status === "rejected"
+		) {
+			return { status, record };
+		}
 
-    // New user: create a pending request
-    const docRef = getAdminDb().collection("admin_users").doc(decoded.uid);
-    const newRecord: AdminRecord = {
-      uid: decoded.uid,
-      email: decoded.email,
-      name: decoded.name || undefined,
-      status: "pending",
-      requestedAt: new Date().toISOString(),
-    };
+		// New user: create a pending request
+		const docRef = getAdminDb().collection("admin_users").doc(decoded.uid);
+		const newRecord: AdminRecord = {
+			uid: decoded.uid,
+			email: decoded.email,
+			name: decoded.name || undefined,
+			status: "pending",
+			requestedAt: new Date().toISOString(),
+		};
 
-    await docRef.set(newRecord);
-    return { status: "pending", record: newRecord };
-  } catch (error) {
-    console.error("[requestAdminAccess] Failed to process access request:", error);
-    throw error;
-  }
+		await docRef.set(newRecord);
+		return { status: "pending", record: newRecord };
+	} catch (error) {
+		console.error(
+			"[requestAdminAccess] Failed to process access request:",
+			error,
+		);
+		throw error;
+	}
 }
 
-export async function listAdminRequests(
-  token: string
-): Promise<AdminRecord[]> {
-  const decoded = await getAdminAuth().verifyIdToken(token);
-  if (!decoded.email || !isSuperAdmin(decoded.email)) {
-    throw new Error("Forbidden");
-  }
+export async function listAdminRequests(token: string): Promise<AdminRecord[]> {
+	const decoded = await getAdminAuth().verifyIdToken(token);
+	if (!decoded.email || !isSuperAdmin(decoded.email)) {
+		throw new Error("Forbidden");
+	}
 
-  const snapshot = await getAdminDb()
-    .collection("admin_users")
-    .orderBy("requestedAt", "desc")
-    .get();
+	const snapshot = await getAdminDb()
+		.collection("admin_users")
+		.orderBy("requestedAt", "desc")
+		.get();
 
-  return snapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      uid: doc.id,
-      email: data.email,
-      name: data.name,
-      status: data.status,
-      requestedAt: data.requestedAt?._seconds
-        ? new Date(data.requestedAt._seconds * 1000).toISOString()
-        : data.requestedAt,
-      approvedBy: data.approvedBy,
-      approvedAt: data.approvedAt?._seconds
-        ? new Date(data.approvedAt._seconds * 1000).toISOString()
-        : data.approvedAt,
-    };
-  });
+	return snapshot.docs.map((doc) => {
+		const data = doc.data();
+		return {
+			uid: doc.id,
+			email: data.email,
+			name: data.name,
+			status: data.status,
+			requestedAt: data.requestedAt?._seconds
+				? new Date(data.requestedAt._seconds * 1000).toISOString()
+				: data.requestedAt,
+			approvedBy: data.approvedBy,
+			approvedAt: data.approvedAt?._seconds
+				? new Date(data.approvedAt._seconds * 1000).toISOString()
+				: data.approvedAt,
+		};
+	});
 }
 
 export async function updateAdminStatus(
-  token: string,
-  targetUid: string,
-  status: "approved" | "rejected",
-  options?: { revoke?: boolean }
+	token: string,
+	targetUid: string,
+	status: "approved" | "rejected",
+	options?: { revoke?: boolean },
 ): Promise<void> {
-  const decoded = await getAdminAuth().verifyIdToken(token);
-  if (!decoded.email || !isSuperAdmin(decoded.email)) {
-    throw new Error("Forbidden");
-  }
+	const decoded = await getAdminAuth().verifyIdToken(token);
+	if (!decoded.email || !isSuperAdmin(decoded.email)) {
+		throw new Error("Forbidden");
+	}
 
-  const docRef = getAdminDb().collection("admin_users").doc(targetUid);
-  const doc = await docRef.get();
+	const docRef = getAdminDb().collection("admin_users").doc(targetUid);
+	const doc = await docRef.get();
 
-  if (status === "rejected" && options?.revoke) {
-    // Revoke access by deleting the record or setting to rejected
-    await docRef.delete();
-    return;
-  }
+	if (status === "rejected" && options?.revoke) {
+		// Revoke access by deleting the record or setting to rejected
+		await docRef.delete();
+		return;
+	}
 
-  const update: Record<string, unknown> = { status };
-  if (status === "approved") {
-    update.approvedBy = decoded.email;
-    update.approvedAt = new Date().toISOString();
-  }
+	const update: Record<string, unknown> = { status };
+	if (status === "approved") {
+		update.approvedBy = decoded.email;
+		update.approvedAt = new Date().toISOString();
+	}
 
-  if (doc.exists) {
-    await docRef.update(update);
-  } else {
-    await docRef.set({
-      status,
-      approvedBy: decoded.email,
-      approvedAt: new Date().toISOString(),
-    });
-  }
+	if (doc.exists) {
+		await docRef.update(update);
+	} else {
+		await docRef.set({
+			status,
+			approvedBy: decoded.email,
+			approvedAt: new Date().toISOString(),
+		});
+	}
 }
