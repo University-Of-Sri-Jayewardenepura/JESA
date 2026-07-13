@@ -41,7 +41,7 @@
 
 	/* JESA 2026 Awards Application Theme Variables */
 	/* Re-mapping Tailwind 'slate', 'amber', and 'blue' to the brand colors so the form updates automatically */
-	--color-slate-950: #07030c;
+	--color-slate-950: #040206;
 	--color-slate-900: #170c1e;
 	--color-slate-800: #1f0f29;
 	--color-slate-700: #42293f; /* Royal Mauve */
@@ -128,8 +128,8 @@
 
 :root {
 	/* Dark Purple Backgrounds */
-	--background: #07030c;
-	--backgroud-dark: #040206;
+	--background: #040206;
+	--backgroud-dark: #020103;
 	--background-gradient: linear-gradient(
 		to right,
 		#040206 0%,
