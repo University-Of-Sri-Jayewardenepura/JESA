@@ -697,11 +697,7 @@ const Step2AcademicInfo: React.FC = () => {
 		) {
 			updateAcademicInfo({ university: "University of Sri Jayewardenepura" });
 		}
-		// NOTE: academicInfo.university intentionally omitted from deps to avoid
-		// an infinite loop: the update itself changes the value, retriggering this
-		// effect. The guard condition above prevents unnecessary calls.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isInternal, updateAcademicInfo, academicInfo.university]);
+	}, [isInternal, updateAcademicInfo]);
 
 	React.useEffect(() => {
 		if (isRecentGraduate && (awardSelection.selectedAwards?.length ?? 0) > 0) {
