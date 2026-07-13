@@ -11,13 +11,16 @@ import {
    VALIDATION CONSTANTS
 ========================= */
 
-export const SRI_LANKA_PHONE_REGEX = /^(?:0|0094|\+94)?(?:[\s-]*[1-9])(?:[\s-]*\d){8}$/;
+export const SRI_LANKA_PHONE_REGEX =
+	/^(?:0|0094|\+94)?(?:[\s-]*[1-9])(?:[\s-]*\d){8}$/;
 
 export const formatPhoneNumber = (val: string) => {
 	const cleaned = val.replace(/[\s-]/g, "");
 	if (cleaned.length === 9) return `+94${cleaned}`;
-	if (cleaned.length === 10 && cleaned.startsWith("0")) return `+94${cleaned.slice(1)}`;
-	if (cleaned.length === 13 && cleaned.startsWith("0094")) return `+94${cleaned.slice(4)}`;
+	if (cleaned.length === 10 && cleaned.startsWith("0"))
+		return `+94${cleaned.slice(1)}`;
+	if (cleaned.length === 13 && cleaned.startsWith("0094"))
+		return `+94${cleaned.slice(4)}`;
 	return cleaned;
 };
 
