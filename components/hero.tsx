@@ -27,7 +27,7 @@ const Hero: React.FC = () => {
 				<Particles
 					className="absolute inset-0"
 					color={"#fcd34d"}
-					staticity={150}
+					staticity={350}
 					ease={100}
 					quantity={80}
 					refresh
@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
 					</span>
 				</h1>
 
-				<p className="mt-5 max-w-[312px] text-center text-slate-500 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
+				<p className="mt-5 max-w-[312px] text-center text-slate-300 tracking-tight md:max-w-[532px] md:text-lg lg:mt-6 lg:text-xl">
 					Bask in the spotlight of recognition at the most prestigious and
 					elegant
 					<br className="block md:hidden" /> award gala ever organized by the
@@ -52,7 +52,9 @@ const Hero: React.FC = () => {
 
 				<div className="mt-8 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:flex-row">
 					<div className="w-5/7 sm:w-1/2">
-						<CtaButton href="/register/2026">Register Now</CtaButton>
+						<CtaButton href="/register/2026" shimmer>
+							Register Now
+						</CtaButton>
 					</div>
 
 					<div className="w-5/7 sm:w-1/2">
