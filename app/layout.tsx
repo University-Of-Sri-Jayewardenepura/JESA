@@ -13,12 +13,15 @@ export const metadata: Metadata = {
 	title: "JESA 2026 | J'pura Employability Skills Awards",
 	description:
 		"Official 2026 JESA aka J'pura Employability Skills Awards, the ultimate platform for honoring the accomplishments of young talents.",
-	metadataBase: new URL("https://jesa.usjp.ac.lk"),
+	metadataBase: new URL("https://www.jesa.lk"),
+	alternates: {
+		canonical: "https://www.jesa.lk",
+	},
 	openGraph: {
 		title: "JESA 2026 | J'pura Employability Skills Awards",
 		description:
 			"Official 2026 JESA aka J'pura Employability Skills Awards, the ultimate platform for honoring the accomplishments of young talents.",
-		url: "https://jesa.usjp.ac.lk",
+		url: "https://www.jesa.lk",
 		siteName: "JESA 2026",
 		images: [
 			{

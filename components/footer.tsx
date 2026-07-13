@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
 								width={40}
 							/>
 						</div>
-						<p className="max-w-xs text-slate-500 text-sm">
+						<p className="max-w-xs text-slate-400 text-sm">
 							Career Skills Development Society • 2026 <br />
 							in collaboration with Career Guidance Unit of <br /> University of
 							Sri Jayewardenepura Contacts
@@ -52,14 +52,14 @@ const Footer: React.FC = () => {
 								{contactNames.map((contact, index) => (
 									<li key={index}>
 										<Link
-											className="cursor-pointer text-slate-500 duration-200"
+											className="cursor-pointer text-slate-400 hover:text-amber-400 transition-colors duration-200"
 											href={contact.linkedin}
 										>
 											{contact.name}
 										</Link>{" "}
 										<br />
 										<Link
-											className="cursor-pointer text-slate-700 duration-200"
+											className="cursor-pointer text-slate-300 hover:text-amber-400 transition-colors duration-200 text-sm"
 											href={`tel:${contact.phone}`}
 										>
 											{contact.phone}
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
 							<ul className="grid gap-4">
 								<li>
 									<Link
-										className="cursor-pointer text-slate-500 duration-200"
+										className="cursor-pointer text-slate-400 hover:text-amber-400 transition-colors duration-200"
 										href="/awards"
 									>
 										Awards{" "}
@@ -81,7 +81,7 @@ const Footer: React.FC = () => {
 								</li>
 								<li>
 									<Link
-										className="cursor-pointer text-slate-500 duration-200"
+										className="cursor-pointer text-slate-400 hover:text-amber-400 transition-colors duration-200"
 										href="/magazine"
 									>
 										Magazine{" "}
@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
 								</li>
 								<li>
 									<Link
-										className="cursor-pointer text-slate-500 duration-200"
+										className="cursor-pointer text-slate-400 hover:text-amber-400 transition-colors duration-200"
 										href="/hall-of-fame"
 									>
 										Hall of Fame{" "}
@@ -97,7 +97,7 @@ const Footer: React.FC = () => {
 								</li>
 								<li>
 									<Link
-										className="cursor-pointer text-slate-500 duration-200"
+										className="cursor-pointer text-slate-400 hover:text-amber-400 transition-colors duration-200"
 										href="/terms"
 									>
 										Terms & Conditions{" "}
@@ -108,9 +108,12 @@ const Footer: React.FC = () => {
 					</div>
 				</div>
 				<div className="flex flex-col-reverse gap-4 rounded-md px-8 py-4 sm:flex-row sm:items-center sm:justify-between">
-					<span className="text-slate-500 text-sm sm:text-center">
+					<span className="text-slate-400 text-sm sm:text-center">
 						Copyright © 2026{" "}
-						<a className="cursor-pointer" href="/">
+						<a
+							className="cursor-pointer hover:text-amber-400 transition-colors"
+							href="/"
+						>
 							CDSD
 						</a>
 						. All Rights Reserved.
