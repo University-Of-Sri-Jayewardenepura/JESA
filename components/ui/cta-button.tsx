@@ -38,7 +38,7 @@ export function CtaButton({
 						"relative z-10 w-full rounded-full font-semibold transition-all",
 						isDefault
 							? "bg-white hover:bg-slate-200 !text-slate-950 hover:!text-secondary"
-							: "text-white",
+							: "text-white hover:bg-white/10 hover:text-white",
 						className,
 					)}
 					variant={isDefault ? "default" : "ghost"}
