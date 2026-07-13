@@ -27,9 +27,9 @@ const Hero: React.FC = () => {
 				<Particles
 					className="absolute inset-0"
 					color={"#fcd34d"}
-					staticity={350}
-					ease={100}
-					quantity={80}
+					staticity={100}
+					ease={80}
+					quantity={100}
 					refresh
 				/>
 			</div>
