@@ -150,6 +150,8 @@ const Particles: React.FC<ParticlesProps> = ({
 		return remapped > 0 ? remapped : 0;
 	};
 
+	const requestRef = useRef<number | null>(null);
+
 	const animate = () => {
 		clearContext();
 
@@ -199,7 +201,7 @@ const Particles: React.FC<ParticlesProps> = ({
 				// update the circle position
 			}
 		});
-		window.requestAnimationFrame(animate);
+		requestRef.current = window.requestAnimationFrame(animate);
 	};
 
 	useEffect(() => {
@@ -211,9 +213,12 @@ const Particles: React.FC<ParticlesProps> = ({
 		window.addEventListener("resize", initCanvas);
 
 		return () => {
+			if (requestRef.current) {
+				window.cancelAnimationFrame(requestRef.current);
+			}
 			window.removeEventListener("resize", initCanvas);
 		};
-	}, [animate, initCanvas]);
+	}, [color]);
 
 	useEffect(() => {
 		const handleMouseMove = (event: MouseEvent) => {
@@ -237,7 +242,7 @@ const Particles: React.FC<ParticlesProps> = ({
 
 	useEffect(() => {
 		initCanvas();
-	}, [initCanvas]);
+	}, [refresh]);
 
 	return (
 		<div aria-hidden="true" className={className} ref={canvasContainerRef}>
