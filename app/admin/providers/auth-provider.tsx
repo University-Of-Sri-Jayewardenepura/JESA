@@ -1,26 +1,26 @@
 "use client";
 
 import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
-import {
-  onIdTokenChanged,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut as firebaseSignOut,
-  User,
+	signOut as firebaseSignOut,
+	GoogleAuthProvider,
+	onIdTokenChanged,
+	signInWithPopup,
+	type User,
 } from "firebase/auth";
+import {
+	createContext,
+	type ReactNode,
+	useContext,
+	useEffect,
+	useState,
+} from "react";
 import { getAuthClient } from "@/lib/firebase";
 
 interface AuthContextValue {
-  user: User | null;
-  loading: boolean;
-  signInWithGoogle: () => Promise<void>;
-  signOut: () => Promise<void>;
+	user: User | null;
+	loading: boolean;
+	signInWithGoogle: () => Promise<void>;
+	signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -29,61 +29,59 @@ const SESSION_COOKIE = "__session";
 const SESSION_MAX_AGE = 3600; // Firebase ID tokens expire after 1 hour
 
 function setSessionCookie(token: string) {
-  const secure = location.protocol === "https:" ? ";Secure" : "";
-  document.cookie = `${SESSION_COOKIE}=${token};path=/;max-age=${SESSION_MAX_AGE};SameSite=Lax${secure}`;
+	const secure = location.protocol === "https:" ? ";Secure" : "";
+	document.cookie = `${SESSION_COOKIE}=${token};path=/;max-age=${SESSION_MAX_AGE};SameSite=Lax${secure}`;
 }
 
 function clearSessionCookie() {
-  document.cookie = `${SESSION_COOKIE}=;path=/;max-age=0`;
+	document.cookie = `${SESSION_COOKIE}=;path=/;max-age=0`;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+	const [user, setUser] = useState<User | null>(null);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const auth = getAuthClient();
-    const unsubscribe = onIdTokenChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const token = await currentUser.getIdToken();
-        setSessionCookie(token);
-      } else {
-        clearSessionCookie();
-      }
+	useEffect(() => {
+		const auth = getAuthClient();
+		const unsubscribe = onIdTokenChanged(auth, async (currentUser) => {
+			if (currentUser) {
+				const token = await currentUser.getIdToken();
+				setSessionCookie(token);
+			} else {
+				clearSessionCookie();
+			}
 
-      // Important: update React state AFTER the cookie is saved
-      // so child components don't fetch before the cookie is ready.
-      setUser(currentUser);
-      setLoading(false);
-    });
+			// Important: update React state AFTER the cookie is saved
+			// so child components don't fetch before the cookie is ready.
+			setUser(currentUser);
+			setLoading(false);
+		});
 
-    return () => unsubscribe();
-  }, []);
+		return () => unsubscribe();
+	}, []);
 
-  const signInWithGoogle = async () => {
-    const auth = getAuthClient();
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
-  };
+	const signInWithGoogle = async () => {
+		const auth = getAuthClient();
+		const provider = new GoogleAuthProvider();
+		await signInWithPopup(auth, provider);
+	};
 
-  const signOut = async () => {
-    const auth = getAuthClient();
-    await firebaseSignOut(auth);
-  };
+	const signOut = async () => {
+		const auth = getAuthClient();
+		await firebaseSignOut(auth);
+	};
 
-  return (
-    <AuthContext.Provider
-      value={{ user, loading, signInWithGoogle, signOut }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+	return (
+		<AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
+			{children}
+		</AuthContext.Provider>
+	);
 }
 
 export function useAuth(): AuthContextValue {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+	const context = useContext(AuthContext);
+	if (!context) {
+		throw new Error("useAuth must be used within an AuthProvider");
+	}
+	return context;
 }

@@ -11,7 +11,18 @@ import {
    VALIDATION CONSTANTS
 ========================= */
 
-export const SRI_LANKA_PHONE_REGEX = /^\+94[1-9]\d{8}$/;
+export const SRI_LANKA_PHONE_REGEX =
+	/^(?:0|0094|\+94)?(?:[\s-]*[1-9])(?:[\s-]*\d){8}$/;
+
+export const formatPhoneNumber = (val: string) => {
+	const cleaned = val.replace(/[\s-]/g, "");
+	if (cleaned.length === 9) return `+94${cleaned}`;
+	if (cleaned.length === 10 && cleaned.startsWith("0"))
+		return `+94${cleaned.slice(1)}`;
+	if (cleaned.length === 13 && cleaned.startsWith("0094"))
+		return `+94${cleaned.slice(4)}`;
+	return cleaned;
+};
 
 export const SRI_LANKA_NIC_REGEX = /^[0-9]{9}[vVxX]$|^[0-9]{12}$/;
 
@@ -87,18 +98,18 @@ const personalInfoSchema = z.object({
 		.min(1, "WhatsApp number is required")
 		.refine(
 			(val) => SRI_LANKA_PHONE_REGEX.test(val),
-			"Enter a valid Sri Lankan number (+94 7X XXX XXXX)",
+			"Enter a valid Sri Lankan number",
 		)
-		.transform((val) => val.replace(/\s/g, "")),
+		.transform(formatPhoneNumber),
 
 	mobileNumber: z
 		.string()
 		.min(1, "Mobile number is required")
 		.refine(
 			(val) => SRI_LANKA_PHONE_REGEX.test(val),
-			"Enter a valid Sri Lankan number (+94 7X XXX XXXX)",
+			"Enter a valid Sri Lankan number",
 		)
-		.transform((val) => val.replace(/\s/g, "")),
+		.transform(formatPhoneNumber),
 });
 
 /* =========================
@@ -224,11 +235,13 @@ const bestCSRSchema = z
 		memberAttendingWhatsapp: z
 			.string()
 			.regex(SRI_LANKA_PHONE_REGEX, "Enter a valid Sri Lankan number")
+			.transform(formatPhoneNumber)
 			.optional(),
 		clubPresidentName: z.string().optional(),
 		clubPresidentWhatsapp: z
 			.string()
 			.regex(SRI_LANKA_PHONE_REGEX, "Enter a valid Sri Lankan number")
+			.transform(formatPhoneNumber)
 			.optional(),
 		clubPresidentEmail: z.string().email().optional(),
 	})

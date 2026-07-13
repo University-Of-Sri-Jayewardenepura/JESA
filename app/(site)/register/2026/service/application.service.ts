@@ -1,78 +1,72 @@
-import { applicationBusinessSchema } from "../schemas/applicationSchema";
-import {
-  runTransaction,
-  doc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
 import { getDbClient } from "@/lib/firebase";
+import { applicationBusinessSchema } from "../schemas/applicationSchema";
 
-export async function createNewApplication(
-  formData: any
-): Promise<string> {
-  const result = applicationBusinessSchema.safeParse(formData);
+export async function createNewApplication(formData: any): Promise<string> {
+	const result = applicationBusinessSchema.safeParse(formData);
 
-  if (!result.success) {
-    const message = result.error.errors
-      .map((e) => `${e.path.join(".")}: ${e.message}`)
-      .join(", ");
-    throw new Error(message);
-  }
+	if (!result.success) {
+		const message = result.error.errors
+			.map((e) => `${e.path.join(".")}: ${e.message}`)
+			.join(", ");
+		throw new Error(message);
+	}
 
-  const data = result.data;
+	const data = result.data;
 
-  const appId = crypto.randomUUID();
+	const appId = crypto.randomUUID();
 
-  const db = getDbClient();
+	const db = getDbClient();
 
-  const nic = data.personalInfo.nic;
-  const whatsapp = data.personalInfo.whatsappNumber;
-  const email = data.academicInfo.universityEmail;
+	const nic = data.personalInfo.nic;
+	const whatsapp = data.personalInfo.whatsappNumber;
+	const email = data.academicInfo.universityEmail;
 
-  const nicRef = doc(db, "unique_constraints", `nic_${nic}`);
-  const waRef = doc(db, "unique_constraints", `wa_${whatsapp}`);
-  const emailRef = doc(db, "unique_constraints", `email_${email}`);
-  const appRef = doc(db, "applications", appId);
+	const nicRef = doc(db, "unique_constraints", `nic_${nic}`);
+	const waRef = doc(db, "unique_constraints", `wa_${whatsapp}`);
+	const emailRef = doc(db, "unique_constraints", `email_${email}`);
+	const appRef = doc(db, "applications", appId);
 
-  try {
-    const duplicateFields: string[] = [];
+	try {
+		const duplicateFields: string[] = [];
 
-    await runTransaction(db, async (transaction) => {
-      const nicSnap = await transaction.get(nicRef);
-      const waSnap = await transaction.get(waRef);
-      const emailSnap = await transaction.get(emailRef);
+		await runTransaction(db, async (transaction) => {
+			const nicSnap = await transaction.get(nicRef);
+			const waSnap = await transaction.get(waRef);
+			const emailSnap = await transaction.get(emailRef);
 
-      if (nicSnap.exists()) duplicateFields.push("NIC");
-      if (waSnap.exists()) duplicateFields.push("WhatsApp Number");
-      if (emailSnap.exists()) duplicateFields.push("University Email");
+			if (nicSnap.exists()) duplicateFields.push("NIC");
+			if (waSnap.exists()) duplicateFields.push("WhatsApp Number");
+			if (emailSnap.exists()) duplicateFields.push("University Email");
 
-      if (duplicateFields.length > 0) {
-        throw new Error(`DUPLICATE_FOUND:${duplicateFields.join(",")}`);
-      }
+			if (duplicateFields.length > 0) {
+				throw new Error(`DUPLICATE_FOUND:${duplicateFields.join(",")}`);
+			}
 
-      transaction.set(appRef, {
-        applicationId: appId,
-        ...data,
-        status: "submitted",
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        submittedAt: serverTimestamp(),
-      });
+			transaction.set(appRef, {
+				applicationId: appId,
+				...data,
+				status: "submitted",
+				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp(),
+				submittedAt: serverTimestamp(),
+			});
 
-      transaction.set(nicRef, { appId });
-      transaction.set(waRef, { appId });
-      transaction.set(emailRef, { appId });
-    });
+			transaction.set(nicRef, { appId });
+			transaction.set(waRef, { appId });
+			transaction.set(emailRef, { appId });
+		});
 
-    return appId;
-  } catch (error) {
-    if (error instanceof Error && error.message.startsWith("DUPLICATE_FOUND")) {
-      const fields = error.message.split(":")[1]?.split(",") ?? [];
-      const fieldList = fields.join(" and ");
-      throw new Error(
-        `An application with the same ${fieldList} already exists. If you believe this is a mistake, please contact us.`
-      );
-    }
+		return appId;
+	} catch (error) {
+		if (error instanceof Error && error.message.startsWith("DUPLICATE_FOUND")) {
+			const fields = error.message.split(":")[1]?.split(",") ?? [];
+			const fieldList = fields.join(" and ");
+			throw new Error(
+				`An application with the same ${fieldList} already exists. If you believe this is a mistake, please contact us.`,
+			);
+		}
 
-    throw error;
-  }
+		throw error;
+	}
 }

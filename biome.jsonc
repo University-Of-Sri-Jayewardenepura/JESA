@@ -1,4 +1,44 @@
 {
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": []
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"extends": [],
+	"formatter": {
+		"lineEnding": "lf"
+	},
+	"linter": {
+		"rules": {
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useButtonType": "off"
+			},
+			"complexity": {
+				"noArguments": "off"
+			},
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noArrayIndexKey": "off",
+				"useIterableCallbackReturn": "off",
+				"noExplicitAny": "off",
+				"noDocumentCookie": "off",
+				"noUnknownAtRules": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off",
+				"useConst": "off"
+			},
+			"correctness": {
+				"useUniqueElementIds": "off",
+				"noUnusedFunctionParameters": "off",
+				"noInvalidUseBeforeDeclaration": "off",
+				"useExhaustiveDependencies": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			}
+		}
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	}
 }
