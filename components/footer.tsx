@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
 							/>
 						</div>
 						<p className="max-w-xs text-slate-500 text-sm">
-							Career Skills Development Society • 2025/2026 <br />
+							Career Skills Development Society • 2026 <br />
 							in collaboration with Career Guidance Unit of <br /> University of
 							Sri Jayewardenepura Contacts
 						</p>
