@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-// @ts-ignore
 import HTMLFlipBook from "react-pageflip";
 import { TextAnimate } from "@/components/core/text-animate";
 import { CtaButton } from "@/components/ui/cta-button";
