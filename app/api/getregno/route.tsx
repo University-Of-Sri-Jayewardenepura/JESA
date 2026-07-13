@@ -5,55 +5,55 @@ import RegTable from "@/models/RegTable";
 
 // Define schema using zod
 const schema = z.object({
-  Whatsapp: z.string(),
+	Whatsapp: z.string(),
 });
 
 export async function POST(request: NextRequest) {
-  try {
-    // Parse and validate the request body
-    const body = await request.json();
-    const validation = schema.safeParse(body);
+	try {
+		// Parse and validate the request body
+		const body = await request.json();
+		const validation = schema.safeParse(body);
 
-    // Return error response if validation fails
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: validation.error.errors },
-        { status: 400 }
-      );
-    }
+		// Return error response if validation fails
+		if (!validation.success) {
+			return NextResponse.json(
+				{ error: validation.error.errors },
+				{ status: 400 },
+			);
+		}
 
-    // Check if the phone number length is valid
-    if (body.Whatsapp.length < 9) {
-      return NextResponse.json(
-        { message: "Please check phone number" },
-        { status: 400 }
-      );
-    }
+		// Check if the phone number length is valid
+		if (body.Whatsapp.length < 9) {
+			return NextResponse.json(
+				{ message: "Please check phone number" },
+				{ status: 400 },
+			);
+		}
 
-    // Connect to MongoDB
-    await connectMongoDB();
+		// Connect to MongoDB
+		await connectMongoDB();
 
-    // Find user with the given Whatsapp number
-    const user = await RegTable.find({ Whatsapp: body.Whatsapp });
+		// Find user with the given Whatsapp number
+		const user = await RegTable.find({ Whatsapp: body.Whatsapp });
 
-    // Return error response if no user is found
-    if (!user) {
-      return NextResponse.json({ message: "No Data Found" }, { status: 404 });
-    }
+		// Return error response if no user is found
+		if (!user) {
+			return NextResponse.json({ message: "No Data Found" }, { status: 404 });
+		}
 
-    // Return success response with the user data
-    return NextResponse.json(
-      { message: "Applicant found successfully", user },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error(error);
-    // Return error response for any other errors
-    return NextResponse.json(
-      { message: "Sorry! We are unable to process your request." },
-      { status: 500 }
-    );
-  }
+		// Return success response with the user data
+		return NextResponse.json(
+			{ message: "Applicant found successfully", user },
+			{ status: 200 },
+		);
+	} catch (error) {
+		console.error(error);
+		// Return error response for any other errors
+		return NextResponse.json(
+			{ message: "Sorry! We are unable to process your request." },
+			{ status: 500 },
+		);
+	}
 }
 
 /* api example 
