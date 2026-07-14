@@ -4,11 +4,11 @@ export default function Terms() {
 			<h3 className="secondary-title">Terms & Conditions</h3>
 			<div>
 				<h3 className="mt-8 scroll-m-20 font-semibold text-2xl tracking-tight">
-					Common Eligibility Criteria for JESA 2025
+					Common Eligibility Criteria for JESA 2026
 				</h3>
 				<ul className="my-6 ml-6 max-w-2xl list-disc text-md text-slate-400 [&>li]:mt-2">
 					<li>
-						To be eligible to apply for the JESA 2025 Awards, you must be a
+						To be eligible to apply for the JESA 2026 Awards, you must be a
 						currently enrolled undergraduate student at our university. Recent
 						graduates are not eligible.
 					</li>
@@ -108,7 +108,7 @@ export default function Terms() {
 				</ul>
 			</div>
 			<p className="font-medium text-slate-500 text-sm leading-none [&:not(:first-child)]:mt-6">
-				Last updated: 2025.07.13 at 02:48 PM
+				Last updated: 2026.07.14 at 11:05 AM
 			</p>
 		</section>
 	);
