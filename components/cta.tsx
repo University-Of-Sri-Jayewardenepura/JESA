@@ -18,7 +18,12 @@ const CTA: React.FC = () => {
 				</p>
 				<div className="relative flex justify-center">
 					<div className="mt-5 w-fit md:mt-6 lg:mt-8">
-						<CtaButton href="/register/2026" shimmer>
+						<CtaButton
+							href="/register/2026"
+							size="lg"
+							className="h-12 px-8 text-base md:h-14 md:px-10 md:text-lg"
+							shimmer
+						>
 							Register Now
 						</CtaButton>
 					</div>

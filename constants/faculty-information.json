@@ -189,9 +189,9 @@
 			},
 			"email": {
 				"prefix": "",
-				"suffix": "@sjp.ac.lk",
+				"suffix": "@fms.sjp.ac.lk",
 				"placeholder": "fms",
-				"regex": "^[a-zA-Z0-9._%+-]+@sjp\\.ac\\.lk$"
+				"regex": "^[a-zA-Z0-9._%+-]+@fms\\.sjp\\.ac\\.lk$"
 			},
 			"degrees": [
 				"Bachelor of Medicine, Bachelor of Surgery (MBBS) (5 Years)",

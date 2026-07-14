@@ -352,7 +352,7 @@ describe("USJ faculty academic validation", () => {
 		},
 		FMS: {
 			registration: "ME/123456",
-			email: "fms.student@sjp.ac.lk",
+			email: "fms.student@fms.sjp.ac.lk",
 			degree: "Bachelor of Medicine, Bachelor of Surgery (MBBS) (5 Years)",
 		},
 		FUAB: {
