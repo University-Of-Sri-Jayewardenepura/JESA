@@ -21,7 +21,7 @@ const WhatIsJesa: React.FC = () => {
 		},
 		{
 			text: "With ",
-			highlights: ["seventeen prestigious titles"],
+			highlights: ["eighteen prestigious titles"],
 			continuation: ", JESA stands as a tribute to ",
 			highlights2: ["resilience, leadership, and unwavering dedication"],
 			ending: ", celebrating those who pursue growth, purpose, and excellence.",
@@ -70,7 +70,7 @@ const WhatIsJesa: React.FC = () => {
 										alt="JESA Awards Ceremony"
 										className="h-auto w-full rounded-lg"
 										height={1080}
-										src="/images/jesa-awards.png"
+										src="/images/banner.webp"
 										width={1920}
 									/>
 								</div>
