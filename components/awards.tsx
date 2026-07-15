@@ -9,6 +9,7 @@ const awardCategories = awards.map((award) => ({
 	id: award.id,
 	title: award.name,
 	image: award.image,
+	isNew: award.id === "17",
 }));
 
 export default function Awards() {
@@ -119,6 +120,12 @@ export default function Awards() {
 											<h3 className="absolute top-5 left-5 max-w-44 font-medium text-[20px] leading-tight tracking-tightest lg:top-6 lg:left-6 lg:text-[24px]">
 												{category.title}
 											</h3>
+
+											{category.isNew && (
+												<span className="absolute top-[23px] right-5 flex h-5 items-center justify-center rounded bg-emerald-400/[0.5] px-3 font-semibold text-[8px] text-gray-90 uppercase leading-none tracking-tighter backdrop-blur-[2px] lg:top-[29px] lg:right-6">
+													New
+												</span>
+											)}
 
 											<div
 												aria-hidden="true"
