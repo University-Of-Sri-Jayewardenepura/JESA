@@ -423,7 +423,7 @@ export const awards = [
 		name: "BESA - Inter University Award",
 		image: "/images/awards/besa.png",
 		description:
-			"Introducing this award for the first time this year, BESA Inter University Award is open to undergraduates from the University of Sri Jayewardenepura as well as all other state universities across Sri Lanka. This award recognizes a truly well-rounded individual who has demonstrated excellence in academics, sports, and other extracurricular activities.",
+			"The BESA Inter University Award is open to undergraduates from the University of Sri Jayewardenepura as well as all other state universities across Sri Lanka. This award recognizes a truly well-rounded individual who has demonstrated excellence in academics, sports, and other extracurricular activities.",
 		sponsors: [
 			{
 				year: 2025,
