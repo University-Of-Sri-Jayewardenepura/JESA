@@ -40,9 +40,9 @@ const Footer: React.FC = () => {
 							/>
 						</div>
 						<p className="max-w-xs text-slate-400 text-sm">
-							Career Skills Development Society • 2026 <br />
-							in collaboration with Career Guidance Unit of <br /> University of
-							Sri Jayewardenepura Contacts
+							Career Skills Development Society 2026 <br />
+							in collaboration with the Career Guidance Unit <br />
+							of University of Sri Jayewardenepura
 						</p>
 					</div>
 					<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10">
