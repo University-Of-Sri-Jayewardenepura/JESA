@@ -73,7 +73,8 @@ type AwardType =
 	| "besa-foe"
 	| "besa-fahs"
 	| "besa-fuab"
-	| "besa-fds";
+	| "besa-fds"
+	| "besa-foc";
 
 interface AwardSelection {
 	selectedAwards: AwardType[];
@@ -135,6 +136,7 @@ const BESA_AWARDS: Record<string, string> = {
 	"besa-fahs": "BESA – FAHS (Faculty of Allied Health Sciences)",
 	"besa-fuab": "BESA – FUAB (Faculty of Urban and Aquatic Bioresources)",
 	"besa-fds": "BESA – FDS (Faculty of Dental Sciences)",
+	"besa-foc": "BESA – FOC (Faculty of Computing)",
 };
 
 const FACULTIES = getFacultyOptions();
@@ -149,6 +151,7 @@ const BESA_FACULTY_MAP: Record<string, AwardType> = {
 	FAHS: "besa-fahs",
 	FUAB: "besa-fuab",
 	FDS: "besa-fds",
+	FOC: "besa-foc",
 };
 
 const INDUSTRIES = [
