@@ -24,8 +24,8 @@ export const AwardsPage: React.FC = () => {
 						once
 						startOnView={false}
 					>
-						Discover seventeen prestigious awards celebrating excellence across
-						university life at JESA 2025. Each award recognizes outstanding
+						Discover eighteen prestigious awards celebrating excellence across
+						university life at JESA 2026. Each award recognizes outstanding
 						undergraduates for their dedication in leadership, innovation,
 						academics, and social responsibility.
 					</TextAnimate>
