@@ -5,7 +5,7 @@ export const awards = [
 		name: "Best Leader",
 		image: "/images/awards/best-leader.png",
 		description:
-			"Special award is designed to encourage undergraduates to take on responsible leadership challenges involved in extracurricular activities and in academic-related activities. This award is given to one of the outstanding undergraduates - student leaders of the university",
+			"Special award is designed to encourage undergraduates to take on responsible leadership challenges involved in extracurricular activities and in academic-related activities. This award is given to one of the outstanding undergraduate - student leaders of the university",
 		sponsors: [
 			{
 				year: 2019,
