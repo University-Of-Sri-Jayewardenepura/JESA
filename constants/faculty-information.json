@@ -120,18 +120,18 @@
 				"regex": "^\\d{6}@mgt\\.sjp\\.ac\\.lk$"
 			},
 			"degrees": [
-				"BSc Marketing Management (Special)",
-				"BSc Accounting (Special)",
-				"BSc Estate Management & Valuation (Special)",
-				"BSc Human Resource Management (Special)",
-				"BSc Finance (Special)",
-				"BSc Operations & Technology Management (Special)",
-				"BSc Public Management (Special)",
-				"BSc Entrepreneurship (Special)",
-				"BSc Business Information Systems (Special)",
-				"BSc Business Economics (Special)",
-				"BSc Business Administration (Special)",
-				"B.Com (Special)"
+				"B.Sc. Honours in Accounting",
+				"B.Sc. Honours in Business Administration",
+				"B.Sc. Honours in Business Administration (Business Economics)",
+				"B. Com. Honours",
+				"B. Sc. Honours in Operations and Technology Management",
+				"B.Sc. Honours in Entrepreneurship",
+				"B.Sc. Honours in Estate Management and Valuation",
+				"B.Sc. Honours in Finance",
+				"B.Sc. Honours in Human Resource Management",
+				"B.Sc. Honours in Business Information Systems",
+				"B.Sc. Honours in Marketing Management",
+				"B.Sc. Honours in Management (Public)"
 			]
 		},
 		"FAS": {

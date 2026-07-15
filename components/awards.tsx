@@ -5,12 +5,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { awards } from "@/constants/awards";
 
-// Add isNew property to specific awards (you can modify this logic later)
-const awardCategories = awards.map((award, index) => ({
+const awardCategories = awards.map((award) => ({
 	id: award.id,
 	title: award.name,
 	image: award.image,
-	isNew: index === 7 || index === 15 || index === 16,
+	isNew: award.id === "17",
 }));
 
 export default function Awards() {

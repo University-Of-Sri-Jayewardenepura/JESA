@@ -343,7 +343,7 @@ describe("USJ faculty academic validation", () => {
 		FMSC: {
 			registration: "MC123456",
 			email: "student.123@mgt.sjp.ac.lk",
-			degree: "BSc Accounting (Special)",
+			degree: "B.Sc. Honours in Accounting",
 		},
 		FAS: {
 			registration: "AS123456",
@@ -404,7 +404,7 @@ describe("USJ faculty academic validation", () => {
 	it("rejects a degree from a different faculty", () => {
 		const data = validData();
 		data.academicInfo.faculty = "FOT";
-		data.academicInfo.degree = "BSc Accounting (Special)";
+		data.academicInfo.degree = "B.Sc. Honours in Accounting";
 
 		const result = applicationBusinessSchema.safeParse(data);
 		expect(result.success).toBe(false);
@@ -438,6 +438,30 @@ describe("USJ faculty academic validation", () => {
 
 		const result = applicationBusinessSchema.safeParse(data);
 		expect(result.success).toBe(true);
+	});
+	it("accepts Year 5 for FMS and FDS faculties", () => {
+		const data = validData();
+		data.academicInfo.faculty = "FMS";
+		data.academicInfo.universityRegistrationNumber = "ME/123456";
+		data.academicInfo.universityEmail = "fms.student@fms.sjp.ac.lk";
+		data.academicInfo.degree =
+			"Bachelor of Medicine, Bachelor of Surgery (MBBS) (5 Years)";
+		data.academicInfo.academicYear = "year-5";
+
+		const result = applicationBusinessSchema.safeParse(data);
+		expect(result.success).toBe(true);
+	});
+
+	it("rejects Year 5 for other faculties (e.g. FOC)", () => {
+		const data = validData();
+		data.academicInfo.faculty = "FOC";
+		data.academicInfo.universityRegistrationNumber = "FC123456";
+		data.academicInfo.universityEmail = "student.123@foc.sjp.ac.lk";
+		data.academicInfo.degree = "B. Comp(hons) in Software Engineering";
+		data.academicInfo.academicYear = "year-5";
+
+		const result = applicationBusinessSchema.safeParse(data);
+		expect(result.success).toBe(false);
 	});
 });
 

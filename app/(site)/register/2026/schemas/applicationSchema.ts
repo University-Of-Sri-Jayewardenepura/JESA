@@ -37,6 +37,7 @@ const AcademicYearEnum = z.enum([
 	"year-2",
 	"year-3",
 	"year-4",
+	"year-5",
 	"recent-graduate",
 ]);
 
@@ -199,6 +200,17 @@ const academicInfoSchema = z
 						? "otherDegree"
 						: "degree",
 				],
+			});
+		}
+		if (
+			academicInfo.academicYear === "year-5" &&
+			academicInfo.faculty !== "FMS" &&
+			academicInfo.faculty !== "FDS"
+		) {
+			context.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: "Year 5 is only available for FMS and FDS faculties",
+				path: ["academicYear"],
 			});
 		}
 	});

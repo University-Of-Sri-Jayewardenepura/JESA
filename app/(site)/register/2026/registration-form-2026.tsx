@@ -73,7 +73,8 @@ type AwardType =
 	| "besa-foe"
 	| "besa-fahs"
 	| "besa-fuab"
-	| "besa-fds";
+	| "besa-fds"
+	| "besa-foc";
 
 interface AwardSelection {
 	selectedAwards: AwardType[];
@@ -135,6 +136,7 @@ const BESA_AWARDS: Record<string, string> = {
 	"besa-fahs": "BESA – FAHS (Faculty of Allied Health Sciences)",
 	"besa-fuab": "BESA – FUAB (Faculty of Urban and Aquatic Bioresources)",
 	"besa-fds": "BESA – FDS (Faculty of Dental Sciences)",
+	"besa-foc": "BESA – FOC (Faculty of Computing)",
 };
 
 const FACULTIES = getFacultyOptions();
@@ -149,6 +151,7 @@ const BESA_FACULTY_MAP: Record<string, AwardType> = {
 	FAHS: "besa-fahs",
 	FUAB: "besa-fuab",
 	FDS: "besa-fds",
+	FOC: "besa-foc",
 };
 
 const INDUSTRIES = [
@@ -674,7 +677,15 @@ const Step2AcademicInfo: React.FC = () => {
 	const isInternal = applicantType === "internal";
 	const selectedFacultyConfig = getFacultyConfig(academicInfo.faculty);
 	const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
-	const academicYearOptions = ACADEMIC_YEARS;
+	const academicYearOptions =
+		isInternal &&
+		(academicInfo.faculty === "FMS" || academicInfo.faculty === "FDS")
+			? [
+					...ACADEMIC_YEARS.slice(0, 4),
+					{ value: "year-5", label: "Year 5" },
+					ACADEMIC_YEARS[4],
+				]
+			: ACADEMIC_YEARS;
 	const degreeOptions = getFacultyDegreeOptions(academicInfo.faculty);
 	const registrationLocalPart = selectedFacultyConfig
 		? extractFacultyRegistrationLocalPart(
@@ -706,12 +717,18 @@ const Step2AcademicInfo: React.FC = () => {
 	}, [isRecentGraduate, awardSelection.selectedAwards, updateAwardSelection]);
 
 	const handleInternalFacultyChange = (faculty: string) => {
+		const shouldResetAcademicYear =
+			academicInfo.academicYear === "year-5" &&
+			faculty !== "FMS" &&
+			faculty !== "FDS";
+
 		updateAcademicInfo({
 			faculty,
 			universityRegistrationNumber: "",
 			universityEmail: "",
 			degree: "",
 			otherDegree: "",
+			...(shouldResetAcademicYear ? { academicYear: "" } : {}),
 		});
 		updateAwardSelection({ selectedAwards: [], hasConditionalAwards: false });
 		setErrors((previous) => ({
@@ -721,6 +738,7 @@ const Step2AcademicInfo: React.FC = () => {
 			universityEmail: "",
 			degree: "",
 			otherDegree: "",
+			...(shouldResetAcademicYear ? { academicYear: "" } : {}),
 		}));
 	};
 
