@@ -439,6 +439,30 @@ describe("USJ faculty academic validation", () => {
 		const result = applicationBusinessSchema.safeParse(data);
 		expect(result.success).toBe(true);
 	});
+	it("accepts Year 5 for FMS and FDS faculties", () => {
+		const data = validData();
+		data.academicInfo.faculty = "FMS";
+		data.academicInfo.universityRegistrationNumber = "ME/123456";
+		data.academicInfo.universityEmail = "fms.student@fms.sjp.ac.lk";
+		data.academicInfo.degree =
+			"Bachelor of Medicine, Bachelor of Surgery (MBBS) (5 Years)";
+		data.academicInfo.academicYear = "year-5";
+
+		const result = applicationBusinessSchema.safeParse(data);
+		expect(result.success).toBe(true);
+	});
+
+	it("rejects Year 5 for other faculties (e.g. FOC)", () => {
+		const data = validData();
+		data.academicInfo.faculty = "FOC";
+		data.academicInfo.universityRegistrationNumber = "FC123456";
+		data.academicInfo.universityEmail = "student.123@foc.sjp.ac.lk";
+		data.academicInfo.degree = "B. Comp(hons) in Software Engineering";
+		data.academicInfo.academicYear = "year-5";
+
+		const result = applicationBusinessSchema.safeParse(data);
+		expect(result.success).toBe(false);
+	});
 });
 
 describe("CSR email duplicate validation", () => {

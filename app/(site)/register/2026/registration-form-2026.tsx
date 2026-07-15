@@ -674,7 +674,15 @@ const Step2AcademicInfo: React.FC = () => {
 	const isInternal = applicantType === "internal";
 	const selectedFacultyConfig = getFacultyConfig(academicInfo.faculty);
 	const isRecentGraduate = academicInfo.academicYear === "recent-graduate";
-	const academicYearOptions = ACADEMIC_YEARS;
+	const academicYearOptions =
+		isInternal &&
+		(academicInfo.faculty === "FMS" || academicInfo.faculty === "FDS")
+			? [
+					...ACADEMIC_YEARS.slice(0, 4),
+					{ value: "year-5", label: "Year 5" },
+					ACADEMIC_YEARS[4],
+				]
+			: ACADEMIC_YEARS;
 	const degreeOptions = getFacultyDegreeOptions(academicInfo.faculty);
 	const registrationLocalPart = selectedFacultyConfig
 		? extractFacultyRegistrationLocalPart(
@@ -706,12 +714,18 @@ const Step2AcademicInfo: React.FC = () => {
 	}, [isRecentGraduate, awardSelection.selectedAwards, updateAwardSelection]);
 
 	const handleInternalFacultyChange = (faculty: string) => {
+		const shouldResetAcademicYear =
+			academicInfo.academicYear === "year-5" &&
+			faculty !== "FMS" &&
+			faculty !== "FDS";
+
 		updateAcademicInfo({
 			faculty,
 			universityRegistrationNumber: "",
 			universityEmail: "",
 			degree: "",
 			otherDegree: "",
+			...(shouldResetAcademicYear ? { academicYear: "" } : {}),
 		});
 		updateAwardSelection({ selectedAwards: [], hasConditionalAwards: false });
 		setErrors((previous) => ({
@@ -721,6 +735,7 @@ const Step2AcademicInfo: React.FC = () => {
 			universityEmail: "",
 			degree: "",
 			otherDegree: "",
+			...(shouldResetAcademicYear ? { academicYear: "" } : {}),
 		}));
 	};
 
