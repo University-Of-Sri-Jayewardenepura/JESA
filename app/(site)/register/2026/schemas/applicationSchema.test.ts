@@ -343,7 +343,7 @@ describe("USJ faculty academic validation", () => {
 		FMSC: {
 			registration: "MC123456",
 			email: "student.123@mgt.sjp.ac.lk",
-			degree: "BSc Accounting (Special)",
+			degree: "B.Sc. Honours in Accounting",
 		},
 		FAS: {
 			registration: "AS123456",
@@ -404,7 +404,7 @@ describe("USJ faculty academic validation", () => {
 	it("rejects a degree from a different faculty", () => {
 		const data = validData();
 		data.academicInfo.faculty = "FOT";
-		data.academicInfo.degree = "BSc Accounting (Special)";
+		data.academicInfo.degree = "B.Sc. Honours in Accounting";
 
 		const result = applicationBusinessSchema.safeParse(data);
 		expect(result.success).toBe(false);
