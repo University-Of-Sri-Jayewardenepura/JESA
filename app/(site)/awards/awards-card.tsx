@@ -3,8 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
-import { TextAnimate } from "@/components/core/text-animate";
+import dynamic from "next/dynamic";
 import { awards } from "@/constants/awards";
+
+const TextAnimate = dynamic(
+	() => import("@/components/core/text-animate").then((mod) => mod.TextAnimate),
+	{ ssr: false },
+);
 
 export const AwardsPage: React.FC = () => {
 	return (
