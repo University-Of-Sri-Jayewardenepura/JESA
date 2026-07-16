@@ -852,7 +852,20 @@ export const awards = [
 		image: "/images/awards/besa.png",
 		description:
 			"Dedicated to the most optimistic and brilliant all-rounded undergraduate from the Urban and Aquatic  Bio resources Faculty . The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the Urban and Aquatic Bio resources Faculty  will be awarded as the BESA Silver Medalists accordingly.",
-		sponsors: [],
+		sponsors: [
+			{
+				year: 2025,
+				type: "Gold",
+				imgSrc: "/images/companies/csds.png",
+				link: "http://careerskills.sjp.ac.lk/",
+			},
+			{
+				year: 2025,
+				type: "Silver",
+				imgSrc: "/images/companies/csds.png",
+				link: "http://careerskills.sjp.ac.lk/",
+			},
+		],
 	},
 	{
 		id: "16",
@@ -861,7 +874,20 @@ export const awards = [
 		image: "/images/awards/besa.png",
 		description:
 			"Dedicated to the most optimistic and brilliant all-rounded undergraduate from the New Dental Sciences Faculty. The winner is excelled in academics, sports, and other extracurricular activities. Further, the two contestants (2nd and 3rd place) with the next maximum points in the New Dental Sciences Faculty will be awarded as the BESA Silver Medalists accordingly.",
-		sponsors: [],
+		sponsors: [
+			{
+				year: 2025,
+				type: "Gold",
+				imgSrc: "/images/companies/csds.png",
+				link: "http://careerskills.sjp.ac.lk/",
+			},
+			{
+				year: 2025,
+				type: "Silver",
+				imgSrc: "/images/companies/csds.png",
+				link: "http://careerskills.sjp.ac.lk/",
+			},
+		],
 	},
 	{
 		id: "17",

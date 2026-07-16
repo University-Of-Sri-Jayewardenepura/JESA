@@ -69,9 +69,16 @@ export const AwardsPage: React.FC = () => {
 									</div>
 									<div className="w-full space-y-6 md:w-1/2">
 										<div className="space-y-4">
-											<h3 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-2xl text-transparent md:text-3xl">
-												{award.name}
-											</h3>
+											<div className="flex items-center gap-3">
+												<h3 className="bg-[linear-gradient(92deg,rgba(255,255,255,0.60)_6.46%,#FFF_22.73%,rgba(255,255,255,1.00)_79.27%,rgba(255,255,255,0.50)_95.93%)] bg-clip-text font-title text-2xl text-transparent md:text-3xl">
+													{award.name}
+												</h3>
+												{award.id === "17" && (
+													<span className="inline-flex h-5 items-center justify-center rounded bg-emerald-500/20 border border-emerald-500/30 px-2 text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">
+														New
+													</span>
+												)}
+											</div>
 											<p className="text-slate-400 text-sm leading-relaxed md:text-base">
 												{award.description}
 											</p>
