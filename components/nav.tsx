@@ -147,9 +147,9 @@ const Nav: React.FC = () => {
 							>
 								<Link href="/terms">Terms & Conditions</Link>
 							</CtaButton>
-							<CtaButton asChild className="w-full" onClick={toggleMenu}>
+							{/* <CtaButton asChild className="w-full" onClick={toggleMenu}>
 								<Link href="/register/2026">Register Now</Link>
-							</CtaButton>
+							</CtaButton> */}
 						</div>
 					</div>
 				</div>
