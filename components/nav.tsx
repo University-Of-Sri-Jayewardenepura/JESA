@@ -73,7 +73,7 @@ const Nav: React.FC = () => {
 					>
 						<Link href="/terms">Terms & Conditions</Link>
 					</Button>
-					<Button
+					{/* <Button
 						asChild
 						className="group h-8 rounded-full border border-gray-600 bg-transparent text-md transition-colors hover:border-primary hover:bg-primary"
 						variant="outline"
@@ -84,7 +84,7 @@ const Nav: React.FC = () => {
 						>
 							Register Now
 						</Link>
-					</Button>
+					</Button> */}
 				</div>
 
 				{/* Mobile Menu Button */}
