@@ -10,6 +10,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { getAwardLabel } from "@/lib/awards";
 import type { Application, ApplicationStatus } from "./types";
 
@@ -133,18 +140,22 @@ export default function MobileCards({
 
 					<div className="flex items-center justify-between">
 						{onStatusChange && (
-							<select
+							<Select
 								value={app.status || "submitted"}
-								onChange={(e) =>
-									onStatusChange(app.id, e.target.value as ApplicationStatus)
+								onValueChange={(val) =>
+									onStatusChange(app.id, val as ApplicationStatus)
 								}
-								className="h-8 rounded-[8px] border border-slate-600 bg-slate-800/50 px-2 text-xs text-slate-300 outline-none"
 							>
-								<option value="submitted">Submitted</option>
-								<option value="shortlisted">Shortlisted</option>
-								<option value="approved">Approved</option>
-								<option value="rejected">Rejected</option>
-							</select>
+								<SelectTrigger className="h-8 min-w-[110px] border border-slate-600 bg-slate-800/50 text-xs text-slate-300">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="submitted">Submitted</SelectItem>
+									<SelectItem value="shortlisted">Shortlisted</SelectItem>
+									<SelectItem value="approved">Approved</SelectItem>
+									<SelectItem value="rejected">Rejected</SelectItem>
+								</SelectContent>
+							</Select>
 						)}
 						<div className="flex items-center gap-2 ml-auto">
 							<Button

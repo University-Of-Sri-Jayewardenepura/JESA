@@ -11,6 +11,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { getAwardLabel } from "@/lib/awards";
 import type { Application, ApplicationStatus } from "./types";
 
@@ -165,21 +172,25 @@ export default function ApplicationsTable({
 								<td className="px-4 py-3 text-right">
 									<div className="flex items-center justify-end gap-2">
 										{onStatusChange && (
-											<select
+											<Select
 												value={app.status || "submitted"}
-												onChange={(e) =>
+												onValueChange={(val) =>
 													onStatusChange(
 														app.id,
-														e.target.value as ApplicationStatus,
+														val as ApplicationStatus,
 													)
 												}
-												className="h-8 rounded-[8px] border border-slate-600 bg-slate-800/50 px-2 text-xs text-slate-300 outline-none hover:bg-slate-800"
 											>
-												<option value="submitted">Submitted</option>
-												<option value="shortlisted">Shortlisted</option>
-												<option value="approved">Approved</option>
-												<option value="rejected">Rejected</option>
-											</select>
+												<SelectTrigger className="h-8 min-w-[110px] border border-slate-600 bg-slate-800/50 text-xs text-slate-300 hover:bg-slate-800">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="submitted">Submitted</SelectItem>
+													<SelectItem value="shortlisted">Shortlisted</SelectItem>
+													<SelectItem value="approved">Approved</SelectItem>
+													<SelectItem value="rejected">Rejected</SelectItem>
+												</SelectContent>
+											</Select>
 										)}
 										<Button
 											size="sm"

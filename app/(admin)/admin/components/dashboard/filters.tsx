@@ -10,6 +10,13 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { ALL_AWARD_IDS, getAwardLabel, isBesaAward } from "@/lib/awards";
 import type { Application, ApplicationStatus, DashboardFilters } from "./types";
 
@@ -58,20 +65,21 @@ function SelectField({
 	icon: React.ComponentType<{ className?: string }>;
 }) {
 	return (
-		<div className="relative">
-			<Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-			<select
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
-				className="flex h-9 w-full min-w-0 rounded-[8px] border border-input bg-transparent px-3 py-1 pl-9 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30"
-			>
-				<option value="all">{placeholder}</option>
-				{options.map((opt) => (
-					<option key={opt.value} value={opt.value}>
-						{opt.label}
-					</option>
-				))}
-			</select>
+		<div className="relative w-full">
+			<Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none z-10" />
+			<Select value={value} onValueChange={onChange}>
+				<SelectTrigger className="w-full pl-9 h-9 bg-transparent border-input dark:bg-input/30 text-slate-200">
+					<SelectValue placeholder={placeholder} />
+				</SelectTrigger>
+				<SelectContent className="max-h-[300px]">
+					<SelectItem value="all">{placeholder}</SelectItem>
+					{options.map((opt) => (
+						<SelectItem key={opt.value} value={opt.value}>
+							{opt.label}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
 		</div>
 	);
 }
