@@ -19,6 +19,10 @@ export const WHATSAPP_LINKS: Record<string, { label: string; url: string }> = {
 		label: "BESA FUAB Award",
 		url: "https://chat.whatsapp.com/LUchC4LqKHtLl2eNosSusF",
 	},
+	"besa-foc": {
+		label: "BESA FOC Award",
+		url: "https://chat.whatsapp.com/B8iwXW3W3TE5BeQrrV9dAh",
+	},
 	"besa-fds": {
 		label: "BESA FDS Award",
 		url: "https://chat.whatsapp.com/LYJbov4fad8GHhkqPTeudK",
