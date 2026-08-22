@@ -17,7 +17,6 @@ import {
 	RefreshCw,
 	Search,
 	Send,
-	SlidersHorizontal,
 	UserSearch,
 	X,
 } from "lucide-react";
@@ -146,7 +145,10 @@ function RegistrationLookupTab({
 	const [search, setSearch] = useState("");
 	const [registrationFilter, setRegistrationFilter] = useState<
 		"all" | "registered" | "not_registered"
-	>("all");
+	>("not_registered");
+	const [registrationSort, setRegistrationSort] = useState<"asc" | "desc">(
+		"asc",
+	);
 	const [selectedApplicationIds, setSelectedApplicationIds] = useState<
 		string[]
 	>([]);
@@ -155,24 +157,34 @@ function RegistrationLookupTab({
 	const [registrationActionError, setRegistrationActionError] = useState("");
 	const [isRegistering, startRegistrationTransition] = useTransition();
 	const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase());
-	const filteredRecords = records.filter((record) => {
-		const matchesRegistrationState =
-			registrationFilter === "all" ||
-			(registrationFilter === "registered" && record.isRegistered) ||
-			(registrationFilter === "not_registered" && !record.isRegistered);
-		const matchesSearch =
-			!deferredSearch ||
-			[
-				record.applicationReferenceNumber ?? "",
-				record.recipient.name,
-				record.recipient.email,
-				...record.awards.flatMap((award) => [
-					award.awardLabel,
-					award.registrationNumber ?? "",
-				]),
-			].some((value) => value.toLocaleLowerCase().includes(deferredSearch));
-		return matchesRegistrationState && matchesSearch;
-	});
+	const filteredRecords = records
+		.filter((record) => {
+			const matchesRegistrationState =
+				registrationFilter === "all" ||
+				(registrationFilter === "registered" && record.isRegistered) ||
+				(registrationFilter === "not_registered" && !record.isRegistered);
+			const matchesSearch =
+				!deferredSearch ||
+				[
+					record.applicationReferenceNumber ?? "",
+					record.recipient.name,
+					record.recipient.email,
+					...record.awards.flatMap((award) => [
+						award.awardLabel,
+						award.registrationNumber ?? "",
+					]),
+				].some((value) => value.toLocaleLowerCase().includes(deferredSearch));
+			return matchesRegistrationState && matchesSearch;
+		})
+		.sort((left, right) => {
+			const leftValue = left.applicationReferenceNumber ?? left.recipient.name;
+			const rightValue =
+				right.applicationReferenceNumber ?? right.recipient.name;
+			const comparison = leftValue.localeCompare(rightValue, undefined, {
+				numeric: true,
+			});
+			return registrationSort === "asc" ? comparison : -comparison;
+		});
 	const registeredCount = records.filter(
 		(record) => record.isRegistered,
 	).length;
@@ -320,25 +332,43 @@ function RegistrationLookupTab({
 							awards.
 						</p>
 					</div>
-					<label className="relative block sm:w-56">
-						<select
-							className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-							onChange={(event) =>
-								setRegistrationFilter(
-									event.target.value as typeof registrationFilter,
-								)
-							}
-							value={registrationFilter}
-						>
-							<option value="all">All applications</option>
-							<option value="registered">Registered</option>
-							<option value="not_registered">Not registered</option>
-						</select>
-						<ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
-						<span className="sr-only">
-							Filter application registration status
-						</span>
-					</label>
+					<div className="flex flex-col gap-2 sm:flex-row">
+						<label className="relative block sm:w-48">
+							<select
+								className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+								onChange={(event) =>
+									setRegistrationFilter(
+										event.target.value as typeof registrationFilter,
+									)
+								}
+								value={registrationFilter}
+							>
+								<option value="all">All applications</option>
+								<option value="registered">Registered</option>
+								<option value="not_registered">Not registered</option>
+							</select>
+							<ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
+							<span className="sr-only">
+								Filter application registration status
+							</span>
+						</label>
+						<label className="relative block sm:w-44">
+							<select
+								className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+								onChange={(event) =>
+									setRegistrationSort(
+										event.target.value as typeof registrationSort,
+									)
+								}
+								value={registrationSort}
+							>
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+							<ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
+							<span className="sr-only">Sort registrations</span>
+						</label>
+					</div>
 				</div>
 
 				{!loading && !error && selectableRecords.length > 0 && (
@@ -551,27 +581,40 @@ export default function EmailServiceUI() {
 	const [messageLoading, setMessageLoading] = useState(false);
 	const [messageRefreshKey, setMessageRefreshKey] = useState(0);
 	const [messageFilter, setMessageFilter] =
-		useState<MessageStatusFilter>("all");
+		useState<MessageStatusFilter>("not_sent");
+	const [messageSort, setMessageSort] = useState<"asc" | "desc">("asc");
 	const [messageSearch, setMessageSearch] = useState("");
 	const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([]);
 	const [isSendingMessages, startMessageTransition] = useTransition();
 	const deferredMessageSearch = useDeferredValue(
 		messageSearch.trim().toLocaleLowerCase(),
 	);
-	const filteredMessageRecords = messageRecords.filter((record) => {
-		const matchesStatus = matchesMessageFilter(record.status, messageFilter);
-		const matchesSearch =
-			!deferredMessageSearch ||
-			[
-				record.registrationNumber,
-				record.recipient.name,
-				record.recipient.email,
-				...record.awards,
-			].some((value) =>
-				value.toLocaleLowerCase().includes(deferredMessageSearch),
+	const filteredMessageRecords = messageRecords
+		.filter((record) => {
+			const matchesStatus = matchesMessageFilter(record.status, messageFilter);
+			const matchesSearch =
+				!deferredMessageSearch ||
+				[
+					record.registrationNumber,
+					record.recipient.name,
+					record.recipient.email,
+					...record.awards,
+				].some((value) =>
+					value.toLocaleLowerCase().includes(deferredMessageSearch),
+				);
+			return matchesStatus && matchesSearch;
+		})
+		.sort((left, right) => {
+			const comparison = left.registrationNumber.localeCompare(
+				right.registrationNumber,
+				undefined,
+				{ numeric: true },
 			);
-		return matchesStatus && matchesSearch;
-	});
+			return messageSort === "asc" ? comparison : -comparison;
+		});
+	const unregisteredCount = registrationRecords.filter(
+		(record) => !record.isRegistered,
+	).length;
 	const sendableMessageRecords = filteredMessageRecords.filter((record) =>
 		canSendMessage(record.status),
 	);
@@ -710,8 +753,6 @@ export default function EmailServiceUI() {
 	}, [activeWorkspace, messageRefreshKey]);
 
 	useEffect(() => {
-		if (activeWorkspace !== "registration-lookup") return;
-
 		let cancelled = false;
 
 		/** Loads lookup records while respecting component cancellation. */
@@ -738,7 +779,7 @@ export default function EmailServiceUI() {
 		return () => {
 			cancelled = true;
 		};
-	}, [activeWorkspace, registrationRefreshKey]);
+	}, [registrationRefreshKey]);
 
 	return (
 		<main className="relative min-h-screen overflow-hidden bg-background px-4 pt-28 pb-20 text-foreground sm:px-6 lg:px-8">
@@ -839,6 +880,13 @@ export default function EmailServiceUI() {
 						type="button"
 					>
 						<UserSearch className="size-4" /> Registration Lookup
+						<span className="rounded-full bg-background/20 px-2 py-0.5 text-xs tabular-nums">
+							{registrationLoading ? (
+								<Loader2 className="size-3 animate-spin" />
+							) : (
+								unregisteredCount
+							)}
+						</span>
 					</button>
 				</nav>
 
@@ -917,13 +965,20 @@ export default function EmailServiceUI() {
 										/>
 										<span className="sr-only">Search registration emails</span>
 									</label>
-									<Button
-										className="h-10 border-border bg-background/60"
-										type="button"
-										variant="outline"
-									>
-										<SlidersHorizontal className="size-4" /> Filters
-									</Button>
+									<label className="relative block sm:w-44">
+										<select
+											className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+											onChange={(event) =>
+												setMessageSort(event.target.value as typeof messageSort)
+											}
+											value={messageSort}
+										>
+											<option value="asc">Ascending</option>
+											<option value="desc">Descending</option>
+										</select>
+										<ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
+										<span className="sr-only">Sort messages</span>
+									</label>
 								</div>
 							</div>
 
