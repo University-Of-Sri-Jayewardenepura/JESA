@@ -79,3 +79,31 @@ export type RegistrationBatchResult = {
 	failed: number;
 	results: RegistrationActionResult[];
 };
+
+export type MessageDispatchStatus =
+	| "not_sent"
+	| "processing"
+	| "accepted"
+	| "delivered"
+	| "failed"
+	| "bounced"
+	| "complained";
+
+export type MessageRecord = {
+	applicationId: string;
+	registrationNumber: string;
+	recipient: {
+		name: string;
+		email: string;
+	};
+	awards: string[];
+	status: MessageDispatchStatus;
+	sendCount: number;
+	lastSentAt: string | null;
+	updatedAt: string | null;
+};
+
+export type UpdatedApplicationMessageDocument = {
+	documentId: string;
+	data: FirebaseFirestore.DocumentData;
+};

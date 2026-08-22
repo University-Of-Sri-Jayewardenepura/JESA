@@ -24,112 +24,82 @@ import {
 import { useDeferredValue, useEffect, useState, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { getMessageRecords } from "./service/message-retrieval-service";
 import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
 import type {
+	MessageDispatchStatus,
+	MessageRecord,
 	RegistrationBatchResult,
 	RegistrationLookupItem,
 } from "./service/types";
 
-// Placeholder records keep this page focused on layout until API integration is added.
-const emailRecords = [
-	{
-		id: "JESA26-0148",
-		name: "Nethmi Perera",
-		email: "nethmi.perera@example.com",
-		award: "Young Entrepreneur of the Year",
-		status: "Ready",
-		attempts: 0,
-		lastSent: "Not sent yet",
-	},
-	{
-		id: "JESA26-0147",
-		name: "Kavindu Fernando",
-		email: "kavindu.f@example.com",
-		award: "Outstanding Startup Award",
-		status: "Delivered",
-		attempts: 1,
-		lastSent: "22 Aug, 10:42 AM",
-	},
-	{
-		id: "JESA26-0146",
-		name: "Sajini Wickramasinghe",
-		email: "sajini.w@example.com",
-		award: "Business Excellence Award",
-		status: "Processing",
-		attempts: 1,
-		lastSent: "22 Aug, 10:38 AM",
-	},
-	{
-		id: "JESA26-0145",
-		name: "Ravindu Jayasena",
-		email: "ravindu.j@example.com",
-		award: "Social Impact Award",
-		status: "Failed",
-		attempts: 2,
-		lastSent: "22 Aug, 09:16 AM",
-	},
-	{
-		id: "JESA26-0144",
-		name: "Dilki Gunawardena",
-		email: "dilki.g@example.com",
-		award: "Women in Business Award",
-		status: "Delivered",
-		attempts: 1,
-		lastSent: "21 Aug, 04:55 PM",
-	},
-] as const;
+type MessageStatusFilter =
+	| "all"
+	| "not_sent"
+	| "in_progress"
+	| "sent"
+	| "delivered"
+	| "failed";
 
-const summaryCards = [
-	{
-		label: "Ready to send",
-		value: "128",
-		detail: "Registration emails",
-		icon: MailPlus,
-		accent: "text-primary bg-primary/10 border-primary/20",
-	},
-	{
-		label: "In progress",
-		value: "06",
-		detail: "Queued or processing",
-		icon: Clock3,
-		accent: "text-blue-300 bg-blue-500/10 border-blue-400/20",
-	},
-	{
-		label: "Delivered",
-		value: "1,284",
-		detail: "91.3% delivery rate",
-		icon: CheckCircle2,
-		accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
-	},
-	{
-		label: "Needs attention",
-		value: "12",
-		detail: "Failed or bounced",
-		icon: AlertCircle,
-		accent: "text-red-300 bg-red-500/10 border-red-400/20",
-	},
-] as const;
-
-const statusStyles: Record<(typeof emailRecords)[number]["status"], string> = {
-	Ready: "border-primary/25 bg-primary/10 text-primary",
-	Delivered: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
-	Processing: "border-blue-400/25 bg-blue-500/10 text-blue-300",
-	Failed: "border-red-400/25 bg-red-500/10 text-red-300",
+const MESSAGE_STATUS_LABELS: Record<MessageDispatchStatus, string> = {
+	not_sent: "Not sent",
+	processing: "Processing",
+	accepted: "Sent",
+	delivered: "Delivered",
+	failed: "Failed",
+	bounced: "Bounced",
+	complained: "Complained",
 };
 
+const MESSAGE_STATUS_STYLES: Record<MessageDispatchStatus, string> = {
+	not_sent: "border-primary/25 bg-primary/10 text-primary",
+	processing: "border-blue-400/25 bg-blue-500/10 text-blue-300",
+	accepted: "border-blue-400/25 bg-blue-500/10 text-blue-300",
+	delivered: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
+	failed: "border-red-400/25 bg-red-500/10 text-red-300",
+	bounced: "border-red-400/25 bg-red-500/10 text-red-300",
+	complained: "border-red-400/25 bg-red-500/10 text-red-300",
+};
+
+/** Groups backend dispatch statuses into the visible message tabs. */
+function matchesMessageFilter(
+	status: MessageDispatchStatus,
+	filter: MessageStatusFilter,
+) {
+	if (filter === "all") return true;
+	if (filter === "in_progress") return status === "processing";
+	if (filter === "sent") return status === "accepted";
+	if (filter === "failed") {
+		return (
+			status === "failed" || status === "bounced" || status === "complained"
+		);
+	}
+	return status === filter;
+}
+
+/** Formats a serialized Firestore date for the message table. */
+function formatMessageDate(value: string | null) {
+	if (!value) return "Not sent yet";
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return "Unknown";
+	return new Intl.DateTimeFormat("en-GB", {
+		day: "2-digit",
+		month: "short",
+		year: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+	}).format(date);
+}
+
 /** Displays the delivery state used by the message-sending preview. */
-function StatusBadge({
-	status,
-}: {
-	status: (typeof emailRecords)[number]["status"];
-}) {
+function StatusBadge({ status }: { status: MessageDispatchStatus }) {
 	return (
 		<span
-			className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium text-xs ${statusStyles[status]}`}
+			className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium text-xs ${MESSAGE_STATUS_STYLES[status]}`}
 		>
 			<span className="size-1.5 rounded-full bg-current" />
-			{status}
+			{MESSAGE_STATUS_LABELS[status]}
 		</span>
 	);
 }
@@ -570,6 +540,139 @@ export default function EmailServiceUI() {
 	const [registrationLookupError, setRegistrationLookupError] = useState("");
 	const [registrationLoading, setRegistrationLoading] = useState(false);
 	const [registrationRefreshKey, setRegistrationRefreshKey] = useState(0);
+	const [messageRecords, setMessageRecords] = useState<MessageRecord[]>([]);
+	const [messageError, setMessageError] = useState("");
+	const [messageLoading, setMessageLoading] = useState(false);
+	const [messageRefreshKey, setMessageRefreshKey] = useState(0);
+	const [messageFilter, setMessageFilter] =
+		useState<MessageStatusFilter>("all");
+	const [messageSearch, setMessageSearch] = useState("");
+	const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([]);
+	const deferredMessageSearch = useDeferredValue(
+		messageSearch.trim().toLocaleLowerCase(),
+	);
+	const filteredMessageRecords = messageRecords.filter((record) => {
+		const matchesStatus = matchesMessageFilter(record.status, messageFilter);
+		const matchesSearch =
+			!deferredMessageSearch ||
+			[
+				record.registrationNumber,
+				record.recipient.name,
+				record.recipient.email,
+				...record.awards,
+			].some((value) =>
+				value.toLocaleLowerCase().includes(deferredMessageSearch),
+			);
+		return matchesStatus && matchesSearch;
+	});
+	const allMessagesSelected =
+		filteredMessageRecords.length > 0 &&
+		filteredMessageRecords.every((record) =>
+			selectedMessageIds.includes(record.applicationId),
+		);
+	const messageSummaryCards = [
+		{
+			label: "Ready to send",
+			value: messageRecords.filter((record) => record.status === "not_sent")
+				.length,
+			detail: "Registration emails",
+			icon: MailPlus,
+			accent: "text-primary bg-primary/10 border-primary/20",
+		},
+		{
+			label: "In progress",
+			value: messageRecords.filter(
+				(record) =>
+					record.status === "processing" || record.status === "accepted",
+			).length,
+			detail: "Processing or sent",
+			icon: Clock3,
+			accent: "text-blue-300 bg-blue-500/10 border-blue-400/20",
+		},
+		{
+			label: "Delivered",
+			value: messageRecords.filter((record) => record.status === "delivered")
+				.length,
+			detail: `${messageRecords.length > 0 ? ((messageRecords.filter((record) => record.status === "delivered").length / messageRecords.length) * 100).toFixed(1) : "0.0"}% delivery rate`,
+			icon: CheckCircle2,
+			accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
+		},
+		{
+			label: "Needs attention",
+			value: messageRecords.filter((record) =>
+				matchesMessageFilter(record.status, "failed"),
+			).length,
+			detail: "Failed, bounced, or complained",
+			icon: AlertCircle,
+			accent: "text-red-300 bg-red-500/10 border-red-400/20",
+		},
+	];
+
+	/** Adds or removes one email record from the selected message array. */
+	function toggleMessageSelection(messageId: string) {
+		setSelectedMessageIds((current) =>
+			current.includes(messageId)
+				? current.filter((id) => id !== messageId)
+				: [...current, messageId],
+		);
+	}
+
+	/** Selects every visible message or clears the complete selection. */
+	function toggleAllMessages() {
+		const visibleIds = filteredMessageRecords.map(
+			(record) => record.applicationId,
+		);
+		setSelectedMessageIds((current) =>
+			allMessagesSelected
+				? current.filter((id) => !visibleIds.includes(id))
+				: [...new Set([...current, ...visibleIds])],
+		);
+	}
+
+	/** Logs the selected message array for the future backend integration. */
+	function sendSelectedMessages(messageIds: string[]) {
+		const selectedIds = [...messageIds];
+		console.log("[Message Sending] Selected message IDs:", selectedIds);
+		toast.success(
+			`${selectedIds.length} message${selectedIds.length === 1 ? "" : "s"} prepared for sending.`,
+		);
+	}
+
+	useEffect(() => {
+		if (activeWorkspace !== "message-sending") return;
+		let cancelled = false;
+
+		/** Loads message records from updatedApplications for the active admin. */
+		async function loadMessageRecords() {
+			setMessageLoading(true);
+			setMessageError("");
+			try {
+				const records = await getMessageRecords();
+				if (!cancelled) {
+					setMessageRecords(records);
+					setSelectedMessageIds((current) =>
+						current.filter((id) =>
+							records.some((record) => record.applicationId === id),
+						),
+					);
+				}
+			} catch (error) {
+				if (cancelled || isAbortError(error)) return;
+				console.error("[EmailServiceUI] Failed to load messages:", error);
+				setMessageError("Message records could not be loaded.");
+				toast.error("Message records could not be loaded.", {
+					id: "message-records-error",
+				});
+			} finally {
+				if (!cancelled) setMessageLoading(false);
+			}
+		}
+
+		void loadMessageRecords();
+		return () => {
+			cancelled = true;
+		};
+	}, [activeWorkspace, messageRefreshKey]);
 
 	useEffect(() => {
 		if (activeWorkspace !== "registration-lookup") return;
@@ -642,11 +745,15 @@ export default function EmailServiceUI() {
 						<Button
 							className="h-10 border-border bg-card/60"
 							disabled={
-								activeWorkspace === "registration-lookup" && registrationLoading
+								(activeWorkspace === "registration-lookup" &&
+									registrationLoading) ||
+								(activeWorkspace === "message-sending" && messageLoading)
 							}
 							onClick={() => {
 								if (activeWorkspace === "registration-lookup") {
 									setRegistrationRefreshKey((current) => current + 1);
+								} else {
+									setMessageRefreshKey((current) => current + 1);
 								}
 							}}
 							type="button"
@@ -713,7 +820,7 @@ export default function EmailServiceUI() {
 								</p>
 							</div>
 							<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-								{summaryCards.map((card) => {
+								{messageSummaryCards.map((card) => {
 									const Icon = card.icon;
 									return (
 										<article
@@ -726,7 +833,7 @@ export default function EmailServiceUI() {
 														{card.label}
 													</p>
 													<p className="mt-3 font-semibold text-3xl tabular-nums tracking-tight">
-														{card.value}
+														{card.value.toLocaleString()}
 													</p>
 												</div>
 												<span
@@ -756,7 +863,7 @@ export default function EmailServiceUI() {
 											Registration emails
 										</h2>
 										<span className="rounded-full bg-muted/50 px-2 py-0.5 text-muted-foreground text-xs">
-											1,430 total
+											{messageRecords.length.toLocaleString()} total
 										</span>
 									</div>
 									<p className="mt-1 text-muted-foreground text-sm">
@@ -768,8 +875,10 @@ export default function EmailServiceUI() {
 										<Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
 										<input
 											className="h-10 w-full rounded-lg border border-input bg-background/60 pr-3 pl-9 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
+											onChange={(event) => setMessageSearch(event.target.value)}
 											placeholder="Search name, email or ID"
 											type="search"
+											value={messageSearch}
 										/>
 										<span className="sr-only">Search registration emails</span>
 									</label>
@@ -785,171 +894,260 @@ export default function EmailServiceUI() {
 
 							<div className="flex gap-1 overflow-x-auto border-border/80 border-b px-4 pt-2 sm:px-6">
 								{[
-									"All emails",
-									"Ready",
-									"In progress",
-									"Delivered",
-									"Failed",
-								].map((tab, index) => (
+									{ label: "All emails", value: "all" },
+									{ label: "Not sent", value: "not_sent" },
+									{ label: "In progress", value: "in_progress" },
+									{ label: "Sent", value: "sent" },
+									{ label: "Delivered", value: "delivered" },
+									{ label: "Failed", value: "failed" },
+								].map((tab) => (
 									<button
 										className={`relative shrink-0 px-3 py-3 font-medium text-sm transition-colors ${
-											index === 0
+											messageFilter === tab.value
 												? "text-primary after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary"
 												: "text-muted-foreground hover:text-foreground"
 										}`}
-										key={tab}
+										key={tab.value}
+										onClick={() =>
+											setMessageFilter(tab.value as MessageStatusFilter)
+										}
 										type="button"
 									>
-										{tab}
+										{tab.label}
 									</button>
 								))}
 							</div>
 
-							{/* Desktop table */}
-							<div className="hidden overflow-x-auto md:block">
-								<table className="w-full min-w-[1080px] text-left text-sm">
-									<thead className="bg-background/25 text-muted-foreground">
-										<tr>
-											<th className="w-14 px-5 py-3.5">
-												<input
-													aria-label="Select all records"
-													className="size-4 accent-primary"
-													type="checkbox"
-												/>
-											</th>
-											{[
-												"Registration",
-												"Recipient",
-												"Award category",
-												"Status",
-												"Attempts",
-												"Last activity",
-												"",
-											].map((label) => (
-												<th
-													className="whitespace-nowrap px-4 py-3.5 font-medium text-xs uppercase tracking-wider"
-													key={label || "actions"}
-												>
-													{label}
-												</th>
-											))}
-										</tr>
-									</thead>
-									<tbody className="divide-y divide-border/70">
-										{emailRecords.map((record) => (
-											<tr
-												className="transition-colors hover:bg-muted/15"
-												key={record.id}
-											>
-												<td className="px-5 py-4">
-													<input
-														aria-label={`Select ${record.id}`}
-														className="size-4 accent-primary"
-														type="checkbox"
-													/>
-												</td>
-												<td className="whitespace-nowrap px-4 py-4 font-semibold text-primary">
-													{record.id}
-												</td>
-												<td className="px-4 py-4">
-													<p className="font-medium">{record.name}</p>
-													<p className="mt-0.5 text-muted-foreground text-xs">
-														{record.email}
-													</p>
-												</td>
-												<td className="max-w-60 px-4 py-4 text-muted-foreground">
-													<span className="block truncate" title={record.award}>
-														{record.award}
-													</span>
-												</td>
-												<td className="px-4 py-4">
-													<StatusBadge status={record.status} />
-												</td>
-												<td className="px-4 py-4 text-center tabular-nums">
-													{record.attempts}
-												</td>
-												<td className="whitespace-nowrap px-4 py-4 text-muted-foreground text-xs">
-													{record.lastSent}
-												</td>
-												<td className="px-5 py-4">
-													<div className="flex justify-end gap-1">
-														<Button
-															aria-label={`Preview ${record.id}`}
-															className="text-muted-foreground"
-															size="icon"
-															type="button"
-															variant="ghost"
-														>
-															<Eye className="size-4" />
-														</Button>
-														<Button
-															aria-label={`More actions for ${record.id}`}
-															className="text-muted-foreground"
-															size="icon"
-															type="button"
-															variant="ghost"
-														>
-															<MoreHorizontal className="size-4" />
-														</Button>
-													</div>
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
+							{selectedMessageIds.length > 0 && (
+								<div className="flex flex-col gap-3 border-border/80 border-b bg-primary/[0.05] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+									<p className="font-medium text-sm tabular-nums">
+										{selectedMessageIds.length} message
+										{selectedMessageIds.length === 1 ? "" : "s"} selected
+									</p>
+									<div className="flex items-center gap-2">
+										<Button
+											onClick={() => setSelectedMessageIds([])}
+											size="sm"
+											type="button"
+											variant="ghost"
+										>
+											Clear
+										</Button>
+										<Button
+											onClick={() => sendSelectedMessages(selectedMessageIds)}
+											size="sm"
+											type="button"
+										>
+											<Send className="size-4" /> Send Selected
+										</Button>
+									</div>
+								</div>
+							)}
 
-							{/* Compact records for phone screens */}
-							<div className="divide-y divide-border/70 md:hidden">
-								{emailRecords.map((record) => (
-									<article className="space-y-4 p-4" key={record.id}>
-										<div className="flex items-start justify-between gap-3">
-											<div className="flex items-start gap-3">
-												<input
-													aria-label={`Select ${record.id}`}
-													className="mt-1 size-4 accent-primary"
-													type="checkbox"
-												/>
-												<div>
-													<p className="font-semibold text-primary text-sm">
-														{record.id}
-													</p>
-													<p className="mt-1 font-medium">{record.name}</p>
-													<p className="mt-0.5 break-all text-muted-foreground text-xs">
-														{record.email}
-													</p>
+							{messageLoading ? (
+								<div className="p-10 text-center">
+									<Loader2 className="mx-auto size-6 animate-spin text-primary" />
+									<p className="mt-3 text-muted-foreground text-sm">
+										Loading message records...
+									</p>
+								</div>
+							) : messageError ? (
+								<div className="p-8 text-center">
+									<AlertCircle className="mx-auto size-6 text-red-300" />
+									<p className="mt-3 font-medium">Unable to load messages</p>
+									<p className="mt-1 text-muted-foreground text-sm">
+										{messageError}
+									</p>
+								</div>
+							) : filteredMessageRecords.length === 0 ? (
+								<div className="p-10 text-center">
+									<MailCheck className="mx-auto size-7 text-primary" />
+									<p className="mt-3 font-medium">No matching messages</p>
+									<p className="mt-1 text-muted-foreground text-sm">
+										No updated application messages match this search or status.
+									</p>
+								</div>
+							) : (
+								<>
+									{/* Desktop table */}
+									<div className="hidden overflow-x-auto md:block">
+										<table className="w-full min-w-[1080px] text-left text-sm">
+											<thead className="bg-background/25 text-muted-foreground">
+												<tr>
+													<th className="w-14 px-5 py-3.5">
+														<input
+															aria-label="Select all records"
+															checked={allMessagesSelected}
+															className="size-4 accent-primary"
+															onChange={toggleAllMessages}
+															type="checkbox"
+														/>
+													</th>
+													{[
+														"Registration",
+														"Recipient",
+														"Award category",
+														"Status",
+														"Attempts",
+														"Last activity",
+														"",
+													].map((label) => (
+														<th
+															className="whitespace-nowrap px-4 py-3.5 font-medium text-xs uppercase tracking-wider"
+															key={label || "actions"}
+														>
+															{label}
+														</th>
+													))}
+												</tr>
+											</thead>
+											<tbody className="divide-y divide-border/70">
+												{filteredMessageRecords.map((record) => (
+													<tr
+														className={`transition-colors hover:bg-muted/15 ${selectedMessageIds.includes(record.applicationId) ? "bg-primary/[0.04]" : ""}`}
+														key={record.applicationId}
+													>
+														<td className="px-5 py-4">
+															<input
+																aria-label={`Select ${record.registrationNumber}`}
+																checked={selectedMessageIds.includes(
+																	record.applicationId,
+																)}
+																className="size-4 accent-primary"
+																onChange={() =>
+																	toggleMessageSelection(record.applicationId)
+																}
+																type="checkbox"
+															/>
+														</td>
+														<td className="whitespace-nowrap px-4 py-4 font-semibold text-primary">
+															{record.registrationNumber}
+														</td>
+														<td className="px-4 py-4">
+															<p className="font-medium">
+																{record.recipient.name}
+															</p>
+															<p className="mt-0.5 text-muted-foreground text-xs">
+																{record.recipient.email}
+															</p>
+														</td>
+														<td className="max-w-60 px-4 py-4 text-muted-foreground">
+															<span
+																className="block truncate"
+																title={record.awards.join(", ")}
+															>
+																{record.awards[0] ?? "No active awards"}
+																{record.awards.length > 1
+																	? ` +${record.awards.length - 1}`
+																	: ""}
+															</span>
+														</td>
+														<td className="px-4 py-4">
+															<StatusBadge status={record.status} />
+														</td>
+														<td className="px-4 py-4 text-center tabular-nums">
+															{record.sendCount}
+														</td>
+														<td className="whitespace-nowrap px-4 py-4 text-muted-foreground text-xs">
+															{formatMessageDate(record.lastSentAt)}
+														</td>
+														<td className="px-5 py-4">
+															<div className="flex justify-end gap-1">
+																<Button
+																	aria-label={`Preview ${record.registrationNumber}`}
+																	className="text-muted-foreground"
+																	size="icon"
+																	type="button"
+																	variant="ghost"
+																>
+																	<Eye className="size-4" />
+																</Button>
+																<Button
+																	aria-label={`More actions for ${record.registrationNumber}`}
+																	className="text-muted-foreground"
+																	size="icon"
+																	type="button"
+																	variant="ghost"
+																>
+																	<MoreHorizontal className="size-4" />
+																</Button>
+															</div>
+														</td>
+													</tr>
+												))}
+											</tbody>
+										</table>
+									</div>
+
+									{/* Compact records for phone screens */}
+									<div className="divide-y divide-border/70 md:hidden">
+										{filteredMessageRecords.map((record) => (
+											<article
+												className="space-y-4 p-4"
+												key={record.applicationId}
+											>
+												<div className="flex items-start justify-between gap-3">
+													<div className="flex items-start gap-3">
+														<input
+															aria-label={`Select ${record.registrationNumber}`}
+															checked={selectedMessageIds.includes(
+																record.applicationId,
+															)}
+															className="mt-1 size-4 accent-primary"
+															onChange={() =>
+																toggleMessageSelection(record.applicationId)
+															}
+															type="checkbox"
+														/>
+														<div>
+															<p className="font-semibold text-primary text-sm">
+																{record.registrationNumber}
+															</p>
+															<p className="mt-1 font-medium">
+																{record.recipient.name}
+															</p>
+															<p className="mt-0.5 break-all text-muted-foreground text-xs">
+																{record.recipient.email}
+															</p>
+														</div>
+													</div>
+													<StatusBadge status={record.status} />
 												</div>
-											</div>
-											<StatusBadge status={record.status} />
-										</div>
-										<div className="grid grid-cols-[1fr_auto] gap-4 rounded-xl border border-border/70 bg-background/25 p-3 text-xs">
-											<div>
-												<p className="text-muted-foreground">Award category</p>
-												<p className="mt-1 leading-5">{record.award}</p>
-											</div>
-											<div className="text-right">
-												<p className="text-muted-foreground">Attempts</p>
-												<p className="mt-1 font-semibold tabular-nums">
-													{record.attempts}
-												</p>
-											</div>
-										</div>
-									</article>
-								))}
-							</div>
+												<div className="grid grid-cols-[1fr_auto] gap-4 rounded-xl border border-border/70 bg-background/25 p-3 text-xs">
+													<div>
+														<p className="text-muted-foreground">
+															Award category
+														</p>
+														<p className="mt-1 leading-5">
+															{record.awards.join(", ") || "No active awards"}
+														</p>
+													</div>
+													<div className="text-right">
+														<p className="text-muted-foreground">Attempts</p>
+														<p className="mt-1 font-semibold tabular-nums">
+															{record.sendCount}
+														</p>
+													</div>
+												</div>
+											</article>
+										))}
+									</div>
+								</>
+							)}
 
 							<footer className="flex flex-col gap-3 border-border/80 border-t px-4 py-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
 								<p className="text-muted-foreground">
-									Showing 1–5 of 1,430 records
+									Showing {filteredMessageRecords.length.toLocaleString()} of{" "}
+									{messageRecords.length.toLocaleString()} records
 								</p>
 								<div className="flex items-center gap-2">
 									<Button disabled size="sm" type="button" variant="outline">
 										Previous
 									</Button>
 									<span className="px-2 text-muted-foreground text-xs">
-										Page 1 of 286
+										Page 1 of 1
 									</span>
-									<Button size="sm" type="button" variant="outline">
+									<Button disabled size="sm" type="button" variant="outline">
 										Next <ArrowUpRight className="size-3.5 rotate-45" />
 									</Button>
 								</div>
