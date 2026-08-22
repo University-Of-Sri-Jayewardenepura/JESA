@@ -1,5 +1,6 @@
 "use server";
 
+import { getAdminUserFromCookies } from "@/app/admin/lib/server-auth";
 import { registerSingleApplication } from "./db-transaction/registration-transaction";
 import { fetchApplicationsByIds } from "./fetch-applications";
 import type {
@@ -23,6 +24,9 @@ function normalizeApplicationIds(applicationIds: string[]) {
 export async function registerApplications(
 	applicationIds: string[],
 ): Promise<RegistrationBatchResult> {
+	const admin = await getAdminUserFromCookies();
+	if (!admin) throw new Error("Unauthorized");
+
 	const uniqueApplicationIds = normalizeApplicationIds(applicationIds);
 	if (uniqueApplicationIds.length === 0) {
 		return {

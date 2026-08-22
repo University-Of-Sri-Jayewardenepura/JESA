@@ -1,5 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { getDbClient } from "@/lib/firebase";
+import { getAdminDb } from "@/lib/firebase-admin";
 import type { RegistrationSourceApplication } from "./types";
 
 const FIRESTORE_IN_LIMIT = 30;
@@ -38,16 +37,14 @@ export async function fetchApplicationsByIds(
 	applicationIds: string[],
 ): Promise<RegistrationSourceApplication[]> {
 	if (applicationIds.length === 0) return [];
-	const db = getDbClient();
+	const db = getAdminDb();
 	const applications: RegistrationSourceApplication[] = [];
 
 	for (const applicationIdChunk of chunkApplicationIds(applicationIds)) {
-		const snapshot = await getDocs(
-			query(
-				collection(db, "applications"),
-				where("applicationId", "in", applicationIdChunk),
-			),
-		);
+		const snapshot = await db
+			.collection("applications")
+			.where("applicationId", "in", applicationIdChunk)
+			.get();
 		for (const document of snapshot.docs) {
 			const application = document.data();
 			if (isRegistrationSourceApplication(application)) {

@@ -1,13 +1,11 @@
 import {
 	type DocumentData,
 	type DocumentSnapshot,
-	doc,
-	runTransaction,
-	serverTimestamp,
-} from "firebase/firestore";
+	FieldValue,
+} from "firebase-admin/firestore";
 import { WHATSAPP_LINKS } from "@/constants/whatsapp-links";
 import type { AwardType } from "@/lib/awards";
-import { getDbClient } from "@/lib/firebase";
+import { getAdminDb } from "@/lib/firebase-admin";
 import type {
 	GeneratedAwardRegistration,
 	RegistrationActionResult,
@@ -82,7 +80,7 @@ function normalizeSelectedAwards(selectedAwards: string[]) {
 
 /** Reads the latest sequence from a counter, defaulting a missing counter to zero. */
 function readLastCounterSequence(snapshot: DocumentSnapshot<DocumentData>) {
-	if (!snapshot.exists()) return 0;
+	if (!snapshot.exists) return 0;
 	const value = snapshot.data()?.lastSequence;
 	if (typeof value !== "number" || !Number.isInteger(value) || value < 0) {
 		throw new Error(`Invalid counter: ${snapshot.ref.path}`);
@@ -205,25 +203,21 @@ function hasAwardStatusChanges(
 export async function registerSingleApplication(
 	application: RegistrationSourceApplication,
 ): Promise<RegistrationActionResult> {
-	const db = getDbClient();
+	const db = getAdminDb();
 	const selectedAwards = normalizeSelectedAwards(
 		application.awardSelection.selectedAwards,
 	);
 	const selectedAwardSet = new Set(selectedAwards);
-	const updatedApplicationReference = doc(
-		db,
-		"updatedApplications",
-		application.applicationId,
-	);
-	const applicationCounterReference = doc(
-		db,
-		"registrationCounters",
-		`application-${REGISTRATION_YEAR}`,
-	);
+	const updatedApplicationReference = db
+		.collection("updatedApplications")
+		.doc(application.applicationId);
+	const applicationCounterReference = db
+		.collection("registrationCounters")
+		.doc(`application-${REGISTRATION_YEAR}`);
 
-	return runTransaction(db, async (transaction) => {
+	return db.runTransaction(async (transaction) => {
 		const existingSnapshot = await transaction.get(updatedApplicationReference);
-		const existingData = existingSnapshot.exists()
+		const existingData = existingSnapshot.exists
 			? existingSnapshot.data()
 			: null;
 		const existingAwardRegistrations = Array.isArray(
@@ -286,11 +280,9 @@ export async function registerSingleApplication(
 		}
 
 		const awardCounterReferences = missingAwardCodes.map((awardCode) =>
-			doc(
-				db,
-				"registrationCounters",
-				`award-${REGISTRATION_YEAR}-${awardCode}`,
-			),
+			db
+				.collection("registrationCounters")
+				.doc(`award-${REGISTRATION_YEAR}-${awardCode}`),
 		);
 		// All counter reads finish before the first transaction write.
 		const applicationCounterSnapshot = needsApplicationSequence
@@ -332,7 +324,7 @@ export async function registerSingleApplication(
 					type: "application",
 					year: REGISTRATION_YEAR,
 					lastSequence: applicationSequence,
-					updatedAt: serverTimestamp(),
+					updatedAt: FieldValue.serverTimestamp(),
 				},
 				{ merge: true },
 			);
@@ -347,7 +339,7 @@ export async function registerSingleApplication(
 					awardCode,
 					prefix: AWARD_PREFIXES[awardCode],
 					lastSequence: registration.registrationSequence,
-					updatedAt: serverTimestamp(),
+					updatedAt: FieldValue.serverTimestamp(),
 				},
 				{ merge: true },
 			);
@@ -364,7 +356,7 @@ export async function registerSingleApplication(
 			existingAwardRegistrations,
 			selectedAwardSet,
 		);
-		const now = serverTimestamp();
+		const now = FieldValue.serverTimestamp();
 		const registrationDocument: Record<string, unknown> = {
 			applicationId: application.applicationId,
 			applicationReferenceNumber,
@@ -393,7 +385,7 @@ export async function registerSingleApplication(
 			},
 			updatedAt: now,
 		};
-		if (!existingSnapshot.exists()) registrationDocument.createdAt = now;
+		if (!existingSnapshot.exists) registrationDocument.createdAt = now;
 		transaction.set(updatedApplicationReference, registrationDocument, {
 			merge: true,
 		});
@@ -401,8 +393,8 @@ export async function registerSingleApplication(
 		return {
 			applicationId: application.applicationId,
 			applicationReferenceNumber,
-			status: existingSnapshot.exists() ? "updated" : "created",
-			message: existingSnapshot.exists()
+			status: existingSnapshot.exists ? "updated" : "created",
+			message: existingSnapshot.exists
 				? "Missing registration numbers were added."
 				: "Registration record created successfully.",
 			awardRegistrations: activeAwardRegistrations,

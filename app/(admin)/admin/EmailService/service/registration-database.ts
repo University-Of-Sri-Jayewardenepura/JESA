@@ -1,12 +1,7 @@
-import {
-	collection,
-	type DocumentData,
-	getDocs,
-	getFirestore,
-} from "firebase/firestore/lite";
+import type { DocumentData } from "firebase-admin/firestore";
 import type { AwardType } from "@/lib/awards";
 import { ALL_AWARD_IDS } from "@/lib/awards";
-import { getFirebaseApp } from "@/lib/firebase";
+import { getAdminDb } from "@/lib/firebase-admin";
 import type {
 	ApplicationRegistrationPair,
 	SourceApplication,
@@ -109,15 +104,11 @@ function parseUpdatedApplication(
 export async function fetchApplicationRegistrationPairs(): Promise<
 	ApplicationRegistrationPair[]
 > {
-	// Firestore Lite performs one-time REST reads without opening Listen streams.
-	const db = getFirestore(getFirebaseApp());
-	// Read sequentially so only one Firestore transport can be cancelled at a time.
-	const applicationSnapshot = await getDocs(
-		collection(db, APPLICATIONS_COLLECTION),
-	);
-	const updatedApplicationSnapshot = await getDocs(
-		collection(db, UPDATED_APPLICATIONS_COLLECTION),
-	);
+	const db = getAdminDb();
+	const [applicationSnapshot, updatedApplicationSnapshot] = await Promise.all([
+		db.collection(APPLICATIONS_COLLECTION).get(),
+		db.collection(UPDATED_APPLICATIONS_COLLECTION).get(),
+	]);
 	const updatedApplications = new Map<string, UpdatedApplication>();
 
 	for (const document of updatedApplicationSnapshot.docs) {

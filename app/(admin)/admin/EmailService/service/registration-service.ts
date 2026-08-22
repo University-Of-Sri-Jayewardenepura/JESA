@@ -1,3 +1,6 @@
+"use server";
+
+import { getAdminUserFromCookies } from "@/app/admin/lib/server-auth";
 import { getAwardLabel } from "@/lib/awards";
 import { fetchApplicationRegistrationPairs } from "./registration-database";
 import type {
@@ -47,6 +50,9 @@ function buildLookupItem(
 export async function getRegistrationLookup(): Promise<
 	RegistrationLookupItem[]
 > {
+	const admin = await getAdminUserFromCookies();
+	if (!admin) throw new Error("Unauthorized");
+
 	const pairs = await fetchApplicationRegistrationPairs();
 	return pairs
 		.map(({ source, updated }) => buildLookupItem(source, updated))
