@@ -22,6 +22,7 @@ import {
 	X,
 } from "lucide-react";
 import { useDeferredValue, useEffect, useState, useTransition } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
@@ -237,9 +238,22 @@ function RegistrationLookupTab({
 		setRegistrationResult(null);
 		setRegistrationActionError("");
 		startRegistrationTransition(async () => {
+			const notificationId = toast.loading(
+				`Adding registration numbers for ${selectedIds.length} application${selectedIds.length === 1 ? "" : "s"}...`,
+			);
 			try {
 				const result = await registerApplications(selectedIds);
 				setRegistrationResult(result);
+				const successful = result.created + result.updated + result.skipped;
+				const summary = `${result.created} created, ${result.updated} updated, ${result.skipped} skipped`;
+				if (result.failed > 0) {
+					toast.error(
+						`${summary}. ${result.failed} failed${successful === 0 ? "." : "; review the result below."}`,
+						{ id: notificationId, duration: 7000 },
+					);
+				} else {
+					toast.success(summary, { id: notificationId });
+				}
 				if (result.created > 0 || result.updated > 0) {
 					setSelectedApplicationIds([]);
 					onRegistrationsChanged();
@@ -253,6 +267,12 @@ function RegistrationLookupTab({
 					actionError instanceof Error
 						? actionError.message
 						: "Registration numbers could not be added.",
+				);
+				toast.error(
+					actionError instanceof Error
+						? actionError.message
+						: "Registration numbers could not be added.",
+					{ id: notificationId, duration: 7000 },
 				);
 			}
 		});
@@ -567,6 +587,9 @@ export default function EmailServiceUI() {
 				if (cancelled || isAbortError(error)) return;
 				console.error("[EmailServiceUI] Failed to load registrations:", error);
 				setRegistrationLookupError("Registration records could not be loaded.");
+				toast.error("Registration records could not be loaded.", {
+					id: "registration-lookup-error",
+				});
 			} finally {
 				if (!cancelled) setRegistrationLoading(false);
 			}
@@ -581,6 +604,17 @@ export default function EmailServiceUI() {
 
 	return (
 		<main className="relative min-h-screen overflow-hidden bg-background px-4 pt-28 pb-20 text-foreground sm:px-6 lg:px-8">
+			<Toaster
+				position="top-right"
+				toastOptions={{
+					duration: 5000,
+					style: {
+						background: "var(--popover)",
+						border: "1px solid var(--border)",
+						color: "var(--popover-foreground)",
+					},
+				}}
+			/>
 			{/* Restrained brand lighting separates the workspace from the site shell. */}
 			<div className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(circle_at_18%_0%,rgba(219,190,69,0.10),transparent_34%),radial-gradient(circle_at_85%_8%,rgba(89,44,85,0.24),transparent_32%)]" />
 
