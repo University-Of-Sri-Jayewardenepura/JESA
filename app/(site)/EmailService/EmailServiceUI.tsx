@@ -21,10 +21,14 @@ import {
 	UserSearch,
 	X,
 } from "lucide-react";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
+import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
-import type { RegistrationLookupItem } from "./service/types";
+import type {
+	RegistrationBatchResult,
+	RegistrationLookupItem,
+} from "./service/types";
 
 // Placeholder records keep this page focused on layout until API integration is added.
 const emailRecords = [
@@ -155,10 +159,12 @@ function RegistrationLookupTab({
 	records,
 	error,
 	loading,
+	onRegistrationsChanged,
 }: {
 	records: RegistrationLookupItem[];
 	error?: string;
 	loading: boolean;
+	onRegistrationsChanged: () => void;
 }) {
 	const [search, setSearch] = useState("");
 	const [registrationFilter, setRegistrationFilter] = useState<
@@ -167,9 +173,10 @@ function RegistrationLookupTab({
 	const [selectedApplicationIds, setSelectedApplicationIds] = useState<
 		string[]
 	>([]);
-	const [preparedApplicationIds, setPreparedApplicationIds] = useState<
-		string[]
-	>([]);
+	const [registrationResult, setRegistrationResult] =
+		useState<RegistrationBatchResult | null>(null);
+	const [registrationActionError, setRegistrationActionError] = useState("");
+	const [isRegistering, startRegistrationTransition] = useTransition();
 	const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase());
 	const filteredRecords = records.filter((record) => {
 		const matchesRegistrationState =
@@ -208,7 +215,8 @@ function RegistrationLookupTab({
 				? current.filter((id) => id !== applicationId)
 				: [...current, applicationId],
 		);
-		setPreparedApplicationIds([]);
+		setRegistrationResult(null);
+		setRegistrationActionError("");
 	}
 
 	/** Selects or clears every visible unregistered application. */
@@ -219,13 +227,35 @@ function RegistrationLookupTab({
 				? current.filter((id) => !visibleIds.includes(id))
 				: [...new Set([...current, ...visibleIds])],
 		);
-		setPreparedApplicationIds([]);
+		setRegistrationResult(null);
+		setRegistrationActionError("");
 	}
 
-	/** Copies selected IDs into the future backend action payload without saving data. */
-	function prepareRegistrationNumberAction(applicationIds: string[]) {
-		setPreparedApplicationIds([...applicationIds]);
-		console.log(applicationIds)
+	/** Sends a copied application ID array to the registration server action. */
+	function submitRegistrationNumberAction(applicationIds: string[]) {
+		const selectedIds = [...applicationIds];
+		setRegistrationResult(null);
+		setRegistrationActionError("");
+		startRegistrationTransition(async () => {
+			try {
+				const result = await registerApplications(selectedIds);
+				setRegistrationResult(result);
+				if (result.created > 0 || result.updated > 0) {
+					setSelectedApplicationIds([]);
+					onRegistrationsChanged();
+				}
+			} catch (actionError) {
+				console.error(
+					"[RegistrationLookupTab] Registration action failed:",
+					actionError,
+				);
+				setRegistrationActionError(
+					actionError instanceof Error
+						? actionError.message
+						: "Registration numbers could not be added.",
+				);
+			}
+		});
 	}
 
 	return (
@@ -322,6 +352,7 @@ function RegistrationLookupTab({
 								aria-label="Select all visible unregistered applications"
 								checked={allSelectableRecordsSelected}
 								className="size-4 accent-primary"
+								disabled={isRegistering}
 								onChange={toggleVisibleApplications}
 								type="checkbox"
 							/>
@@ -333,7 +364,12 @@ function RegistrationLookupTab({
 									{selectedApplicationIds.length} selected
 								</span>
 								<Button
-									onClick={() => setSelectedApplicationIds([])}
+									disabled={isRegistering}
+									onClick={() => {
+										setSelectedApplicationIds([]);
+										setRegistrationResult(null);
+										setRegistrationActionError("");
+									}}
 									size="sm"
 									type="button"
 									variant="ghost"
@@ -341,38 +377,51 @@ function RegistrationLookupTab({
 									Clear
 								</Button>
 								<Button
+									disabled={isRegistering}
 									onClick={() =>
-										prepareRegistrationNumberAction(selectedApplicationIds)
+										submitRegistrationNumberAction(selectedApplicationIds)
 									}
 									size="sm"
 									type="button"
 								>
-									<Plus className="size-4" /> Add Registration Numbers
+									{isRegistering ? (
+										<Loader2 className="size-4 animate-spin" />
+									) : (
+										<Plus className="size-4" />
+									)}
+									{isRegistering ? "Adding..." : "Add Registration Numbers"}
 								</Button>
 							</div>
 						)}
 					</div>
 				)}
 
-				{preparedApplicationIds.length > 0 && (
+				{(registrationResult || registrationActionError) && (
 					<div
 						aria-live="polite"
-						className="flex items-center justify-between gap-4 border-primary/20 border-b bg-primary/[0.06] px-4 py-3 sm:px-6"
+						className={`flex items-center justify-between gap-4 border-b px-4 py-3 sm:px-6 ${
+							registrationActionError || registrationResult?.failed
+								? "border-red-400/20 bg-red-500/[0.06]"
+								: "border-emerald-500/20 bg-emerald-500/[0.06]"
+						}`}
 					>
 						<div>
 							<p className="font-medium text-sm">
-								{preparedApplicationIds.length} application
-								{preparedApplicationIds.length === 1 ? " is" : "s are"} ready
-								for registration numbers
+								{registrationActionError
+									? "Registration action failed"
+									: `${registrationResult?.created ?? 0} created, ${registrationResult?.updated ?? 0} updated, ${registrationResult?.skipped ?? 0} skipped`}
 							</p>
 							<p className="mt-0.5 text-muted-foreground text-xs">
-								The selected application IDs are prepared as an array. No data
-								has been saved.
+								{registrationActionError ||
+									`${registrationResult?.failed ?? 0} failed out of ${registrationResult?.total ?? 0} selected applications.`}
 							</p>
 						</div>
 						<Button
-							aria-label="Dismiss prepared selection"
-							onClick={() => setPreparedApplicationIds([])}
+							aria-label="Dismiss registration result"
+							onClick={() => {
+								setRegistrationResult(null);
+								setRegistrationActionError("");
+							}}
 							size="icon"
 							type="button"
 							variant="ghost"
@@ -420,6 +469,7 @@ function RegistrationLookupTab({
 												record.applicationId,
 											)}
 											className="mt-3 size-4 shrink-0 accent-primary"
+											disabled={isRegistering}
 											onChange={() =>
 												toggleApplicationSelection(record.applicationId)
 											}
@@ -894,6 +944,9 @@ export default function EmailServiceUI() {
 					<RegistrationLookupTab
 						error={registrationLookupError}
 						loading={registrationLoading}
+						onRegistrationsChanged={() =>
+							setRegistrationRefreshKey((current) => current + 1)
+						}
 						records={registrationRecords}
 					/>
 				)}
