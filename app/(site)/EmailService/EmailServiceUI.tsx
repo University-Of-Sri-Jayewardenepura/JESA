@@ -13,11 +13,13 @@ import {
 	MailCheck,
 	MailPlus,
 	MoreHorizontal,
+	Plus,
 	RefreshCw,
 	Search,
 	Send,
 	SlidersHorizontal,
 	UserSearch,
+	X,
 } from "lucide-react";
 import { useDeferredValue, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -162,6 +164,12 @@ function RegistrationLookupTab({
 	const [registrationFilter, setRegistrationFilter] = useState<
 		"all" | "registered" | "not_registered"
 	>("all");
+	const [selectedApplicationIds, setSelectedApplicationIds] = useState<
+		string[]
+	>([]);
+	const [preparedApplicationIds, setPreparedApplicationIds] = useState<
+		string[]
+	>([]);
 	const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase());
 	const filteredRecords = records.filter((record) => {
 		const matchesRegistrationState =
@@ -184,6 +192,41 @@ function RegistrationLookupTab({
 	const registeredCount = records.filter(
 		(record) => record.isRegistered,
 	).length;
+	const selectableRecords = filteredRecords.filter(
+		(record) => !record.isRegistered,
+	);
+	const allSelectableRecordsSelected =
+		selectableRecords.length > 0 &&
+		selectableRecords.every((record) =>
+			selectedApplicationIds.includes(record.applicationId),
+		);
+
+	/** Adds or removes one unregistered application from the selection array. */
+	function toggleApplicationSelection(applicationId: string) {
+		setSelectedApplicationIds((current) =>
+			current.includes(applicationId)
+				? current.filter((id) => id !== applicationId)
+				: [...current, applicationId],
+		);
+		setPreparedApplicationIds([]);
+	}
+
+	/** Selects or clears every visible unregistered application. */
+	function toggleVisibleApplications() {
+		const visibleIds = selectableRecords.map((record) => record.applicationId);
+		setSelectedApplicationIds((current) =>
+			allSelectableRecordsSelected
+				? current.filter((id) => !visibleIds.includes(id))
+				: [...new Set([...current, ...visibleIds])],
+		);
+		setPreparedApplicationIds([]);
+	}
+
+	/** Copies selected IDs into the future backend action payload without saving data. */
+	function prepareRegistrationNumberAction(applicationIds: string[]) {
+		setPreparedApplicationIds([...applicationIds]);
+		console.log(applicationIds)
+	}
 
 	return (
 		<section aria-labelledby="registration-lookup" className="space-y-4">
@@ -272,6 +315,73 @@ function RegistrationLookupTab({
 					</label>
 				</div>
 
+				{!loading && !error && selectableRecords.length > 0 && (
+					<div className="flex flex-col gap-3 border-border/80 border-b bg-background/20 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+						<label className="flex cursor-pointer items-center gap-2 text-muted-foreground text-sm">
+							<input
+								aria-label="Select all visible unregistered applications"
+								checked={allSelectableRecordsSelected}
+								className="size-4 accent-primary"
+								onChange={toggleVisibleApplications}
+								type="checkbox"
+							/>
+							Select all unregistered in this view
+						</label>
+						{selectedApplicationIds.length > 0 && (
+							<div className="flex flex-wrap items-center gap-2">
+								<span className="mr-1 font-medium text-sm tabular-nums">
+									{selectedApplicationIds.length} selected
+								</span>
+								<Button
+									onClick={() => setSelectedApplicationIds([])}
+									size="sm"
+									type="button"
+									variant="ghost"
+								>
+									Clear
+								</Button>
+								<Button
+									onClick={() =>
+										prepareRegistrationNumberAction(selectedApplicationIds)
+									}
+									size="sm"
+									type="button"
+								>
+									<Plus className="size-4" /> Add Registration Numbers
+								</Button>
+							</div>
+						)}
+					</div>
+				)}
+
+				{preparedApplicationIds.length > 0 && (
+					<div
+						aria-live="polite"
+						className="flex items-center justify-between gap-4 border-primary/20 border-b bg-primary/[0.06] px-4 py-3 sm:px-6"
+					>
+						<div>
+							<p className="font-medium text-sm">
+								{preparedApplicationIds.length} application
+								{preparedApplicationIds.length === 1 ? " is" : "s are"} ready
+								for registration numbers
+							</p>
+							<p className="mt-0.5 text-muted-foreground text-xs">
+								The selected application IDs are prepared as an array. No data
+								has been saved.
+							</p>
+						</div>
+						<Button
+							aria-label="Dismiss prepared selection"
+							onClick={() => setPreparedApplicationIds([])}
+							size="icon"
+							type="button"
+							variant="ghost"
+						>
+							<X className="size-4" />
+						</Button>
+					</div>
+				)}
+
 				{loading ? (
 					<div className="p-10 text-center">
 						<Loader2 className="mx-auto size-6 animate-spin text-primary" />
@@ -301,6 +411,21 @@ function RegistrationLookupTab({
 								key={record.applicationId}
 							>
 								<div className="flex items-start gap-3">
+									{record.isRegistered ? (
+										<span aria-hidden="true" className="mt-3 size-4 shrink-0" />
+									) : (
+										<input
+											aria-label={`Select ${record.recipient.name}`}
+											checked={selectedApplicationIds.includes(
+												record.applicationId,
+											)}
+											className="mt-3 size-4 shrink-0 accent-primary"
+											onChange={() =>
+												toggleApplicationSelection(record.applicationId)
+											}
+											type="checkbox"
+										/>
+									)}
 									<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/40 font-semibold text-primary text-sm">
 										{record.recipient.name
 											.split(" ")
