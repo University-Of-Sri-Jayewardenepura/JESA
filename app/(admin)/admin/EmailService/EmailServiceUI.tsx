@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { getMessageRecords } from "./service/message-retrieval-service";
 import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
+import { sendRegistrationEmails } from "./service/send-registration-emails";
 import type {
 	MessageDispatchStatus,
 	MessageRecord,
@@ -76,6 +77,11 @@ function matchesMessageFilter(
 		);
 	}
 	return status === filter;
+}
+
+/** Allows initial sends and explicit retries while preventing duplicate delivery. */
+function canSendMessage(status: MessageDispatchStatus) {
+	return status === "not_sent" || status === "failed";
 }
 
 /** Formats a serialized Firestore date for the message table. */
@@ -548,6 +554,7 @@ export default function EmailServiceUI() {
 		useState<MessageStatusFilter>("all");
 	const [messageSearch, setMessageSearch] = useState("");
 	const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([]);
+	const [isSendingMessages, startMessageTransition] = useTransition();
 	const deferredMessageSearch = useDeferredValue(
 		messageSearch.trim().toLocaleLowerCase(),
 	);
@@ -565,9 +572,12 @@ export default function EmailServiceUI() {
 			);
 		return matchesStatus && matchesSearch;
 	});
+	const sendableMessageRecords = filteredMessageRecords.filter((record) =>
+		canSendMessage(record.status),
+	);
 	const allMessagesSelected =
-		filteredMessageRecords.length > 0 &&
-		filteredMessageRecords.every((record) =>
+		sendableMessageRecords.length > 0 &&
+		sendableMessageRecords.every((record) =>
 			selectedMessageIds.includes(record.applicationId),
 		);
 	const messageSummaryCards = [
@@ -619,7 +629,7 @@ export default function EmailServiceUI() {
 
 	/** Selects every visible message or clears the complete selection. */
 	function toggleAllMessages() {
-		const visibleIds = filteredMessageRecords.map(
+		const visibleIds = sendableMessageRecords.map(
 			(record) => record.applicationId,
 		);
 		setSelectedMessageIds((current) =>
@@ -629,13 +639,38 @@ export default function EmailServiceUI() {
 		);
 	}
 
-	/** Logs the selected message array for the future backend integration. */
+	/** Sends the copied selection sequentially and refreshes dispatch statuses. */
 	function sendSelectedMessages(messageIds: string[]) {
 		const selectedIds = [...messageIds];
-		console.log("[Message Sending] Selected message IDs:", selectedIds);
-		toast.success(
-			`${selectedIds.length} message${selectedIds.length === 1 ? "" : "s"} prepared for sending.`,
-		);
+		startMessageTransition(async () => {
+			const notificationId = toast.loading(
+				`Sending ${selectedIds.length} registration email${selectedIds.length === 1 ? "" : "s"}...`,
+			);
+			try {
+				const result = await sendRegistrationEmails(selectedIds);
+				const summary = `${result.accepted} accepted, ${result.skipped} skipped, ${result.failed} failed`;
+				if (result.failed > 0 || result.skipped > 0) {
+					const firstProblem = result.results.find(
+						(item) => item.status !== "accepted",
+					);
+					toast.error(
+						`${summary}.${firstProblem ? ` ${firstProblem.applicationReferenceNumber ?? firstProblem.applicationId}: ${firstProblem.message}` : ""}`,
+						{ id: notificationId, duration: 8000 },
+					);
+				} else {
+					toast.success(summary, { id: notificationId });
+				}
+				setSelectedMessageIds([]);
+				setMessageRefreshKey((current) => current + 1);
+			} catch (error) {
+				toast.error(
+					error instanceof Error
+						? error.message
+						: "Registration emails could not be sent.",
+					{ id: notificationId, duration: 8000 },
+				);
+			}
+		});
 	}
 
 	useEffect(() => {
@@ -926,6 +961,7 @@ export default function EmailServiceUI() {
 									</p>
 									<div className="flex items-center gap-2">
 										<Button
+											disabled={isSendingMessages}
 											onClick={() => setSelectedMessageIds([])}
 											size="sm"
 											type="button"
@@ -934,11 +970,17 @@ export default function EmailServiceUI() {
 											Clear
 										</Button>
 										<Button
+											disabled={isSendingMessages}
 											onClick={() => sendSelectedMessages(selectedMessageIds)}
 											size="sm"
 											type="button"
 										>
-											<Send className="size-4" /> Send Selected
+											{isSendingMessages ? (
+												<Loader2 className="size-4 animate-spin" />
+											) : (
+												<Send className="size-4" />
+											)}
+											{isSendingMessages ? "Sending..." : "Send Selected"}
 										</Button>
 									</div>
 								</div>
@@ -979,6 +1021,10 @@ export default function EmailServiceUI() {
 															aria-label="Select all records"
 															checked={allMessagesSelected}
 															className="size-4 accent-primary"
+															disabled={
+																isSendingMessages ||
+																sendableMessageRecords.length === 0
+															}
 															onChange={toggleAllMessages}
 															type="checkbox"
 														/>
@@ -1014,6 +1060,10 @@ export default function EmailServiceUI() {
 																	record.applicationId,
 																)}
 																className="size-4 accent-primary"
+																disabled={
+																	isSendingMessages ||
+																	!canSendMessage(record.status)
+																}
 																onChange={() =>
 																	toggleMessageSelection(record.applicationId)
 																}
@@ -1094,6 +1144,10 @@ export default function EmailServiceUI() {
 																record.applicationId,
 															)}
 															className="mt-1 size-4 accent-primary"
+															disabled={
+																isSendingMessages ||
+																!canSendMessage(record.status)
+															}
 															onChange={() =>
 																toggleMessageSelection(record.applicationId)
 															}

@@ -1,11 +1,12 @@
 type RegistrationAward = {
 	label: string;
+	registrationNumber: string;
 	whatsappUrl: string;
 };
 
 type RegistrationEmailProps = {
 	recipientName: string;
-	registrationNumber: string;
+	applicationReferenceNumber: string;
 	awards: RegistrationAward[];
 };
 
@@ -19,10 +20,10 @@ function escapeHtml(value: string) {
 		.replaceAll("'", "&#039;");
 }
 
-/** Builds the registration confirmation email markup. */
+/** Builds a registration email with one number and WhatsApp link per award. */
 export default function RegistrationEmail({
 	recipientName,
-	registrationNumber,
+	applicationReferenceNumber,
 	awards,
 }: RegistrationEmailProps) {
 	const awardRows = awards
@@ -30,7 +31,9 @@ export default function RegistrationEmail({
 			(award) => `
 				<tr>
 					<td style="border-top:1px solid #e3dbe2;padding:20px 0;">
-						<p style="color:#170c1e;font-size:15px;margin:0 0 12px;"><strong>${escapeHtml(award.label)}</strong></p>
+						<p style="color:#170c1e;font-size:15px;margin:0 0 8px;"><strong>${escapeHtml(award.label)}</strong></p>
+						<p style="color:#7a5676;font-size:11px;font-weight:700;letter-spacing:1px;margin:0 0 5px;text-transform:uppercase;">Award Registration Number</p>
+						<p style="color:#592c55;font-size:20px;font-weight:700;letter-spacing:0.8px;margin:0 0 14px;">${escapeHtml(award.registrationNumber)}</p>
 						<a href="${escapeHtml(award.whatsappUrl)}" style="background-color:#dbbe45;border-radius:8px;color:#170c1e;display:inline-block;font-size:14px;font-weight:700;padding:11px 18px;text-decoration:none;">Join WhatsApp Group</a>
 					</td>
 				</tr>`,
@@ -55,13 +58,13 @@ export default function RegistrationEmail({
 				<tr>
 					<td style="padding:32px;">
 						<p style="font-size:16px;line-height:1.7;margin:0 0 16px;">Dear ${escapeHtml(recipientName)},</p>
-						<p style="color:#592c55;font-size:15px;line-height:1.7;">Your JESA/BESA 2026 application has been successfully registered. Keep the registration number below for future communication.</p>
+						<p style="color:#592c55;font-size:15px;line-height:1.7;">Your JESA/BESA 2026 application has been successfully registered. Keep the application reference and award registration numbers below for future communication.</p>
 						<div style="background-color:#f0ebf0;border:1px solid #d4c8d4;border-radius:12px;margin:28px 0;padding:22px;text-align:center;">
-							<p style="color:#7a5676;font-size:12px;font-weight:700;letter-spacing:1.4px;margin:0 0 10px;text-transform:uppercase;">Registration Number</p>
-							<strong style="color:#592c55;font-size:24px;letter-spacing:1px;">${escapeHtml(registrationNumber)}</strong>
+							<p style="color:#7a5676;font-size:12px;font-weight:700;letter-spacing:1.4px;margin:0 0 10px;text-transform:uppercase;">Application Reference</p>
+							<strong style="color:#592c55;font-size:24px;letter-spacing:1px;">${escapeHtml(applicationReferenceNumber)}</strong>
 						</div>
 						<h2 style="color:#170c1e;font-size:18px;margin:0 0 8px;">Your Registered Award Categories</h2>
-						<p style="color:#7a5676;font-size:14px;line-height:1.6;">Join the relevant WhatsApp group for each award to receive important updates.</p>
+						<p style="color:#7a5676;font-size:14px;line-height:1.6;">Each award has a separate registration number. Join the relevant WhatsApp groups to receive important updates.</p>
 						<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;">${awardRows}</table>
 						<div style="background-color:#f0ebf0;border-radius:10px;color:#592c55;font-size:13px;line-height:1.6;margin-top:8px;padding:16px;">Do not share these WhatsApp group links publicly. They are intended only for registered applicants.</div>
 						<p style="font-size:15px;line-height:1.7;margin:28px 0 0;">Regards,<br /><strong>JESA/BESA 2026 Organizing Committee</strong></p>

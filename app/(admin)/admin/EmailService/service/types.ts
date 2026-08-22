@@ -107,3 +107,43 @@ export type UpdatedApplicationMessageDocument = {
 	documentId: string;
 	data: FirebaseFirestore.DocumentData;
 };
+
+export type ClaimedRegistrationMessage = {
+	applicationId: string;
+	applicationReferenceNumber: string;
+	attempt: number;
+	recipient: {
+		name: string;
+		email: string;
+	};
+	awards: Array<{
+		awardLabel: string;
+		registrationNumber: string;
+		whatsappUrl: string;
+	}>;
+};
+
+export type MessageClaimResult =
+	| { claimed: true; message: ClaimedRegistrationMessage }
+	| {
+			claimed: false;
+			applicationId: string;
+			applicationReferenceNumber: string | null;
+			reason: string;
+	  };
+
+export type MessageSendResult = {
+	applicationId: string;
+	applicationReferenceNumber: string | null;
+	status: "accepted" | "skipped" | "failed";
+	message: string;
+	resendEmailId: string | null;
+};
+
+export type MessageSendBatchResult = {
+	total: number;
+	accepted: number;
+	skipped: number;
+	failed: number;
+	results: MessageSendResult[];
+};
