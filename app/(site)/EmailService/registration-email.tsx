@@ -9,6 +9,7 @@ type RegistrationEmailProps = {
 	awards: RegistrationAward[];
 };
 
+/** Escapes dynamic values before placing them in the email HTML. */
 function escapeHtml(value: string) {
 	return value
 		.replaceAll("&", "&amp;")
@@ -18,6 +19,7 @@ function escapeHtml(value: string) {
 		.replaceAll("'", "&#039;");
 }
 
+/** Builds the registration confirmation email markup. */
 export default function RegistrationEmail({
 	recipientName,
 	registrationNumber,

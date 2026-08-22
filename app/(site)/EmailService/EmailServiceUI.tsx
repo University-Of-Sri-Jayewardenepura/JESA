@@ -8,6 +8,7 @@ import {
 	Clock3,
 	Eye,
 	FileCheck2,
+	Loader2,
 	Mail,
 	MailCheck,
 	MailPlus,
@@ -18,8 +19,10 @@ import {
 	SlidersHorizontal,
 	UserSearch,
 } from "lucide-react";
-import { useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { getRegistrationLookup } from "./service/registration-service";
+import type { RegistrationLookupItem } from "./service/types";
 
 // Placeholder records keep this page focused on layout until API integration is added.
 const emailRecords = [
@@ -101,63 +104,6 @@ const summaryCards = [
 	},
 ] as const;
 
-type LookupRegistrationRecord = {
-	applicationId: string;
-	applicationReferenceNumber: string;
-	applicantType: "internal" | "external";
-	recipient: { name: string; email: string };
-	registrationStatus: "pending" | "generating" | "generated" | "failed";
-	awardRegistrations: ReadonlyArray<{
-		awardLabel: string;
-		registrationNumber: string;
-	}>;
-};
-
-const registrationRecords = [
-	{
-		applicationId: "76062d3e-4ceb-4e34-a880-9c2a04f5d901",
-		applicationReferenceNumber: "J26-APP-0148",
-		applicantType: "external",
-		recipient: {
-			name: "Nethmi Perera",
-			email: "nethmi.perera@example.com",
-		},
-		registrationStatus: "generated",
-		awardRegistrations: [
-			{
-				awardLabel: "Young Entrepreneur of the Year",
-				registrationNumber: "JESA26-YE-0148",
-			},
-			{
-				awardLabel: "Social Impact Award",
-				registrationNumber: "JESA26-SI-0062",
-			},
-		],
-	},
-	{
-		applicationId: "88bf7b8d-0c65-4014-b9a2-11ea73009e28",
-		applicationReferenceNumber: "J26-APP-0143",
-		applicantType: "internal",
-		recipient: {
-			name: "Tharindu Silva",
-			email: "tharindu.s@example.com",
-		},
-		registrationStatus: "pending",
-		awardRegistrations: [],
-	},
-	{
-		applicationId: "c440b75c-cbb8-493c-b862-28f351519767",
-		applicationReferenceNumber: "J26-APP-0139",
-		applicantType: "external",
-		recipient: {
-			name: "Hasini Abeysekara",
-			email: "hasini.a@example.com",
-		},
-		registrationStatus: "failed",
-		awardRegistrations: [],
-	},
-] as const satisfies readonly LookupRegistrationRecord[];
-
 const statusStyles: Record<(typeof emailRecords)[number]["status"], string> = {
 	Ready: "border-primary/25 bg-primary/10 text-primary",
 	Delivered: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
@@ -165,6 +111,7 @@ const statusStyles: Record<(typeof emailRecords)[number]["status"], string> = {
 	Failed: "border-red-400/25 bg-red-500/10 text-red-300",
 };
 
+/** Displays the delivery state used by the message-sending preview. */
 function StatusBadge({
 	status,
 }: {
@@ -180,44 +127,62 @@ function StatusBadge({
 	);
 }
 
-const registrationStatusStyles: Record<
-	LookupRegistrationRecord["registrationStatus"],
-	string
-> = {
-	generated: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
-	generating: "border-blue-400/25 bg-blue-500/10 text-blue-300",
-	pending: "border-primary/25 bg-primary/10 text-primary",
-	failed: "border-red-400/25 bg-red-500/10 text-red-300",
-};
-
-const registrationStatusLabels: Record<
-	LookupRegistrationRecord["registrationStatus"],
-	string
-> = {
-	generated: "Generated",
-	generating: "Generating",
-	pending: "Pending",
-	failed: "Failed",
-};
-
-function RegistrationStatusBadge({
-	status,
-}: {
-	status: LookupRegistrationRecord["registrationStatus"];
-}) {
+/** Shows whether all required registration values exist for an application. */
+function RegistrationStatusBadge({ isRegistered }: { isRegistered: boolean }) {
 	return (
 		<span
-			className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium text-xs ${registrationStatusStyles[status]}`}
+			className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium text-xs ${
+				isRegistered
+					? "border-emerald-500/25 bg-emerald-500/10 text-emerald-400"
+					: "border-primary/25 bg-primary/10 text-primary"
+			}`}
 		>
 			<span className="size-1.5 rounded-full bg-current" />
-			{registrationStatusLabels[status]}
+			{isRegistered ? "Registered" : "Not registered"}
 		</span>
 	);
 }
 
-function RegistrationLookupTab() {
-	const recordsWithNumbers = registrationRecords.filter(
-		(record) => record.awardRegistrations.length > 0,
+/** Identifies a browser request cancelled during navigation or development reload. */
+function isAbortError(error: unknown) {
+	return error instanceof DOMException && error.name === "AbortError";
+}
+
+/** Provides client-side search and status filtering for database lookup results. */
+function RegistrationLookupTab({
+	records,
+	error,
+	loading,
+}: {
+	records: RegistrationLookupItem[];
+	error?: string;
+	loading: boolean;
+}) {
+	const [search, setSearch] = useState("");
+	const [registrationFilter, setRegistrationFilter] = useState<
+		"all" | "registered" | "not_registered"
+	>("all");
+	const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase());
+	const filteredRecords = records.filter((record) => {
+		const matchesRegistrationState =
+			registrationFilter === "all" ||
+			(registrationFilter === "registered" && record.isRegistered) ||
+			(registrationFilter === "not_registered" && !record.isRegistered);
+		const matchesSearch =
+			!deferredSearch ||
+			[
+				record.applicationReferenceNumber ?? "",
+				record.recipient.name,
+				record.recipient.email,
+				...record.awards.flatMap((award) => [
+					award.awardLabel,
+					award.registrationNumber ?? "",
+				]),
+			].some((value) => value.toLocaleLowerCase().includes(deferredSearch));
+		return matchesRegistrationState && matchesSearch;
+	});
+	const registeredCount = records.filter(
+		(record) => record.isRegistered,
 	).length;
 
 	return (
@@ -228,26 +193,23 @@ function RegistrationLookupTab() {
 						<UserSearch className="size-5" />
 					</div>
 					<h2 className="mt-5 font-semibold text-xl" id="registration-lookup">
-						Find a registration
+						Registration lookup
 					</h2>
 					<p className="mt-1 max-w-2xl text-muted-foreground text-sm leading-6">
-						Search by application reference, registration number, applicant
-						name, or email address.
+						Compare original applications with updated applications and verify
+						whether every selected award has a registration number.
 					</p>
-					<div className="mt-5 flex flex-col gap-2 sm:flex-row">
-						<label className="relative flex-1">
-							<Search className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
-							<input
-								className="h-11 w-full rounded-lg border border-input bg-background/60 pr-4 pl-10 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
-								placeholder="e.g. J26-APP-0148 or applicant name"
-								type="search"
-							/>
-							<span className="sr-only">Search registrations</span>
-						</label>
-						<Button className="h-11 px-5" type="button">
-							<Search className="size-4" /> Search records
-						</Button>
-					</div>
+					<label className="relative mt-5 block">
+						<Search className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
+						<input
+							className="h-11 w-full rounded-lg border border-input bg-background/60 pr-4 pl-10 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
+							onChange={(event) => setSearch(event.target.value)}
+							placeholder="Search application, applicant, email, or registration number"
+							type="search"
+							value={search}
+						/>
+						<span className="sr-only">Search registrations</span>
+					</label>
 				</div>
 
 				<aside className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5">
@@ -258,15 +220,17 @@ function RegistrationLookupTab() {
 						<span className="text-muted-foreground text-xs">2026 intake</span>
 					</div>
 					<p className="mt-5 font-semibold text-3xl tabular-nums">
-						{recordsWithNumbers} / {registrationRecords.length}
+						{records.length}
 					</p>
 					<p className="mt-1 text-muted-foreground text-sm">
-						Have registration numbers
+						Total applications
 					</p>
-					<div className="mt-5 border-primary/15 border-t pt-4 text-xs">
-						<span className="text-muted-foreground">
-							Each award has its own registration number.
+					<div className="mt-5 border-primary/15 border-t pt-4 text-muted-foreground text-xs">
+						<span className="text-emerald-400">
+							{registeredCount} registered
 						</span>
+						<span className="mx-2 text-border">/</span>
+						{records.length - registeredCount} not registered
 					</div>
 				</aside>
 			</div>
@@ -275,69 +239,106 @@ function RegistrationLookupTab() {
 				<div className="flex flex-col gap-4 border-border/80 border-b px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
 					<div>
 						<div className="flex items-center gap-2">
-							<h3 className="font-semibold text-lg">Recent registrations</h3>
+							<h3 className="font-semibold text-lg">
+								Application registrations
+							</h3>
 							<span className="rounded-full bg-muted/50 px-2 py-0.5 text-muted-foreground text-xs">
-								3 results
+								{filteredRecords.length} results
 							</span>
 						</div>
 						<p className="mt-1 text-muted-foreground text-sm">
-							See which applicants already have registration numbers.
+							Registration status is calculated from the currently selected
+							awards.
 						</p>
 					</div>
-					<label className="relative block sm:w-48">
-						<select className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15">
-							<option>All records</option>
-							<option>Has registration number</option>
-							<option>No registration number</option>
+					<label className="relative block sm:w-56">
+						<select
+							className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+							onChange={(event) =>
+								setRegistrationFilter(
+									event.target.value as typeof registrationFilter,
+								)
+							}
+							value={registrationFilter}
+						>
+							<option value="all">All applications</option>
+							<option value="registered">Registered</option>
+							<option value="not_registered">Not registered</option>
 						</select>
 						<ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
 						<span className="sr-only">
-							Filter registration number availability
+							Filter application registration status
 						</span>
 					</label>
 				</div>
 
-				<div className="divide-y divide-border/70">
-					{registrationRecords.map((record) => (
-						<article
-							className="grid gap-5 p-4 transition-colors hover:bg-muted/10 sm:p-6 lg:grid-cols-[minmax(15rem,0.9fr)_minmax(18rem,1.25fr)_auto] lg:items-center"
-							key={record.applicationId}
-						>
-							<div className="flex items-start gap-3">
-								<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/40 font-semibold text-primary text-sm">
-									{record.recipient.name
-										.split(" ")
-										.map((part) => part[0])
-										.join("")}
-								</span>
-								<div className="min-w-0">
-									<div className="flex flex-wrap items-center gap-2">
+				{loading ? (
+					<div className="p-10 text-center">
+						<Loader2 className="mx-auto size-6 animate-spin text-primary" />
+						<p className="mt-3 text-muted-foreground text-sm">
+							Loading application registrations...
+						</p>
+					</div>
+				) : error ? (
+					<div className="p-8 text-center">
+						<AlertCircle className="mx-auto size-6 text-red-300" />
+						<p className="mt-3 font-medium">Unable to load registrations</p>
+						<p className="mt-1 text-muted-foreground text-sm">{error}</p>
+					</div>
+				) : filteredRecords.length === 0 ? (
+					<div className="p-10 text-center">
+						<CheckCircle2 className="mx-auto size-7 text-emerald-400" />
+						<p className="mt-3 font-medium">No matching applications</p>
+						<p className="mt-1 text-muted-foreground text-sm">
+							No application records match this search or filter.
+						</p>
+					</div>
+				) : (
+					<div className="divide-y divide-border/70">
+						{filteredRecords.map((record) => (
+							<article
+								className="grid gap-5 p-4 transition-colors hover:bg-muted/10 sm:p-6 lg:grid-cols-[minmax(15rem,0.9fr)_minmax(18rem,1.25fr)_auto] lg:items-center"
+								key={record.applicationId}
+							>
+								<div className="flex items-start gap-3">
+									<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/40 font-semibold text-primary text-sm">
+										{record.recipient.name
+											.split(" ")
+											.map((part) => part[0])
+											.join("")}
+									</span>
+									<div className="min-w-0">
 										<p className="font-semibold">{record.recipient.name}</p>
+										<p className="mt-1 truncate text-muted-foreground text-xs">
+											{record.recipient.email}
+										</p>
+										<p className="mt-1.5 font-medium text-primary text-xs">
+											{record.applicationReferenceNumber ??
+												"Application reference missing"}
+											<span className="ml-2 font-normal text-muted-foreground capitalize">
+												{record.applicantType}
+											</span>
+										</p>
 									</div>
-									<p className="mt-1 truncate text-muted-foreground text-xs">
-										{record.recipient.email}
-									</p>
-									<p className="mt-1.5 font-medium text-primary text-xs">
-										{record.applicationReferenceNumber}
-										<span className="ml-2 font-normal text-muted-foreground capitalize">
-											{record.applicantType}
-										</span>
-									</p>
 								</div>
-							</div>
-							<div>
-								<p className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
-									Registration numbers
-								</p>
-								{record.awardRegistrations.length > 0 ? (
+								<div>
+									<p className="mb-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
+										Selected awards
+									</p>
 									<ul className="space-y-2">
-										{record.awardRegistrations.map((award) => (
+										{record.awards.map((award) => (
 											<li
 												className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-2"
-												key={award.registrationNumber}
+												key={award.awardCode}
 											>
-												<span className="font-semibold text-primary text-sm">
-													{award.registrationNumber}
+												<span
+													className={
+														award.registrationNumber
+															? "font-semibold text-primary text-sm"
+															: "font-medium text-red-300 text-xs"
+													}
+												>
+													{award.registrationNumber ?? "Number missing"}
 												</span>
 												<span className="truncate text-muted-foreground text-xs">
 													{award.awardLabel}
@@ -345,27 +346,63 @@ function RegistrationLookupTab() {
 											</li>
 										))}
 									</ul>
-								) : (
-									<p className="text-muted-foreground text-sm">
-										Not generated yet
-									</p>
-								)}
-							</div>
-							<div className="flex items-center justify-between gap-3 lg:justify-end">
-								<RegistrationStatusBadge status={record.registrationStatus} />
-							</div>
-						</article>
-					))}
-				</div>
+								</div>
+								<div className="flex items-center justify-between gap-3 lg:flex-col lg:items-end">
+									<RegistrationStatusBadge isRegistered={record.isRegistered} />
+									<span className="text-muted-foreground text-xs tabular-nums">
+										{record.missingRegistrationCount === 0
+											? "Complete"
+											: `${record.missingRegistrationCount} missing`}
+									</span>
+								</div>
+							</article>
+						))}
+					</div>
+				)}
 			</div>
 		</section>
 	);
 }
 
+/** Renders the message and registration lookup workspaces. */
 export default function EmailServiceUI() {
 	const [activeWorkspace, setActiveWorkspace] = useState<
 		"message-sending" | "registration-lookup"
 	>("message-sending");
+	const [registrationRecords, setRegistrationRecords] = useState<
+		RegistrationLookupItem[]
+	>([]);
+	const [registrationLookupError, setRegistrationLookupError] = useState("");
+	const [registrationLoading, setRegistrationLoading] = useState(false);
+	const [registrationRefreshKey, setRegistrationRefreshKey] = useState(0);
+
+	useEffect(() => {
+		if (activeWorkspace !== "registration-lookup") return;
+
+		let cancelled = false;
+
+		/** Loads lookup records while respecting component cancellation. */
+		async function loadRegistrationRecords() {
+			setRegistrationLoading(true);
+			setRegistrationLookupError("");
+			try {
+				const records = await getRegistrationLookup();
+				if (!cancelled) setRegistrationRecords(records);
+			} catch (error) {
+				if (cancelled || isAbortError(error)) return;
+				console.error("[EmailServiceUI] Failed to load registrations:", error);
+				setRegistrationLookupError("Registration records could not be loaded.");
+			} finally {
+				if (!cancelled) setRegistrationLoading(false);
+			}
+		}
+
+		void loadRegistrationRecords();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [activeWorkspace, registrationRefreshKey]);
 
 	return (
 		<main className="relative min-h-screen overflow-hidden bg-background px-4 pt-28 pb-20 text-foreground sm:px-6 lg:px-8">
@@ -395,6 +432,14 @@ export default function EmailServiceUI() {
 					<div className="flex flex-wrap gap-2">
 						<Button
 							className="h-10 border-border bg-card/60"
+							disabled={
+								activeWorkspace === "registration-lookup" && registrationLoading
+							}
+							onClick={() => {
+								if (activeWorkspace === "registration-lookup") {
+									setRegistrationRefreshKey((current) => current + 1);
+								}
+							}}
 							type="button"
 							variant="outline"
 						>
@@ -721,7 +766,11 @@ export default function EmailServiceUI() {
 						</div>
 					</>
 				) : (
-					<RegistrationLookupTab />
+					<RegistrationLookupTab
+						error={registrationLookupError}
+						loading={registrationLoading}
+						records={registrationRecords}
+					/>
 				)}
 			</div>
 		</main>
