@@ -34,7 +34,7 @@ export async function sendClaimedRegistrationEmail(
 			from:
 				process.env.RESEND_FROM_EMAIL ??
 				"JESA/BESA 2026 <onboarding@resend.dev>",
-			to:message.recipient.email,
+			to: message.recipient.email,
 			subject: `Registration Confirmation - ${message.applicationReferenceNumber}`,
 			html,
 		}),
