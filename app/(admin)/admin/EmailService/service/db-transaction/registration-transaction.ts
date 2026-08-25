@@ -42,7 +42,7 @@ const REGISTRATION_YEAR = 2026;
 
 /** Formats an application reference such as J26-APP-0002. */
 function formatApplicationReference(year: number, sequence: number) {
-	return `J${String(year).slice(-2)}-APP-${String(sequence).padStart(4, "0")}`;
+	return `J${String(year).slice(-2)}-${String(sequence).padStart(4, "0")}`;
 }
 
 /** Formats an award registration such as FMS002, BTP002, or IU169. */

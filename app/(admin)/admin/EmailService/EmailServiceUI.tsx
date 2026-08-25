@@ -53,7 +53,7 @@ const MESSAGE_STATUS_LABELS: Record<MessageDispatchStatus, string> = {
 };
 
 const MESSAGE_STATUS_STYLES: Record<MessageDispatchStatus, string> = {
-	not_sent: "border-primary/25 bg-primary/10 text-primary",
+	not_sent: "border-slate-600/40 bg-slate-800/50 text-slate-100",
 	processing: "border-blue-400/25 bg-blue-500/10 text-blue-300",
 	accepted: "border-blue-400/25 bg-blue-500/10 text-blue-300",
 	delivered: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
@@ -116,7 +116,7 @@ function RegistrationStatusBadge({ isRegistered }: { isRegistered: boolean }) {
 			className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium text-xs ${
 				isRegistered
 					? "border-emerald-500/25 bg-emerald-500/10 text-emerald-400"
-					: "border-primary/25 bg-primary/10 text-primary"
+					: "border-slate-600/40 bg-slate-800/50 text-slate-100"
 			}`}
 		>
 			<span className="size-1.5 rounded-full bg-current" />
@@ -270,7 +270,7 @@ function RegistrationLookupTab({
 		<section aria-labelledby="registration-lookup" className="space-y-4">
 			<div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
 				<div className="rounded-2xl border border-border/80 bg-card/45 p-5 shadow-[0_20px_70px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:p-6">
-					<div className="flex size-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
+					<div className="flex size-10 items-center justify-center rounded-xl border border-slate-700/50 bg-slate-800/50 text-slate-100">
 						<UserSearch className="size-5" />
 					</div>
 					<h2 className="mt-5 font-semibold text-xl" id="registration-lookup">
@@ -283,7 +283,7 @@ function RegistrationLookupTab({
 					<label className="relative mt-5 block">
 						<Search className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
 						<input
-							className="h-11 w-full rounded-lg border border-input bg-background/60 pr-4 pl-10 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
+							className="h-11 w-full rounded-lg border border-input bg-background/60 pr-4 pl-10 text-sm outline-none placeholder:text-muted-foreground focus:border-slate-500 focus:ring-2 focus:ring-slate-400/15"
 							onChange={(event) => setSearch(event.target.value)}
 							placeholder="Search application, applicant, email, or registration number"
 							type="search"
@@ -293,9 +293,9 @@ function RegistrationLookupTab({
 					</label>
 				</div>
 
-				<aside className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5">
+				<aside className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-5">
 					<div className="flex items-center justify-between">
-						<span className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+						<span className="flex size-9 items-center justify-center rounded-lg bg-slate-800/50 text-slate-100">
 							<FileCheck2 className="size-4" />
 						</span>
 						<span className="text-muted-foreground text-xs">2026 intake</span>
@@ -306,7 +306,7 @@ function RegistrationLookupTab({
 					<p className="mt-1 text-muted-foreground text-sm">
 						Total applications
 					</p>
-					<div className="mt-5 border-primary/15 border-t pt-4 text-muted-foreground text-xs">
+					<div className="mt-5 border-slate-700/50 border-t pt-4 text-muted-foreground text-xs">
 						<span className="text-emerald-400">
 							{registeredCount} registered
 						</span>
@@ -335,7 +335,7 @@ function RegistrationLookupTab({
 					<div className="flex flex-col gap-2 sm:flex-row">
 						<label className="relative block sm:w-48">
 							<select
-								className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+								className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-400/15"
 								onChange={(event) =>
 									setRegistrationFilter(
 										event.target.value as typeof registrationFilter,
@@ -354,7 +354,7 @@ function RegistrationLookupTab({
 						</label>
 						<label className="relative block sm:w-44">
 							<select
-								className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+								className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-400/15"
 								onChange={(event) =>
 									setRegistrationSort(
 										event.target.value as typeof registrationSort,
@@ -377,7 +377,7 @@ function RegistrationLookupTab({
 							<input
 								aria-label="Select all visible unregistered applications"
 								checked={allSelectableRecordsSelected}
-								className="size-4 accent-primary"
+								className="size-4 accent-slate-400"
 								disabled={isRegistering}
 								onChange={toggleVisibleApplications}
 								type="checkbox"
@@ -459,7 +459,7 @@ function RegistrationLookupTab({
 
 				{loading ? (
 					<div className="p-10 text-center">
-						<Loader2 className="mx-auto size-6 animate-spin text-primary" />
+						<Loader2 className="mx-auto size-6 animate-spin text-slate-100" />
 						<p className="mt-3 text-muted-foreground text-sm">
 							Loading application registrations...
 						</p>
@@ -494,7 +494,7 @@ function RegistrationLookupTab({
 											checked={selectedApplicationIds.includes(
 												record.applicationId,
 											)}
-											className="mt-3 size-4 shrink-0 accent-primary"
+											className="mt-3 size-4 shrink-0 accent-slate-400"
 											disabled={isRegistering}
 											onChange={() =>
 												toggleApplicationSelection(record.applicationId)
@@ -502,7 +502,7 @@ function RegistrationLookupTab({
 											type="checkbox"
 										/>
 									)}
-									<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/40 font-semibold text-primary text-sm">
+									<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/40 font-semibold text-slate-100 text-sm">
 										{record.recipient.name
 											.split(" ")
 											.map((part) => part[0])
@@ -513,7 +513,7 @@ function RegistrationLookupTab({
 										<p className="mt-1 truncate text-muted-foreground text-xs">
 											{record.recipient.email}
 										</p>
-										<p className="mt-1.5 font-medium text-primary text-xs">
+										<p className="mt-1.5 font-medium text-slate-100 text-xs">
 											{record.applicationReferenceNumber ??
 												"Application reference missing"}
 											<span className="ml-2 font-normal text-muted-foreground capitalize">
@@ -535,7 +535,7 @@ function RegistrationLookupTab({
 												<span
 													className={
 														award.registrationNumber
-															? "font-semibold text-primary text-sm"
+															? "font-semibold text-slate-100 text-sm"
 															: "font-medium text-red-300 text-xs"
 													}
 												>
@@ -630,7 +630,7 @@ export default function EmailServiceUI() {
 				.length,
 			detail: "Registration emails",
 			icon: MailPlus,
-			accent: "text-primary bg-primary/10 border-primary/20",
+							accent: "text-slate-100 bg-slate-800/50 border-slate-700/50",
 		},
 		{
 			label: "In progress",
@@ -795,14 +795,14 @@ export default function EmailServiceUI() {
 				}}
 			/>
 			{/* Restrained brand lighting separates the workspace from the site shell. */}
-			<div className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(circle_at_18%_0%,rgba(219,190,69,0.10),transparent_34%),radial-gradient(circle_at_85%_8%,rgba(89,44,85,0.24),transparent_32%)]" />
+			<div className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(circle_at_18%_0%,rgba(248,250,252,0.06),transparent_34%),radial-gradient(circle_at_85%_8%,rgba(100,116,139,0.12),transparent_32%)]" />
 
 			<div className="relative mx-auto max-w-[1440px] space-y-6">
 				{/* Page heading and primary actions */}
 				<header className="flex flex-col gap-6 border-border/70 border-b pb-7 lg:flex-row lg:items-end lg:justify-between">
 					<div className="max-w-3xl">
-						<div className="mb-3 flex items-center gap-2 text-primary">
-							<span className="flex size-7 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
+						<div className="mb-3 flex items-center gap-2 text-slate-300">
+							<span className="flex size-7 items-center justify-center rounded-lg border border-slate-600/40 bg-slate-800/50">
 								<Mail className="size-3.5" />
 							</span>
 							<p className="font-semibold text-xs uppercase tracking-[0.2em]">
@@ -859,8 +859,8 @@ export default function EmailServiceUI() {
 						}
 						className={`flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-medium text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
 							activeWorkspace === "message-sending"
-								? "bg-primary text-primary-foreground shadow-sm"
-								: "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
+							? "bg-slate-100 text-slate-900 shadow-sm"
+							: "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
 						}`}
 						onClick={() => setActiveWorkspace("message-sending")}
 						type="button"
@@ -873,7 +873,7 @@ export default function EmailServiceUI() {
 						}
 						className={`flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-medium text-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
 							activeWorkspace === "registration-lookup"
-								? "bg-primary text-primary-foreground shadow-sm"
+								? "bg-slate-100 text-slate-900 shadow-sm"
 								: "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
 						}`}
 						onClick={() => setActiveWorkspace("registration-lookup")}
@@ -907,7 +907,7 @@ export default function EmailServiceUI() {
 									const Icon = card.icon;
 									return (
 										<article
-											className="group rounded-2xl border border-border/80 bg-card/45 p-5 shadow-[0_16px_50px_rgba(0,0,0,0.12)] backdrop-blur-sm transition-colors hover:border-primary/35"
+											className="group rounded-2xl border border-border/80 bg-card/45 p-5 shadow-[0_16px_50px_rgba(0,0,0,0.12)] backdrop-blur-sm transition-colors hover:border-slate-600/50"
 											key={card.label}
 										>
 											<div className="flex items-start justify-between gap-4">
@@ -957,7 +957,7 @@ export default function EmailServiceUI() {
 									<label className="relative block sm:w-72">
 										<Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
 										<input
-											className="h-10 w-full rounded-lg border border-input bg-background/60 pr-3 pl-9 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/15"
+											className="h-10 w-full rounded-lg border border-input bg-background/60 pr-3 pl-9 text-sm outline-none placeholder:text-muted-foreground focus:border-slate-500 focus:ring-2 focus:ring-slate-400/15"
 											onChange={(event) => setMessageSearch(event.target.value)}
 											placeholder="Search name, email or ID"
 											type="search"
@@ -967,7 +967,7 @@ export default function EmailServiceUI() {
 									</label>
 									<label className="relative block sm:w-44">
 										<select
-											className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+											className="h-10 w-full appearance-none rounded-lg border border-input bg-background/60 px-3 pr-9 text-sm outline-none focus:border-slate-500 focus:ring-2 focus:ring-slate-400/15"
 											onChange={(event) =>
 												setMessageSort(event.target.value as typeof messageSort)
 											}
@@ -994,7 +994,7 @@ export default function EmailServiceUI() {
 									<button
 										className={`relative shrink-0 px-3 py-3 font-medium text-sm transition-colors ${
 											messageFilter === tab.value
-												? "text-primary after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-primary"
+												? "text-slate-100 after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-slate-100"
 												: "text-muted-foreground hover:text-foreground"
 										}`}
 										key={tab.value}
@@ -1009,7 +1009,7 @@ export default function EmailServiceUI() {
 							</div>
 
 							{selectedMessageIds.length > 0 && (
-								<div className="flex flex-col gap-3 border-border/80 border-b bg-primary/[0.05] px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+								<div className="flex flex-col gap-3 border-border/80 border-b bg-slate-800/40 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
 									<p className="font-medium text-sm tabular-nums">
 										{selectedMessageIds.length} message
 										{selectedMessageIds.length === 1 ? "" : "s"} selected
@@ -1043,7 +1043,7 @@ export default function EmailServiceUI() {
 
 							{messageLoading ? (
 								<div className="p-10 text-center">
-									<Loader2 className="mx-auto size-6 animate-spin text-primary" />
+		<Loader2 className="mx-auto size-6 animate-spin text-slate-300" />
 									<p className="mt-3 text-muted-foreground text-sm">
 										Loading message records...
 									</p>
@@ -1058,7 +1058,7 @@ export default function EmailServiceUI() {
 								</div>
 							) : filteredMessageRecords.length === 0 ? (
 								<div className="p-10 text-center">
-									<MailCheck className="mx-auto size-7 text-primary" />
+									<MailCheck className="mx-auto size-7 text-slate-100" />
 									<p className="mt-3 font-medium">No matching messages</p>
 									<p className="mt-1 text-muted-foreground text-sm">
 										No updated application messages match this search or status.
@@ -1075,7 +1075,7 @@ export default function EmailServiceUI() {
 														<input
 															aria-label="Select all records"
 															checked={allMessagesSelected}
-															className="size-4 accent-primary"
+															className="size-4 accent-slate-400"
 															disabled={
 																isSendingMessages ||
 																sendableMessageRecords.length === 0
@@ -1105,7 +1105,7 @@ export default function EmailServiceUI() {
 											<tbody className="divide-y divide-border/70">
 												{filteredMessageRecords.map((record) => (
 													<tr
-														className={`transition-colors hover:bg-muted/15 ${selectedMessageIds.includes(record.applicationId) ? "bg-primary/[0.04]" : ""}`}
+														className={`transition-colors hover:bg-muted/15 ${selectedMessageIds.includes(record.applicationId) ? "bg-slate-800/30" : ""}`}
 														key={record.applicationId}
 													>
 														<td className="px-5 py-4">
@@ -1114,7 +1114,7 @@ export default function EmailServiceUI() {
 																checked={selectedMessageIds.includes(
 																	record.applicationId,
 																)}
-																className="size-4 accent-primary"
+																className="size-4 accent-slate-400"
 																disabled={
 																	isSendingMessages ||
 																	!canSendMessage(record.status)
@@ -1125,7 +1125,7 @@ export default function EmailServiceUI() {
 																type="checkbox"
 															/>
 														</td>
-														<td className="whitespace-nowrap px-4 py-4 font-semibold text-primary">
+														<td className="whitespace-nowrap px-4 py-4 font-semibold text-slate-100">
 															{record.registrationNumber}
 														</td>
 														<td className="px-4 py-4">
@@ -1198,7 +1198,7 @@ export default function EmailServiceUI() {
 															checked={selectedMessageIds.includes(
 																record.applicationId,
 															)}
-															className="mt-1 size-4 accent-primary"
+															className="mt-1 size-4 accent-slate-400"
 															disabled={
 																isSendingMessages ||
 																!canSendMessage(record.status)
@@ -1209,7 +1209,7 @@ export default function EmailServiceUI() {
 															type="checkbox"
 														/>
 														<div>
-															<p className="font-semibold text-primary text-sm">
+															<p className="font-semibold text-slate-100 text-sm">
 																{record.registrationNumber}
 															</p>
 															<p className="mt-1 font-medium">
@@ -1264,16 +1264,16 @@ export default function EmailServiceUI() {
 						</section>
 
 						{/* Static informational footer: actions are intentionally UI-only. */}
-						<div className="flex flex-col gap-3 rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-3 text-xs sm:flex-row sm:items-center sm:justify-between">
+							<div className="flex flex-col gap-3 rounded-xl border border-slate-700/50 bg-slate-800/40 px-4 py-3 text-xs sm:flex-row sm:items-center sm:justify-between">
 							<div className="flex items-center gap-2 text-muted-foreground">
-								<MailCheck className="size-4 text-primary" />
+								<MailCheck className="size-4 text-slate-100" />
 								<span>
 									Email delivery is configured for JESA / BESA 2026
 									registrations.
 								</span>
 							</div>
 							<button
-								className="flex items-center gap-1 font-medium text-primary"
+								className="flex items-center gap-1 font-medium text-slate-100"
 								type="button"
 							>
 								View delivery guide{" "}
