@@ -23,6 +23,7 @@ import {
 import { useDeferredValue, useEffect, useState, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import EmailPreviewDialog from "./email-preview-dialog";
 import { getMessageRecords } from "./service/message-retrieval-service";
 import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
@@ -81,6 +82,11 @@ function matchesMessageFilter(
 /** Allows initial sends and explicit retries while preventing duplicate delivery. */
 function canSendMessage(status: MessageDispatchStatus) {
 	return status === "not_sent" || status === "failed";
+}
+
+/** Checks if a message status indicates it needs resending (failed, bounced, or complained). */
+function needsResend(status: MessageDispatchStatus) {
+	return status === "failed" || status === "bounced" || status === "complained";
 }
 
 /** Formats a serialized Firestore date for the message table. */
@@ -586,6 +592,8 @@ export default function EmailServiceUI() {
 	const [messageSearch, setMessageSearch] = useState("");
 	const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([]);
 	const [isSendingMessages, startMessageTransition] = useTransition();
+	const [previewRecord, setPreviewRecord] = useState<MessageRecord | null>(null);
+	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 	const deferredMessageSearch = useDeferredValue(
 		messageSearch.trim().toLocaleLowerCase(),
 	);
@@ -680,6 +688,16 @@ export default function EmailServiceUI() {
 				? current.filter((id) => !visibleIds.includes(id))
 				: [...new Set([...current, ...visibleIds])],
 		);
+	}
+
+	/** Selects all failed, bounced, or complained messages for batch resend. */
+	function selectAllFailedMessages() {
+		const failedIds = filteredMessageRecords
+			.filter((record) => needsResend(record.status))
+			.map((record) => record.applicationId);
+		setSelectedMessageIds((current) => [
+			...new Set([...current, ...failedIds]),
+		]);
 	}
 
 	/** Sends the copied selection sequentially and refreshes dispatch statuses. */
@@ -928,6 +946,24 @@ export default function EmailServiceUI() {
 											<p className="mt-4 text-muted-foreground text-xs">
 												{card.detail}
 											</p>
+											{card.label === "Needs attention" && card.value > 0 && (
+												<Button
+													className="mt-4 w-full border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
+													disabled={isSendingMessages}
+													onClick={() => {
+														const failedIds = messageRecords
+															.filter((r) => needsResend(r.status))
+															.map((r) => r.applicationId);
+														sendSelectedMessages(failedIds);
+													}}
+													size="sm"
+													type="button"
+													variant="outline"
+												>
+													<RefreshCw className="size-4 mr-1.5" />
+													Resend All Failed
+												</Button>
+											)}
 										</article>
 									);
 								})}
@@ -1006,6 +1042,22 @@ export default function EmailServiceUI() {
 										{tab.label}
 									</button>
 								))}
+								<div className="ml-auto flex items-center">
+									{messageFilter === "failed" &&
+										filteredMessageRecords.some((r) => needsResend(r.status)) && (
+											<Button
+												className="border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
+												disabled={isSendingMessages}
+												onClick={selectAllFailedMessages}
+												size="sm"
+												type="button"
+												variant="outline"
+											>
+												<RefreshCw className="size-4 mr-1.5" />
+												Select All Failed
+											</Button>
+										)}
+								</div>
 							</div>
 
 							{selectedMessageIds.length > 0 && (
@@ -1158,9 +1210,28 @@ export default function EmailServiceUI() {
 														</td>
 														<td className="px-5 py-4">
 															<div className="flex justify-end gap-1">
+																{needsResend(record.status) && (
+																	<Button
+																		aria-label={`Resend email to ${record.recipient.name}`}
+																		className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+																		disabled={isSendingMessages}
+																		onClick={() =>
+																			sendSelectedMessages([record.applicationId])
+																		}
+																		size="icon"
+																		type="button"
+																		variant="ghost"
+																	>
+																		<RefreshCw className="size-4" />
+																	</Button>
+																)}
 																<Button
-																	aria-label={`Preview ${record.registrationNumber}`}
-																	className="text-muted-foreground"
+																	aria-label={`Preview email for ${record.registrationNumber}`}
+																	className="text-muted-foreground hover:text-foreground"
+																	onClick={() => {
+																		setPreviewRecord(record);
+																		setIsPreviewOpen(true);
+																	}}
 																	size="icon"
 																	type="button"
 																	variant="ghost"
@@ -1238,6 +1309,22 @@ export default function EmailServiceUI() {
 														</p>
 													</div>
 												</div>
+												{needsResend(record.status) && (
+													<Button
+														aria-label={`Resend email to ${record.recipient.name}`}
+														className="w-full border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
+														disabled={isSendingMessages}
+														onClick={() =>
+															sendSelectedMessages([record.applicationId])
+														}
+														size="sm"
+														type="button"
+														variant="outline"
+													>
+														<RefreshCw className="size-4 mr-2" />
+														Resend Email
+													</Button>
+												)}
 											</article>
 										))}
 									</div>
@@ -1292,6 +1379,12 @@ export default function EmailServiceUI() {
 					/>
 				)}
 			</div>
+
+			<EmailPreviewDialog
+				record={previewRecord}
+				open={isPreviewOpen}
+				onOpenChange={setIsPreviewOpen}
+			/>
 		</main>
 	);
 }
