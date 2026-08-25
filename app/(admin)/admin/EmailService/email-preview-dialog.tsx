@@ -96,7 +96,7 @@ export default function EmailPreviewDialog({
 					</div>
 				</DialogHeader>
 
-				<div className="flex justify-center overflow-auto bg-slate-950 p-4 sm:p-6">
+				<div className="flex justify-center overflow-auto p-4 sm:p-6" style={{ backgroundColor: "#1c1029" }}>
 					<div
 						className="overflow-hidden rounded-lg border border-slate-800 shadow-2xl transition-all duration-300"
 						style={{

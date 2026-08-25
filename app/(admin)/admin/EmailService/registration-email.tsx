@@ -1,9 +1,3 @@
-import {
-	CSDS_BASE64,
-	JESA_ICON_BASE64,
-	USJP_BASE64,
-} from "./email-images";
-
 type RegistrationAward = {
 	label: string;
 	registrationNumber: string;
@@ -26,6 +20,13 @@ function escapeHtml(value: string) {
 		.replaceAll("'", "&#039;");
 }
 
+const JESA_ICON_URL =
+	"https://res.cloudinary.com/dgpiqnweu/image/upload/v1787688326/jesa-min.png";
+const USJP_LOGO_URL =
+	"https://res.cloudinary.com/dgpiqnweu/image/upload/v1787688311/usjp.png";
+const CSDS_LOGO_URL =
+	"https://res.cloudinary.com/dgpiqnweu/image/upload/v1787688314/csds.png";
+
 /** Builds a registration email with one number and WhatsApp link per award. */
 export default function RegistrationEmail({
 	recipientName,
@@ -35,157 +36,132 @@ export default function RegistrationEmail({
 	const awardRows = awards
 		.map(
 			(award) => `
-				<tr>
-					<td style="padding:24px 0;border-bottom:1px solid #2a2a4a;">
-						<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-							<tr>
-								<td style="padding-right:16px;vertical-align:top;">
-									<p style="color:#d4af37;font-size:11px;font-weight:700;letter-spacing:1.5px;margin:0 0 6px;text-transform:uppercase;">Award Category</p>
-									<p style="color:#ffffff;font-size:16px;font-weight:600;margin:0 0 12px;">${escapeHtml(award.label)}</p>
-									<p style="color:#d4af37;font-size:11px;font-weight:700;letter-spacing:1.5px;margin:0 0 6px;text-transform:uppercase;">Registration Number</p>
-									<p style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:1px;margin:0 0 16px;font-family:'Courier New',monospace;">${escapeHtml(award.registrationNumber)}</p>
-								</td>
-								<td style="vertical-align:top;text-align:right;">
-									<a href="${escapeHtml(award.whatsappUrl)}" style="display:inline-block;background-color:#25d366;color:#ffffff;font-size:13px;font-weight:700;padding:12px 20px;border-radius:8px;text-decoration:none;text-align:center;">Join WhatsApp Group</a>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>`,
+            <!-- Award -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+              <tr><td class="award-pad" style="padding:18px 20px;background:#170c20;border:1px solid #392b47;border-radius:12px;">
+                <p style="margin:0 0 7px;color:#e5c064;font-size:10px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;">Award Category</p>
+                <p style="margin:0 0 12px;color:#f7f2fa;font-size:15px;font-weight:700;line-height:1.45;">${escapeHtml(award.label)}</p>
+                <p style="margin:0 0 13px;color:#a996b2;font-size:12px;">Registration No. <strong style="color:#ffffff;">${escapeHtml(award.registrationNumber)}</strong></p>
+                <a href="${escapeHtml(award.whatsappUrl)}" target="_blank" style="display:inline-block;padding:10px 15px;background:#e5c064;border-radius:7px;color:#17101d;text-decoration:none;font-size:11px;font-weight:700;letter-spacing:.2px;">Join WhatsApp Group&nbsp;&rarr;</a>
+              </td></tr>
+            </table>`,
 		)
 		.join("");
 
 	return `<!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="x-apple-disable-message-reformatting" />
-		<meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no" />
-		<title>Registration Confirmation - JESA/BESA 2026</title>
-		<!--[if mso]>
-		<noscript>
-			<xml>
-				<o:OfficeDocumentSettings>
-					<o:AllowPNG/>
-					<o:PixelsPerInch>96</o:PixelsPerInch>
-				</o:OfficeDocumentSettings>
-			</xml>
-		</noscript>
-		<![endif]-->
-		<style>
-			* { box-sizing: border-box; }
-			body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-			table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-			img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
-			p { margin: 0; }
-			a { text-decoration: none; }
-			@media only screen and (max-width: 600px) {
-				.email-container { width: 100% !important; max-width: 100% !important; }
-				.fluid { max-width: 100% !important; height: auto !important; }
-				.stack-column { display: block !important; width: 100% !important; max-width: 100% !important; }
-				.center-on-narrow { text-align: center !important; display: block !important; margin-left: auto !important; margin-right: auto !important; float: none !important; }
-				table.center-on-narrow { display: inline-block !important; }
-				.mobile-padding { padding: 20px !important; }
-			}
-		</style>
-	</head>
-	<body style="margin:0;padding:0;background-color:#1a1a2e;font-family:Arial,Helvetica,sans-serif;">
-		<div style="display:none;font-size:1px;color:#1a1a2e;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
-			Your JESA/BESA 2026 registration is confirmed. Your registration numbers are ready.
-			${"&#847;".repeat(30)}
-		</div>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>Registration Confirmed — JESA/BESA 2026</title>
+<!--[if mso]><style>table{border-collapse:collapse!important}td{font-family:Arial,Helvetica,sans-serif!important}</style><![endif]-->
+<style>
+  @media screen and (max-width:620px) {
+    .shell{width:100%!important;border-radius:0!important}
+    .pad{padding-left:22px!important;padding-right:22px!important}
+    .hero{padding:32px 22px 28px!important}
+    .header{padding:16px 20px!important}
+    .brand-copy{font-size:13px!important}
+    .title{font-size:27px!important;line-height:1.2!important}
+    .ref-code{font-size:22px!important}
+    .award-pad{padding:16px!important}
+    .footer-stack{display:block!important;width:100%!important}
+    .footer-logo-cell{padding:0 0 18px!important;text-align:center!important}
+    .footer-copy{padding:0!important;text-align:center!important}
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#1c1029;color:#f7f2fa;font-family:Arial,Helvetica,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1c1029;">
+    <tr><td align="center" style="padding:28px 14px 40px;">
+      <table role="presentation" class="shell" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#130b1a;border:1px solid #33243f;border-radius:18px;overflow:hidden;">
+        <!-- HEADER -->
+        <tr>
+          <td class="header" style="padding:18px 26px;background:#0d0714;border-bottom:1px solid #31213e;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td valign="middle" style="width:72px;">
+                  <img src="${JESA_ICON_URL}" alt="JESA / BESA 2026" width="60" style="display:block;width:60px;height:auto;border:0;" />
+                </td>
+                <td valign="middle" style="padding-left:14px;">
+                  <p class="brand-copy" style="margin:0;color:#f4e9f7;font-size:14px;font-weight:700;letter-spacing:.2px;">J'pura Employability Skills Awards</p>
+                  <p style="margin:4px 0 0;color:#8f7c9d;font-size:11px;letter-spacing:1.3px;text-transform:uppercase;">JESA / BESA 2026</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-		<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#1a1a2e;">
-			<tr>
-				<td align="center" style="padding:40px 16px;">
-					<!--[if mso]>
-					<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" align="center">
-					<tr>
-					<td>
-					<![endif]-->
-					<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;" class="email-container">
+        <!-- HERO -->
+        <tr>
+          <td class="hero" align="center" style="padding:42px 32px 36px;background:#12091a;border-bottom:1px solid #e5c064;">
+            <p style="margin:18px 0 9px;color:#e5c064;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Registration Successful</p>
+            <h1 class="title" style="margin:0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:30px;font-weight:700;line-height:1.25;">Registration Confirmed</h1>
+            <p style="margin:10px 0 0;color:#ae9eb9;font-size:14px;line-height:1.6;">Your JESA/BESA 2026 application has been successfully registered.</p>
+          </td>
+        </tr>
 
-						<!-- HEADER -->
-						<tr>
-							<td style="background-color:#16213e;padding:32px 40px 24px;text-align:center;border-radius:16px 16px 0 0;" class="mobile-padding">
-								<img src="${JESA_ICON_BASE64}" width="56" height="56" alt="JESA" style="display:block;margin:0 auto 16px;border-radius:12px;" />
-								<p style="color:#d4af37;font-size:12px;font-weight:700;letter-spacing:3px;margin:0 0 8px;text-transform:uppercase;">JESA / BESA 2026</p>
-								<h1 style="color:#ffffff;font-size:28px;font-weight:700;line-height:1.3;margin:0;">Registration Confirmed</h1>
-							</td>
-						</tr>
+        <!-- BODY -->
+        <tr>
+          <td class="pad" style="padding:30px 32px 10px;">
+            <p style="margin:0 0 14px;color:#f7f2fa;font-size:16px;line-height:1.7;">Dear <strong>${escapeHtml(recipientName)}</strong>,</p>
+            <p style="margin:0;color:#b9a9c2;font-size:14px;line-height:1.8;">Thank you for registering for the J'pura Employability Skills Awards. Please keep the reference numbers below for future communication and award-related updates.</p>
 
-						<!-- GOLD ACCENT LINE -->
-						<tr>
-							<td style="background-color:#d4af37;height:4px;font-size:0;line-height:0;">&nbsp;</td>
-						</tr>
+            <!-- Reference -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 28px;">
+              <tr><td align="center" style="padding:20px;background:#0b0711;border:1px solid #e5c064;border-radius:12px;">
+                <p style="margin:0 0 8px;color:#d8bd65;font-size:10px;font-weight:700;letter-spacing:1.7px;text-transform:uppercase;">Application Reference</p>
+                <p class="ref-code" style="margin:0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:25px;font-weight:700;letter-spacing:1px;">${escapeHtml(applicationReferenceNumber)}</p>
+                <p style="margin:7px 0 0;color:#776580;font-size:11px;">Keep this number for all future correspondence.</p>
+              </td></tr>
+            </table>
 
-						<!-- BODY -->
-						<tr>
-							<td style="background-color:#0f3460;padding:40px;" class="mobile-padding">
-								<p style="color:#b8b8d0;font-size:16px;line-height:1.7;margin:0 0 20px;">Dear <strong style="color:#ffffff;">${escapeHtml(recipientName)}</strong>,</p>
+            <p style="margin:0;color:#ffffff;font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;">Your Registered Award Categories</p>
+            <p style="margin:7px 0 18px;color:#8f7c9d;font-size:12px;line-height:1.7;">Each selected award has its own registration number. Join the relevant WhatsApp group to receive official updates.</p>
 
-								<p style="color:#b8b8d0;font-size:15px;line-height:1.7;margin:0 0 32px;">Your JESA/BESA 2026 application has been successfully registered. Please save the application reference and award registration numbers below for all future communication.</p>
+            <!-- Awards -->
+            ${awardRows}
 
-								<!-- APPLICATION REFERENCE BOX -->
-								<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:32px;">
-									<tr>
-										<td style="background-color:#16213e;border:1px solid #2a2a4a;border-radius:12px;padding:24px;text-align:center;">
-											<p style="color:#d4af37;font-size:11px;font-weight:700;letter-spacing:2px;margin:0 0 10px;text-transform:uppercase;">Application Reference</p>
-											<p style="color:#ffffff;font-size:26px;font-weight:700;letter-spacing:2px;margin:0;font-family:'Courier New',monospace;">${escapeHtml(applicationReferenceNumber)}</p>
-										</td>
-									</tr>
-								</table>
+            <!-- Privacy -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:22px;">
+              <tr><td style="padding:13px 15px;background:#0d0714;border-left:3px solid #e5c064;border-radius:8px;color:#a996b2;font-size:12px;line-height:1.65;">
+                <strong style="color:#d8c6de;">Privacy notice:</strong> Do not share the WhatsApp group links publicly. They are intended only for registered applicants.
+              </td></tr>
+            </table>
 
-								<!-- AWARDS SECTION -->
-								<h2 style="color:#d4af37;font-size:14px;font-weight:700;letter-spacing:2px;margin:0 0 20px;text-transform:uppercase;">Your Registered Award Categories</h2>
-								<p style="color:#b8b8d0;font-size:14px;line-height:1.6;margin:0 0 24px;">Each award has a separate registration number. Join the relevant WhatsApp groups to receive important updates.</p>
+            <p style="margin:0 0 28px;color:#d9ccdf;font-size:14px;line-height:1.7;">Regards,<br><strong style="color:#e5c064;">JESA/BESA 2026 Organizing Committee</strong></p>
+          </td>
+        </tr>
 
-								<table role="presentation" cellpadding="0" cellspacing="0" width="100%">${awardRows}</table>
-
-								<!-- SECURITY NOTICE -->
-								<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-top:24px;">
-									<tr>
-										<td style="background-color:#16213e;border-left:4px solid #d4af37;border-radius:0 8px 8px 0;padding:16px 20px;">
-											<p style="color:#b8b8d0;font-size:13px;line-height:1.6;margin:0;">Do not share these WhatsApp group links publicly. They are intended only for registered applicants.</p>
-										</td>
-									</tr>
-								</table>
-
-								<!-- SIGN-OFF -->
-								<p style="color:#b8b8d0;font-size:15px;line-height:1.7;margin:32px 0 0;">Regards,<br /><strong style="color:#ffffff;">JESA/BESA 2026 Organizing Committee</strong></p>
-							</td>
-						</tr>
-
-						<!-- FOOTER -->
-						<tr>
-							<td style="background-color:#16213e;padding:32px 40px;border-radius:0 0 16px 16px;" class="mobile-padding">
-								<!-- LOGOS -->
-								<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:20px;">
-									<tr>
-										<td width="50%" style="text-align:center;vertical-align:middle;">
-											<img src="${USJP_BASE64}" alt="University of Sri Jayewardenepura" width="120" style="display:inline-block;max-width:120px;height:auto;border-radius:4px;" />
-										</td>
-										<td width="50%" style="text-align:center;vertical-align:middle;">
-											<img src="${CSDS_BASE64}" alt="Career Skills Development Society" width="120" style="display:inline-block;max-width:120px;height:auto;border-radius:4px;" />
-										</td>
-									</tr>
-								</table>
-								<p style="color:#6b6b8d;font-size:12px;line-height:1.5;text-align:center;margin:0 0 8px;">This is an automated registration message. Please do not reply directly to this email.</p>
-								<p style="color:#6b6b8d;font-size:11px;text-align:center;margin:0;">JESA/BESA 2026 &bull; Organizing Committee</p>
-							</td>
-						</tr>
-
-					</table>
-					<!--[if mso]>
-					</td>
-					</tr>
-					</table>
-					<![endif]-->
-				</td>
-			</tr>
-		</table>
-	</body>
+        <!-- FOOTER -->
+        <tr>
+          <td style="padding:24px 28px 28px;background:#0d0714;border-top:1px solid #31213e;">
+            <p style="margin:0 0 16px;color:#6f5d7b;font-size:10px;font-weight:700;letter-spacing:1.8px;text-align:center;text-transform:uppercase;">Organized By</p>
+            <table role="presentation" class="footer-stack" align="center" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td class="footer-logo-cell" align="center" valign="middle" style="padding:0 12px;">
+                  <img src="${USJP_LOGO_URL}" alt="University of Sri Jayewardenepura" width="48" style="display:block;width:48px;height:auto;border:0;" />
+                </td>
+                <td class="footer-logo-cell" align="center" valign="middle" style="padding:0 12px;">
+                  <img src="${CSDS_LOGO_URL}" alt="Career Skills Development Society" width="48" style="display:block;width:48px;height:auto;border:0;" />
+                </td>
+                <td class="footer-copy" valign="middle" style="padding:0 0 0 16px;">
+                  <p style="margin:0;color:#d5c8db;font-size:12px;font-weight:700;line-height:1.5;">University of Sri Jayewardenepura</p>
+                  <p style="margin:2px 0 0;color:#86738f;font-size:11px;line-height:1.5;">in collaboration with the Career Skills Development Society (CSDS)</p>
+                </td>
+              </tr>
+            </table>
+            <div style="height:1px;background:#281b33;margin:20px 0 16px;"></div>
+            <p style="margin:0 0 6px;color:#6f5d7b;font-size:11px;line-height:1.6;text-align:center;">This is an automated registration message from J'pura Employability Skills Awards.</p>
+            <p style="margin:0;color:#6f5d7b;font-size:11px;line-height:1.6;text-align:center;">Questions? Contact <a href="mailto:jesa@sjp.ac.lk" style="color:#e5c064;text-decoration:none;">jesa@sjp.ac.lk</a></p>
+          </td>
+        </tr>
+      </table>
+      <p style="margin:14px 0 0;color:#4f4159;font-size:10px;text-align:center;">JESA / BESA 2026 &bull; Official Registration Communication</p>
+    </td></tr>
+  </table>
+</body>
 </html>`;
 }
