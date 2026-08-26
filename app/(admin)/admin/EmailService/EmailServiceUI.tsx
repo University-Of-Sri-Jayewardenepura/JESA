@@ -8,6 +8,7 @@ import {
 	Clock3,
 	Eye,
 	FileCheck2,
+	FileJson,
 	Loader2,
 	Mail,
 	MailCheck,
@@ -26,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import EmailPreviewDialog from "./email-preview-dialog";
 import SendProgressDialog from "./send-progress-dialog";
 import type { SendResultItem } from "./send-progress-dialog";
+import BulkImportDialog from "./bulk-import-dialog";
 import { getMessageRecords } from "./service/message-retrieval-service";
 import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
@@ -667,6 +669,7 @@ export default function EmailServiceUI() {
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 	const [sendProgressResults, setSendProgressResults] = useState<SendResultItem[]>([]);
 	const [isSendProgressOpen, setIsSendProgressOpen] = useState(false);
+	const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
 	const deferredMessageSearch = useDeferredValue(
 		messageSearch.trim().toLocaleLowerCase(),
 	);
@@ -1134,6 +1137,16 @@ export default function EmailServiceUI() {
 										<ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
 										<span className="sr-only">Sort messages</span>
 									</label>
+									<Button
+										className="h-10 border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
+										onClick={() => setIsBulkImportOpen(true)}
+										size="sm"
+										type="button"
+										variant="outline"
+									>
+										<FileJson className="size-4 mr-1.5" />
+										Import JSON
+									</Button>
 								</div>
 							</div>
 
@@ -1511,6 +1524,11 @@ export default function EmailServiceUI() {
 				title="Send Registration Emails"
 				results={sendProgressResults}
 				isSending={isSendingMessages}
+			/>
+
+			<BulkImportDialog
+				open={isBulkImportOpen}
+				onOpenChange={setIsBulkImportOpen}
 			/>
 		</main>
 	);
