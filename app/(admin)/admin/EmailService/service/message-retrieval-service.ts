@@ -93,6 +93,7 @@ function buildMessageRecord(
 			typeof emailDispatch.sendCount === "number" ? emailDispatch.sendCount : 0,
 		lastSentAt: serializeDate(emailDispatch.lastSentAt),
 		updatedAt: serializeDate(data.updatedAt),
+		createdAt: serializeDate(data.createdAt),
 	};
 }
 

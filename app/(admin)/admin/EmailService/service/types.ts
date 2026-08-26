@@ -18,6 +18,7 @@ export type UpdatedApplication = {
 		registrationNumber: string;
 		status: "active" | "removed";
 	}>;
+	createdAt: string | null;
 };
 
 export type ApplicationRegistrationPair = {
@@ -40,6 +41,7 @@ export type RegistrationLookupItem = {
 		registrationNumber: string | null;
 	}>;
 	missingRegistrationCount: number;
+	createdAt: string | null;
 };
 
 export type RegistrationSourceApplication = {
@@ -101,6 +103,7 @@ export type MessageRecord = {
 	sendCount: number;
 	lastSentAt: string | null;
 	updatedAt: string | null;
+	createdAt: string | null;
 };
 
 export type UpdatedApplicationMessageDocument = {

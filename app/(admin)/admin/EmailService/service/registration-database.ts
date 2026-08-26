@@ -97,7 +97,22 @@ function parseUpdatedApplication(
 				? data.applicationReferenceNumber.trim()
 				: "",
 		awardRegistrations,
+		createdAt: serializeDate(data.createdAt),
 	};
+}
+
+/** Converts Firestore timestamps and serialized dates into ISO strings. */
+function serializeDate(value: unknown): string | null {
+	if (!value) return null;
+	if (value instanceof Date) return value.toISOString();
+	if (typeof value === "string") return value;
+	if (typeof value === "object" && "toDate" in value) {
+		const toDate = (value as { toDate?: unknown }).toDate;
+		if (typeof toDate === "function") {
+			return (toDate.call(value) as Date).toISOString();
+		}
+	}
+	return null;
 }
 
 /** Fetches both collections and pairs every original application by applicationId. */

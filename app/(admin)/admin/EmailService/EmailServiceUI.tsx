@@ -189,12 +189,9 @@ function RegistrationLookupTab({
 			return matchesRegistrationState && matchesSearch;
 		})
 		.sort((left, right) => {
-			const leftValue = left.applicationReferenceNumber ?? left.recipient.name;
-			const rightValue =
-				right.applicationReferenceNumber ?? right.recipient.name;
-			const comparison = leftValue.localeCompare(rightValue, undefined, {
-				numeric: true,
-			});
+			const comparison = (left.createdAt ?? "").localeCompare(
+				right.createdAt ?? "",
+			);
 			return registrationSort === "asc" ? comparison : -comparison;
 		});
 	const registeredCount = records.filter(
@@ -689,10 +686,8 @@ export default function EmailServiceUI() {
 			return matchesStatus && matchesSearch;
 		})
 		.sort((left, right) => {
-			const comparison = left.registrationNumber.localeCompare(
-				right.registrationNumber,
-				undefined,
-				{ numeric: true },
+			const comparison = (left.createdAt ?? "").localeCompare(
+				right.createdAt ?? "",
 			);
 			return messageSort === "asc" ? comparison : -comparison;
 		});
