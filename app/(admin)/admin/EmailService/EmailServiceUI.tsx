@@ -24,6 +24,8 @@ import { useDeferredValue, useEffect, useState, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import EmailPreviewDialog from "./email-preview-dialog";
+import SendProgressDialog from "./send-progress-dialog";
+import type { SendResultItem } from "./send-progress-dialog";
 import { getMessageRecords } from "./service/message-retrieval-service";
 import { registerApplications } from "./service/register-applications";
 import { getRegistrationLookup } from "./service/registration-service";
@@ -162,6 +164,8 @@ function RegistrationLookupTab({
 		useState<RegistrationBatchResult | null>(null);
 	const [registrationActionError, setRegistrationActionError] = useState("");
 	const [isRegistering, startRegistrationTransition] = useTransition();
+	const [registerProgressResults, setRegisterProgressResults] = useState<SendResultItem[]>([]);
+	const [isRegisterProgressOpen, setIsRegisterProgressOpen] = useState(false);
 	const deferredSearch = useDeferredValue(search.trim().toLocaleLowerCase());
 	const filteredRecords = records
 		.filter((record) => {
@@ -229,24 +233,69 @@ function RegistrationLookupTab({
 	/** Sends a copied application ID array to the registration server action. */
 	function submitRegistrationNumberAction(applicationIds: string[]) {
 		const selectedIds = [...applicationIds];
+		const records = selectedIds
+			.map((id) => {
+				const found = filteredRecords.find((r) => r.applicationId === id);
+				return found;
+			})
+			.filter(
+				(r): r is (typeof filteredRecords)[number] => !!r,
+			);
+
+		const initialResults: SendResultItem[] = records.map((r) => ({
+			applicationId: r.applicationId,
+			registrationNumber:
+				r.applicationReferenceNumber ?? r.recipient.name,
+			recipientName: r.recipient.name,
+			recipientEmail: r.recipient.email,
+			status: "pending" as const,
+		}));
+
+		setRegisterProgressResults(initialResults);
+		setIsRegisterProgressOpen(true);
 		setRegistrationResult(null);
 		setRegistrationActionError("");
+
 		startRegistrationTransition(async () => {
-			const notificationId = toast.loading(
-				`Adding registration numbers for ${selectedIds.length} application${selectedIds.length === 1 ? "" : "s"}...`,
+			setRegisterProgressResults((prev) =>
+				prev.map((r) => ({ ...r, status: "sending" as const })),
 			);
+
 			try {
 				const result = await registerApplications(selectedIds);
 				setRegistrationResult(result);
-				const successful = result.created + result.updated + result.skipped;
+
+				setRegisterProgressResults((prev) =>
+					prev.map((item) => {
+						const match = result.results.find(
+							(r) =>
+								r.applicationId === item.applicationId ||
+								r.applicationReferenceNumber === item.registrationNumber,
+						);
+						if (match) {
+							return {
+								...item,
+								status:
+									match.status === "failed"
+										? ("failed" as const)
+										: ("accepted" as const),
+								registrationNumber:
+									match.applicationReferenceNumber ?? item.registrationNumber,
+								message: match.message,
+							};
+						}
+						return item;
+					}),
+				);
+
 				const summary = `${result.created} created, ${result.updated} updated, ${result.skipped} skipped`;
 				if (result.failed > 0) {
 					toast.error(
-						`${summary}. ${result.failed} failed${successful === 0 ? "." : "; review the result below."}`,
-						{ id: notificationId, duration: 7000 },
+						`${summary}. ${result.failed} failed; review the result below.`,
+						{ duration: 7000 },
 					);
 				} else {
-					toast.success(summary, { id: notificationId });
+					toast.success(summary);
 				}
 				if (result.created > 0 || result.updated > 0) {
 					setSelectedApplicationIds([]);
@@ -262,11 +311,25 @@ function RegistrationLookupTab({
 						? actionError.message
 						: "Registration numbers could not be added.",
 				);
+				setRegisterProgressResults((prev) =>
+					prev.map((item) =>
+						item.status === "sending" || item.status === "pending"
+							? {
+									...item,
+									status: "failed" as const,
+									message:
+										actionError instanceof Error
+											? actionError.message
+											: "Registration numbers could not be added.",
+								}
+							: item,
+					),
+				);
 				toast.error(
 					actionError instanceof Error
 						? actionError.message
 						: "Registration numbers could not be added.",
-					{ id: notificationId, duration: 7000 },
+					{ duration: 7000 },
 				);
 			}
 		});
@@ -567,6 +630,14 @@ function RegistrationLookupTab({
 					</div>
 				)}
 			</div>
+
+			<SendProgressDialog
+				open={isRegisterProgressOpen}
+				onOpenChange={setIsRegisterProgressOpen}
+				title="Add Registration Numbers"
+				results={registerProgressResults}
+				isSending={isRegistering}
+			/>
 		</section>
 	);
 }
@@ -594,6 +665,8 @@ export default function EmailServiceUI() {
 	const [isSendingMessages, startMessageTransition] = useTransition();
 	const [previewRecord, setPreviewRecord] = useState<MessageRecord | null>(null);
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+	const [sendProgressResults, setSendProgressResults] = useState<SendResultItem[]>([]);
+	const [isSendProgressOpen, setIsSendProgressOpen] = useState(false);
 	const deferredMessageSearch = useDeferredValue(
 		messageSearch.trim().toLocaleLowerCase(),
 	);
@@ -703,32 +776,78 @@ export default function EmailServiceUI() {
 	/** Sends the copied selection sequentially and refreshes dispatch statuses. */
 	function sendSelectedMessages(messageIds: string[]) {
 		const selectedIds = [...messageIds];
+		const records = selectedIds
+			.map((id) => messageRecords.find((r) => r.applicationId === id))
+			.filter((r): r is MessageRecord => !!r);
+
+		const initialResults: SendResultItem[] = records.map((r) => ({
+			applicationId: r.applicationId,
+			registrationNumber: r.registrationNumber,
+			recipientName: r.recipient.name,
+			recipientEmail: r.recipient.email,
+			status: "pending" as const,
+		}));
+
+		setSendProgressResults(initialResults);
+		setIsSendProgressOpen(true);
+
 		startMessageTransition(async () => {
-			const notificationId = toast.loading(
-				`Sending ${selectedIds.length} registration email${selectedIds.length === 1 ? "" : "s"}...`,
+			setSendProgressResults((prev) =>
+				prev.map((r) => ({ ...r, status: "sending" as const })),
 			);
+
 			try {
 				const result = await sendRegistrationEmails(selectedIds);
+
+				setSendProgressResults((prev) =>
+					prev.map((item) => {
+						const match = result.results.find(
+							(r) =>
+								r.applicationId === item.applicationId ||
+								r.applicationReferenceNumber === item.registrationNumber,
+						);
+						if (match) {
+							return {
+								...item,
+								status:
+									match.status === "accepted"
+										? ("accepted" as const)
+										: ("failed" as const),
+								message: match.message,
+							};
+						}
+						return { ...item, status: "accepted" as const };
+					}),
+				);
+
 				const summary = `${result.accepted} accepted, ${result.skipped} skipped, ${result.failed} failed`;
 				if (result.failed > 0 || result.skipped > 0) {
-					const firstProblem = result.results.find(
-						(item) => item.status !== "accepted",
-					);
-					toast.error(
-						`${summary}.${firstProblem ? ` ${firstProblem.applicationReferenceNumber ?? firstProblem.applicationId}: ${firstProblem.message}` : ""}`,
-						{ id: notificationId, duration: 8000 },
-					);
+					toast.error(summary, { duration: 8000 });
 				} else {
-					toast.success(summary, { id: notificationId });
+					toast.success(summary);
 				}
 				setSelectedMessageIds([]);
 				setMessageRefreshKey((current) => current + 1);
 			} catch (error) {
+				setSendProgressResults((prev) =>
+					prev.map((item) =>
+						item.status === "sending" || item.status === "pending"
+							? {
+									...item,
+									status: "failed" as const,
+									message:
+										error instanceof Error
+											? error.message
+											: "Registration emails could not be sent.",
+								}
+							: item,
+					),
+				);
 				toast.error(
 					error instanceof Error
 						? error.message
 						: "Registration emails could not be sent.",
-					{ id: notificationId, duration: 8000 },
+					{ duration: 8000 },
 				);
 			}
 		});
@@ -1384,6 +1503,14 @@ export default function EmailServiceUI() {
 				record={previewRecord}
 				open={isPreviewOpen}
 				onOpenChange={setIsPreviewOpen}
+			/>
+
+			<SendProgressDialog
+				open={isSendProgressOpen}
+				onOpenChange={setIsSendProgressOpen}
+				title="Send Registration Emails"
+				results={sendProgressResults}
+				isSending={isSendingMessages}
 			/>
 		</main>
 	);
