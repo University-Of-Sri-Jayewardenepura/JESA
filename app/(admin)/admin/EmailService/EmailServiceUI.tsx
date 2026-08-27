@@ -948,7 +948,7 @@ export default function EmailServiceUI() {
 							Email Service
 						</h1>
 						<p className="mt-3 max-w-2xl text-muted-foreground text-sm leading-6 sm:text-base">
-							Review and prepare registration emails for JESA / BESA 2026
+							Review and prepare registration emails for JESA 2026
 							applicants from one organized workspace.
 						</p>
 					</div>
@@ -1482,7 +1482,7 @@ export default function EmailServiceUI() {
 							<div className="flex items-center gap-2 text-muted-foreground">
 								<MailCheck className="size-4 text-slate-100" />
 								<span>
-									Email delivery is configured for JESA / BESA 2026
+									Email delivery is configured for JESA 2026
 									registrations.
 								</span>
 							</div>

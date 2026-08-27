@@ -83,11 +83,11 @@ export default function RegistrationEmail({
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td valign="middle" style="width:72px;">
-                  <img src="${JESA_ICON_URL}" alt="JESA / BESA 2026" width="60" style="display:block;width:60px;height:auto;border:0;" />
+                  <img src="${JESA_ICON_URL}" alt="JESA 2026" width="60" style="display:block;width:60px;height:auto;border:0;" />
                 </td>
                 <td valign="middle" style="padding-left:14px;">
                   <p class="brand-copy" style="margin:0;color:#f4e9f7;font-size:14px;font-weight:700;letter-spacing:.2px;">J'pura Employability Skills Awards</p>
-                  <p style="margin:4px 0 0;color:#8f7c9d;font-size:11px;letter-spacing:1.3px;text-transform:uppercase;">JESA / BESA 2026</p>
+                  <p style="margin:4px 0 0;color:#8f7c9d;font-size:11px;letter-spacing:1.3px;text-transform:uppercase;">JESA 2026</p>
                 </td>
               </tr>
             </table>
@@ -159,7 +159,7 @@ export default function RegistrationEmail({
           </td>
         </tr>
       </table>
-      <p style="margin:14px 0 0;color:#4f4159;font-size:10px;text-align:center;">JESA / BESA 2026 &bull; Official Registration Communication</p>
+      <p style="margin:14px 0 0;color:#4f4159;font-size:10px;text-align:center;">JESA 2026 &bull; Official Registration Communication</p>
     </td></tr>
   </table>
 </body>

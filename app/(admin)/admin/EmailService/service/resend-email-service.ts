@@ -11,7 +11,7 @@ type ResendResponse = {
 export async function sendClaimedRegistrationEmail(
 	message: ClaimedRegistrationMessage,
 ) {
-	const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
+	const apiKey = process.env.NEXT_RESEND_API_KEY;
 	if (!apiKey) throw new Error("RESEND_API_KEY is not configured.");
 
 	const html = RegistrationEmail({
