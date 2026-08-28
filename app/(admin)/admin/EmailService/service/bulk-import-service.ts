@@ -182,7 +182,7 @@ export async function processBulkImport(
 					const { data, error } = await resend.emails.send({
 						from:
 							process.env.RESEND_FROM_EMAIL ??
-							"JESA/BESA 2026 <onboarding@resend.dev>",
+							"JESA 2026 <onboarding@resend.dev>",
 						to: [item.personalInfo.email],
 						subject: `Registration Confirmed - ${applicationReferenceNumber}`,
 						html,
