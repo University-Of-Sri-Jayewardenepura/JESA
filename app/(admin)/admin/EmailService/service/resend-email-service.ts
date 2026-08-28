@@ -33,7 +33,7 @@ export async function sendClaimedRegistrationEmail(
 		body: JSON.stringify({
 			from:
 				process.env.RESEND_FROM_EMAIL ??
-				"JESA 2026 <onboarding@resend.dev>",
+				"JESA 2026 <noreply@jesa.lk>",
 			to: message.recipient.email,
 			subject: `Registration Confirmation `,
 			html,
