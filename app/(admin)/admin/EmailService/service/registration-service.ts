@@ -43,7 +43,7 @@ function buildLookupItem(
 			missingRegistrationCount === 0,
 		awards,
 		missingRegistrationCount,
-		createdAt: updated?.createdAt ?? null,
+		createdAt: updated?.createdAt ?? source.createdAt ?? null,
 	};
 }
 

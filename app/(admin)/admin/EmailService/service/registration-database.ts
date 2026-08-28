@@ -59,6 +59,7 @@ function parseSourceApplication(
 			email: readRequiredString(personalInfo?.email, "personalInfo.email"),
 		},
 		selectedAwards: [...new Set(selectedAwards)],
+		createdAt: serializeDate(data.createdAt),
 	};
 }
 

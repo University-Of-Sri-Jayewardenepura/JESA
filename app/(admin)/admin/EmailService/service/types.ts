@@ -8,6 +8,7 @@ export type SourceApplication = {
 		email: string;
 	};
 	selectedAwards: AwardType[];
+	createdAt: string | null;
 };
 
 export type UpdatedApplication = {
