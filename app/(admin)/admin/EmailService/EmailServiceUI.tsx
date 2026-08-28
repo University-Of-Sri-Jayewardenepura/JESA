@@ -88,9 +88,9 @@ function canSendMessage(status: MessageDispatchStatus) {
 	return status === "not_sent" || status === "failed";
 }
 
-/** Checks if a message status indicates it needs resending (failed, bounced, or complained). */
+/** Checks if a message status indicates it needs resending (failed, bounced, complained, accepted, or delivered). */
 function needsResend(status: MessageDispatchStatus) {
-	return status === "failed" || status === "bounced" || status === "complained";
+	return status === "failed" || status === "bounced" || status === "complained" || status === "accepted" || status === "delivered";
 }
 
 /** Formats a serialized Firestore date for the message table. */
@@ -686,6 +686,12 @@ export default function EmailServiceUI() {
 			return matchesStatus && matchesSearch;
 		})
 		.sort((left, right) => {
+			if (messageFilter === "sent" || messageFilter === "delivered") {
+				const comparison = (left.lastSentAt ?? "").localeCompare(
+					right.lastSentAt ?? "",
+				);
+				return messageSort === "asc" ? comparison : -comparison;
+			}
 			const comparison = (left.createdAt ?? "").localeCompare(
 				right.createdAt ?? "",
 			);
@@ -948,7 +954,7 @@ export default function EmailServiceUI() {
 							Email Service
 						</h1>
 						<p className="mt-3 max-w-2xl text-muted-foreground text-sm leading-6 sm:text-base">
-							Review and prepare registration emails for JESA / BESA 2026
+							Review and prepare registration emails for JESA 2026
 							applicants from one organized workspace.
 						</p>
 					</div>
@@ -1161,29 +1167,32 @@ export default function EmailServiceUI() {
 												: "text-muted-foreground hover:text-foreground"
 										}`}
 										key={tab.value}
-										onClick={() =>
-											setMessageFilter(tab.value as MessageStatusFilter)
-										}
+										onClick={() => {
+											const newFilter = tab.value as MessageStatusFilter;
+											setMessageFilter(newFilter);
+											if (newFilter === "sent" || newFilter === "delivered") {
+												setMessageSort("desc");
+											}
+										}}
 										type="button"
 									>
 										{tab.label}
 									</button>
 								))}
 								<div className="ml-auto flex items-center">
-									{messageFilter === "failed" &&
-										filteredMessageRecords.some((r) => needsResend(r.status)) && (
-											<Button
-												className="border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
-												disabled={isSendingMessages}
-												onClick={selectAllFailedMessages}
-												size="sm"
-												type="button"
-												variant="outline"
-											>
-												<RefreshCw className="size-4 mr-1.5" />
-												Select All Failed
-											</Button>
-										)}
+									{filteredMessageRecords.some((r) => needsResend(r.status)) && (
+										<Button
+											className="border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300"
+											disabled={isSendingMessages}
+											onClick={selectAllFailedMessages}
+											size="sm"
+											type="button"
+											variant="outline"
+										>
+											<RefreshCw className="size-4 mr-1.5" />
+											Select All Resendable
+										</Button>
+									)}
 								</div>
 							</div>
 
@@ -1482,7 +1491,7 @@ export default function EmailServiceUI() {
 							<div className="flex items-center gap-2 text-muted-foreground">
 								<MailCheck className="size-4 text-slate-100" />
 								<span>
-									Email delivery is configured for JESA / BESA 2026
+									Email delivery is configured for JESA 2026
 									registrations.
 								</span>
 							</div>

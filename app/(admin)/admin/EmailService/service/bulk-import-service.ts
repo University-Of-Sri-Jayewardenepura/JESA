@@ -7,7 +7,7 @@ import RegistrationEmail from "../registration-email";
 import { Resend } from "resend";
 import type { BulkImportItem, BulkImportResult, BulkImportResultItem } from "./bulk-import-types";
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+const resend = new Resend(process.env.NEXT_RESEND_API_KEY);
 const REGISTRATION_YEAR = 2026;
 
 const AWARD_PREFIXES: Record<AwardType, string> = {
@@ -182,7 +182,7 @@ export async function processBulkImport(
 					const { data, error } = await resend.emails.send({
 						from:
 							process.env.RESEND_FROM_EMAIL ??
-							"JESA/BESA 2026 <onboarding@resend.dev>",
+							"JESA 2026 <onboarding@resend.dev>",
 						to: [item.personalInfo.email],
 						subject: `Registration Confirmed - ${applicationReferenceNumber}`,
 						html,

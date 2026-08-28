@@ -11,7 +11,7 @@ type ResendResponse = {
 export async function sendClaimedRegistrationEmail(
 	message: ClaimedRegistrationMessage,
 ) {
-	const apiKey = process.env.NEXT_PUBLIC_RESEND_API_KEY;
+	const apiKey = process.env.NEXT_RESEND_API_KEY;
 	if (!apiKey) throw new Error("RESEND_API_KEY is not configured.");
 
 	const html = RegistrationEmail({
@@ -33,9 +33,9 @@ export async function sendClaimedRegistrationEmail(
 		body: JSON.stringify({
 			from:
 				process.env.RESEND_FROM_EMAIL ??
-				"JESA/BESA 2026 <onboarding@resend.dev>",
+				"JESA 2026 <onboarding@resend.dev>",
 			to: message.recipient.email,
-			subject: `Registration Confirmation - ${message.applicationReferenceNumber}`,
+			subject: `Registration Confirmation `,
 			html,
 		}),
 	});
