@@ -94,7 +94,7 @@ export default function RegistrationEmail({
 
             <!-- Privacy -->
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:22px;">
-              <tr><td style="padding:13px 15px;background:#0d0714;border-left:3px solid #e5c064;border-radius:8px;color:#a996b2;font-size:12px;line-height:1.65;">
+              <tr><td style="padding:13px 15px;background:#0d0714;color:#a996b2;font-size:12px;line-height:1.65;">
                 <strong style="color:#d8c6de;">Privacy notice:</strong> Do not share the WhatsApp group links publicly. They are intended only for registered applicants.
               </td></tr>
             </table>
