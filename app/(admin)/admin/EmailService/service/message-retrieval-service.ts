@@ -1,10 +1,12 @@
 "use server";
 
 import { getAdminUserFromCookies } from "@/app/admin/lib/server-auth";
+import { WHATSAPP_LINKS } from "@/constants/whatsapp-links";
 import { fetchUpdatedApplicationMessages } from "./db-transaction/message-query";
 import type {
 	MessageDispatchStatus,
 	MessageRecord,
+	MessageRecordAward,
 	UpdatedApplicationMessageDocument,
 } from "./types";
 
@@ -66,7 +68,7 @@ function buildMessageRecord(
 	}
 	const emailDispatch = (data.emailDispatch ??
 		{}) as FirebaseFirestore.DocumentData;
-	const awards = Array.isArray(data.awardRegistrations)
+	const awards: MessageRecordAward[] = Array.isArray(data.awardRegistrations)
 		? data.awardRegistrations.flatMap((award: unknown) => {
 				if (!award || typeof award !== "object") return [];
 				const value = award as FirebaseFirestore.DocumentData;
@@ -76,7 +78,18 @@ function buildMessageRecord(
 				) {
 					return [];
 				}
-				return [value.awardLabel];
+				const awardCode = typeof value.awardCode === "string" ? value.awardCode : "";
+				const whatsappEntry = WHATSAPP_LINKS[awardCode];
+				return [
+					{
+						label: value.awardLabel,
+						registrationNumber:
+							typeof value.registrationNumber === "string"
+								? value.registrationNumber
+								: "",
+						whatsappUrl: whatsappEntry?.url || "",
+					},
+				];
 			})
 		: [];
 

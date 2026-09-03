@@ -679,7 +679,8 @@ export default function EmailServiceUI() {
 					record.registrationNumber,
 					record.recipient.name,
 					record.recipient.email,
-					...record.awards,
+					...record.awards.map((a) => a.label),
+					...record.awards.map((a) => a.registrationNumber),
 				].some((value) =>
 					value.toLocaleLowerCase().includes(deferredMessageSearch),
 				);
@@ -1327,9 +1328,9 @@ export default function EmailServiceUI() {
 														<td className="max-w-60 px-4 py-4 text-muted-foreground">
 															<span
 																className="block truncate"
-																title={record.awards.join(", ")}
+																title={record.awards.map((a) => a.label).join(", ")}
 															>
-																{record.awards[0] ?? "No active awards"}
+																{record.awards[0]?.label ?? "No active awards"}
 																{record.awards.length > 1
 																	? ` +${record.awards.length - 1}`
 																	: ""}
