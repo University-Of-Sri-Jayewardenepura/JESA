@@ -24,13 +24,13 @@ const DEVICE_WIDTHS: Record<DeviceMode, string> = {
 	mobile: "375px",
 };
 
-/** Generates sample award data for preview when real data is unavailable. */
+/** Builds award data for the email preview from real message record data. */
 function getPreviewAwards(record: MessageRecord) {
 	if (record.awards.length > 0) {
-		return record.awards.map((label, index) => ({
-			label,
-			registrationNumber: `REG-2026-${String(index + 1).padStart(4, "0")}`,
-			whatsappUrl: "https://chat.whatsapp.com/example",
+		return record.awards.map((award) => ({
+			label: award.label,
+			registrationNumber: award.registrationNumber,
+			whatsappUrl: award.whatsappUrl,
 		}));
 	}
 	return [

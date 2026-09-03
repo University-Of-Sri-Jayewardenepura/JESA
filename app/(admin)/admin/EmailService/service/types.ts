@@ -92,6 +92,12 @@ export type MessageDispatchStatus =
 	| "bounced"
 	| "complained";
 
+export type MessageRecordAward = {
+	label: string;
+	registrationNumber: string;
+	whatsappUrl: string;
+};
+
 export type MessageRecord = {
 	applicationId: string;
 	registrationNumber: string;
@@ -99,7 +105,7 @@ export type MessageRecord = {
 		name: string;
 		email: string;
 	};
-	awards: string[];
+	awards: MessageRecordAward[];
 	status: MessageDispatchStatus;
 	sendCount: number;
 	lastSentAt: string | null;
