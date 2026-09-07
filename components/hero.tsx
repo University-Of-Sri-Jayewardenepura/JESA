@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import type React from "react";
+import CountdownTimer from "@/components/countdown-timer";
 import Particles from "@/components/core/particles";
 import { Spotlight } from "@/components/core/spotlight";
 import { CtaButton } from "@/components/ui/cta-button";
@@ -63,6 +64,7 @@ const Hero: React.FC = () => {
 						</CtaButton>
 					</div>
 				</div>
+				<CountdownTimer />
 			</div>
 
 			<div
