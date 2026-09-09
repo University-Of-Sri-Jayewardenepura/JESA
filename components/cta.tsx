@@ -16,7 +16,7 @@ const CTA: React.FC = () => {
 					<br className="block md:hidden" /> Look at the past and wait for your
 					chance to shine.
 				</p>
-				<div className="relative flex justify-center">
+				{/* <div className="relative flex justify-center">
 					<div className="mt-5 w-fit md:mt-6 lg:mt-8">
 						<CtaButton
 							href="/register/2026"
@@ -27,7 +27,7 @@ const CTA: React.FC = () => {
 							Register Now
 						</CtaButton>
 					</div>
-				</div>
+				</div> */}
 			</div>
 			<div
 				aria-hidden="true"
